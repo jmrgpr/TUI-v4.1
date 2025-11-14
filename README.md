@@ -1,3 +1,12 @@
+# TUI v4.1 — Unified Intelligence Theory
+![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)
+![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17552094.svg)
+
+**Autor**: Jose M Rivera Garcia  
+**Licencia**: CC BY-NC-SA 4.0  
+→ **Uso científico permitido. Prohibido uso comercial.**  
+→ Cita: `Rivera Garcia, J. M. (2025). TUI v4.1. Zenodo. https://doi.org/10.5281/zenodo.17552094`
+
 # Propuesta de GUI / GUI Proposal
 
 ## Módulos principales / Main modules
