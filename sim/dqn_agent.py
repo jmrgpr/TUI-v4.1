@@ -4,9 +4,14 @@ dqn_agent.py — Agente DQN para Simbiosis RL / DQN Agent for Symbiosis RL
 Integración directa con prototipo_rl_simbiosis.py para el experimento A/B (Q-learning vs DQN+PGF).
 Direct integration with prototipo_rl_simbiosis.py for A/B experiment (Q-learning vs DQN+PGF).
 
-Uso: El script principal permite comparar ambos agentes y guardar sus políticas usando flags CLI.
-Usage: The main script allows comparison of both agents and saving their policies using CLI flags.
+Uso / Usage:
+    python dqn_agent.py --state_dim 8 --action_dim 4
 
+Ejemplo de uso / Example:
+    >>> agent = DQNAgent(state_dim=8, action_dim=4)
+    >>> agent.calcular_metricas(env, info, step)
+    >>> agent.save_policy('policy.json')
+    >>> agent.load_policy('policy.json')
 """
 import numpy as np
 import torch
