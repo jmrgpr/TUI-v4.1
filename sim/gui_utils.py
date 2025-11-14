@@ -9,12 +9,30 @@ import seaborn as sns
 from scipy.stats import ttest_ind, f_oneway, sem
 
 def confidence_interval(data, alpha=0.95):
+    """
+    Alias profesional para compatibilidad con tests y documentación bilingüe.
+    Professional alias for test compatibility and bilingual documentation.
+    """
+    return _confidence_interval(data, alpha)
+
+def calcular_intervalo_confianza(data, alpha=0.95):
+    """
+    Alias profesional en español para compatibilidad con tests y documentación bilingüe.
+    Professional Spanish alias for test compatibility and bilingual documentation.
+    """
+    return confidence_interval(data, alpha)
+
+def _confidence_interval(data, alpha=0.95):
     arr = np.array(data)
     arr = arr[~np.isnan(arr)]
+    if len(arr) == 0:
+        return np.nan, (np.nan, np.nan)
     mean = np.nanmean(arr)
+    if len(arr) == 1:
+        return mean, (mean, mean)
     s = sem(arr)
     from scipy.stats import t
-    ci = t.interval(alpha, len(arr)-1, loc=mean, scale=s) if len(arr) > 1 else (mean, mean)
+    ci = t.interval(alpha, len(arr)-1, loc=mean, scale=s)
     return mean, ci
 
 def plot_heatmap(data, row_labels, col_labels, title):
@@ -30,6 +48,18 @@ def plot_dashboard(metrics_dict):
     ax.set_title('Dashboard de métricas / Metrics dashboard')
     ax.set_ylabel('Valor / Value')
     return fig
+
+def t_test(a, b):
+    """Alias público para t-test independiente."""
+    from scipy.stats import ttest_ind
+    res = ttest_ind(a, b)
+    return res.statistic, res.pvalue
+
+def anova(groups):
+    """Alias público para ANOVA de una vía."""
+    from scipy.stats import f_oneway
+    res = f_oneway(*groups)
+    return res.statistic, res.pvalue
 
 def scientific_report(results_A, results_B, label_A='Control', label_B='Simbiosis'):
     report = []

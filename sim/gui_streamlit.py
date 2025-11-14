@@ -52,12 +52,17 @@ st.sidebar.markdown("[Teoría Unificada de la Inteligencia v4.1](./TUI/Teoria_Un
 if "runs" not in st.session_state:
     st.session_state["runs"] = []
 
-st.title("Simulador TUI v4.1 — Toy Model RL Symbiosis")
-st.markdown("""
-Controla parámetros, ejecuta simulaciones, visualiza métricas y reportes científicos, exporta resultados y accede a la documentación TUI. Todo bilingüe y reproducible.
 
-**Nota:** Siempre se ejecuta y compara el agente Control (Q-table) con Simbiosis (DQN) para referencia científica. / **Note:** Control agent is always run and compared with Simbiosis for scientific reference.
-""")
+def main():
+    st.title("Simulador TUI v4.1 — Toy Model RL Symbiosis")
+    st.markdown("""
+    Controla parámetros, ejecuta simulaciones, visualiza métricas y reportes científicos, exporta resultados y accede a la documentación TUI. Todo bilingüe y reproducible.
+
+    **Nota:** Siempre se ejecuta y compara el agente Control (Q-table) con Simbiosis (DQN) para referencia científica. / **Note:** Control agent is always run and compared with Simbiosis for scientific reference.
+    """)
+    # ...existing code...
+
+main()
 
 if st.button("Ejecutar simulación / Run simulation"):
     # Ejecutar Control

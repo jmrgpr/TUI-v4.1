@@ -2,6 +2,9 @@
 Test unitarios para agentes del TUI v4.1 Toy Model — RL Symbiosis
 Unit tests for agents in TUI v4.1 Toy Model — RL Symbiosis
 """
+# Profesional: asegura importación robusta de 'sim'
+import sys, os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import pytest
 from sim.dqn_agent import DQNAgent
 from sim.prototipo_rl_simbiosis import Agent

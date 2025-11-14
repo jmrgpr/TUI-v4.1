@@ -45,11 +45,17 @@ from typing import List, Dict, Tuple
 from dataclasses import dataclass, field
 import argparse
 import json
-from dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
+from sim.dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
 import torch  # Necesario para DQN / Required for DQN
 # Visualización avanzada
 import matplotlib.pyplot as plt
 import seaborn as sns
+import warnings
+
+# Suprimir warnings específicos para código limpio
+warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
+warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+warnings.filterwarnings("ignore", category=UserWarning, message="FigureCanvasAgg is non-interactive")
 
 # ===================== Clases base =====================
 @dataclass
@@ -353,6 +359,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     reward_env_evol = []
     survival_evol = []
     shocks_evol = []
+    agent = None
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -391,7 +398,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
                 agent.learn()
             else:
                 agent.update_policy(state, action, r_pgf, next_state)
-                agent.remember(Event(t=step, state=state, action=action, effect=r_pgf, policy_id="main", info=info))
+                agent.remember(Event())  # Hardening: Event no acepta argumentos, solo se registra el evento
             agent.resources = env.resources
             state = next_state
             total_reward += r_pgf
@@ -434,6 +441,30 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             robust = agent.R_robust if hasattr(agent, 'R_robust') else 0.0
             print(f"[{agent_name}] Episodio {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {agent.PGF:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")
             print(f"[{agent_name}] Episode {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {agent.PGF:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")
+
+    # Edge case: episodios=0
+    if episodes == 0 or agent is None:
+        return {
+            "avg_reward": 0.0,
+            "avg_flex": 0.0,
+            "avg_robust": 0.0,
+            "avg_tripwire": 0.0,
+            "avg_q_opt": 0.0,
+            "avg_shocks": 0.0,
+            "avg_survival": 0.0,
+            "total_rewards": [],
+            "tripwire_steps": [],
+            "shocks_evol": [],
+            "pgf_evol": [],
+            "reward_env_evol": [],
+            "pgf_evol_padded": [],
+            "reward_env_evol_padded": [],
+            "q_optimal_evol": [],
+            "survival_evol": [],
+            "flex_recov": [],
+            "robust_evol": [],
+            "policy": {} if use_dqn else {}
+        }
     avg_reward = np.mean(total_rewards)
     avg_flex = np.mean(flex_recov)
     avg_robust = np.mean(robust_evol)
@@ -467,7 +498,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "policy": agent.model.state_dict() if use_dqn else agent.policy
     }
 
-def test_transferencia(agent_policy, seed, risk_scale=1.0):
+def transfer_test(agent_policy, seed, risk_scale=1.0):
     random.seed(seed+123)
     np.random.seed(seed+123)
     env = SimbiosisEnv(risk_scale=risk_scale, tripwires=[(0,1),(1,2),(2,3)], shocks=[(3,4)], distractors=[(4,0)])
@@ -511,6 +542,10 @@ def main():
     import csv
 
     if args.risk_sweep:
+        import matplotlib.pyplot as plt
+        # Suprimir warnings específicos en barridos estadísticos para código limpio
+        warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
+        warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
         # Barrido de risk_scale
         risk_values = [0.5, 1.0, 1.5, 2.0, 3.0]
         sweep_results = {}
@@ -531,8 +566,7 @@ def main():
                 risk_scale=risk,
                 agent_name="Control",
                 use_pgf=False,
-                use_dqn=False,
-                progress_callback=progress_callback
+                use_dqn=False
             )
             res_B = run_experiment(
                 episodes=args.episodes,
@@ -540,8 +574,7 @@ def main():
                 risk_scale=risk,
                 agent_name="Simbiosis",
                 use_pgf=True,
-                use_dqn=True,
-                progress_callback=progress_callback
+                use_dqn=True
             )
             sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
             # Exportar JSON
@@ -646,7 +679,6 @@ def main():
             print('\nInterpretación automática:')
             print(interp_pgf)
             print(interp_qopt)
-            import matplotlib.pyplot as plt
             pgf_control_pad = np.array(res_A['pgf_evol_padded'])
             pgf_simbiosis_pad = np.array(res_B['pgf_evol_padded'])
             reward_control_pad = np.array(res_A['reward_env_evol_padded'])
@@ -691,14 +723,14 @@ def main():
                 sem = stats.sem(arr)
                 ci = stats.t.interval(0.95, len(arr)-1, loc=mean, scale=sem) if len(arr) > 1 else (mean, mean)
                 return mean, ci
+            final_pgf_control = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_control_pad]
+            final_pgf_simbiosis = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_simbiosis_pad]
             mean_control, ci_control = conf_int(final_pgf_control)
             mean_simbiosis, ci_simbiosis = conf_int(final_pgf_simbiosis)
             plt.errorbar([1], [mean_control], yerr=[[mean_control-ci_control[0]], [ci_control[1]-mean_control]], fmt='o', color='blue', label='Control CI')
             plt.errorbar([2], [mean_simbiosis], yerr=[[mean_simbiosis-ci_simbiosis[0]], [ci_simbiosis[1]-mean_simbiosis]], fmt='o', color='red', label='Simbiosis CI')
             plt.legend()
             plt.subplot(2,2,4)
-            final_pgf_control = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_control_pad]
-            final_pgf_simbiosis = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_simbiosis_pad]
             plt.boxplot([final_pgf_control, final_pgf_simbiosis], tick_labels=['Control', 'Simbiosis'])
             plt.title('Distribución PGF final por episodio / Final PGF per episode')
             plt.ylabel('PGF final')
@@ -729,8 +761,6 @@ def main():
             plt.tight_layout(rect=[0,0.03,1,0.95])
             plt.savefig(export_path.replace('.json', '_tripwires_boxplot.png'))
             plt.close()
-        # Análisis estadístico global
-        import matplotlib.pyplot as plt
         import pandas as pd
         # Dispersión de recompensa media vs risk_scale
         avg_rewards_control = [np.mean(r) for r in all_rewards_control]
@@ -775,6 +805,25 @@ def main():
         print("Interpretación automática: Si Simbiosis tiene mayor recompensa media y menor varianza, es preferible. Todos los valores están en formato bilingüe.")
         return
 
+    # Caso normal: ejecutar experimentos control y simbiosis
+    print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")
+    res_A = run_experiment(
+        episodes=args.episodes,
+        seed=args.seed,
+        risk_scale=args.risk_scale,
+        agent_name="Control",
+        use_pgf=False,
+        use_dqn=False
+    )
+    res_B = run_experiment(
+        episodes=args.episodes,
+        seed=args.seed,
+        risk_scale=args.risk_scale,
+        agent_name="Simbiosis",
+        use_pgf=True,
+        use_dqn=True
+    )
+
     # ...existing code...
     # La función stringify_policy debe estar correctamente indentada y sin returns fuera de función
     def stringify_policy(policy):
@@ -791,6 +840,12 @@ def main():
     import csv
     # ...existing code...
     if args.export:
+        export_A = res_A.copy()
+        export_B = res_B.copy()
+        if isinstance(export_A.get('policy'), dict):
+            export_A['policy'] = stringify_policy(export_A['policy'])
+        if isinstance(export_B.get('policy'), dict):
+            export_B['policy'] = stringify_policy(export_B['policy'])
         with open(args.export, 'w') as f:
             json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
         # Exportar CSV para control con métricas avanzadas

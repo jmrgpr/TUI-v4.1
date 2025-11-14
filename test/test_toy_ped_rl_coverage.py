@@ -1,0 +1,120 @@
+#!/usr/bin/env python3
+"""
+test_toy_ped_rl_coverage.py — Tests adicionales para aumentar cobertura en toy_ped_rl.py
+"""
+import pytest
+import numpy as np
+from sim.toy_ped_rl import (
+    System, ABResult, GridworldCaminoC, generate_toy_systems,
+    compute_I_op, compute_I_justo, ped_ablation, simulate_ab_adversary,
+    demo_gridworld_camino_c, demo_ped_arbol_humano, demo_sensibilidad_pesos,
+    pearson_correlation
+)
+
+def test_generate_toy_systems():
+    """Test generate_toy_systems."""
+    systems = generate_toy_systems(seed=42)
+    assert len(systems) == 7
+    assert systems[0].name == "Bacteria"
+    assert systems[-1].name == "GPT-4"
+
+def test_compute_I_op():
+    """Test compute_I_op."""
+    system = System("Test", 1.0, 0.1, 0.1, 0.5, 0.5, 0.5)
+    I_op = compute_I_op(system)
+    expected = 0.4 * 0.5 + 0.3 * 0.5 + 0.3 * 0.5
+    assert I_op == expected
+
+def test_compute_I_justo():
+    """Test compute_I_justo."""
+    system = System("Test", 1.0, 0.2, 0.3, 0.5, 0.5, 0.5)
+    I_justo = compute_I_justo(system)
+    I_op = compute_I_op(system)
+    expected = (0.2 ** 0.5) * (0.3 ** 0.5) * I_op
+    assert I_justo == expected
+
+def test_ped_ablation():
+    """Test ped_ablation."""
+    systems = generate_toy_systems()
+    r2_no_ped, r2_ped = ped_ablation(systems)
+    assert r2_no_ped > 0
+    assert r2_ped > 0
+
+def test_simulate_ab_adversary():
+    """Test simulate_ab_adversary."""
+    result = simulate_ab_adversary(episodes=100, seed=42)
+    assert isinstance(result, ABResult)
+    assert result.episodes == 100
+    assert result.detection_rate >= 0  # Can be >1 due to multiple detections per episode
+
+def test_gridworld_camino_c():
+    """Test GridworldCaminoC methods."""
+    env = GridworldCaminoC()
+    state = env.reset()
+    assert state == (0, 0)
+
+    next_state, reward, done, info = env.step("right")
+    assert next_state == (0, 1)
+    assert "U_humans" in info
+
+    # Test gaming position - but step moves away, so no gaming detected
+    env.agent_pos = [1, 1]
+    _, reward, _, info = env.step("stay")  # invalid action defaults to right, moves to (1,2)
+    assert not info["gaming_detected"]
+
+    # Test tripwire
+    env.agent_pos = [2, 1]
+    _, reward, _, info = env.step("right")  # to (2,2), tripwire
+    assert reward < 0
+
+    # Test goal
+    env.agent_pos = [4, 4]
+    _, reward, _, info = env.step("right")
+    assert reward > 0
+
+def test_apply_G3_attribution():
+    """Test apply_G3_attribution."""
+    env = GridworldCaminoC()
+    env.reset()
+    env.step("right")
+    env.step("right")
+    env.step("right")  # to (0,3)
+    credits = env.apply_G3_attribution(10.0)
+    assert len(credits) == 3
+    assert all(isinstance(c, float) for c in credits)
+
+def test_pearson_correlation():
+    """Test pearson_correlation."""
+    x = [1, 2, 3, 4]
+    y = [1, 2, 3, 4]
+    corr = pearson_correlation(x, y)
+    assert corr == 1.0
+
+    x = [1, 2, 3, 4]
+    y = [4, 3, 2, 1]
+    corr = pearson_correlation(x, y)
+    assert corr == -1.0
+
+    # Empty lists
+    corr = pearson_correlation([], [])
+    assert corr == 0.0
+
+def test_demo_gridworld_camino_c(capsys):
+    """Test demo_gridworld_camino_c."""
+    demo_gridworld_camino_c()
+    captured = capsys.readouterr()
+    assert "Módulo 1" in captured.out
+    assert "Gaming promedio" in captured.out
+
+def test_demo_ped_arbol_humano(capsys):
+    """Test demo_ped_arbol_humano."""
+    demo_ped_arbol_humano()
+    captured = capsys.readouterr()
+    assert "Módulo 2" in captured.out
+    assert "Sistema" in captured.out
+
+def test_demo_sensibilidad_pesos(capsys):
+    """Test demo_sensibilidad_pesos."""
+    demo_sensibilidad_pesos()
+    captured = capsys.readouterr()
+    assert "w_C" in captured.out

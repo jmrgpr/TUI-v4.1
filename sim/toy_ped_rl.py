@@ -175,7 +175,7 @@ def compute_I_justo(system: System, alpha=0.5, beta=0.5, w_C=0.4, w_F=0.3, w_T=0
     I_op = compute_I_op(system, w_C, w_F, w_T)
     return (system.Tiss ** alpha) * (system.Meta ** beta) * I_op
 
-def test_ped_ablation(systems: List[System]) -> Tuple[float, float]:
+def ped_ablation(systems: List[System]) -> Tuple[float, float]:
     """Test de ablación PED: R² sin vs con normalización"""
     P_riesgo = np.array([s.P_riesgo for s in systems])
     # Sin PED

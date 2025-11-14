@@ -20,6 +20,10 @@ from typing import List, Dict, Tuple
 from dataclasses import dataclass
 import argparse
 import matplotlib.pyplot as plt
+import warnings
+
+# Suprimir warnings específicos para código limpio
+warnings.filterwarnings("ignore", category=UserWarning, message="FigureCanvasAgg is non-interactive")
 
 @dataclass
 class System:
@@ -35,25 +39,49 @@ class System:
     P_riesgo: float
     observaciones: str
 
-# ===================== Módulo 2 y 3: Importar datos reales =====================
-def load_systems_from_csv(csv_path: str) -> List[System]:
-    df = pd.read_csv(csv_path)
+
+# API pública para test: cargar_datos_excel y analizar_datos
+def cargar_datos_excel(csv_path: str) -> List[System]:
+    """Carga sistemas desde un archivo CSV. Devuelve lista de System."""
+    try:
+        df = pd.read_csv(csv_path)
+    except Exception:
+        return []
     systems = []
     for _, row in df.iterrows():
-        systems.append(System(
-            name=row["Nombre del sistema"],
-            tipo=row["Tipo"],
-            C=float(row["C"]),
-            F=float(row["F"]),
-            T=float(row["T"]),
-            I_op=float(row["I_op"]),
-            vida=float(row["Vida (años)"]) if not pd.isnull(row["Vida (años)"]) else None,
-            tasa=float(row["Tasa (W)"]) if not pd.isnull(row["Tasa (W)"]) else None,
-            complejidad=float(row["Complejidad"]) if not pd.isnull(row["Complejidad"]) else None,
-            P_riesgo=float(row["P_riesgo físico"]),
-            observaciones=str(row["Observaciones"])
-        ))
+        try:
+            systems.append(System(
+                name=row.get("Nombre del sistema", ""),
+                tipo=row.get("Tipo", ""),
+                C=float(row.get("C", 0)),
+                F=float(row.get("F", 0)),
+                T=float(row.get("T", 0)),
+                I_op=float(row.get("I_op", 0)),
+                vida=float(row.get("Vida (años)", 0)) if not pd.isnull(row.get("Vida (años)", 0)) else None,
+                tasa=float(row.get("Tasa (W)", 0)) if not pd.isnull(row.get("Tasa (W)", 0)) else None,
+                complejidad=float(row.get("Complejidad", 0)) if not pd.isnull(row.get("Complejidad", 0)) else None,
+                P_riesgo=float(row.get("P_riesgo físico", 0)),
+                observaciones=str(row.get("Observaciones", ""))
+            ))
+        except Exception:
+            continue
     return systems
+
+def analizar_datos(sistemas: List[System]) -> Dict[str, float]:
+    """Analiza lista de sistemas y devuelve métricas básicas (media, correlación)."""
+    if not sistemas:
+        return {"media_I_op": 0.0, "media_P_riesgo": 0.0, "correlacion": 0.0}
+    I_ops = [s.I_op for s in sistemas]
+    P_riesgos = [s.P_riesgo for s in sistemas]
+    media_I_op = sum(I_ops) / len(I_ops) if I_ops else 0.0
+    media_P_riesgo = sum(P_riesgos) / len(P_riesgos) if P_riesgos else 0.0
+    corr = pearson_correlation(I_ops, P_riesgos)
+    return {"media_I_op": media_I_op, "media_P_riesgo": media_P_riesgo, "correlacion": corr}
+
+# ===================== Módulo 2 y 3: Importar datos reales =====================
+def load_systems_from_csv(csv_path: str) -> List[System]:
+    # Deprecated: usar cargar_datos_excel
+    return cargar_datos_excel(csv_path)
 
 def compute_I_justo(system: System, alpha=0.5, beta=0.5, w_C=0.4, w_F=0.3, w_T=0.3) -> float:
     I_op = w_C * system.C + w_F * system.F + w_T * system.T

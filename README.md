@@ -1,63 +1,41 @@
-# TUI v4.1 — Unified Intelligence Theory
 ![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/License-CC%20BY--NC--SA%204.0-lightgrey.svg)
-![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17552094.svg)
 
-**Autor**: Jose M Rivera Garcia  
-**Licencia**: CC BY-NC-SA 4.0  
-→ **Uso científico permitido. Prohibido uso comercial.**  
-→ Cita: `Rivera Garcia, J. M. (2025). TUI v4.1. Zenodo. https://doi.org/10.5281/zenodo.17552094`
+# TUI v4.1 — Unified Intelligence Theory
 
-# Propuesta de GUI / GUI Proposal
+**NO USO COMERCIAL PERMITIDO**  
+Solo para investigación, educación y ciencia.
 
-## Módulos principales / Main modules
+Cita:  
+> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
 
-- `sim/prototipo_rl_simbiosis.py`: Script principal de experimentos RL y comparación Control vs Simbiosis.
-- `sim/dqn_agent.py`: Agente DQN profesional, bilingüe y parametrizable.
-- `sim/visualizaciones.py`: Visualizaciones avanzadas, dashboards, boxplots, heatmaps, análisis estadístico y exportación profesional.
-- `sim/gui_streamlit.py`: GUI interactiva con Streamlit para controlar parámetros, visualizar resultados, comparar agentes y exportar métricas.
-- `sim/gui_utils.py`: Utilidades científicas para intervalos de confianza, t-test, ANOVA, interpretación automática bilingüe y exportación.
-- `sim/__init__.py`: Inicializa el paquete `sim` para importación profesional.
+## Licencia
 
-## Wireframe conceptual / Conceptual Wireframe
+Este repositorio está bajo la licencia [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode).
 
-- Vista principal: Panel de control con parámetros de simulación (episodios, semilla, risk_scale, tipo de agente).
-- Visualización: Área de gráficos avanzados (curvas de riesgo, boxplots, heatmaps, dashboards).
-- Resultados: Exportación y resumen estadístico bilingüe.
-- Navegación: Menú lateral para cambiar entre simulación, visualización y análisis.
+- **Permitido:** Uso académico, modificar y compartir cambios, citar con DOI, reproducir resultados, entrenar modelos no comerciales.
+- **Prohibido:** Vender el código, uso en producto comercial, usar sin atribución, entrenar modelos comerciales.
 
-## Ejecución de la GUI / Run the GUI
+## Reglas de uso
 
-Para usar la interfaz interactiva profesional:
+| Permitido         | Prohibido                |
+|------------------|-------------------------|
+| Uso académico    | Vender el código        |
+| Modificar/citar  | Uso comercial           |
+| Compartir cambios| Usar sin atribución     |
+| Reproducir       | Entrenar modelos comerciales |
+| Entrenar modelos no comerciales | |
 
-```powershell
-streamlit run sim/gui_streamlit.py
+## Enlace legal
+
+[Texto legal completo](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)
+
+## Zenodo
+
+Automatizado vía GitHub Actions (.github/workflows/zenodo.yml)
+
+```yaml
+license: "cc-by-nc-sa-4.0"
 ```
-
-Permite controlar parámetros, comparar agentes (Control vs Simbiosis), visualizar métricas avanzadas, exportar resultados y obtener interpretación automática bilingüe.
-
----
-
-- **Frontend:** Streamlit (Python, web, fácil despliegue, integración directa con scripts y visualizaciones matplotlib/seaborn).
-- **Alternativa:** Dash (Plotly) para visualizaciones interactivas avanzadas.
-- **Backend:** Python puro, reutilizando los módulos existentes (`sim/`, `notebooks/`, `visualizaciones.py`).
-- **Exportación:** Soporte para CSV, JSON y PNG directamente desde la interfaz.
-
-## Plan incremental / Incremental Implementation Plan
-
-1. **MVP:**
-  - Panel de parámetros y botón de ejecución.
-  - Visualización básica de resultados (curva de riesgo, boxplot).
-  - Exportación de resultados.
-2. **Iteración 2:**
-  - Dashboards interactivos, heatmaps y análisis estadístico.
-  - Resúmenes bilingües automáticos.
-3. **Iteración 3:**
-  - Personalización avanzada (selección de agente, comparación múltiple).
-  - Exportación DOI-ready y visualización de logs.
-
-## Justificación / Justification
-
-Streamlit permite una integración rápida y profesional con los módulos científicos existentes, es multiplataforma y facilita el despliegue web o local. Dash es una alternativa si se requiere mayor interactividad. El enfoque incremental asegura entregas funcionales y validación continua.
 # TUI v4.1 Toy Model — RL Symbiosis
 
 Este repositorio contiene el toy model oficial de la Teoría Unificada de la Inteligencia (TUI v4.1), con validación experimental de la hipótesis H1: "La inteligencia emerge al capitalizar el riesgo, no al evitarlo".
