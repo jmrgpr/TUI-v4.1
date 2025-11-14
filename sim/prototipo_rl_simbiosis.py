@@ -45,33 +45,65 @@ from typing import List, Dict, Tuple
 from dataclasses import dataclass, field
 import argparse
 import json
-# Integración DQN / DQN integration
-# from dqn_agent import DQNAgent  # Comentado para ejecución solo con Q-table / Commented for Q-table only
-from dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Symbiosis
+from dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
 import torch  # Necesario para DQN / Required for DQN
+# Visualización avanzada
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # ===================== Clases base =====================
 @dataclass
 class Event:
-    t: int
-    state: dict
-    action: str
-    effect: float
-    policy_id: str
-    info: dict = field(default_factory=dict)
+    pass
 
-@dataclass
-class Agent:
-    name: str
-    resources: float
-    memory: List[Event] = field(default_factory=list)
-    policy: Dict = field(default_factory=dict)
-    purpose: str = "survive_and_help"
-    plasticity: float = 0.5
-    alignment: float = 1.0
-    # Métricas TUI / TUI metrics
-    C: float = 0.0  # Capacidad predictiva / Predictive capacity
-    F: float = 0.0  # Flexibilidad / Flexibility
+
+# ===================== Clase Agent =====================
+class Agent(Event):
+    """
+    Agente RL base para control y simbiosis. Hereda de Event para compatibilidad métrica.
+    RL base agent for control and symbiosis. Inherits from Event for metric compatibility.
+    """
+    def __init__(self, name="Agent", resources=100.0):
+        super().__init__()
+        self.name = name
+        self.resources = resources
+        self.memory = []
+        self.policy = {}
+        self.purpose = "survive"
+        self.alignment = 1.0
+
+    def act(self, state):
+        # Política simple: elige acción aleatoria
+        return random.choice(self.ACTIONS)
+
+    def remember(self, event):
+        self.memory.append(event)
+        if len(self.memory) > 100:
+            self.memory.pop(0)
+
+    """
+    tui_toy_rl.py — TUI v4.1 Toy Model RL Symbiosis (DOI-ready)
+
+    Autor / Author: Jose M Rivera Garcia
+    Email: jmrgpr@gmail.com | jrivera77@outlook.com
+
+    ---
+    Toy model oficial de la Teoría Unificada de la Inteligencia (TUI v4.1).
+    Official toy model for the Unified Intelligence Theory (TUI v4.1).
+
+    Características principales / Key features:
+    ...existing code...
+
+    Uso / Usage:
+        python tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 1.0 --visualize --plot --export results/run1.json
+        # Para comparar curvas de riesgo / To compare risk curves:
+        python tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 0.5 --export results/run_risk05.json
+        python tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 1.5 --export results/run_risk15.json
+
+    Ejemplo de visualización avanzada / Example advanced visualization:
+        >>> from sim.visualizaciones import curva_riesgo_comparativa
+        >>> curva_riesgo_comparativa(riesgo_control, riesgo_simbiosis, export_path='results/risk_curves.png')
+    """
     T: float = 0.0  # Transferencia / Transfer
     I_op: float = 0.0  # Índice de oportunidad / Opportunity index
     P_riesgo: float = 0.0  # Riesgo acumulado / Accumulated risk
@@ -307,11 +339,10 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     INITIAL_RESOURCES = 100.0
     MAX_STEPS = 50
     # Selección de agente / Agent selection
-    if use_dqn:
-        state_dim = len(env.get_abstract_state())
-        action_dim = 4  # up, down, left, right
-        agent = DQNAgent(state_dim, action_dim)
-        ACTIONS = ['up','down','left','right']
+    state_dim = len(env.get_abstract_state())
+    action_dim = 4  # up, down, left, right
+    ACTIONS = ['up','down','left','right']
+    # El agente se inicializa en cada episodio para evitar errores de referencia
     # Inicialización de listas de métricas / Metrics lists initialization
     total_rewards = []
     flex_recov = []  # Flexibilidad por episodio / Flexibility per episode
@@ -326,6 +357,11 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
         state = env.reset()
+        # Inicialización segura del agente en cada episodio
+        if use_dqn:
+            agent = DQNAgent(state_dim, action_dim)
+        else:
+            agent = Agent(name=agent_name, resources=INITIAL_RESOURCES)
         agent.P_riesgo = 0.0
         agent.P_riesgo_prev = 0.0
         agent.resources = env.resources
