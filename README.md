@@ -1,5 +1,14 @@
 # Propuesta de GUI / GUI Proposal
 
+## Módulos principales / Main modules
+
+- `sim/prototipo_rl_simbiosis.py`: Script principal de experimentos RL y comparación Control vs Simbiosis.
+- `sim/dqn_agent.py`: Agente DQN profesional, bilingüe y parametrizable.
+- `sim/visualizaciones.py`: Visualizaciones avanzadas, dashboards, boxplots, heatmaps, análisis estadístico y exportación profesional.
+- `sim/gui_streamlit.py`: GUI interactiva con Streamlit para controlar parámetros, visualizar resultados, comparar agentes y exportar métricas.
+- `sim/gui_utils.py`: Utilidades científicas para intervalos de confianza, t-test, ANOVA, interpretación automática bilingüe y exportación.
+- `sim/__init__.py`: Inicializa el paquete `sim` para importación profesional.
+
 ## Wireframe conceptual / Conceptual Wireframe
 
 - Vista principal: Panel de control con parámetros de simulación (episodios, semilla, risk_scale, tipo de agente).
@@ -7,7 +16,17 @@
 - Resultados: Exportación y resumen estadístico bilingüe.
 - Navegación: Menú lateral para cambiar entre simulación, visualización y análisis.
 
-## Stack tecnológico recomendado / Recommended Tech Stack
+## Ejecución de la GUI / Run the GUI
+
+Para usar la interfaz interactiva profesional:
+
+```powershell
+streamlit run sim/gui_streamlit.py
+```
+
+Permite controlar parámetros, comparar agentes (Control vs Simbiosis), visualizar métricas avanzadas, exportar resultados y obtener interpretación automática bilingüe.
+
+---
 
 - **Frontend:** Streamlit (Python, web, fácil despliegue, integración directa con scripts y visualizaciones matplotlib/seaborn).
 - **Alternativa:** Dash (Plotly) para visualizaciones interactivas avanzadas.
@@ -86,7 +105,11 @@ python sim/tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 1.
 ```
 
 
-## Output esperado
+## Flujo de comparación automática / Automatic comparison workflow
+
+La GUI y los scripts ejecutan siempre la comparación científica Control vs Simbiosis, registrando todas las métricas relevantes y exportando resultados en formatos profesionales (CSV, JSON, PNG). El logging y los gráficos incluyen interpretación automática bilingüe.
+
+---
 
 ```
 Control:   reward=-4.95, tripwires=0.04, shocks=0.01, survival=95.0
@@ -160,7 +183,11 @@ Todos los gráficos y análisis incluyen interpretación automática bilingüe (
 - `--export`: exporta resultados a JSON/CSV / export results to JSON/CSV
 
 
-## Reproducibilidad
+## Exportación y reproducibilidad / Export & reproducibility
+
+Todos los resultados, métricas y visualizaciones pueden exportarse desde la GUI o los scripts en formatos listos para publicación (CSV, JSON, PNG). El código y los comentarios son bilingües y reproducibles internacionalmente.
+
+---
 - Semillas numpy, torch y cuda
 - Resultados exportables y visualización en vivo
 - Logging profesional y bilingüe / Professional bilingual logging
