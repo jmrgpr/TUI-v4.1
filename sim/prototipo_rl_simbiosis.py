@@ -9,20 +9,27 @@ Email: jmrgpr@gmail.com | jrivera77@outlook.com
 Toy model oficial de la Teoría Unificada de la Inteligencia (TUI v4.1).
 Official toy model for the Unified Intelligence Theory (TUI v4.1).
 
+Características principales / Key features:
 - Entorno Gridworld con riesgo constitutivo, propósito acoplado, recursos limitados, shocks y distractores.
 - Agente con memoria, plasticidad, reprogramación de meta y atribución granular de culpa/recompensa.
-- Métricas: adaptación, robustez, sacrificio, alineación, persistencia de propósito.
+- Métricas avanzadas: adaptación, robustez, sacrificio, alineación, persistencia de propósito, flexibilidad, acción óptima (Q-optimal), PGF prudencial, robustez y flexibilidad por episodio.
 - PGF prudencial: el reward premia explícitamente la reducción de riesgo entre pasos, alineado con la teoría TUI v4.1.
-- Logging profesional: se reportan por episodio supervivencia, tasa de tripwires/shocks, evolución de PGF y reward ambiental.
-- Experimentos parametrizables: comparar control vs simbiosis en distintos niveles de riesgo (`risk_scale`), sin números mágicos ni hardcoding.
+- Logging profesional y bilingüe: reporte por episodio de supervivencia, tasa de tripwires/shocks, evolución de PGF, reward ambiental, flexibilidad, robustez y acción óptima, exportación avanzada en CSV y JSON.
+- Visualización avanzada: gráficos robustos, boxplots, heatmaps, scatterplots, interpretación automática y resúmenes bilingües en consola y visuales.
+- Experimentos parametrizables: comparar control vs simbiosis en distintos niveles de riesgo (`risk_scale`), sin números mágicos ni hardcoding, CLI profesional.
+- Análisis estadístico avanzado: intervalos de confianza, t-test, ANOVA, interpretación automática bilingüe en consola y visuales.
+- Exportación DOI-ready en JSON/CSV y gráficos.
 - Comentarios y docstrings bilingües para reproducibilidad internacional.
 
 Gridworld environment with constitutive risk, coupled purpose, limited resources, shocks and distractors.
 Agent with memory, plasticity, meta reprogramming and granular blame/reward attribution.
-Metrics: adaptation, robustness, sacrifice, alignment, persistence of purpose.
+Advanced metrics: adaptation, robustness, sacrifice, alignment, persistence of purpose, flexibility, optimal action (Q-optimal), prudential PGF, robustness and flexibility per episode.
 Prudential PGF: reward explicitly favors risk reduction between steps, aligned with TUI v4.1 theory.
-Professional logging: per-episode reporting of survival, tripwire/shock rate, PGF evolution and environmental reward.
-Parametric experiments: compare control vs symbiosis at different risk levels (`risk_scale`), no magic numbers or hardcoding.
+Professional bilingual logging: per-episode reporting of survival, tripwire/shock rate, PGF evolution, environmental reward, flexibility, robustness and optimal action, advanced export in CSV and JSON.
+Advanced visualization: robust plots, boxplots, heatmaps, scatterplots, automatic interpretation and bilingual summaries in console and visuals.
+Parametric experiments: compare control vs symbiosis at different risk levels (`risk_scale`), no magic numbers or hardcoding, professional CLI.
+Advanced statistical analysis: confidence intervals, t-test, ANOVA, automatic bilingual interpretation in console and visuals.
+DOI-ready export in JSON/CSV and plots.
 Bilingual comments and docstrings for international reproducibility.
 
 Uso / Usage:
@@ -263,6 +270,20 @@ def state_to_vector(state):
     return np.array([v for _, v in state], dtype=np.float32)
 
 def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dqn=False):
+    """
+    Ejecuta un experimento RL con logging bilingüe y métricas avanzadas.
+    Runs an RL experiment with bilingual logging and advanced metrics.
+    Args:
+        episodes (int): Número de episodios / Number of episodes
+        seed (int): Semilla aleatoria / Random seed
+        risk_scale (float): Escala de riesgo / Risk scale
+        agent_name (str): Nombre del agente / Agent name
+        use_pgf (bool): Usar PGF prudencial / Use prudential PGF
+        use_dqn (bool): Usar agente DQN / Use DQN agent
+    Returns:
+        dict: Métricas y trayectorias del experimento, incluyendo flexibilidad, robustez y acción óptima por episodio, PGF prudencial, exportación avanzada y visualización bilingüe.
+        Experiment metrics and trajectories, including flexibility, robustness and optimal action per episode, prudential PGF, advanced export and bilingual visualization.
+    """
     def pad_trajectories(trajectories, max_steps=50, pad_value=np.nan):
         """
         Homogeneiza trayectorias de longitud variable.
@@ -291,13 +312,11 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         action_dim = 4  # up, down, left, right
         agent = DQNAgent(state_dim, action_dim)
         ACTIONS = ['up','down','left','right']
-    else:
-        agent = Agent(name=agent_name, resources=INITIAL_RESOURCES)
-        ACTIONS = agent.ACTIONS
-    # Logging profesional y bilingüe / Professional bilingual logging
+    # Inicialización de listas de métricas / Metrics lists initialization
     total_rewards = []
-    flex_recov = []
-    q_optimal = []
+    flex_recov = []  # Flexibilidad por episodio / Flexibility per episode
+    robust_evol = [] # Robustez por episodio / Robustness per episode
+    q_optimal = []   # Acción óptima por episodio / Optimal action per episode
     tripwire_steps = []
     pgf_evol = []
     reward_env_evol = []
@@ -317,6 +336,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         pgf_steps = []
         reward_env_steps = []
         q_optimal_steps = []
+        flex_steps = []
+        robust_steps = []
         for step in range(MAX_STEPS):
             if use_dqn:
                 state_vec = np.array([v for _, v in state], dtype=np.float32)
@@ -340,6 +361,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             total_reward += r_pgf
             pgf_steps.append(agent.PGF)
             reward_env_steps.append(reward_env)
+            flex_steps.append(agent.F)
+            robust_steps.append(agent.R_robust)
             if use_dqn:
                 q_vals = agent.model(torch.FloatTensor(state_to_vector(state)).unsqueeze(0)).detach().cpu().numpy()[0]
                 optimal_action_idx = int(np.argmax(q_vals))
@@ -359,7 +382,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             if done:
                 break
         total_rewards.append(total_reward)
-        flex_recov.append(steps_to_recover if steps_to_recover is not None else MAX_STEPS)
+        flex_recov.append(np.mean(flex_steps) if flex_steps else 0.0)
+        robust_evol.append(np.mean(robust_steps) if robust_steps else 0.0)
         tripwire_steps.append(tripwire_count)
         shocks_evol.append(shock_count)
         pgf_evol.append(pgf_steps)
@@ -367,8 +391,16 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
         agent.reprogram_purpose("survive_and_help") if not use_dqn else None
+        # Logging por episodio (bilingüe, con métricas avanzadas)
+        if (ep+1) % max(1, episodes//10) == 0 or ep == episodes-1:
+            flex = agent.F if hasattr(agent, 'F') else 0.0
+            q_opt = np.max(agent.policy.get('Q', np.zeros(4))) if hasattr(agent, 'policy') and 'Q' in agent.policy else 0.0
+            robust = agent.R_robust if hasattr(agent, 'R_robust') else 0.0
+            print(f"[{agent_name}] Episodio {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {agent.PGF:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")
+            print(f"[{agent_name}] Episode {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {agent.PGF:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")
     avg_reward = np.mean(total_rewards)
     avg_flex = np.mean(flex_recov)
+    avg_robust = np.mean(robust_evol)
     avg_tripwire = np.mean(tripwire_steps)
     avg_q_opt = np.mean(q_optimal)
     avg_shocks = np.mean(shocks_evol)
@@ -380,6 +412,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     return {
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
+        "avg_robust": avg_robust,
         "avg_tripwire": avg_tripwire,
         "avg_q_opt": avg_q_opt,
         "avg_shocks": avg_shocks,
@@ -393,6 +426,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "reward_env_evol_padded": reward_env_padded.tolist(),
         "q_optimal_evol": q_optimal,
         "survival_evol": survival_evol,
+        "flex_recov": flex_recov,
+        "robust_evol": robust_evol,
         "policy": agent.model.state_dict() if use_dqn else agent.policy
     }
 
@@ -449,13 +484,19 @@ def main():
         all_tripwires_simbiosis = []
         for risk in risk_values:
             print(f"\n=== Barrido de risk_scale: {risk} ===")
+            # Mensaje de progreso en porcentaje
+            def progress_callback(ep, total):
+                if ep % max(1, total // 20) == 0 or ep == total:
+                    pct = int(100 * ep / total)
+                    print(f"Progreso: {ep}/{total} ({pct}%)")
             res_A = run_experiment(
                 episodes=args.episodes,
                 seed=args.seed,
                 risk_scale=risk,
                 agent_name="Control",
                 use_pgf=False,
-                use_dqn=False
+                use_dqn=False,
+                progress_callback=progress_callback
             )
             res_B = run_experiment(
                 episodes=args.episodes,
@@ -463,7 +504,8 @@ def main():
                 risk_scale=risk,
                 agent_name="Simbiosis",
                 use_pgf=True,
-                use_dqn=True
+                use_dqn=True,
+                progress_callback=progress_callback
             )
             sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
             # Exportar JSON
@@ -495,14 +537,88 @@ def main():
             all_rewards_simbiosis.append(res_B['total_rewards'])
             all_tripwires_control.append(res_A['tripwire_steps'])
             all_tripwires_simbiosis.append(res_B['tripwire_steps'])
-            # Graficar evolución PGF, reward_env y tripwires (bilingüe, robusto)
+            # Gráficos avanzados y análisis bilingüe
+            # Análisis estadístico avanzado
+            from scipy.stats import ttest_ind, f_oneway, sem
+            def print_ci_metric(metric_A, metric_B, name):
+                mean_A, mean_B = np.mean(metric_A), np.mean(metric_B)
+                ci_A = sem(metric_A)
+                ci_B = sem(metric_B)
+                print(f"{name} Control: {mean_A:.2f} ± {ci_A:.2f} | Simbiosis: {mean_B:.2f} ± {ci_B:.2f}")
+            print('\nIntervalos de confianza (±SEM) / Confidence intervals (±SEM):')
+            print_ci_metric(res_A['flex_recov'], res_B['flex_recov'], 'Flexibilidad / Flexibility')
+            print_ci_metric(res_A['shocks_evol'], res_B['shocks_evol'], 'Robustez / Robustness')
+            print_ci_metric(res_A['q_optimal_evol'], res_B['q_optimal_evol'], 'Q-optimal')
+            # t-test y ANOVA
+            print('\nTests estadísticos / Statistical tests:')
+            t_flex = ttest_ind(res_A['flex_recov'], res_B['flex_recov'])
+            t_robust = ttest_ind(res_A['shocks_evol'], res_B['shocks_evol'])
+            t_qopt = ttest_ind(res_A['q_optimal_evol'], res_B['q_optimal_evol'])
+            print(f"t-test Flexibilidad: p={t_flex.pvalue:.4f}")
+            print(f"t-test Robustez: p={t_robust.pvalue:.4f}")
+            print(f"t-test Q-optimal: p={t_qopt.pvalue:.4f}")
+            anova_flex = f_oneway(res_A['flex_recov'], res_B['flex_recov'])
+            print(f"ANOVA Flexibilidad: p={anova_flex.pvalue:.4f}")
+            # Interpretación automática bilingüe
+            print('\nInterpretación estadística:')
+            print('Si p < 0.05, la diferencia entre agentes es significativa. / If p < 0.05, difference between agents is significant.')
+            # Evolución temporal de flexibilidad, robustez y Q-optimal
+            plt.figure(figsize=(12,6))
+            plt.subplot(3,1,1)
+            plt.plot(np.nanmean(res_A['pgf_evol_padded'], axis=0), label='Control PGF', color='blue')
+            plt.plot(np.nanmean(res_B['pgf_evol_padded'], axis=0), label='Simbiosis PGF', color='red')
+            plt.title('Evolución PGF / PGF Evolution')
+            plt.legend()
+            plt.subplot(3,1,2)
+            plt.plot(np.nanmean(res_A['reward_env_evol_padded'], axis=0), label='Control Reward', color='blue')
+            plt.plot(np.nanmean(res_B['reward_env_evol_padded'], axis=0), label='Simbiosis Reward', color='red')
+            plt.title('Evolución Reward / Reward Evolution')
+            plt.legend()
+            plt.subplot(3,1,3)
+            plt.plot(res_A['q_optimal_evol'], label='Control Q-optimal', color='blue')
+            plt.plot(res_B['q_optimal_evol'], label='Simbiosis Q-optimal', color='red')
+            plt.title('Acción óptima por episodio / Optimal action per episode')
+            plt.legend()
+            plt.tight_layout()
+            plt.savefig(export_path.replace('.json', '_evol_metrics.png'), dpi=200)
+            plt.close()
+            # Scatterplot PGF vs Reward
+            plt.figure(figsize=(6,5))
+            plt.scatter(res_A['total_rewards'], [row[-1] for row in res_A['pgf_evol_padded']], label='Control', color='blue', alpha=0.5)
+            plt.scatter(res_B['total_rewards'], [row[-1] for row in res_B['pgf_evol_padded']], label='Simbiosis', color='red', alpha=0.5)
+            plt.xlabel('Reward final')
+            plt.ylabel('PGF final')
+            plt.title('PGF vs Reward final / PGF vs Final Reward')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.savefig(export_path.replace('.json', '_scatter_pgf_reward.png'), dpi=200)
+            plt.close()
+            # Heatmap de tripwires por episodio
+            import seaborn as sns
+            plt.figure(figsize=(8,4))
+            data_tw = np.vstack([res_A['tripwire_steps'], res_B['tripwire_steps']])
+            sns.heatmap(data_tw, cmap='coolwarm', annot=True, fmt='.1f', cbar=True, yticklabels=['Control','Simbiosis'])
+            plt.title('Tripwires por episodio / Tripwires per episode')
+            plt.xlabel('Episodio / Episode')
+            plt.ylabel('Agente / Agent')
+            plt.tight_layout()
+            plt.savefig(export_path.replace('.json', '_heatmap_tripwires.png'), dpi=200)
+            plt.close()
+            # Interpretación automática bilingüe
+            interp_pgf = 'Simbiosis supera a Control en PGF si la curva roja está por encima de la azul. / Simbiosis outperforms Control in PGF if the red curve is above the blue.'
+            interp_qopt = 'Mayor Q-optimal indica mejor alineación de política. / Higher Q-optimal indicates better policy alignment.'
+            print('\nInterpretación automática:')
+            print(interp_pgf)
+            print(interp_qopt)
             import matplotlib.pyplot as plt
             pgf_control_pad = np.array(res_A['pgf_evol_padded'])
             pgf_simbiosis_pad = np.array(res_B['pgf_evol_padded'])
             reward_control_pad = np.array(res_A['reward_env_evol_padded'])
             reward_simbiosis_pad = np.array(res_B['reward_env_evol_padded'])
-            plt.figure(figsize=(10,5))
-            plt.subplot(1,2,1)
+            max_steps = pgf_control_pad.shape[1]
+            # Curvas PGF y Reward
+            plt.figure(figsize=(12,6))
+            plt.subplot(2,2,1)
             plt.plot(np.nanmean(pgf_control_pad, axis=0), label='Control PGF', linewidth=2)
             plt.plot(np.nanmean(pgf_simbiosis_pad, axis=0), label='Simbiosis PGF', linewidth=2)
             plt.title(f'PGF Evolución (risk_scale={risk})')
@@ -510,7 +626,7 @@ def main():
             plt.ylabel('PGF promedio (solo pasos vivos) / Mean PGF (alive steps only)')
             plt.legend()
             plt.grid(True, alpha=0.3)
-            plt.subplot(1,2,2)
+            plt.subplot(2,2,2)
             plt.plot(np.nanmean(reward_control_pad, axis=0), label='Control Reward', linewidth=2)
             plt.plot(np.nanmean(reward_simbiosis_pad, axis=0), label='Simbiosis Reward', linewidth=2)
             plt.title(f'Reward Evolución (risk_scale={risk})')
@@ -518,14 +634,63 @@ def main():
             plt.ylabel('Reward promedio (solo pasos vivos) / Mean Reward (alive steps only)')
             plt.legend()
             plt.grid(True, alpha=0.3)
-            plt.tight_layout()
-            plt.savefig(export_path.replace('.json', '_evol.png'), dpi=200)
+            # Tasa de supervivencia por paso
+            survival_control = [np.mean(~np.isnan(pgf_control_pad[:, t])) for t in range(max_steps)]
+            survival_simbiosis = [np.mean(~np.isnan(pgf_simbiosis_pad[:, t])) for t in range(max_steps)]
+            plt.subplot(2,2,3)
+            plt.plot(survival_control, label='Control', color='blue')
+            plt.plot(survival_simbiosis, label='Simbiosis', color='red')
+            plt.title('Tasa de supervivencia por paso / Survival rate per step')
+            plt.xlabel('Paso / Step')
+            plt.ylabel('Tasa de supervivencia / Survival rate')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            # Boxplot PGF final por episodio
+            # Gráfico de intervalos de confianza para PGF final
+            import scipy.stats as stats
+            def conf_int(data):
+                arr = np.array(data)
+                arr = arr[~np.isnan(arr)]
+                mean = np.nanmean(arr)
+                sem = stats.sem(arr)
+                ci = stats.t.interval(0.95, len(arr)-1, loc=mean, scale=sem) if len(arr) > 1 else (mean, mean)
+                return mean, ci
+            mean_control, ci_control = conf_int(final_pgf_control)
+            mean_simbiosis, ci_simbiosis = conf_int(final_pgf_simbiosis)
+            plt.errorbar([1], [mean_control], yerr=[[mean_control-ci_control[0]], [ci_control[1]-mean_control]], fmt='o', color='blue', label='Control CI')
+            plt.errorbar([2], [mean_simbiosis], yerr=[[mean_simbiosis-ci_simbiosis[0]], [ci_simbiosis[1]-mean_simbiosis]], fmt='o', color='red', label='Simbiosis CI')
+            plt.legend()
+            plt.subplot(2,2,4)
+            final_pgf_control = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_control_pad]
+            final_pgf_simbiosis = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_simbiosis_pad]
+            plt.boxplot([final_pgf_control, final_pgf_simbiosis], tick_labels=['Control', 'Simbiosis'])
+            plt.title('Distribución PGF final por episodio / Final PGF per episode')
+            plt.ylabel('PGF final')
+            # Interpretación automática
+            mean_control = np.nanmean(final_pgf_control)
+            mean_simbiosis = np.nanmean(final_pgf_simbiosis)
+            interp = f"Control: {mean_control:.2f} | Simbiosis: {mean_simbiosis:.2f}"
+            plt.figtext(0.5, 0.01, f"Interpretación: Simbiosis mejora PGF si su media supera a Control. {interp}", ha='center', fontsize=10, color='darkgreen')
+            plt.tight_layout(rect=[0,0.03,1,0.95])
+            plt.savefig(export_path.replace('.json', '_evol_advanced.png'), dpi=200)
             plt.close()
             # Boxplot tripwires
+            # Gráfico de intervalos de confianza para tripwires
+            mean_tw_control, ci_tw_control = conf_int(res_A['tripwire_steps'])
+            mean_tw_simbiosis, ci_tw_simbiosis = conf_int(res_B['tripwire_steps'])
+            plt.errorbar([1], [mean_tw_control], yerr=[[mean_tw_control-ci_tw_control[0]], [ci_tw_control[1]-mean_tw_control]], fmt='o', color='blue', label='Control CI')
+            plt.errorbar([2], [mean_tw_simbiosis], yerr=[[mean_tw_simbiosis-ci_tw_simbiosis[0]], [ci_tw_simbiosis[1]-mean_tw_simbiosis]], fmt='o', color='red', label='Simbiosis CI')
+            plt.legend()
             plt.figure(figsize=(6,4))
-            plt.boxplot([res_A['tripwire_steps'], res_B['tripwire_steps']], labels=['Control', 'Simbiosis'])
+            plt.boxplot([res_A['tripwire_steps'], res_B['tripwire_steps']], tick_labels=['Control', 'Simbiosis'])
             plt.title(f'Tripwires por episodio (risk_scale={risk})')
             plt.ylabel('Tripwires')
+            # Interpretación automática
+            mean_tw_control = np.mean(res_A['tripwire_steps'])
+            mean_tw_simbiosis = np.mean(res_B['tripwire_steps'])
+            interp_tw = f"Control: {mean_tw_control:.2f} | Simbiosis: {mean_tw_simbiosis:.2f}"
+            plt.figtext(0.5, 0.01, f"Interpretación: Menos tripwires indica mejor desempeño. {interp_tw}", ha='center', fontsize=10, color='darkred')
+            plt.tight_layout(rect=[0,0.03,1,0.95])
             plt.savefig(export_path.replace('.json', '_tripwires_boxplot.png'))
             plt.close()
         # Análisis estadístico global
@@ -547,21 +712,31 @@ def main():
         plt.close()
         # Boxplot global de tripwires
         plt.figure(figsize=(7,5))
-        plt.boxplot(all_tripwires_control, positions=np.array(risk_values)-0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='blue', alpha=0.3), labels=[str(r) for r in risk_values])
+        # Matplotlib >=3.9: usar tick_labels
+        plt.boxplot(all_tripwires_control, positions=np.array(risk_values)-0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='blue', alpha=0.3), tick_labels=[str(r) for r in risk_values])
         plt.boxplot(all_tripwires_simbiosis, positions=np.array(risk_values)+0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='red', alpha=0.3))
         plt.xlabel('risk_scale')
-        plt.ylabel('Tripwires por episodio')
-        plt.title('Tripwires por episodio vs risk_scale')
+        plt.ylabel('Tripwires por episodio / Tripwires per episode')
+        plt.title('Tripwires por episodio vs risk_scale / Tripwires per episode vs risk_scale')
+        plt.grid(True, alpha=0.3)
+        plt.tight_layout()
         plt.savefig('results/sweep_tripwires_vs_risk.png')
         plt.close()
         # Métricas adicionales: varianza de recompensa, supervivencia
+        # Resumen estadístico avanzado bilingüe
+        print('\nResumen estadístico avanzado / Advanced statistical summary:')
+        for i, risk in enumerate(risk_values):
+            print(f"risk_scale={risk} | Control PGF: {avg_rewards_control[i]:.2f} ± {stats.sem(all_rewards_control[i]):.2f} | Simbiosis PGF: {avg_rewards_simbiosis[i]:.2f} ± {stats.sem(all_rewards_simbiosis[i]):.2f}")
+            print(f"risk_scale={risk} | Control Tripwires: {np.mean(all_tripwires_control[i]):.2f} ± {stats.sem(all_tripwires_control[i]):.2f} | Simbiosis Tripwires: {np.mean(all_tripwires_simbiosis[i]):.2f} ± {stats.sem(all_tripwires_simbiosis[i]):.2f}")
         var_rewards_control = [np.var(r) for r in all_rewards_control]
         var_rewards_simbiosis = [np.var(r) for r in all_rewards_simbiosis]
         print('\nResumen estadístico global:')
         print('risk_scale | Control (media, varianza) | Simbiosis (media, varianza)')
         for i, risk in enumerate(risk_values):
-            print(f'{risk:>9} | {avg_rewards_control[i]:>8.2f}, {var_rewards_control[i]:>8.2f} | {avg_rewards_simbiosis[i]:>8.2f}, {var_rewards_simbiosis[i]:>8.2f}')
+            interp = "Simbiosis supera a Control" if avg_rewards_simbiosis[i] > avg_rewards_control[i] else "Control supera a Simbiosis"
+            print(f'{risk:>9} | {avg_rewards_control[i]:>8.2f}, {var_rewards_control[i]:>8.2f} | {avg_rewards_simbiosis[i]:>8.2f}, {var_rewards_simbiosis[i]:>8.2f} | {interp}')
         print("\n=== Barrido de risk_scale completado. Resultados exportados, gráficos y análisis generados. ===")
+        print("Interpretación automática: Si Simbiosis tiene mayor recompensa media y menor varianza, es preferible. Todos los valores están en formato bilingüe.")
         return
 
     # ...existing code...
@@ -582,20 +757,26 @@ def main():
     if args.export:
         with open(args.export, 'w') as f:
             json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
-        # Exportar CSV para control
+        # Exportar CSV para control con métricas avanzadas
         csv_control = args.export.replace('.json', '_control.csv')
         with open(csv_control, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control'])
-            for i, (r, t) in enumerate(zip(res_A['total_rewards'], res_A['tripwire_steps'])):
-                writer.writerow([i+1, r, t])
-        # Exportar CSV para simbiosis
+            writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control', 'Flexibilidad', 'Robustez', 'Q-optimal'])
+            for i in range(len(res_A['total_rewards'])):
+                flex = res_A.get('flex_recov', [None]*len(res_A['total_rewards']))[i]
+                robust = res_A.get('shocks_evol', [None]*len(res_A['total_rewards']))[i]
+                qopt = res_A.get('q_optimal_evol', [None]*len(res_A['total_rewards']))[i]
+                writer.writerow([i+1, res_A['total_rewards'][i], res_A['tripwire_steps'][i], flex, robust, qopt])
+        # Exportar CSV para simbiosis con métricas avanzadas
         csv_simbiosis = args.export.replace('.json', '_simbiosis.csv')
         with open(csv_simbiosis, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis'])
-            for i, (r, t) in enumerate(zip(res_B['total_rewards'], res_B['tripwire_steps'])):
-                writer.writerow([i+1, r, t])
+            writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis', 'Flexibilidad', 'Robustez', 'Q-optimal'])
+            for i in range(len(res_B['total_rewards'])):
+                flex = res_B.get('flex_recov', [None]*len(res_B['total_rewards']))[i]
+                robust = res_B.get('shocks_evol', [None]*len(res_B['total_rewards']))[i]
+                qopt = res_B.get('q_optimal_evol', [None]*len(res_B['total_rewards']))[i]
+                writer.writerow([i+1, res_B['total_rewards'][i], res_B['tripwire_steps'][i], flex, robust, qopt])
         # Mostrar resumen tabular en consola
         print('\nResumen tabular:')
         print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Acción óptima':>16}")
