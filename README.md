@@ -5,9 +5,11 @@
 ![DOI Theory](https://zenodo.org/badge/DOI/10.5281/zenodo.17552094.svg)
 ![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)
 ![Reproducible](https://img.shields.io/badge/reproducible-validated-success)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 
 # TUI v4.2 - Unified Intelligence Theory (toy simulator)
 
+<<<<<<< HEAD
 ES: Simulador Gridworld para ejercer la Teoria Unificada de la Inteligencia (TUI v4.2). Incluye agentes Control (Q-table) y Simbiosis (DQN+PGF), exportacion DOI-ready, analisis estadistico y visualizaciones.  
 EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
 
@@ -58,10 +60,64 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 
 - **Escenarios donde la metodología puede no ser aplicable:**  
   El enfoque TUI/PGF está optimizado para entornos discretos y problemas de decisión secuencial. No se recomienda para tareas de control continuo, simulaciones físicas realistas, ni benchmarks de alta dimensionalidad (MuJoCo, Procgen, etc.).
+=======
+Cita recomendada:  
+> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+
+---
+
+## Licencias
+
+Este proyecto distingue entre **código** y **teoría/documentación larga**:
+
+### 🧩 Código de este repositorio
+
+- **Licencia:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- **Alcanza a:**  
+  - Código fuente (`.py`, `.ipynb`, scripts, herramientas de simulación).  
+  - Archivos auxiliares necesarios para ejecutar el toy model RL.
+
+**Resumen (no legal, solo orientativo):**
+
+- ✅ Puedes usar, modificar, redistribuir e integrar el código (incluyendo uso comercial).
+- ✅ Puedes crear derivados cerrados o integrarlo en otros sistemas.
+- ✅ Debes conservar los avisos de copyright y licencia.
+- ❌ No hay garantías; el código se entrega “AS IS”.
+
+El texto completo está en [`LICENSE`](LICENSE).
+
+---
+
+### 📄 Teoría / preprint / contenido conceptual (Zenodo)
+
+- **Licencia:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
+- **Alcanza a:**  
+  - El preprint teórico en Zenodo.  
+  - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
+
+**Resumen (no legal):**
+
+- ✅ Uso académico y de investigación.  
+- ✅ Citar con DOI y atribución a **José M. Rivera García**.  
+- ✅ Compartir y adaptar, siempre bajo la misma licencia.  
+- ❌ No usar el texto/teoría como base directa de productos comerciales sin acuerdo previo.
+
+---
+
+### Resumen práctico
+
+| Tipo de contenido      | Licencia          | Uso comercial | Obligación principal                    |
+|------------------------|-------------------|--------------|-----------------------------------------|
+| Código de este repo    | Apache 2.0        | ✅ Permitido  | Mantener aviso de licencia/copyright    |
+| Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
+
+---
+>>>>>>> 603de3f (Change license to Apache 2.0 and update project info)
 
 - **Fuentes de sesgo o incertidumbre experimental:**  
   Los resultados pueden verse afectados por la selección de semillas, episodios y parámetros de riesgo. La interpretación de métricas depende de la correcta configuración experimental. No se garantiza robustez ante cambios drásticos en la estructura del entorno o los agentes.
 
+<<<<<<< HEAD
 - **Restricciones técnicas:**  
   El simulador depende de librerías específicas (torch, stable-baselines3, gymnasium, etc.) y está optimizado para Python 3.10/3.11. El rendimiento puede verse limitado en hardware sin soporte para aceleración (GPU/CPU). La escalabilidad está pensada para experimentos medianos; no se recomienda para grandes clusters o HPC sin adaptación.
 
@@ -101,59 +157,57 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - El notebook de análisis produce tablas y gráficos comparativos.
 - La estructura del repositorio está limpia y documentada.
 
-**Próximos pasos:**
-- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
-- Validar exportación de steps en los CSV para métricas avanzadas.
-- Integrar nuevos hallazgos y figuras en el reporte preliminar.
-- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
-
-**Recomendaciones:**
-- Mantener README y reportes actualizados tras cada experimento.
-- Documentar hallazgos relevantes y cambios en scripts/notebooks.
-- Garantizar reproducibilidad y trazabilidad en cada etapa.
-
-## Ejemplo de interpretación de resultados
-
-Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
-
-```
-agent, risk_scale, avg_reward, std_reward
-Control, 1.0, 85.2, 4.1
-Simbiosis, 1.0, 92.7, 2.8
-```
-
-**¿Cómo interpretar estos valores?**
-
-- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
-- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
-
-**Recomendaciones:**
-- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
-- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
-- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
-
-
-## Nota sobre herramientas utilizadas
-Este proyecto fue desarrollado y documentado con apoyo de herramientas de inteligencia artificial (IA) para acelerar tareas de refactorización, documentación y validación técnica. Todas las decisiones científicas, experimentales y de diseño fueron tomadas por el autor humano, garantizando la trazabilidad y reproducibilidad del trabajo.
-
-## Dedicatoria / Dedication
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazón.
+Cita recomendada:  
+> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
 
 ---
 
-# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+## Licencias
 
-EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+Este proyecto distingue entre **código** y **teoría/documentación larga**:
 
-## Recent achievements
-- Refactor of simulator and runners (v4.2).
-- **100%** test coverage in `sim/`; full integration.
-- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
-- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
-- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+### 🧩 Código de este repositorio
 
-## Reference environment
-- Python 3.10 or 3.11
+- **Licencia:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
+- **Alcanza a:**  
+  - Código fuente (`.py`, `.ipynb`, scripts, herramientas de simulación).  
+  - Archivos auxiliares necesarios para ejecutar el toy model RL.
+
+**Resumen (no legal, solo orientativo):**
+
+- ✅ Puedes usar, modificar, redistribuir e integrar el código (incluyendo uso comercial).
+- ✅ Puedes crear derivados cerrados o integrarlo en otros sistemas.
+- ✅ Debes conservar los avisos de copyright y licencia.
+- ❌ No hay garantías; el código se entrega “AS IS”.
+
+El texto completo está en [`LICENSE`](LICENSE).
+
+---
+
+### 📄 Teoría / preprint / contenido conceptual (Zenodo)
+
+- **Licencia:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
+- **Alcanza a:**  
+  - El preprint teórico en Zenodo.  
+  - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
+
+**Resumen (no legal):**
+
+- ✅ Uso académico y de investigación.  
+- ✅ Citar con DOI y atribución a **José M. Rivera García**.  
+- ✅ Compartir y adaptar, siempre bajo la misma licencia.  
+- ❌ No usar el texto/teoría como base directa de productos comerciales sin acuerdo previo.
+
+---
+
+### Resumen práctico
+
+| Tipo de contenido      | Licencia          | Uso comercial | Obligación principal                    |
+|------------------------|-------------------|--------------|-----------------------------------------|
+| Código de este repo    | Apache 2.0        | ✅ Permitido  | Mantener aviso de licencia/copyright    |
+| Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
+
+---
 - Key dependencies (see `requirements.txt` / `environment.yml`):
   torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
 
@@ -550,3 +604,9 @@ Se ha identificado una discrepancia en la interpretación de los resultados entr
 Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
 
 ---
+=======
+Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/workflows/zenodo.yml`) usando la licencia de código:
+
+```yaml
+license: "Apache-2.0"
+>>>>>>> 603de3f (Change license to Apache 2.0 and update project info)
