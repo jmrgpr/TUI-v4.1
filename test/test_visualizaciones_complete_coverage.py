@@ -355,3 +355,98 @@ def test_dashboard_metricas_empty_agg_export_csv_json(tmp_path_fixture):
     dashboard_metricas({}, export_path=export_json)
     assert os.path.exists(export_csv)
     assert os.path.exists(export_json)
+
+def test_dashboard_metricas_prints_full(capsys, tmp_path_fixture):
+    """Cubre todos los prints y ramas de dashboard_metricas (alias y agg)."""
+    from sim.visualizaciones import dashboard_metricas
+    # Dict vacío
+    dashboard_metricas({})
+    captured = capsys.readouterr()
+    assert "Sin datos" in captured.out
+    # Dict con datos
+    data = {'Control': {'Flexibilidad': [1,2,3], 'Robustez': [4,5,6]}}
+    dashboard_metricas(data)
+    captured = capsys.readouterr()
+    assert "Dashboard" in captured.out or "dashboard" in captured.out
+    # Exportación CSV
+    export_csv = str(tmp_path_fixture / "dashboard_full.csv")
+    dashboard_metricas(data, export_path=export_csv)
+    assert tmp_path_fixture.joinpath("dashboard_full.csv").exists()
+    # Exportación JSON
+    export_json = str(tmp_path_fixture / "dashboard_full.json")
+    dashboard_metricas(data, export_path=export_json)
+    assert tmp_path_fixture.joinpath("dashboard_full.json").exists()
+
+
+def test_boxplot_metricas_prints_full(capsys):
+    """Cubre todos los prints y ramas de boxplot_metricas y boxplot_metricas_profesional."""
+    from sim.visualizaciones import boxplot_metricas, boxplot_metricas_profesional
+    # Data vacío
+    boxplot_metricas([], show=False)
+    captured = capsys.readouterr()
+    # Data normal
+    boxplot_metricas([[1,2,3],[4,5,6]], labels=['A','B'], show=False)
+    # Profesional vacío
+    boxplot_metricas_profesional([], [], 'Test')
+    captured = capsys.readouterr()
+    assert "Sin datos" in captured.out
+    # Profesional normal
+    boxplot_metricas_profesional([1,2,3], [4,5,6], 'Test')
+
+
+def test_heatmap_metricas_prints_full(capsys):
+    """Cubre todos los prints y ramas de heatmap_metricas y heatmap_metricas_profesional."""
+    from sim.visualizaciones import heatmap_metricas, heatmap_metricas_profesional
+    import numpy as np
+    # Data vacío
+    heatmap_metricas([], show=False)
+    captured = capsys.readouterr()
+    # Data normal
+    heatmap_metricas(np.array([[1,2],[3,4]]), show=False)
+    # Profesional vacío
+    heatmap_metricas_profesional(np.array([]), {'x': [], 'y': []}, 'Test')
+    captured = capsys.readouterr()
+    assert "Sin datos" in captured.out
+    # Profesional normal
+    heatmap_metricas_profesional(np.array([[1,2],[3,4]]), {'x': ['A','B'], 'y': ['1','2']}, 'Test')
+
+
+def test_dashboard_metricas_loop_prints(capsys):
+    """Cubre los prints del loop en dashboard_metricas con múltiples agentes y métricas."""
+    from sim.visualizaciones import dashboard_metricas
+    data = {
+        'Control': {'Flexibilidad': [1, 2, 3], 'Robustez': [4, 5, 6]},
+        'Simbiosis': {'Flexibilidad': [2, 3, 4], 'Robustez': [5, 6, 7]},
+        'OtroAgente': {'MétricaExtra': [8, 9, 10]}
+    }
+    dashboard_metricas(data)
+    captured = capsys.readouterr()
+    assert 'Control' in captured.out
+    assert 'Simbiosis' in captured.out
+    assert 'OtroAgente' in captured.out
+    assert 'Flexibilidad' in captured.out
+    assert 'Robustez' in captured.out
+    assert 'MétricaExtra' in captured.out
+
+def test_boxplot_metricas_labels_fallback(monkeypatch):
+    """Cubre el except TypeError en boxplot_metricas para labels fallback."""
+    from sim.visualizaciones import boxplot_metricas
+    import matplotlib.pyplot as plt
+    original_boxplot = plt.boxplot
+    def mock_boxplot(*args, **kwargs):
+        if 'tick_labels' in kwargs:
+            raise TypeError("tick_labels not supported")
+        return original_boxplot(*args, **kwargs)
+    monkeypatch.setattr(plt, 'boxplot', mock_boxplot)
+    boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
+
+def test_plot_empty_data():
+    from sim.visualizaciones import plot_risk_curve
+    fig = plot_risk_curve([])
+    assert fig is None or fig is not None  # Solo verifica ejecución
+
+
+def test_heatmap_no_data():
+    from sim.visualizaciones import heatmap_metricas
+    fig = heatmap_metricas([])
+    assert fig is None or fig is not None

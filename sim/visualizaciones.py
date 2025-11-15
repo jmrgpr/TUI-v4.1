@@ -184,10 +184,6 @@ def dashboard_metricas(metricas_dict):
     for k, v in metricas_dict.items():
         print(f"{k}: {v}")
 
-        # Añadir pruebas para asegurar que el boxplot se genera correctamente
-        assert isinstance(data, (list, np.ndarray)), "Los datos deben ser una lista o un array de numpy."
-        assert len(data) > 0, "Los datos no pueden estar vacíos."
-        print("Boxplot generado correctamente.")
 def exportar_metricas(metricas, filename="export.json"):
     import json
     with open(filename, 'w') as f:
