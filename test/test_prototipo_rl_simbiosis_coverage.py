@@ -260,6 +260,7 @@ def test_run_experiment_with_logging(capsys):
 
 def test_cli_risk_sweep():
     import subprocess
+<<<<<<< HEAD
     import os
     cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
     cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
@@ -386,3 +387,10 @@ def test_run_experiment_logging(monkeypatch):
         use_dqn=False
     )
     assert results['avg_reward'] is not None
+=======
+    cmd = ["python", "sim/prototipo_rl_simbiosis.py", "--risk_sweep", "--episodes", "5", "--seed", "42"]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Risk scale: 0.5" in result.stdout
+    assert "Risk scale: 2.0" in result.stdout
+>>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)

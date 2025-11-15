@@ -179,6 +179,7 @@ def test_pgf_zero_delta():
     from sim.toy_ped_rl import calculate_pgf
     config = {"cost": 0.1}
     pgf = calculate_pgf(5.0, 5.0, 0.9, 1.0, config)
+<<<<<<< HEAD
     assert pgf == -0.1
 
 def test_demo_gridworld_camino_c_edge(monkeypatch):
@@ -201,3 +202,6 @@ def test_demo_gridworld_camino_c_edge(monkeypatch):
     # Simular error en pearson_correlation
     monkeypatch.setattr('sim.toy_ped_rl.pearson_correlation', lambda x, y: 0.0)
     demo_gridworld_camino_c()
+=======
+    assert pgf == -0.1
+>>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)

@@ -33,6 +33,7 @@ def test_plot_dashboard():
     fig = plot_dashboard(metrics)
     assert fig is not None
 
+<<<<<<< HEAD
 def test_confidence_interval_len1():
     """Cubre la rama len(arr) == 1 en confidence_interval."""
     datos = [5.0]
@@ -134,3 +135,10 @@ def test_scientific_report():
     report = scientific_report(results_A, results_B)
     assert isinstance(report, str)
     assert 'flex_recov' in report
+=======
+def test_safe_plot_invalid():
+    from sim.gui_utils import safe_plot
+    data = {"x": "not_a_list"}
+    fig = safe_plot(data)
+    assert fig is not None
+>>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)

@@ -196,6 +196,9 @@ def exportar_metricas(metricas, filename="results/export.json"):
     import json
     with open(filename, 'w') as f:
         json.dump(metricas, f)
+    import json
+    with open(filename, 'w') as f:
+        json.dump(metricas, f)
 
 def curva_riesgo_comparativa(riesgo_control, riesgo_simbiosis, export_path=None):
     """
