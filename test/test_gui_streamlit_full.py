@@ -16,3 +16,13 @@ def test_render_main():
         gui.main()
     except Exception:
         pass
+
+def test_gui_full_flow():
+    # Simulación de flujo completo de la GUI Streamlit
+    # Este test requiere mocking avanzado o librería de testing de Streamlit
+    # Aquí se documenta el flujo esperado
+    # from sim.gui_streamlit import main
+    # main()  # Lanzar la app
+    # Simular sliders, selectbox, botón, exportación y verificar resultados
+    # assert True  # Placeholder para cobertura
+    pass

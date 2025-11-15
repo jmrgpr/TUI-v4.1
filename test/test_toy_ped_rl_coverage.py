@@ -8,7 +8,7 @@ from sim.toy_ped_rl import (
     System, ABResult, GridworldCaminoC, generate_toy_systems,
     compute_I_op, compute_I_justo, ped_ablation, simulate_ab_adversary,
     demo_gridworld_camino_c, demo_ped_arbol_humano, demo_sensibilidad_pesos,
-    pearson_correlation
+    pearson_correlation, pad_trajectories, calculate_pgf
 )
 
 def test_generate_toy_systems():
@@ -118,3 +118,15 @@ def test_demo_sensibilidad_pesos(capsys):
     demo_sensibilidad_pesos()
     captured = capsys.readouterr()
     assert "w_C" in captured.out
+
+def test_padding_empty():
+    from sim.toy_ped_rl import pad_trajectories
+    trajs = []
+    padded = pad_trajectories(trajs)
+    assert padded.shape == (0, 50)
+
+def test_pgf_zero_delta():
+    from sim.toy_ped_rl import calculate_pgf
+    config = {"cost": 0.1}
+    pgf = calculate_pgf(5.0, 5.0, 0.9, 1.0, config)
+    assert pgf == -0.1

@@ -354,6 +354,20 @@ def pearson_correlation(x: List[float], y: List[float]) -> float:
         return 0.0
     return num / denom
 
+def pad_trajectories(trajectories, max_len=50, pad_value=0.0):
+    """
+    Padee trayectorias a longitud máxima con valor de padding.
+    Pads trajectories to maximum length with padding value.
+    """
+    padded = []
+    for traj in trajectories:
+        if len(traj) < max_len:
+            padded_traj = traj + [pad_value] * (max_len - len(traj))
+        else:
+            padded_traj = traj[:max_len]
+        padded.append(padded_traj)
+    return np.array(padded)
+
 # ===============================================================================
 # Main: Ejecutar las 3 simulaciones
 # ===============================================================================
@@ -370,4 +384,21 @@ if __name__ == "__main__":
     print("\n" + "=" * 70)
     print("FIN — Simulaciones completadas. Expandir según necesidad.")
     print("=" * 70 + "\n")
+
+__all__ = [
+    "pad_trajectories",
+    "calculate_pgf",
+    "System",
+    "ABResult",
+    "GridworldCaminoC",
+    "generate_toy_systems",
+    "compute_I_op",
+    "compute_I_justo",
+    "ped_ablation",
+    "simulate_ab_adversary",
+    "demo_gridworld_camino_c",
+    "demo_ped_arbol_humano",
+    "demo_sensibilidad_pesos",
+    "pearson_correlation",
+]
 

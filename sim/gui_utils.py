@@ -77,3 +77,42 @@ def scientific_report(results_A, results_B, label_A='Control', label_B='Simbiosi
     # Interpretación automática
     report.append('Si p < 0.05, la diferencia entre agentes es significativa. / If p < 0.05, difference is significant.')
     return '\n'.join(report)
+
+def safe_plot(data, title="Safe Plot"):
+    """
+    Genera un plot seguro manejando datos inválidos.
+    Generates a safe plot handling invalid data.
+    """
+    try:
+        if not isinstance(data, dict) or 'x' not in data or 'y' not in data:
+            fig, ax = plt.subplots()
+            ax.text(0.5, 0.5, 'Datos inválidos / Invalid data', ha='center', va='center', fontsize=14)
+            ax.set_title(title)
+            return fig
+        x = np.array(data['x'])
+        y = np.array(data['y'])
+        if len(x) == 0 or len(y) == 0 or len(x) != len(y):
+            fig, ax = plt.subplots()
+            ax.text(0.5, 0.5, 'Datos insuficientes / Insufficient data', ha='center', va='center', fontsize=14)
+            ax.set_title(title)
+            return fig
+        fig, ax = plt.subplots()
+        ax.plot(x, y)
+        ax.set_title(title)
+        return fig
+    except Exception:
+        fig, ax = plt.subplots()
+        ax.text(0.5, 0.5, 'Error en plotting / Plotting error', ha='center', va='center', fontsize=14)
+        ax.set_title(title)
+        return fig
+
+__all__ = [
+    "safe_plot",
+    "confidence_interval",
+    "calcular_intervalo_confianza",
+    "plot_heatmap",
+    "plot_dashboard",
+    "t_test",
+    "anova",
+    "scientific_report"
+]

@@ -184,3 +184,11 @@ def test_run_experiment_with_logging(capsys):
     result = run_experiment(episodes=10, seed=42, risk_scale=1.0, agent_name="LogTest", use_pgf=False, use_dqn=False)
     captured = capsys.readouterr()
     assert "Progreso" in captured.out or "Episode" in captured.out
+
+def test_cli_risk_sweep():
+    import subprocess
+    cmd = ["python", "sim/prototipo_rl_simbiosis.py", "--risk_sweep", "--episodes", "5", "--seed", "42"]
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    assert result.returncode == 0
+    assert "Risk scale: 0.5" in result.stdout
+    assert "Risk scale: 2.0" in result.stdout

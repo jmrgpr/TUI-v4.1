@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 import matplotlib
 matplotlib.use('Agg')  # Hardening: backend sin GUI para tests
 import numpy as np
-from sim.gui_utils import calcular_intervalo_confianza, confidence_interval, plot_heatmap, plot_dashboard
+from sim.gui_utils import calcular_intervalo_confianza, confidence_interval, plot_heatmap, plot_dashboard, safe_plot
 
 def test_confidence_interval():
     datos = [1, 2, 3, 4, 5]
@@ -25,4 +25,10 @@ def test_plot_heatmap():
 def test_plot_dashboard():
     metrics = {'A': [1,2,3], 'B': [4,5,6]}
     fig = plot_dashboard(metrics)
+    assert fig is not None
+
+def test_safe_plot_invalid():
+    from sim.gui_utils import safe_plot
+    data = {"x": "not_a_list"}
+    fig = safe_plot(data)
     assert fig is not None

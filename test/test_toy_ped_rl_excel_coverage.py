@@ -7,6 +7,7 @@ import pandas as pd
 import numpy as np
 import io
 import sys
+import warnings
 from sim.toy_ped_rl_excel import (
     System, cargar_datos_excel, analizar_datos, load_systems_from_csv,
     compute_I_justo, pearson_correlation, demo_ped_real, demo_sensibilidad_real, main
@@ -104,3 +105,20 @@ def test_main_toy_excel(monkeypatch, tmp_path):
     pd.DataFrame(data).to_csv(csv_path, index=False)
     monkeypatch.setattr(sys, 'argv', ['test', '--csv', str(csv_path)])
     main()
+
+def test_main_toy_excel_warning():
+    """Test main in toy_ped_rl_excel with warnings."""
+    import matplotlib.pyplot as plt
+    import warnings
+    from sim.toy_ped_rl_excel import main_toy_excel
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore", UserWarning)
+        main_toy_excel()
+
+def test_export_no_file():
+    from sim.toy_ped_rl_excel import export_to_excel
+    from unittest.mock import patch
+    results = {"data": [1,2,3]}
+    with patch("pathlib.Path.exists", return_value=False):
+        export_to_excel(results, "nonexistent/path")
+    # No crash
