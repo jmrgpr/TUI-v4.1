@@ -252,15 +252,33 @@ def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
         self.P_riesgo_prev = getattr(self.evaluator, 'P_riesgo_prev', None)
 
     def save_policy(self, filename):
+        """
+        Guarda la policy serializando las claves como strings para compatibilidad JSON.
+        Save policy serializing keys as strings for JSON compatibility.
+        """
+        serializable_policy = {str(k): v for k, v in self.policy.items()}
         with open(filename, 'w') as f:
-            json.dump(self.policy, f)
+            json.dump(serializable_policy, f)
 
     def load_policy(self, filename):
+        """
+        Carga la policy deserializando las claves si es posible.
+        Load policy deserializing keys if possible.
+        """
         try:
             with open(filename, 'r') as f:
-                self.policy = json.load(f)
+                loaded = json.load(f)
+                # Intentar reconstruir tuplas si el formato lo permite
+                def try_tuple(k):
+                    if k.startswith('(') and k.endswith(')'):
+                        try:
+                            return eval(k)
+                        except Exception:
+                            return k
+                    return k
+                self.policy = {try_tuple(k): v for k, v in loaded.items()}
         except Exception:
-            pass
+            self.policy = {}
 
 class SimbiosisEnv:
     def __init__(self, size=5, initial_resources=100.0, tripwires=[(2,2)], shocks=[(3,3)], distractors=[(1,1)], risk_scale=1.0):

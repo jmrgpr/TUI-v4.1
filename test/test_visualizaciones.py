@@ -104,7 +104,7 @@ def test_dashboard_metricas():
         dashboard_metricas(metricas_dict, export_path='test.json')
     except Exception:
         assert False, "dashboard_metricas json debe ejecutarse sin error"
-<<<<<<< HEAD
+    # ...existing code...
 
 def test_boxplot_metricas_edge_cases():
     # Exportación a archivo temporal
@@ -130,5 +130,8 @@ def test_curva_riesgo_comparativa_empty():
 
 def test_analisis_estadistico_empty():
     analisis_estadistico([], [], 'Test')
+<<<<<<< HEAD
 =======
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+>>>>>>> ea4f450 (Refuerzo de cobertura, validación robusta de semilla en GUI, tests edge y visualización. Corrección científica para reproducibilidad.)

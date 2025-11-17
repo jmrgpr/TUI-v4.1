@@ -26,10 +26,7 @@ def test_render_main():
         pass
 
 def test_gui_full_flow():
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
+    # ...existing code...
     import sim.gui_streamlit as gui
     from unittest.mock import patch, MagicMock
     import numpy as np
@@ -127,6 +124,7 @@ def test_gui_edge_cases():
     from unittest.mock import patch, MagicMock
 
 <<<<<<< HEAD
+<<<<<<< HEAD
     # Error en UI (best practice: type check)
     with patch('sim.gui_streamlit.st') as mock_st:
         mock_st.session_state = {"runs": [], "seed": int(42)}
@@ -142,6 +140,15 @@ def test_gui_edge_cases():
         mock_st.sidebar.slider = MagicMock(side_effect=[1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50])
         mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
         mock_st.sidebar.title = MagicMock()
+=======
+    # Session_state vacío con semilla válida (best practice: type check)
+    with patch('sim.gui_streamlit.st') as mock_st:
+        mock_st.session_state = {"seed": int(42)}
+        mock_st.sidebar.title = MagicMock()
+        mock_st.sidebar.button = MagicMock(return_value=False)
+        mock_st.sidebar.slider = MagicMock(return_value=1000)
+        mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
+>>>>>>> ea4f450 (Refuerzo de cobertura, validación robusta de semilla en GUI, tests edge y visualización. Corrección científica para reproducibilidad.)
         mock_st.sidebar.markdown = MagicMock()
         mock_st.title = MagicMock()
         mock_st.markdown = MagicMock()
@@ -154,8 +161,26 @@ def test_gui_edge_cases():
         mock_st.selectbox = MagicMock(return_value=0)
         gui.main()
 
+<<<<<<< HEAD
 =======
 >>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
+=======
+    # Error en UI (best practice: type check)
+    with patch('sim.gui_streamlit.st') as mock_st:
+        mock_st.session_state = {"runs": [], "seed": int(42)}
+        mock_st.sidebar.title = MagicMock(side_effect=Exception("UI error"))
+        try:
+            gui.main()
+        except Exception:
+            pass
+
+    # Exportación con historial vacío (best practice: type check)
+    with patch('sim.gui_streamlit.st') as mock_st:
+        mock_st.session_state = {"runs": [], "seed": int(42)}
+        mock_st.download_button = MagicMock()
+        gui.main()
+
+>>>>>>> ea4f450 (Refuerzo de cobertura, validación robusta de semilla en GUI, tests edge y visualización. Corrección científica para reproducibilidad.)
     # Caso: sin runs
     with patch('sim.gui_streamlit.st') as mock_st:
         mock_st.session_state = {"runs": []}

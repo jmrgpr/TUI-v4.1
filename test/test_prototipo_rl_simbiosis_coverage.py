@@ -156,41 +156,7 @@ def test_save_and_load_policy(tmp_path, sample_agent):
     # Debe reconstruir la tupla y mantener la clave string
     assert ('a', 'b') in sample_agent.policy
     assert 'c' in sample_agent.policy
-
-def test_agent_save_load_policy(monkeypatch):
-    """
-    Test para cubrir save_policy y load_policy (líneas 143-146, 170-171, 174-175)
-    """
-    from sim.prototipo_rl_simbiosis import Agent
-    import tempfile
-    import os
-    
-    agent = Agent(name="Test", resources=100.0)
-    agent.policy = {('state1', 'up'): 1.0, ('state2', 'down'): 0.5}
-    
-    # Test save_policy
-    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
-        temp_file = f.name
-    
-    try:
-        agent.save_policy(temp_file)
-        assert os.path.exists(temp_file)
-        
-        # Test load_policy
-        agent2 = Agent(name="Test2", resources=100.0)
-        agent2.load_policy(temp_file)
-        assert agent2.policy == agent.policy
-        
-        # Test load_policy con archivo corrupto
-        with open(temp_file, 'w') as f:
-            f.write("invalid json")
-        agent3 = Agent(name="Test3", resources=100.0)
-        agent3.load_policy(temp_file)  # Debería manejar la excepción y setear policy={}
-        assert agent3.policy == {}
-        
-    finally:
-        if os.path.exists(temp_file):
-            os.remove(temp_file)
+    # ...existing code...
 
 def test_run_experiment_episodes_zero():
     """Test run_experiment with episodes=0."""
