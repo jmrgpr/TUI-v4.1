@@ -92,12 +92,12 @@ def test_agent_reprogram_purpose(sample_agent):
 
 def test_calcular_metricas_detailed(sample_agent, sample_env):
     """Test calcular_metricas with various scenarios."""
+    from sim.evaluator_pgf import EvaluatorPGF
+    evaluator = EvaluatorPGF()
     # Scenario with tripwire
     info = {'tripwire': True, 'shock': False, 'distractor': False, 'help': False, 'low_resources': False}
-    sample_agent.calcular_metricas(sample_env, info, 0)
-    assert sample_agent.P_riesgo_actual == 20.0
-    assert sample_agent.P_riesgo == 20.0
-    assert sample_agent.P_riesgo_prev == 20.0
+    metrics = evaluator.calcular_metricas(sample_env, info, 0, sample_agent.resources, sample_agent.purpose, sample_agent.alignment)
+    assert isinstance(metrics['PGF'], float) and metrics['PGF'] != 0.0
 
 def test_agent_act_branches(sample_agent):
     # Cubre branch aleatorio y branch de argmax

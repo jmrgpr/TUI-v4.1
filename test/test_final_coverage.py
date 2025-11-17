@@ -240,14 +240,16 @@ def test_agent_uses_external_evaluator():
     env = prs.SimbiosisEnv()
     env.reset()
     info = {'tripwire': True, 'shock': False, 'distractor': False, 'help': True, 'low_resources': False}
-    # Call calcular_metricas
-    agent.calcular_metricas(env, info, 0)
-    # Check that metrics are updated
-    assert hasattr(agent, 'PGF')
-    assert hasattr(agent, 'I_op')
-    assert hasattr(agent, 'P_riesgo')
+    # Call calcular_metricas via evaluator
+    from sim.evaluator_pgf import EvaluatorPGF
+    evaluator = EvaluatorPGF()
+    metrics = evaluator.calcular_metricas(env, info, 0, agent.resources, agent.purpose, agent.alignment)
+    # Check that metrics are returned
+    assert 'PGF' in metrics
+    assert 'I_op' in metrics
+    assert 'P_riesgo' in metrics
     # Check some values
-    assert agent.PGF != 0.0  # Should be calculated
+    assert metrics['PGF'] != 0.0  # Should be calculated
 
 
 def test_transfer_test():

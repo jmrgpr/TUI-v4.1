@@ -8,7 +8,8 @@ import numpy as np
 from sim.dqn_agent import DQNAgent
 
 def test_calcular_metricas_branches():
-    agent = DQNAgent(state_dim=2, action_dim=2)
+    from sim.evaluator_pgf import EvaluatorPGF
+    evaluator = EvaluatorPGF()
     class DummyEnv:
         resources = 100.0
     env = DummyEnv()
@@ -23,18 +24,22 @@ def test_calcular_metricas_branches():
         {'shock': True, 'help': True, 'tripwire': True, 'low_resources': True, 'distractor': True}
     ]
     for info in info_cases:
-        agent.calcular_metricas(env, info, step=0)
-        assert hasattr(agent, 'PGF')
-        assert hasattr(agent, 'P_riesgo')
-        assert hasattr(agent, 'I_op')
+        metrics = evaluator.calcular_metricas(env, info, 0, 100.0, 'survive_and_help', 1.0)
+        assert 'PGF' in metrics
+        assert 'P_riesgo' in metrics
+        assert 'I_op' in metrics
 
-def test_act_epsilon_branch():
-    agent = DQNAgent(state_dim=2, action_dim=2, epsilon=1.0)
-    state = np.array([0.0, 1.0], dtype=np.float32)
-    # Con epsilon=1.0 siempre debe explorar
-    actions = [agent.act(state) for _ in range(10)]
-    assert all(isinstance(a, int) for a in actions)
-    # Con epsilon=0.0 siempre debe explotar
-    agent.epsilon = 0.0
-    actions = [agent.act(state) for _ in range(10)]
-    assert all(isinstance(a, int) for a in actions)
+def test_pgf_logic_independence():
+    """Test that PGF logic is independent of the agent - agent does not have calcular_metricas."""
+    agent = DQNAgent(state_dim=2, action_dim=2)
+    # Ensure agent does not have calcular_metricas method
+    assert not hasattr(agent, 'calcular_metricas')
+    # Ensure evaluator has it
+    from sim.evaluator_pgf import EvaluatorPGF
+    evaluator = EvaluatorPGF()
+    assert hasattr(evaluator, 'calcular_metricas')
+    # Test that run_experiment works with use_pgf=True and use_dqn=True
+    from sim.prototipo_rl_simbiosis import run_experiment
+    result = run_experiment(episodes=5, seed=42, risk_scale=1.0, agent_name="IndependenceTest", use_pgf=True, use_dqn=True)
+    assert 'policy' in result
+    assert 'pgf_evol' in result

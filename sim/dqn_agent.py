@@ -9,7 +9,6 @@ Uso / Usage:
 
 Ejemplo de uso / Example:
     >>> agent = DQNAgent(state_dim=8, action_dim=4)
-    >>> agent.calcular_metricas(env, info, step)
     >>> agent.save_policy('policy.json')
     >>> agent.load_policy('policy.json')
 """
@@ -33,44 +32,6 @@ class DQNNet(nn.Module):
         return self.fc3(x)
 
 class DQNAgent:
-    def calcular_metricas(self, env, info, step):
-        """
-        Calcula métricas TUI y PGF prudencial (bilingüe).
-        Compute TUI metrics and prudential PGF (bilingual).
-        Args:
-            env: SimbiosisEnv
-            info: dict
-            step: int
-        """
-        self.C = max(0.0, env.resources / 100.0)
-        self.F = 1.0 if info.get('shock') else 0.5
-        self.T = 1.0 if info.get('help') else 0.5
-        w_C, w_F, w_T = 0.4, 0.3, 0.3
-        self.I_op = w_C * self.C + w_F * self.F + w_T * self.T
-        # Guardar riesgo previo / Store previous risk
-        if not hasattr(self, 'P_riesgo_prev'):
-            self.P_riesgo_prev = 0.0
-        self.P_riesgo_actual = getattr(self, 'P_riesgo', 0.0) + abs(info.get('tripwire', 0)*20.0 + info.get('shock', 0)*10.0 + info.get('distractor', 0)*5.0)
-        delta_P = self.P_riesgo_prev - self.P_riesgo_actual
-        self.P_riesgo = self.P_riesgo_actual
-        self.C_costo = 1.0 if info.get('low_resources') else 0.8
-        self.S_auto = 1.0 if getattr(self, 'purpose', 'survive_and_help') != "survive_and_help" else 0.7
-        self.R_robust = 1.0 if not info.get('distractor') else 0.6
-        self.I_rep = 1.0 if info.get('help') else 0.7
-        self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
-        # Parámetros prudenciales (no hardcodeados) / Prudential parameters (no hardcoded)
-        kappa = 1.0  # Sensibilidad PGF / PGF sensitivity
-        lambda_c = 0.1  # Penalización costo / Cost penalty
-        S_t = 1.0 if info.get('shock') or info.get('tripwire') else 0.5
-        A_t = getattr(self, 'alignment', 1.0) * self.P_genuino
-        delta_C_t = abs(env.resources - getattr(self, 'resources', 100.0))
-        # PGF prudencial: premia reducción de riesgo / PGF: rewards risk reduction
-        self.PGF = kappa * delta_P * A_t - lambda_c * delta_C_t
-        self.P_riesgo_prev = self.P_riesgo_actual
-        beta = 1.0
-        C_total_norm = 1.0
-        delta_I_useful = self.I_op
-        self.eta_extendido = (delta_I_useful * getattr(self, 'alignment', 1.0)) / (C_total_norm + beta * self.P_riesgo)
     """
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.

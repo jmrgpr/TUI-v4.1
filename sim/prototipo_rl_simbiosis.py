@@ -352,6 +352,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         torch.backends.cudnn.deterministic = True
         torch.backends.cudnn.benchmark = False
     env = SimbiosisEnv(risk_scale=risk_scale)
+    evaluator = EvaluatorPGF()
     # Parámetros profesionales / Professional parameters
     INITIAL_RESOURCES = 100.0
     MAX_STEPS = 50
@@ -392,6 +393,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         q_optimal_steps = []
         flex_steps = []
         robust_steps = []
+        last_metrics = None
         for step in range(MAX_STEPS):
             if use_dqn:
                 state_vec = np.array([v for _, v in state], dtype=np.float32)
@@ -400,8 +402,10 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             else:
                 action = agent.act(state)
             next_state, reward_env, done, info = env.step(action)
-            agent.calcular_metricas(env, info, step)
-            r_pgf = agent.PGF if use_pgf else reward_env
+            # Calcular métricas externamente usando evaluador / Compute metrics externally using evaluator
+            metrics = evaluator.calcular_metricas(env, info, step, agent.resources if hasattr(agent, 'resources') else env.resources, getattr(agent, 'purpose', 'survive_and_help'), getattr(agent, 'alignment', 1.0))
+            last_metrics = metrics
+            r_pgf = metrics['PGF'] if use_pgf else reward_env
             # Aprendizaje / Learning
             if use_dqn:
                 next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
@@ -410,13 +414,11 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             else:
                 agent.update_policy(state, action, r_pgf, next_state)
                 agent.remember(Event())  # Hardening: Event no acepta argumentos, solo se registra el evento
-            agent.resources = env.resources
-            state = next_state
             total_reward += r_pgf
-            pgf_steps.append(agent.PGF)
+            pgf_steps.append(metrics['PGF'])
             reward_env_steps.append(reward_env)
-            flex_steps.append(agent.F)
-            robust_steps.append(agent.R_robust)
+            flex_steps.append(metrics['F'])
+            robust_steps.append(metrics['R_robust'])
             if use_dqn:
                 q_vals = agent.model(torch.FloatTensor(state_to_vector(state)).unsqueeze(0)).detach().cpu().numpy()[0]
                 optimal_action_idx = int(np.argmax(q_vals))
@@ -447,11 +449,12 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         agent.reprogram_purpose("survive_and_help") if not use_dqn else None
         # Logging por episodio (bilingüe, con métricas avanzadas)
         if (ep+1) % max(1, episodes//10) == 0 or ep == episodes-1:
-            flex = agent.F if hasattr(agent, 'F') else 0.0
+            flex = last_metrics['F'] if last_metrics else 0.0
             q_opt = np.max(agent.policy.get('Q', np.zeros(4))) if hasattr(agent, 'policy') and 'Q' in agent.policy else 0.0
-            robust = agent.R_robust if hasattr(agent, 'R_robust') else 0.0
-            print(f"[{agent_name}] Episodio {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {agent.PGF:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")
-            print(f"[{agent_name}] Episode {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {agent.PGF:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")
+            robust = last_metrics['R_robust'] if last_metrics else 0.0
+            pgf_val = last_metrics['PGF'] if last_metrics else 0.0
+            print(f"[{agent_name}] Episodio {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")
+            print(f"[{agent_name}] Episode {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")
 
     # Edge case: episodios=0
     if episodes == 0 or agent is None:
