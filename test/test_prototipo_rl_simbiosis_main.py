@@ -7,5 +7,5 @@ import os
 
 def test_main_block_runs():
     # Ejecuta el script como CLI usando runpy para cobertura
-    sys.argv = ['prototipo_rl_simbiosis.py', '--risk_sweep', '--fast', '--dqn_control', '--seed', '42']
+    sys.argv = ['prototipo_rl_simbiosis.py', '--risk_sweep', '--dqn_control', '--episodes', '20', '--seed', '42']
     runpy.run_module('sim.prototipo_rl_simbiosis', run_name='__main__')

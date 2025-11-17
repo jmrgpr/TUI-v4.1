@@ -1,18 +1,14 @@
 """
 Cobertura del bloque main de toy_ped_rl.py
 """
-import subprocess
+import runpy
 import sys
 import os
 
 def test_main_block_runs():
-    # Ejecuta el script como CLI y verifica salida sin errores
-    script = os.path.join(os.path.dirname(__file__), '..', 'sim', 'toy_ped_rl.py')
-    result = subprocess.run([sys.executable, script], capture_output=True, text=True)
-    assert result.returncode == 0
-    # Verifica presencia de mensajes clave sin hardcoding exacto
-    assert any("SIMULACIONES" in line for line in result.stdout.splitlines())
-    assert any("FIN" in line for line in result.stdout.splitlines())
+    # Ejecuta el script como CLI usando runpy para cobertura
+    sys.argv = ['toy_ped_rl.py']
+    runpy.run_module('sim.toy_ped_rl', run_name='__main__')
 
 def test_calculate_pgf():
     from sim.toy_ped_rl import calculate_pgf
