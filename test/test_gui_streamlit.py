@@ -191,6 +191,9 @@ def test_export_functionality(mock_st):
     mock_st.subheader.assert_any_call("Exportar historial / Export history")
     mock_st.download_button.assert_called()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
 
 @patch('sim.gui_streamlit.st')
 def test_invalid_seed_exception(mock_st):
@@ -259,5 +262,8 @@ def test_seed_validation_error(mock_json_dumps, mock_run_experiment, mock_st):
 #     at.session_state["runs"] = [{"params": {}, "control": {}, "simbiosis": {}}, {"params": {}, "control": {}, "simbiosis": {}}]
 #     at.run()
 #     # Should cover the comparison
+<<<<<<< HEAD
 =======
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+>>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)

@@ -6634,6 +6634,11 @@
 }
 =======
 Episodio,Recompensa_Simbiosis,Tripwires_Simbiosis,Flexibilidad,Robustez,Q-optimal
+<<<<<<< HEAD
 1,-7.964009090454187,0,0.5,0,0.74
 2,-11.94601363568128,0,0.5,0,0.74
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+1,-32.964009090454184,0,0.5,0,0.82
+2,-5.982004545227094,0,0.5,0,0.76
+>>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)

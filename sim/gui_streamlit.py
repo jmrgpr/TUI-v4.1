@@ -220,6 +220,14 @@ if __name__ == "__main__":  # pragma: no cover
     """)
 
     if st.button("Ejecutar simulación / Run simulation"):
+        # --- Validación científica reforzada de la semilla ---
+        # Usar el valor final del slider (variable seed)
+        if (seed is None or type(seed) is not int
+            or seed < PARAMS["seed"]["min_value"]
+            or seed > PARAMS["seed"]["max_value"]):
+            st.sidebar.error("Error: La 'Semilla (seed)' debe ser un número entero válido dentro del rango permitido para garantizar la reproducibilidad.")
+            st.warning("La simulación no se ejecutó. Por favor, ingrese una semilla válida.")
+            st.stop()
         # Ejecutar Control
         st.info("Simulando agente Control (Q-table)... / Simulating Control agent...")
         results_control = run_experiment(

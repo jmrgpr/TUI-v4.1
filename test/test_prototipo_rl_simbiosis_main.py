@@ -2,6 +2,7 @@
 Cobertura del bloque main de prototipo_rl_simbiosis.py
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 import runpy
 import sys
 import os
@@ -120,10 +121,14 @@ def test_main_with_risk_sweep():
             prototipo_main()
 =======
 import subprocess
+=======
+import runpy
+>>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
 import sys
 import os
 
 def test_main_block_runs():
+<<<<<<< HEAD
     # Ejecuta el script como CLI y verifica salida sin errores
     script = os.path.join(os.path.dirname(__file__), '..', 'sim', 'prototipo_rl_simbiosis.py')
     env = os.environ.copy()
@@ -132,3 +137,8 @@ def test_main_block_runs():
     assert result.returncode == 0
     assert "Ejecutando experimentos" in result.stdout or "Running experiments" in result.stdout
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+    # Ejecuta el script como CLI usando runpy para cobertura
+    sys.argv = ['prototipo_rl_simbiosis.py', '--risk_sweep', '--fast', '--dqn_control', '--seed', '42']
+    runpy.run_module('sim.prototipo_rl_simbiosis', run_name='__main__')
+>>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)

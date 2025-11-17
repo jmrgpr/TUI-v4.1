@@ -412,11 +412,17 @@ def main():
     print("=" * 70 + "\n")
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 if __name__ == "__main__":
     main()
 
 =======
 >>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
+=======
+if __name__ == "__main__":
+    main()
+
+>>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
 __all__ = [
     "pad_trajectories",
     "calculate_pgf",
