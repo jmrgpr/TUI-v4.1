@@ -106,6 +106,27 @@ def test_demo_gridworld_camino_c(capsys):
     assert "Módulo 1" in captured.out
     assert "Gaming promedio" in captured.out
 
+def test_demo_gridworld_camino_c_edge(monkeypatch):
+    """Test demo_gridworld_camino_c con edge cases para cobertura total (líneas 385-395)."""
+    # Forzar condiciones extremas y errores
+    # Simular entorno sin sistemas
+    monkeypatch.setattr('sim.toy_ped_rl.generate_toy_systems', lambda seed=42: [])
+    demo_gridworld_camino_c()
+    # Simular entorno con sistemas corruptos
+    class BadSystem:
+        def __init__(self):
+            self.name = None
+            self.C = None
+            self.F = None
+            self.T = None
+            self.I_op = None
+            self.P_riesgo = None
+    monkeypatch.setattr('sim.toy_ped_rl.generate_toy_systems', lambda seed=42: [BadSystem()])
+    demo_gridworld_camino_c()
+    # Simular error en pearson_correlation
+    monkeypatch.setattr('sim.toy_ped_rl.pearson_correlation', lambda x, y: 0.0)
+    demo_gridworld_camino_c()
+
 def test_demo_ped_arbol_humano(capsys):
     """Test demo_ped_arbol_humano."""
     demo_ped_arbol_humano()
@@ -130,3 +151,24 @@ def test_pgf_zero_delta():
     config = {"cost": 0.1}
     pgf = calculate_pgf(5.0, 5.0, 0.9, 1.0, config)
     assert pgf == -0.1
+
+def test_demo_gridworld_camino_c_edge(monkeypatch):
+    """Test demo_gridworld_camino_c con edge cases para cobertura total (líneas 385-395)."""
+    from sim.toy_ped_rl import demo_gridworld_camino_c
+    # Simular entorno sin sistemas
+    monkeypatch.setattr('sim.toy_ped_rl.generate_toy_systems', lambda seed=42: [])
+    demo_gridworld_camino_c()
+    # Simular entorno con sistemas corruptos
+    class BadSystem:
+        def __init__(self):
+            self.name = None
+            self.C = None
+            self.F = None
+            self.T = None
+            self.I_op = None
+            self.P_riesgo = None
+    monkeypatch.setattr('sim.toy_ped_rl.generate_toy_systems', lambda seed=42: [BadSystem()])
+    demo_gridworld_camino_c()
+    # Simular error en pearson_correlation
+    monkeypatch.setattr('sim.toy_ped_rl.pearson_correlation', lambda x, y: 0.0)
+    demo_gridworld_camino_c()

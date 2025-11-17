@@ -14,107 +14,172 @@ def test_import_gui_streamlit():
 import pytest
 from unittest.mock import patch, MagicMock
 
+# Test que verifica que el módulo se puede importar y ejecutar sin errores
 @patch('sim.gui_streamlit.st')
-def test_main_render(mock_st):
-    """Test main function rendering."""
-    from sim.gui_streamlit import main
-    main()
+def test_gui_module_execution(mock_st):
+    """Test that the GUI module can be executed without errors when mocked."""
+    # Setup mocks
+    mock_st.session_state = {}
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.slider = MagicMock(side_effect=[1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50])
+    mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
+    mock_st.sidebar.markdown = MagicMock()
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.button = MagicMock(return_value=False)  # No button press
+    mock_st.subheader = MagicMock()
+    mock_st.info = MagicMock()
+    mock_st.write = MagicMock()
+    mock_st.success = MagicMock()
+    mock_st.download_button = MagicMock()
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    # Verify some basic calls were made
+    mock_st.sidebar.title.assert_called_with("TUI v4.1 Simulador — Parámetros")
+    assert mock_st.sidebar.slider.call_count == 9
     mock_st.title.assert_called_with("Simulador TUI v4.1 — Toy Model RL Symbiosis")
-    mock_st.markdown.assert_called()
 
 @patch('sim.gui_streamlit.st')
 @patch('sim.gui_streamlit.run_experiment')
-def test_button_simulation_control(mock_run_experiment, mock_st):
-    """Test simulation button for Control agent."""
-    mock_st.button.return_value = True
-    mock_st.selectbox.return_value = "Control (Q-table)"
-    mock_run_experiment.return_value = {"avg_reward": 10.0}
-    # Import and execute the button logic
-    import sim.gui_streamlit as gui
-    # Simulate the button press logic
-    if mock_st.button("Ejecutar simulación / Run simulation"):
-        results_control = gui.run_experiment(
-            episodes=1000,
-            seed=42,
-            risk_scale=1.0,
-            agent_name="Control",
-            use_pgf=False,
-            use_dqn=False
-        )
-        assert results_control["avg_reward"] == 10.0
-    mock_st.button.assert_called_with("Ejecutar simulación / Run simulation")
+def test_simulation_execution_control(mock_run_experiment, mock_st):
+    """Test simulation execution for Control agent."""
+    # Setup session state
+    mock_st.session_state = {"runs": []}
+
+    # Mock sidebar parameters
+    mock_st.sidebar.slider.side_effect = [1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50]
+    mock_st.sidebar.selectbox.return_value = "Control (Q-table)"
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+
+    # Mock main UI
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.subheader = MagicMock()
+    mock_st.button = MagicMock(return_value=True)  # Button pressed
+    mock_st.spinner = MagicMock()
+    mock_st.success = MagicMock()
+    mock_st.info = MagicMock()
+
+    # Mock experiment result
+    mock_run_experiment.return_value = {"avg_reward": 10.0, "avg_tripwire": 5.0}
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    # Verify run_experiment was called correctly
+    mock_run_experiment.assert_called_with(
+        episodes=1000, seed=42, risk_scale=1.0, agent_name="Control", use_pgf=False, use_dqn=False
+    )
+    mock_st.success.assert_called_with("Simulación completada y registrada. / Simulation completed and logged.")
 
 @patch('sim.gui_streamlit.st')
 @patch('sim.gui_streamlit.run_experiment')
-def test_button_simulation_simbiosis(mock_run_experiment, mock_st):
-    """Test simulation button for Simbiosis agent."""
-    mock_st.button.return_value = True
-    mock_st.selectbox.return_value = "Simbiosis (DQN)"
-    mock_run_experiment.return_value = {"avg_reward": 15.0}
-    import sim.gui_streamlit as gui
-    results_simbiosis = None
-    if mock_st.button("Ejecutar simulación / Run simulation"):
-        results_control = gui.run_experiment(
-            episodes=1000,
-            seed=42,
-            risk_scale=1.0,
-            agent_name="Control",
-            use_pgf=False,
-            use_dqn=False
-        )
-        if mock_st.selectbox.return_value == "Simbiosis (DQN)":
-            results_simbiosis = gui.run_experiment(
-                episodes=1000,
-                seed=42,
-                risk_scale=1.0,
-                agent_name="Simbiosis",
-                use_pgf=True,
-                use_dqn=True
-            )
-        assert results_simbiosis is not None
-        assert results_simbiosis["avg_reward"] == 15.0
+def test_simulation_execution_symbiosis(mock_run_experiment, mock_st):
+    """Test simulation execution for Symbiosis agent."""
+    mock_st.session_state = {"runs": []}
+
+    # Mock parameters
+    mock_st.sidebar.slider.side_effect = [1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50]
+    mock_st.sidebar.selectbox.return_value = "Simbiosis (DQN)"
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.subheader = MagicMock()
+    mock_st.button = MagicMock(return_value=True)
+    mock_st.spinner = MagicMock()
+    mock_st.success = MagicMock()
+    mock_st.info = MagicMock()
+
+    # Mock experiment results
+    mock_run_experiment.side_effect = [
+        {"avg_reward": 10.0},  # Control
+        {"avg_reward": 15.0}   # Symbiosis
+    ]
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    # Verify both experiments were called
+    assert mock_run_experiment.call_count == 2
+    calls = mock_run_experiment.call_args_list
+    assert calls[0][1]['agent_name'] == "Control"
+    assert calls[1][1]['agent_name'] == "Simbiosis"
+    mock_st.success.assert_called_with("Simulación completada y registrada. / Simulation completed and logged.")
 
 @patch('sim.gui_streamlit.st')
-def test_comparison_panel(mock_st):
-    """Test historical runs comparison panel."""
+def test_comparison_panel_with_multiple_runs(mock_st):
+    """Test comparison panel when multiple runs exist."""
     mock_st.session_state = {"runs": [
         {"params": {"episodes": 1000}, "control": {"avg_reward": 10.0}, "simbiosis": {"avg_reward": 12.0}},
         {"params": {"episodes": 1000}, "control": {"avg_reward": 11.0}, "simbiosis": {"avg_reward": 13.0}}
     ]}
-    mock_st.selectbox.side_effect = [0, 1]
-    import sim.gui_streamlit as gui
-    # Simulate comparison logic
-    if len(mock_st.session_state["runs"]) > 1:
-        idx_a = mock_st.selectbox("Corrida A / Run A", options=list(range(len(mock_st.session_state["runs"]))), format_func=lambda i: f"Run {i+1}")
-        idx_b = mock_st.selectbox("Corrida B / Run B", options=list(range(len(mock_st.session_state["runs"]))), index=len(mock_st.session_state["runs"])-1, format_func=lambda i: f"Run {i+1}")
-        run_a = mock_st.session_state["runs"][idx_a]
-        run_b = mock_st.session_state["runs"][idx_b]
-        assert run_a["control"]["avg_reward"] == 10.0
-        assert run_b["control"]["avg_reward"] == 11.0
 
-@patch('sim.gui_streamlit.st')
-def test_export_history(mock_st):
-    """Test export history functionality."""
-    mock_st.session_state = {"runs": [{"params": {}, "control": {}, "simbiosis": {}}]}
-    mock_st.download_button.return_value = None
-    import sim.gui_streamlit as gui
-    import json
-    data = json.dumps(mock_st.session_state["runs"], indent=2)
-    mock_st.download_button.assert_not_called()  # Since it's conditional
-
-@patch('sim.gui_streamlit.st')
-def test_sidebar_parameters(mock_st):
-    """Test sidebar parameter sliders."""
+    # Mock UI elements
     mock_st.sidebar.slider.side_effect = [1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50]
     mock_st.sidebar.selectbox.return_value = "Control (Q-table)"
-    import sim.gui_streamlit as gui
-    # Check that parameters are set
-    assert gui.episodes == 1000
-    assert gui.seed == 42
-    assert gui.risk_scale == 1.0
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.subheader = MagicMock()
+    mock_st.button = MagicMock(return_value=False)
+    mock_st.selectbox.side_effect = [0, 1]  # Select runs for comparison
+    mock_st.write = MagicMock()
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    mock_st.subheader.assert_any_call("Comparación de corridas históricas / Historical runs comparison")
+    assert mock_st.selectbox.call_count >= 2  # At least the comparison selectboxes
 
 @patch('sim.gui_streamlit.st')
-def test_help_panel(mock_st):
-    """Test help panel rendering."""
-    import sim.gui_streamlit as gui
-    mock_st.markdown.assert_not_called()  # Just check it can be called
+def test_comparison_panel_insufficient_runs(mock_st):
+    """Test comparison panel when only one run exists."""
+    mock_st.session_state = {"runs": [{"params": {}, "control": {}, "simbiosis": {}}]}
+
+    # Mock UI elements
+    mock_st.sidebar.slider.side_effect = [1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50]
+    mock_st.sidebar.selectbox.return_value = "Control (Q-table)"
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.subheader = MagicMock()
+    mock_st.button = MagicMock(return_value=False)
+    mock_st.info = MagicMock()
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    mock_st.info.assert_called_with("Ejecuta al menos dos simulaciones para comparar históricamente. / Run at least two simulations to compare historically.")
+
+@patch('sim.gui_streamlit.st')
+def test_export_functionality(mock_st):
+    """Test export functionality."""
+    mock_st.session_state = {"runs": [{"params": {}, "control": {}, "simbiosis": {}}]}
+
+    # Mock UI elements
+    mock_st.sidebar.slider.side_effect = [1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50]
+    mock_st.sidebar.selectbox.return_value = "Control (Q-table)"
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.subheader = MagicMock()
+    mock_st.button = MagicMock(return_value=False)
+    mock_st.download_button = MagicMock()
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    # Verify export UI was created
+    mock_st.subheader.assert_any_call("Exportar historial / Export history")
+    mock_st.download_button.assert_called()

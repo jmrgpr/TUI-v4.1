@@ -122,3 +122,79 @@ def test_export_no_file():
     with patch("pathlib.Path.exists", return_value=False):
         export_to_excel(results, "nonexistent/path")
     # No crash
+
+def test_demo_ped_real_edge(monkeypatch, tmp_path):
+    """Test demo_ped_real con edge cases para cobertura total (líneas 67-68, 103, 136-137, 170-171, 183, 206)."""
+    import pandas as pd
+    from sim.toy_ped_rl_excel import demo_ped_real
+    # CSV vacío
+    csv_path = tmp_path / "empty.csv"
+    pd.DataFrame().to_csv(csv_path, index=False)
+    monkeypatch.setattr('matplotlib.pyplot.show', lambda: None)
+    demo_ped_real(str(csv_path))
+    # CSV con datos corruptos
+    df = pd.DataFrame({"Nombre del sistema": [None], "Tipo": [None], "C": [None], "F": [None], "T": [None], "I_op": [None], "Vida (años)": [None], "Tasa (W)": [None], "Complejidad": [None], "P_riesgo físico": [None], "Observaciones": [None]})
+    bad_csv = tmp_path / "bad.csv"
+    df.to_csv(bad_csv, index=False)
+    demo_ped_real(str(bad_csv))
+    # Forzar error en pearson_correlation
+    import sim.toy_ped_rl_excel as mod
+    monkeypatch.setattr(mod, 'pearson_correlation', lambda x, y: 0.0)
+    demo_ped_real(str(csv_path))
+
+def test_demo_sensibilidad_real_edge(monkeypatch, tmp_path):
+    """Test demo_sensibilidad_real con edge cases para cobertura total (líneas 170-171, 183, 206)."""
+    import pandas as pd
+    from sim.toy_ped_rl_excel import demo_sensibilidad_real
+    # CSV vacío
+    csv_path = tmp_path / "empty.csv"
+    pd.DataFrame().to_csv(csv_path, index=False)
+    monkeypatch.setattr('matplotlib.pyplot.show', lambda: None)
+    demo_sensibilidad_real(str(csv_path))
+    # CSV con datos corruptos
+    df = pd.DataFrame({"Nombre del sistema": [None], "Tipo": [None], "C": [None], "F": [None], "T": [None], "I_op": [None], "Vida (años)": [None], "Tasa (W)": [None], "Complejidad": [None], "P_riesgo físico": [None], "Observaciones": [None]})
+    bad_csv = tmp_path / "bad.csv"
+    df.to_csv(bad_csv, index=False)
+    demo_sensibilidad_real(str(bad_csv))
+    # Forzar error en pearson_correlation
+    import sim.toy_ped_rl_excel as mod
+    monkeypatch.setattr(mod, 'pearson_correlation', lambda x, y: 0.0)
+    demo_sensibilidad_real(str(csv_path))
+
+def test_demo_ped_real_edge(monkeypatch, tmp_path):
+    """Test demo_ped_real con edge cases para cobertura total (líneas 67-68, 103, 136-137, 170-171, 183, 206)."""
+    import pandas as pd
+    from sim.toy_ped_rl_excel import demo_ped_real
+    # CSV vacío
+    csv_path = tmp_path / "empty.csv"
+    pd.DataFrame().to_csv(csv_path, index=False)
+    monkeypatch.setattr('matplotlib.pyplot.show', lambda: None)
+    demo_ped_real(str(csv_path))
+    # CSV con datos corruptos
+    df = pd.DataFrame({"Nombre del sistema": [None], "Tipo": [None], "C": [None], "F": [None], "T": [None], "I_op": [None], "Vida (años)": [None], "Tasa (W)": [None], "Complejidad": [None], "P_riesgo físico": [None], "Observaciones": [None]})
+    bad_csv = tmp_path / "bad.csv"
+    df.to_csv(bad_csv, index=False)
+    demo_ped_real(str(bad_csv))
+    # Forzar error en pearson_correlation
+    import sim.toy_ped_rl_excel as mod
+    monkeypatch.setattr(mod, 'pearson_correlation', lambda x, y: 0.0)
+    demo_ped_real(str(csv_path))
+
+def test_demo_sensibilidad_real_edge(monkeypatch, tmp_path):
+    """Test demo_sensibilidad_real con edge cases para cobertura total (líneas 170-171, 183, 206)."""
+    import pandas as pd
+    from sim.toy_ped_rl_excel import demo_sensibilidad_real
+    # CSV vacío
+    csv_path = tmp_path / "empty.csv"
+    pd.DataFrame().to_csv(csv_path, index=False)
+    monkeypatch.setattr('matplotlib.pyplot.show', lambda: None)
+    demo_sensibilidad_real(str(csv_path))
+    # CSV con datos corruptos
+    df = pd.DataFrame({"Nombre del sistema": [None], "Tipo": [None], "C": [None], "F": [None], "T": [None], "I_op": [None], "Vida (años)": [None], "Tasa (W)": [None], "Complejidad": [None], "P_riesgo físico": [None], "Observaciones": [None]})
+    bad_csv = tmp_path / "bad.csv"
+    df.to_csv(bad_csv, index=False)
+    demo_sensibilidad_real(str(bad_csv))
+    # Forzar error en pearson_correlation
+    import sim.toy_ped_rl_excel as mod
+    monkeypatch.setattr(mod, 'pearson_correlation', lambda x, y: 0.0)
+    demo_sensibilidad_real(str(csv_path))

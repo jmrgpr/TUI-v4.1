@@ -37,16 +37,25 @@ def _confidence_interval(data, alpha=0.95):
 
 def plot_heatmap(data, row_labels, col_labels, title):
     fig, ax = plt.subplots(figsize=(8,4))
-    sns.heatmap(data, cmap='coolwarm', annot=True, fmt='.1f', cbar=True, yticklabels=row_labels, xticklabels=col_labels)
-    ax.set_title(title)
+    try:
+        sns.heatmap(data, cmap='coolwarm', annot=True, fmt='.1f', cbar=True, yticklabels=row_labels, xticklabels=col_labels)
+        ax.set_title(title)
+    except Exception:
+        ax.text(0.5, 0.5, 'Datos inválidos / Invalid data', ha='center', va='center', fontsize=14)
+        ax.set_title(title)
     return fig
 
 def plot_dashboard(metrics_dict):
     df = pd.DataFrame(metrics_dict)
     fig, ax = plt.subplots(figsize=(10,4))
-    df.plot(kind='bar', ax=ax)
-    ax.set_title('Dashboard de métricas / Metrics dashboard')
-    ax.set_ylabel('Valor / Value')
+    try:
+        df.plot(kind='bar', ax=ax)
+        ax.set_title('Dashboard de métricas / Metrics dashboard')
+        ax.set_ylabel('Valor / Value')
+    except Exception:
+        ax.text(0.5, 0.5, 'Sin datos / No data', ha='center', va='center', fontsize=14)
+        ax.set_title('Dashboard de métricas / Metrics dashboard')
+        ax.set_ylabel('Valor / Value')
     return fig
 
 def t_test(a, b):
@@ -101,6 +110,8 @@ def safe_plot(data, title="Safe Plot"):
         ax.set_title(title)
         return fig
     except Exception:
+        import matplotlib
+        matplotlib.use('Agg', force=True)
         fig, ax = plt.subplots()
         ax.text(0.5, 0.5, 'Error en plotting / Plotting error', ha='center', va='center', fontsize=14)
         ax.set_title(title)

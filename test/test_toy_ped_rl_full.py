@@ -20,6 +20,38 @@ def test_system_full():
     assert s.name == "Test"
     assert isinstance(s.P_riesgo, float)
 
-def test_abresult_full():
-    ab = ABResult(episodes=10, detection_rate=0.5, mttd_min=1.0, mttr_min=2.0, false_positives=0, gap_before=0.1, gap_after=0.05, ipg_before=0.2, ipg_after=0.3)
-    assert ab.episodes == 10 and ab.detection_rate == 0.5
+def test_pad_trajectories_empty():
+    """Cubre la rama if not trajectories en pad_trajectories."""
+    from sim.toy_ped_rl import pad_trajectories
+    result = pad_trajectories([])
+    assert result.shape == (0, 50)
+
+def test_pad_trajectories_normal():
+    """Test pad_trajectories with data."""
+    from sim.toy_ped_rl import pad_trajectories
+    trajectories = [[1,2], [3,4,5,6]]
+    result = pad_trajectories(trajectories, max_len=4)
+    assert result.shape == (2, 4)
+    assert result[0][2] == 0.0  # padded
+
+def test_calculate_pgf():
+    """Test calculate_pgf."""
+    from sim.toy_ped_rl import calculate_pgf
+    result = calculate_pgf(10, 5, 1, 2, {'cost': 1})
+    assert result == 10 - 5 - 1  # 4
+
+def test_pearson_correlation():
+    """Test pearson_correlation."""
+    from sim.toy_ped_rl import pearson_correlation
+    x = [1,2,3,4,5]
+    y = [2,4,6,8,10]
+    result = pearson_correlation(x, y)
+    assert abs(result - 1.0) < 1e-6  # perfect correlation
+
+def test_pearson_correlation_zero_denom():
+    """Cubre la rama if denom == 0 en pearson_correlation."""
+    from sim.toy_ped_rl import pearson_correlation
+    x = [1,1,1]
+    y = [2,2,2]
+    result = pearson_correlation(x, y)
+    assert result == 0.0

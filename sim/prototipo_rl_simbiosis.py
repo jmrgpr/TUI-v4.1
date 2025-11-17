@@ -38,6 +38,7 @@ Uso / Usage:
     python tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 0.5 --export results/run_risk05.json
     python tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 1.5 --export results/run_risk15.json
 """
+
 import random
 import math
 import numpy as np
@@ -45,6 +46,9 @@ from typing import List, Dict, Tuple
 from dataclasses import dataclass, field
 import argparse
 import json
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from sim.dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
 import torch  # Necesario para DQN / Required for DQN
 # Visualización avanzada
@@ -515,6 +519,25 @@ def transfer_test(agent_policy, seed, risk_scale=1.0):
         if done:
             break
     return tripwire_count
+# Serialización profesional de políticas para exportación y pruebas
+def stringify_policy(policy):
+    import numpy as np
+    import torch
+    def to_serializable(val):
+        if isinstance(val, dict):
+            return {str(k): to_serializable(v) for k, v in val.items()}
+        elif isinstance(val, (list, tuple)):
+            return [to_serializable(v) for v in val]
+        elif isinstance(val, np.ndarray):
+            return val.tolist()
+        elif hasattr(torch, 'Tensor') and isinstance(val, torch.Tensor):
+            return val.detach().cpu().tolist() if val.dim() > 0 else float(val.detach().cpu())
+        elif isinstance(val, (float, int, str, bool)) or val is None:
+            return val
+        else:
+            return str(val)
+    return to_serializable(policy)
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=1000, help='Número de episodios / Number of episodes')
@@ -525,24 +548,22 @@ def main():
     parser.add_argument('--plot', action='store_true', help='Grafica I_op vs P_riesgo / Plot I_op vs P_riesgo')
     parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON / Export results to JSON')
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk_scale y exporta resultados / Run risk_scale sweep and export results')
+    parser.add_argument('--fast', action='store_true', help='Modo rápido/test: menos episodios, sin visualización ni gráficos')
     args = parser.parse_args()
 
-    def stringify_policy(policy):
-        import torch, numpy as np
-        def to_serializable(val):
-            if isinstance(val, torch.Tensor):
-                return val.item() if val.numel() == 1 else val.tolist()
-            if isinstance(val, np.ndarray):
-                return val.tolist()
-            return val
-        if isinstance(policy, dict):
-            return {str(k): to_serializable(v) for k, v in policy.items()}
-        return policy
+    # Modo rápido/test: fuerza parámetros bajos y desactiva visualización
+    if getattr(args, 'fast', False):
+        args.episodes = min(args.episodes, 10)
+        args.visualize = False
+        args.plot = False
+        print("[Modo rápido/test activado: episodios=10, sin visualización ni gráficos]")
 
-    import csv
 
     if args.risk_sweep:
+        import os
+        os.makedirs('results', exist_ok=True)
         import matplotlib.pyplot as plt
+        import csv
         # Suprimir warnings específicos en barridos estadísticos para código limpio
         warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
         warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
@@ -580,6 +601,29 @@ def main():
             # Exportar JSON
             export_path = args.export or f"results/sweep_risk_{risk}.json"
             export_A = res_A.copy()
+            export_B = res_B.copy()
+            if isinstance(export_A.get('policy'), dict):
+                export_A['policy'] = stringify_policy(export_A['policy'])
+            if isinstance(export_B.get('policy'), dict):
+                export_B['policy'] = stringify_policy(export_B['policy'])
+            with open(export_path, 'w') as f:
+                json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
+            # Exportar CSV para control
+            csv_control = export_path.replace('.json', '_control.csv')
+            with open(csv_control, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control'])
+                for i, (r, t) in enumerate(zip(res_A['total_rewards'], res_A['tripwire_steps'])):
+                    writer.writerow([i+1, r, t])
+            # Exportar CSV para simbiosis
+            csv_simbiosis = export_path.replace('.json', '_simbiosis.csv')
+            with open(csv_simbiosis, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis'])
+                for i, (r, t) in enumerate(zip(res_B['total_rewards'], res_B['tripwire_steps'])):
+                    writer.writerow([i+1, r, t])
+        # ...gráficos y resumen estadístico...
+        # ...return...
             export_B = res_B.copy()
             if isinstance(export_A.get('policy'), dict):
                 export_A['policy'] = stringify_policy(export_A['policy'])
@@ -824,28 +868,13 @@ def main():
         use_dqn=True
     )
 
-    # ...existing code...
-    # La función stringify_policy debe estar correctamente indentada y sin returns fuera de función
-    def stringify_policy(policy):
-        import torch, numpy as np
-        def to_serializable(val):
-            if isinstance(val, torch.Tensor):
-                return val.item() if val.numel() == 1 else val.tolist()
-            if isinstance(val, np.ndarray):
-                return val.tolist()
-            return val
-        if isinstance(policy, dict):
-            return {str(k): to_serializable(v) for k, v in policy.items()}
-        return policy
     import csv
     # ...existing code...
     if args.export:
         export_A = res_A.copy()
         export_B = res_B.copy()
-        if isinstance(export_A.get('policy'), dict):
-            export_A['policy'] = stringify_policy(export_A['policy'])
-        if isinstance(export_B.get('policy'), dict):
-            export_B['policy'] = stringify_policy(export_B['policy'])
+        export_A['policy'] = stringify_policy(export_A.get('policy'))
+        export_B['policy'] = stringify_policy(export_B.get('policy'))
         with open(args.export, 'w') as f:
             json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
         # Exportar CSV para control con métricas avanzadas

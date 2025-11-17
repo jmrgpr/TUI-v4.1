@@ -87,6 +87,39 @@ def test_boxplot_metricas_profesional_empty_print(capsys):
     captured = capsys.readouterr()
     assert 'Sin datos' in captured.out
 
+
+def test_boxplot_metricas_labels_fallback(monkeypatch):
+    """Cubre el fallback a labels en boxplot_metricas (línea 95)."""
+    from sim.visualizaciones import boxplot_metricas
+    import matplotlib.pyplot as plt
+    called = {'tick': 0, 'labels': 0}
+    def fake_boxplot(data, **kwargs):
+        if 'tick_labels' in kwargs:
+            called['tick'] += 1
+            raise TypeError('tick_labels no soportado')
+        if 'labels' in kwargs:
+            called['labels'] += 1
+            return None
+    monkeypatch.setattr(plt, 'boxplot', fake_boxplot)
+    boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
+    assert called['tick'] == 1 and called['labels'] == 1
+
+def test_boxplot_metricas_labels_fallback_real(monkeypatch):
+    """Cubre el fallback real de labels en boxplot_metricas simulando matplotlib antiguo."""
+    from sim.visualizaciones import boxplot_metricas
+    import matplotlib.pyplot as plt
+    called = {'labels': 0}
+    def fake_boxplot(data, **kwargs):
+        # Simula matplotlib antiguo: solo acepta 'labels', rechaza 'tick_labels'
+        if 'tick_labels' in kwargs:
+            raise TypeError('tick_labels no soportado')
+        if 'labels' in kwargs:
+            called['labels'] += 1
+            return None
+        raise TypeError('Argumento no soportado')
+    monkeypatch.setattr(plt, 'boxplot', fake_boxplot)
+    boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
+    assert called['labels'] == 1
 def test_heatmap_metricas_empty():
     """Test heatmap_metricas with empty data."""
     heatmap_metricas([], show=False)
@@ -135,9 +168,12 @@ def test_heatmap_metricas_profesional_empty_print(capsys):
     captured = capsys.readouterr()
     assert 'Sin datos' in captured.out
 
-def test_dashboard_metricas_empty():
-    """Test dashboard_metricas (alias) with empty dict."""
+def test_dashboard_metricas_empty(capsys):
+    """Test dashboard_metricas (professional) with empty dict."""
     dashboard_metricas({})
+    captured = capsys.readouterr()
+    assert "Dashboard de métricas agregadas" in captured.out
+    assert "Sin datos" in captured.out
 
 def test_dashboard_metricas_normal():
     """Test dashboard_metricas (alias) with data."""
@@ -178,6 +214,12 @@ def test_curva_riesgo_comparativa_normal():
     assert os.path.exists(export_path)
     os.unlink(export_path)
 
+def test_curva_riesgo_comparativa_no_export():
+    """Test curva_riesgo_comparativa with normal data and no export_path to cover plt.close()."""
+    control = np.random.rand(10, 50)
+    simbiosis = np.random.rand(10, 50)
+    curva_riesgo_comparativa(control, simbiosis, export_path=None)
+
 def test_curva_riesgo_comparativa_empty_print(capsys):
     """Cubre el print de datos vacíos en curva_riesgo_comparativa."""
     from sim.visualizaciones import curva_riesgo_comparativa
@@ -194,9 +236,12 @@ def test_analisis_estadistico(capsys):
     captured = capsys.readouterr()
     assert 't-test' in captured.out
 
-def test_dashboard_metricas_profesional_empty(tmp_path_fixture):
+def test_dashboard_metricas_profesional_empty(tmp_path_fixture, capsys):
     """Test dashboard_metricas (professional) with empty dict."""
     dashboard_metricas_profesional({}, export_path=str(tmp_path_fixture / "empty.json"))
+    captured = capsys.readouterr()
+    assert "Sin datos" in captured.out
+    assert "Interpretación bilingüe" in captured.out
 
 def test_dashboard_metricas_profesional_normal(tmp_path_fixture, capsys):
     """Test dashboard_metricas (professional) with data."""
@@ -206,7 +251,19 @@ def test_dashboard_metricas_profesional_normal(tmp_path_fixture, capsys):
     }
     dashboard_metricas_profesional(data, export_path=str(tmp_path_fixture / "dashboard.json"))
     captured = capsys.readouterr()
-    assert 'Dashboard' in captured.out
+    assert "Dashboard" in captured.out
+    assert "Interpretación bilingüe" in captured.out
+    assert "Control" in captured.out
+    assert "Simbiosis" in captured.out
+
+def test_dashboard_metricas_profesional_export_csv(tmp_path_fixture):
+    """Test dashboard_metricas export to CSV to cover the CSV writing loop."""
+    data = {
+        'Control': {'Flexibilidad': [1, 2, 3]},
+    }
+    export_path = str(tmp_path_fixture / "dashboard.csv")
+    dashboard_metricas_profesional(data, export_path=export_path)
+    assert tmp_path_fixture.joinpath("dashboard.csv").exists()
 
 def test_plot_risk_curve_show_exception(monkeypatch):
     """Cubre el except Exception en plt.show() de plot_risk_curve."""
@@ -356,26 +413,26 @@ def test_dashboard_metricas_empty_agg_export_csv_json(tmp_path_fixture):
     assert os.path.exists(export_csv)
     assert os.path.exists(export_json)
 
-def test_dashboard_metricas_prints_full(capsys, tmp_path_fixture):
-    """Cubre todos los prints y ramas de dashboard_metricas (alias y agg)."""
+def test_dashboard_metricas_profesional_len1_ci(capsys, tmp_path_fixture):
+    """Cubre la rama else en CI cuando len(arr) == 1."""
     from sim.visualizaciones import dashboard_metricas
-    # Dict vacío
-    dashboard_metricas({})
+    data = {
+        'Control': {'Flexibilidad': [1.0]},  # len=1, cubre else en CI
+    }
+    dashboard_metricas(data, export_path=str(tmp_path_fixture / "len1.json"))
     captured = capsys.readouterr()
-    assert "Sin datos" in captured.out
-    # Dict con datos
-    data = {'Control': {'Flexibilidad': [1,2,3], 'Robustez': [4,5,6]}}
-    dashboard_metricas(data)
+    assert 'media=1.00' in captured.out
+
+def test_dashboard_metricas_profesional_with_nans(capsys, tmp_path_fixture):
+    """Cubre el filtro de NaNs en dashboard_metricas."""
+    from sim.visualizaciones import dashboard_metricas
+    import numpy as np
+    data = {
+        'Control': {'Flexibilidad': [1.0, np.nan, 3.0]},  # Tiene NaN, cubre arr = arr[~np.isnan(arr)]
+    }
+    dashboard_metricas(data, export_path=str(tmp_path_fixture / "nans.json"))
     captured = capsys.readouterr()
-    assert "Dashboard" in captured.out or "dashboard" in captured.out
-    # Exportación CSV
-    export_csv = str(tmp_path_fixture / "dashboard_full.csv")
-    dashboard_metricas(data, export_path=export_csv)
-    assert tmp_path_fixture.joinpath("dashboard_full.csv").exists()
-    # Exportación JSON
-    export_json = str(tmp_path_fixture / "dashboard_full.json")
-    dashboard_metricas(data, export_path=export_json)
-    assert tmp_path_fixture.joinpath("dashboard_full.json").exists()
+    assert 'media=2.00' in captured.out  # (1+3)/2 = 2
 
 
 def test_boxplot_metricas_prints_full(capsys):
@@ -440,13 +497,14 @@ def test_boxplot_metricas_labels_fallback(monkeypatch):
     monkeypatch.setattr(plt, 'boxplot', mock_boxplot)
     boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
 
-def test_plot_empty_data():
-    from sim.visualizaciones import plot_risk_curve
-    fig = plot_risk_curve([])
-    assert fig is None or fig is not None  # Solo verifica ejecución
+def test_plot_risk_curve_empty_show():
+    """Test plot_risk_curve with empty data and show=True to cover if show branch."""
+    plot_risk_curve([], show=True)
 
+def test_boxplot_metricas_empty_show():
+    """Test boxplot_metricas with empty data and show=True."""
+    boxplot_metricas([], show=True)
 
-def test_heatmap_no_data():
-    from sim.visualizaciones import heatmap_metricas
-    fig = heatmap_metricas([])
-    assert fig is None or fig is not None
+def test_heatmap_metricas_empty_show():
+    """Test heatmap_metricas with empty data and show=True."""
+    heatmap_metricas([], show=True)

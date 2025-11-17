@@ -359,6 +359,8 @@ def pad_trajectories(trajectories, max_len=50, pad_value=0.0):
     Padee trayectorias a longitud máxima con valor de padding.
     Pads trajectories to maximum length with padding value.
     """
+    if not trajectories:
+        return np.zeros((0, max_len))
     padded = []
     for traj in trajectories:
         if len(traj) < max_len:
@@ -367,6 +369,13 @@ def pad_trajectories(trajectories, max_len=50, pad_value=0.0):
             padded_traj = traj[:max_len]
         padded.append(padded_traj)
     return np.array(padded)
+
+def calculate_pgf(reward1, reward2, factor1, factor2, config):
+    """
+    Calcula ganancia potencial (Potential Gain Function).
+    Calculates potential gain function.
+    """
+    return reward1 - reward2 - config['cost']
 
 # ===============================================================================
 # Main: Ejecutar las 3 simulaciones

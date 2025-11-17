@@ -176,14 +176,6 @@ def heatmap_metricas_profesional(matriz, etiquetas, nombre, export_path=None):
         plt.savefig(export_path, dpi=200)
     plt.close()
 
-def dashboard_metricas(metricas_dict):
-    print("Dashboard de métricas (alias)")
-    if not metricas_dict:
-        print("Sin datos / No data")
-        return
-    for k, v in metricas_dict.items():
-        print(f"{k}: {v}")
-
 def exportar_metricas(metricas, filename="export.json"):
     import json
     with open(filename, 'w') as f:
