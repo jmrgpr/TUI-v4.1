@@ -186,6 +186,9 @@ def heatmap_metricas_profesional(matriz, etiquetas, nombre, export_path=None):
     plt.close(fig)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def exportar_metricas(metricas, filename="results/export.json"):
     """
     Exporta métricas en formato JSON. Por defecto, guarda en 'results/export.json'.
@@ -194,12 +197,15 @@ def exportar_metricas(metricas, filename="results/export.json"):
     Exports metrics in JSON format. By default, saves to 'results/export.json'.
     Test/result files should never be saved in the project root.
     """
+<<<<<<< HEAD
     import json
     with open(filename, 'w') as f:
         json.dump(metricas, f)
 =======
 def exportar_metricas(metricas, filename="export.json"):
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+>>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
     import json
     with open(filename, 'w') as f:
         json.dump(metricas, f)

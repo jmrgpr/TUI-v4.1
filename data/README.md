@@ -6,6 +6,10 @@ This folder stores datasets and associated documentation for experiments and sim
 
 ## Uso / Usage
 - Solo archivos de datos y documentación.
+<<<<<<< HEAD
 - Only data files and documentation.
 
 ---
+=======
+- Only data files and documentation.
+>>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)

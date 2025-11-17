@@ -47,16 +47,29 @@ def main():  # pragma: no cover
 def main():
     # ===================== Sidebar: Parámetros =====================
     st.sidebar.title("TUI v4.1 Simulador — Parámetros")
-    episodes = st.sidebar.slider(PARAMS["episodes"]["label"], min_value=PARAMS["episodes"]["min_value"], max_value=PARAMS["episodes"]["max_value"], step=PARAMS["episodes"]["step"], value=PARAMS["episodes"]["value"], help=PARAMS["episodes"]["help"])
-    seed = st.sidebar.slider(PARAMS["seed"]["label"], min_value=PARAMS["seed"]["min_value"], max_value=PARAMS["seed"]["max_value"], step=PARAMS["seed"]["step"], value=PARAMS["seed"]["value"], help=PARAMS["seed"]["help"])
-    risk_scale = st.sidebar.slider(PARAMS["risk_scale"]["label"], min_value=PARAMS["risk_scale"]["min_value"], max_value=PARAMS["risk_scale"]["max_value"], step=PARAMS["risk_scale"]["step"], value=PARAMS["risk_scale"]["value"], help=PARAMS["risk_scale"]["help"])
-    grid_size = st.sidebar.slider(PARAMS["grid_size"]["label"], min_value=PARAMS["grid_size"]["min_value"], max_value=PARAMS["grid_size"]["max_value"], step=PARAMS["grid_size"]["step"], value=PARAMS["grid_size"]["value"], help=PARAMS["grid_size"]["help"])
-    initial_resources = st.sidebar.slider(PARAMS["initial_resources"]["label"], min_value=PARAMS["initial_resources"]["min_value"], max_value=PARAMS["initial_resources"]["max_value"], step=PARAMS["initial_resources"]["step"], value=PARAMS["initial_resources"]["value"], help=PARAMS["initial_resources"]["help"])
-    tripwires = st.sidebar.slider(PARAMS["tripwires"]["label"], min_value=PARAMS["tripwires"]["min_value"], max_value=PARAMS["tripwires"]["max_value"], step=PARAMS["tripwires"]["step"], value=PARAMS["tripwires"]["value"], help=PARAMS["tripwires"]["help"])
-    shocks = st.sidebar.slider(PARAMS["shocks"]["label"], min_value=PARAMS["shocks"]["min_value"], max_value=PARAMS["shocks"]["max_value"], step=PARAMS["shocks"]["step"], value=PARAMS["shocks"]["value"], help=PARAMS["shocks"]["help"])
-    distractors = st.sidebar.slider(PARAMS["distractors"]["label"], min_value=PARAMS["distractors"]["min_value"], max_value=PARAMS["distractors"]["max_value"], step=PARAMS["distractors"]["step"], value=PARAMS["distractors"]["value"], help=PARAMS["distractors"]["help"])
-    max_steps = st.sidebar.slider(PARAMS["max_steps"]["label"], min_value=PARAMS["max_steps"]["min_value"], max_value=PARAMS["max_steps"]["max_value"], step=PARAMS["max_steps"]["step"], value=PARAMS["max_steps"]["value"], help=PARAMS["max_steps"]["help"])
-    agent_type = st.sidebar.selectbox(PARAMS["agent_type"]["label"], PARAMS["agent_type"]["options"], help=PARAMS["agent_type"]["help"])
+    # Botón de reset a valores por defecto
+    if st.sidebar.button("Reset to default"):
+        st.session_state["episodes"] = PARAMS["episodes"]["value"]
+        st.session_state["seed"] = PARAMS["seed"]["value"]
+        st.session_state["risk_scale"] = PARAMS["risk_scale"]["value"]
+        st.session_state["grid_size"] = PARAMS["grid_size"]["value"]
+        st.session_state["initial_resources"] = PARAMS["initial_resources"]["value"]
+        st.session_state["tripwires"] = PARAMS["tripwires"]["value"]
+        st.session_state["shocks"] = PARAMS["shocks"]["value"]
+        st.session_state["distractors"] = PARAMS["distractors"]["value"]
+        st.session_state["max_steps"] = PARAMS["max_steps"]["value"]
+        st.session_state["agent_type"] = PARAMS["agent_type"]["options"][0]
+
+    episodes = st.sidebar.slider(PARAMS["episodes"]["label"], min_value=PARAMS["episodes"]["min_value"], max_value=PARAMS["episodes"]["max_value"], step=PARAMS["episodes"]["step"], value=st.session_state.get("episodes", PARAMS["episodes"]["value"]), help=PARAMS["episodes"]["help"])
+    seed = st.sidebar.slider(PARAMS["seed"]["label"], min_value=PARAMS["seed"]["min_value"], max_value=PARAMS["seed"]["max_value"], step=PARAMS["seed"]["step"], value=st.session_state.get("seed", PARAMS["seed"]["value"]), help=PARAMS["seed"]["help"])
+    risk_scale = st.sidebar.slider(PARAMS["risk_scale"]["label"], min_value=PARAMS["risk_scale"]["min_value"], max_value=PARAMS["risk_scale"]["max_value"], step=PARAMS["risk_scale"]["step"], value=st.session_state.get("risk_scale", PARAMS["risk_scale"]["value"]), help=PARAMS["risk_scale"]["help"])
+    grid_size = st.sidebar.slider(PARAMS["grid_size"]["label"], min_value=PARAMS["grid_size"]["min_value"], max_value=PARAMS["grid_size"]["max_value"], step=PARAMS["grid_size"]["step"], value=st.session_state.get("grid_size", PARAMS["grid_size"]["value"]), help=PARAMS["grid_size"]["help"])
+    initial_resources = st.sidebar.slider(PARAMS["initial_resources"]["label"], min_value=PARAMS["initial_resources"]["min_value"], max_value=PARAMS["initial_resources"]["max_value"], step=PARAMS["initial_resources"]["step"], value=st.session_state.get("initial_resources", PARAMS["initial_resources"]["value"]), help=PARAMS["initial_resources"]["help"])
+    tripwires = st.sidebar.slider(PARAMS["tripwires"]["label"], min_value=PARAMS["tripwires"]["min_value"], max_value=PARAMS["tripwires"]["max_value"], step=PARAMS["tripwires"]["step"], value=st.session_state.get("tripwires", PARAMS["tripwires"]["value"]), help=PARAMS["tripwires"]["help"])
+    shocks = st.sidebar.slider(PARAMS["shocks"]["label"], min_value=PARAMS["shocks"]["min_value"], max_value=PARAMS["shocks"]["max_value"], step=PARAMS["shocks"]["step"], value=st.session_state.get("shocks", PARAMS["shocks"]["value"]), help=PARAMS["shocks"]["help"])
+    distractors = st.sidebar.slider(PARAMS["distractors"]["label"], min_value=PARAMS["distractors"]["min_value"], max_value=PARAMS["distractors"]["max_value"], step=PARAMS["distractors"]["step"], value=st.session_state.get("distractors", PARAMS["distractors"]["value"]), help=PARAMS["distractors"]["help"])
+    max_steps = st.sidebar.slider(PARAMS["max_steps"]["label"], min_value=PARAMS["max_steps"]["min_value"], max_value=PARAMS["max_steps"]["max_value"], step=PARAMS["max_steps"]["step"], value=st.session_state.get("max_steps", PARAMS["max_steps"]["value"]), help=PARAMS["max_steps"]["help"])
+    agent_type = st.sidebar.selectbox(PARAMS["agent_type"]["label"], PARAMS["agent_type"]["options"], index=PARAMS["agent_type"]["options"].index(st.session_state.get("agent_type", PARAMS["agent_type"]["options"][0])), help=PARAMS["agent_type"]["help"])
 
     st.sidebar.markdown("---")
     st.sidebar.markdown("**Documentación TUI:**")
@@ -274,7 +287,32 @@ if __name__ == "__main__":  # pragma: no cover
     if st.session_state["runs"]:  # Si hay al menos una run
         st.subheader("Exportar historial / Export history")
         import json
-        st.download_button("Descargar historial JSON / Download history JSON", json.dumps(st.session_state["runs"], indent=2), "historial_corridas.json")
+        def stringify_policy(policy):
+            import numpy as np
+            import torch
+            if isinstance(policy, dict):
+                return {str(k): stringify_policy(v) for k, v in policy.items()}
+            elif isinstance(policy, (list, tuple)):
+                return [stringify_policy(v) for v in policy]
+            elif isinstance(policy, np.ndarray):
+                return policy.tolist()
+            elif hasattr(torch, 'Tensor') and isinstance(policy, torch.Tensor):
+                return policy.detach().cpu().tolist() if policy.dim() > 0 else float(policy.detach().cpu())
+            elif isinstance(policy, (float, int, str, bool)) or policy is None:
+                return policy
+            else:
+                return str(policy)
+
+        def sanitize_run(run):
+            run_copy = dict(run)
+            for agent_key in ["control", "simbiosis", "dqn_control"]:
+                if agent_key in run_copy and isinstance(run_copy[agent_key], dict):
+                    if "policy" in run_copy[agent_key]:
+                        run_copy[agent_key]["policy"] = stringify_policy(run_copy[agent_key]["policy"])
+            return run_copy
+
+        runs_serializable = [sanitize_run(run) for run in st.session_state["runs"]]
+        st.download_button("Descargar historial JSON / Download history JSON", json.dumps(runs_serializable, indent=2), "historial_corridas.json")
 
     # ===================== Panel de ayuda =====================
 
