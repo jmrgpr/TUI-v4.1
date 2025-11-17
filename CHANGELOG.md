@@ -8,6 +8,13 @@
 - Cobertura de tests mantenida en 97% (ligera disminución por eliminación de código interno).
 - Fecha y hora de documentación: 3:19 PM, 11-17-2025.
 
+## [2025-11-17] Mejora de Cobertura de Tests a 95%
+- Agregados tests para cubrir líneas faltantes en `sim/gui_streamlit.py` (except en seed, validación de parámetros, comparación histórica).
+- Agregados tests para cubrir el bloque `if __name__ == "__main__"` en `sim/toy_ped_rl_excel.py` usando runpy.
+- Agregados tests para cubrir branches en `sim/prototipo_rl_simbiosis.py` (logging condicional, barrido de risk_scale, DQN control).
+- Cobertura global mejorada de 92% a 95%, con módulos principales en 96-99%.
+- Fecha y hora de documentación: 11-17-2025.
+
 ## [2025-11-13] Proveniencia y estructura de datos
 - Se agrega el archivo `Cacería de sistemas inteligencia riesgo.txt` con documentación detallada de fuentes, estructura y referencias del dataset principal.
 - Se actualiza el `README.md` para citar el nuevo archivo y resaltar la transparencia y trazabilidad de los datos.

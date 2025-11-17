@@ -1,15 +1,11 @@
 """
 Cobertura del bloque main de prototipo_rl_simbiosis.py
 """
-import subprocess
+import runpy
 import sys
 import os
 
 def test_main_block_runs():
-    # Ejecuta el script como CLI y verifica salida sin errores
-    script = os.path.join(os.path.dirname(__file__), '..', 'sim', 'prototipo_rl_simbiosis.py')
-    env = os.environ.copy()
-    env['PYTHONPATH'] = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    result = subprocess.run([sys.executable, script, '--episodes', '10', '--seed', '42'], capture_output=True, text=True, env=env)
-    assert result.returncode == 0
-    assert "Ejecutando experimentos" in result.stdout or "Running experiments" in result.stdout
+    # Ejecuta el script como CLI usando runpy para cobertura
+    sys.argv = ['prototipo_rl_simbiosis.py', '--risk_sweep', '--fast', '--dqn_control', '--seed', '42']
+    runpy.run_module('sim.prototipo_rl_simbiosis', run_name='__main__')

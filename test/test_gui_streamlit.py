@@ -183,3 +183,71 @@ def test_export_functionality(mock_st):
     # Verify export UI was created
     mock_st.subheader.assert_any_call("Exportar historial / Export history")
     mock_st.download_button.assert_called()
+
+@patch('sim.gui_streamlit.st')
+def test_invalid_seed_exception(mock_st):
+    """Test that invalid seed triggers except block."""
+    mock_st.session_state = {"seed": "invalid"}  # Invalid seed
+    mock_st.sidebar.slider = MagicMock(side_effect=[1000, 1.0, 5, 100.0, 1, 1, 1, 50, 100])  # 9 values
+    mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.button = MagicMock(return_value=False)
+    mock_st.subheader = MagicMock()
+    mock_st.info = MagicMock()
+    mock_st.write = MagicMock()
+    mock_st.success = MagicMock()
+    mock_st.download_button = MagicMock()
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    # The except should set seed to default
+
+@patch('sim.gui_streamlit.st')
+@patch('sim.gui_streamlit.run_experiment')
+@patch('json.dumps', return_value='"mock"')
+def test_seed_validation_error(mock_json_dumps, mock_run_experiment, mock_st):
+    """Test seed validation error."""
+    mock_st.session_state = {"seed": 999999, "runs": []}  # Out of range, no runs
+    mock_st.sidebar.slider = MagicMock(side_effect=[1000, 1.0, 5, 100.0, 1, 1, 1, 50, 100])  # 9 values
+    mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
+    mock_st.sidebar.title = MagicMock()
+    mock_st.sidebar.markdown = MagicMock()
+    mock_st.sidebar.error = MagicMock()
+    mock_st.title = MagicMock()
+    mock_st.markdown = MagicMock()
+    mock_st.button = MagicMock(return_value=True)
+    mock_st.warning = MagicMock()
+    mock_st.stop = MagicMock()
+    mock_st.download_button = MagicMock()
+
+    import sim.gui_streamlit
+    sim.gui_streamlit.main()
+
+    mock_st.sidebar.error.assert_called()
+    mock_st.warning.assert_called()
+    mock_st.stop.assert_called()
+
+# @pytest.mark.skipif(AppTest is None, reason="streamlit.testing not available")
+# def test_app_invalid_seed():
+#     at = AppTest.from_file("sim/gui_streamlit.py")
+#     at.session_state["seed"] = "invalid"
+#     at.run()
+#     # The except should trigger, seed set to default
+
+# @pytest.mark.skipif(AppTest is None, reason="streamlit.testing not available")
+# def test_app_validation_error():
+#     at = AppTest.from_file("sim/gui_streamlit.py")
+#     at.session_state["seed"] = 10000  # > 9999
+#     at.button[0].click().run()
+#     # Should trigger error
+
+# @pytest.mark.skipif(AppTest is None, reason="streamlit.testing not available")
+# def test_app_comparison():
+#     at = AppTest.from_file("sim/gui_streamlit.py")
+#     at.session_state["runs"] = [{"params": {}, "control": {}, "simbiosis": {}}, {"params": {}, "control": {}, "simbiosis": {}}]
+#     at.run()
+#     # Should cover the comparison

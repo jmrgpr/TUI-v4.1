@@ -381,7 +381,7 @@ def calculate_pgf(reward1, reward2, factor1, factor2, config):
 # Main: Ejecutar las 3 simulaciones
 # ===============================================================================
 
-if __name__ == "__main__":
+def main():
     print("\n" + "=" * 70)
     print("SIMULACIONES TOY — TUI v4.1 (sin dependencias externas)")
     print("=" * 70 + "\n")
@@ -393,6 +393,9 @@ if __name__ == "__main__":
     print("\n" + "=" * 70)
     print("FIN — Simulaciones completadas. Expandir según necesidad.")
     print("=" * 70 + "\n")
+
+if __name__ == "__main__":
+    main()
 
 __all__ = [
     "pad_trajectories",

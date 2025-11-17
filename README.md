@@ -156,17 +156,18 @@ All scripts and tests have been audited to ensure no image or result file is exp
 ---
 
 ## Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente docstrings no ejecutables).
+- **Cobertura global en módulos sim/**: 95% (203 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
-  - `sim/gui_streamlit.py`
+  - `sim/evaluator_pgf.py`
   - `sim/gui_utils.py`
-  - `sim/toy_ped_rl.py`
+  - `sim/toy_ped_rl_excel.py`
   - `sim/visualizaciones.py`
 - **Módulos con cobertura alta**:
-  - `sim/prototipo_rl_simbiosis.py`: 97% (16 líneas faltantes en branches específicos y docstrings).
-  - `sim/toy_ped_rl_excel.py`: 99% (1 línea faltante en exportación).
+  - `sim/gui_streamlit.py`: 96% (4 líneas faltantes en validaciones específicas).
+  - `sim/prototipo_rl_simbiosis.py`: 96% (25 líneas faltantes en branches específicos).
+  - `sim/toy_ped_rl.py`: 99% (1 línea faltante).
 - **Mejores prácticas aplicadas**:
   - Tests con monkeypatch para simular excepciones sin hardcoding.
   - Ejecución de scripts bajo coverage para cubrir `__main__` blocks.
@@ -263,18 +264,18 @@ numpy, torch, matplotlib
 Este proyecto mantiene estándares profesionales de calidad de código, con un enfoque en reproducibilidad, robustez y mejores prácticas. Se han implementado 281 tests automatizados que cubren excepciones, edge cases y visualizaciones avanzadas.
 
 ### Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 97% (42 líneas faltantes, principalmente docstrings no ejecutables y código legacy).
+- **Cobertura global en módulos sim/**: 95% (203 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
   - `sim/evaluator_pgf.py`
-  - `sim/gui_streamlit.py`
   - `sim/gui_utils.py`
-  - `sim/toy_ped_rl.py`
+  - `sim/toy_ped_rl_excel.py`
   - `sim/visualizaciones.py`
 - **Módulos con cobertura alta**:
-  - `sim/prototipo_rl_simbiosis.py`: 96% (26 líneas faltantes en branches específicos y docstrings).
-  - `sim/toy_ped_rl_excel.py`: 99% (1 línea faltante en exportación).
+  - `sim/gui_streamlit.py`: 96% (4 líneas faltantes en validaciones específicas).
+  - `sim/prototipo_rl_simbiosis.py`: 96% (25 líneas faltantes en branches específicos).
+  - `sim/toy_ped_rl.py`: 99% (1 línea faltante).
 - **Mejores prácticas aplicadas**:
   - Tests con monkeypatch para simular excepciones sin hardcoding.
   - Ejecución de scripts bajo coverage para cubrir `__main__` blocks.

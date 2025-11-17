@@ -22,3 +22,9 @@ def test_abresult_dataclass():
     r = ABResult(episodes=10, detection_rate=0.9, mttd_min=1.0, mttr_min=2.0, false_positives=0, gap_before=0.1, gap_after=0.05, ipg_before=0.2, ipg_after=0.1)
     assert r.episodes == 10
     assert r.detection_rate == 0.9
+
+def test_main_execution():
+    """Test that main() runs without errors."""
+    from sim.toy_ped_rl import main
+    # This should run the demos without raising exceptions
+    main()

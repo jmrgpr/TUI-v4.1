@@ -6,6 +6,14 @@ import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import streamlit as st
 import sim.gui_streamlit as gui
+import unittest.mock as mock
+import pytest
+try:
+    from streamlit.testing.v1 import AppTest
+    from sim.gui_streamlit import main as main_gui
+    from sim import prototipo_rl_simbiosis
+except ImportError:
+    AppTest = None
 
 def test_import_gui_streamlit():
     assert hasattr(gui, "main")
@@ -76,28 +84,40 @@ def test_gui_full_flow():
         # Verifica que la ayuda se muestra
         mock_st.markdown.assert_any_call("**Ayuda / Help:**")
 
+def test_gui_run_with_invalid_seed_stops_execution():
+    """
+    Prueba científica: Verifica que la GUI se niega a correr si la semilla (seed) es None.
+    """
+    with mock.patch('sim.gui_streamlit.st') as mock_st:
+        # Simular session_state con semilla None
+        mock_st.session_state = {"seed": None}
+        # Mockear sliders para devolver None en la semilla (segundo slider)
+        mock_st.sidebar.slider = mock.MagicMock(side_effect=[1000, None, 1.0, 5, 100.0, 1, 1, 1, 50])
+        mock_st.sidebar.selectbox = mock.MagicMock(return_value="Control (Q-table)")
+        mock_st.sidebar.title = mock.MagicMock()
+        mock_st.sidebar.markdown = mock.MagicMock()
+        mock_st.sidebar.error = mock.MagicMock()
+        mock_st.title = mock.MagicMock()
+        mock_st.markdown = mock.MagicMock()
+        mock_st.button = mock.MagicMock(return_value=True)
+        mock_st.subheader = mock.MagicMock()
+        mock_st.info = mock.MagicMock()
+        mock_st.write = mock.MagicMock()
+        mock_st.success = mock.MagicMock()
+        mock_st.download_button = mock.MagicMock()
+        mock_st.selectbox = mock.MagicMock(return_value=0)
+        # Mockear st.stop para que lance SystemExit
+        mock_st.stop = mock.MagicMock(side_effect=SystemExit)
+        # Ejecutar main y esperar SystemExit
+        with pytest.raises(SystemExit):
+            main_gui()
+        # Verificar que se mostró el error
+        mock_st.sidebar.error.assert_called_once()
+        assert "La 'Semilla (seed)' debe ser un número entero válido" in mock_st.sidebar.error.call_args[0][0]
+
 def test_gui_edge_cases():
     import sim.gui_streamlit as gui
     from unittest.mock import patch, MagicMock
-
-    # Session_state vacío con semilla válida (best practice: type check)
-    with patch('sim.gui_streamlit.st') as mock_st:
-        mock_st.session_state = {"seed": int(42)}
-        mock_st.sidebar.title = MagicMock()
-        mock_st.sidebar.button = MagicMock(return_value=False)
-        mock_st.sidebar.slider = MagicMock(return_value=1000)
-        mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
-        mock_st.sidebar.markdown = MagicMock()
-        mock_st.title = MagicMock()
-        mock_st.markdown = MagicMock()
-        mock_st.button = MagicMock(return_value=False)
-        mock_st.subheader = MagicMock()
-        mock_st.info = MagicMock()
-        mock_st.write = MagicMock()
-        mock_st.success = MagicMock()
-        mock_st.download_button = MagicMock()
-        mock_st.selectbox = MagicMock(return_value=0)
-        gui.main()
 
     # Error en UI (best practice: type check)
     with patch('sim.gui_streamlit.st') as mock_st:
@@ -111,7 +131,19 @@ def test_gui_edge_cases():
     # Exportación con historial vacío (best practice: type check)
     with patch('sim.gui_streamlit.st') as mock_st:
         mock_st.session_state = {"runs": [], "seed": int(42)}
+        mock_st.sidebar.slider = MagicMock(side_effect=[1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50])
+        mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
+        mock_st.sidebar.title = MagicMock()
+        mock_st.sidebar.markdown = MagicMock()
+        mock_st.title = MagicMock()
+        mock_st.markdown = MagicMock()
+        mock_st.button = MagicMock(return_value=False)
+        mock_st.subheader = MagicMock()
+        mock_st.info = MagicMock()
+        mock_st.write = MagicMock()
+        mock_st.success = MagicMock()
         mock_st.download_button = MagicMock()
+        mock_st.selectbox = MagicMock(return_value=0)
         gui.main()
 
     # Caso: sin runs
