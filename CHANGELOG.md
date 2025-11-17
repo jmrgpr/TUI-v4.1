@@ -85,6 +85,14 @@
 - Cobertura global mejorada de 92% a 95%, con módulos principales en 96-99%.
 - Fecha y hora de documentación: 11-17-2025.
 
+## [2025-11-17] Refactor Metodológico - Eliminación del Oráculo en DQN (3:19 PM)
+- Eliminado el método `calcular_metricas` interno del agente DQN para evitar bias metodológico (oráculo) y asegurar pureza en experimentos RL.
+- Externalizado el cálculo de métricas PGF a `EvaluatorPGF` independiente, garantizando que el agente reciba recompensas como valores negros.
+- Actualizados todos los tests dependientes para usar el evaluador externo en lugar del método interno del agente.
+- Agregado nuevo test `test_pgf_logic_independence` que valida la separación de lógica PGF del agente.
+- Cobertura de tests mantenida en 97% (ligera disminución por eliminación de código interno).
+- Fecha y hora de documentación: 3:19 PM, 11-17-2025.
+
 ## [2025-11-13] Proveniencia y estructura de datos
 - Se agrega el archivo `Caceria de sistemas inteligencia riesgo.txt` con documentación detallada de fuentes, estructura y referencias del dataset principal.
 - Se actualiza el `README.md` para citar el nuevo archivo y resaltar la transparencia y trazabilidad de los datos.

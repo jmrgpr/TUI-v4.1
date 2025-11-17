@@ -383,6 +383,202 @@ def state_to_vector(state):
     """
     return np.array([v for _, v in state], dtype=np.float32)
 
+<<<<<<< HEAD
+=======
+def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dqn=False):
+    """
+    Ejecuta un experimento RL con logging bilingüe y métricas avanzadas.
+    Runs an RL experiment with bilingual logging and advanced metrics.
+    Args:
+        episodes (int): Número de episodios / Number of episodes
+        seed (int): Semilla aleatoria / Random seed
+        risk_scale (float): Escala de riesgo / Risk scale
+        agent_name (str): Nombre del agente / Agent name
+        use_pgf (bool): Usar PGF prudencial / Use prudential PGF
+        use_dqn (bool): Usar agente DQN / Use DQN agent
+    Returns:
+        dict: Métricas y trayectorias del experimento, incluyendo flexibilidad, robustez y acción óptima por episodio, PGF prudencial, exportación avanzada y visualización bilingüe.
+        Experiment metrics and trajectories, including flexibility, robustness and optimal action per episode, prudential PGF, advanced export and bilingual visualization.
+    """
+    def pad_trajectories(trajectories, max_steps=50, pad_value=np.nan):
+        """
+        Homogeneiza trayectorias de longitud variable.
+        Padding con np.nan permite np.nanmean() sin sesgo.
+        Homogenize variable-length trajectories. Padding with np.nan enables unbiased np.nanmean().
+        """
+        padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
+        for i, traj in enumerate(trajectories):
+            length = min(len(traj), max_steps)
+            padded[i, :length] = traj[:length]
+        return padded
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if torch.cuda.is_available():
+        torch.cuda.manual_seed_all(seed)
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+    env = SimbiosisEnv(risk_scale=risk_scale)
+    evaluator = EvaluatorPGF()
+    # Parámetros profesionales / Professional parameters
+    INITIAL_RESOURCES = 100.0
+    MAX_STEPS = 50
+    # Selección de agente / Agent selection
+    state_dim = len(env.get_abstract_state())
+    action_dim = 4  # up, down, left, right
+    ACTIONS = ['up','down','left','right']
+    # El agente se inicializa en cada episodio para evitar errores de referencia
+    # Inicialización de listas de métricas / Metrics lists initialization
+    total_rewards = []
+    flex_recov = []  # Flexibilidad por episodio / Flexibility per episode
+    robust_evol = [] # Robustez por episodio / Robustness per episode
+    q_optimal = []   # Acción óptima por episodio / Optimal action per episode
+    tripwire_steps = []
+    pgf_evol = []
+    reward_env_evol = []
+    survival_evol = []
+    shocks_evol = []
+    agent = None
+    for ep in range(episodes):
+        if (ep+1) % 10 == 0 or ep == 0:
+            print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
+        state = env.reset()
+        # Inicialización segura del agente en cada episodio
+        if use_dqn:
+            agent = DQNAgent(state_dim, action_dim)
+        else:
+            agent = Agent(name=agent_name, resources=INITIAL_RESOURCES)
+        agent.P_riesgo = 0.0
+        agent.P_riesgo_prev = 0.0
+        agent.resources = env.resources
+        total_reward = 0.0
+        steps_to_recover = None
+        tripwire_count = 0
+        shock_count = 0
+        pgf_steps = []
+        reward_env_steps = []
+        q_optimal_steps = []
+        flex_steps = []
+        robust_steps = []
+        last_metrics = None
+        for step in range(MAX_STEPS):
+            if use_dqn:
+                state_vec = np.array([v for _, v in state], dtype=np.float32)
+                action_idx = agent.act(state_vec)
+                action = ACTIONS[action_idx]
+            else:
+                action = agent.act(state)
+            next_state, reward_env, done, info = env.step(action)
+            # Calcular métricas externamente usando evaluador / Compute metrics externally using evaluator
+            metrics = evaluator.calcular_metricas(env, info, step, agent.resources if hasattr(agent, 'resources') else env.resources, getattr(agent, 'purpose', 'survive_and_help'), getattr(agent, 'alignment', 1.0))
+            last_metrics = metrics
+            r_pgf = metrics['PGF'] if use_pgf else reward_env
+            # Aprendizaje / Learning
+            if use_dqn:
+                next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
+                agent.remember(state_vec, action_idx, r_pgf, next_state_vec, done)
+                agent.learn()
+            else:
+                agent.update_policy(state, action, r_pgf, next_state)
+                agent.remember(Event())  # Hardening: Event no acepta argumentos, solo se registra el evento
+            total_reward += r_pgf
+            pgf_steps.append(metrics['PGF'])
+            reward_env_steps.append(reward_env)
+            flex_steps.append(metrics['F'])
+            robust_steps.append(metrics['R_robust'])
+            if use_dqn:
+                q_vals = agent.model(torch.FloatTensor(state_to_vector(state)).unsqueeze(0)).detach().cpu().numpy()[0]
+                optimal_action_idx = int(np.argmax(q_vals))
+                q_optimal_steps.append(1 if action_idx == optimal_action_idx else 0)
+            else:
+                q_vals = [agent.policy.get((state, a), 0.0) for a in ACTIONS]
+                optimal_action = ACTIONS[int(np.argmax(q_vals))]
+                q_optimal_steps.append(1 if action == optimal_action else 0)
+            if info.get('shock') and steps_to_recover is None:
+                steps_to_recover = 0
+            if steps_to_recover is not None:
+                steps_to_recover += 1
+            if info.get('tripwire'):
+                tripwire_count += 1
+            if info.get('shock'):
+                shock_count += 1
+            if done:
+                break
+        total_rewards.append(total_reward)
+        flex_recov.append(np.mean(flex_steps) if flex_steps else 0.0)
+        robust_evol.append(np.mean(robust_steps) if robust_steps else 0.0)
+        tripwire_steps.append(tripwire_count)
+        shocks_evol.append(shock_count)
+        pgf_evol.append(pgf_steps)
+        reward_env_evol.append(reward_env_steps)
+        q_optimal.append(np.mean(q_optimal_steps))
+        survival_evol.append(agent.resources)
+        agent.reprogram_purpose("survive_and_help") if not use_dqn else None
+        # Logging por episodio (bilingüe, con métricas avanzadas)
+        if (ep+1) % max(1, episodes//10) == 0 or ep == episodes-1:
+            flex = last_metrics['F'] if last_metrics else 0.0
+            q_opt = np.max(agent.policy.get('Q', np.zeros(4))) if hasattr(agent, 'policy') and 'Q' in agent.policy else 0.0
+            robust = last_metrics['R_robust'] if last_metrics else 0.0
+            pgf_val = last_metrics['PGF'] if last_metrics else 0.0
+            print(f"[{agent_name}] Episodio {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")
+            print(f"[{agent_name}] Episode {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")
+
+    # Edge case: episodios=0
+    if episodes == 0 or agent is None:
+        return {
+            "avg_reward": 0.0,
+            "avg_flex": 0.0,
+            "avg_robust": 0.0,
+            "avg_tripwire": 0.0,
+            "avg_q_opt": 0.0,
+            "avg_shocks": 0.0,
+            "avg_survival": 0.0,
+            "total_rewards": [],
+            "tripwire_steps": [],
+            "shocks_evol": [],
+            "pgf_evol": [],
+            "reward_env_evol": [],
+            "pgf_evol_padded": [],
+            "reward_env_evol_padded": [],
+            "q_optimal_evol": [],
+            "survival_evol": [],
+            "flex_recov": [],
+            "robust_evol": [],
+            "policy": {} if use_dqn else {}
+        }
+    avg_reward = np.mean(total_rewards)
+    avg_flex = np.mean(flex_recov)
+    avg_robust = np.mean(robust_evol)
+    avg_tripwire = np.mean(tripwire_steps)
+    avg_q_opt = np.mean(q_optimal)
+    avg_shocks = np.mean(shocks_evol)
+    avg_survival = np.mean(survival_evol)
+    # === Homogeneizar trayectorias antes de devolver ===
+    max_steps = 50
+    pgf_padded = pad_trajectories(pgf_evol, max_steps)
+    reward_env_padded = pad_trajectories(reward_env_evol, max_steps)
+    return {
+        "avg_reward": avg_reward,
+        "avg_flex": avg_flex,
+        "avg_robust": avg_robust,
+        "avg_tripwire": avg_tripwire,
+        "avg_q_opt": avg_q_opt,
+        "avg_shocks": avg_shocks,
+        "avg_survival": avg_survival,
+        "total_rewards": total_rewards,
+        "tripwire_steps": tripwire_steps,
+        "shocks_evol": shocks_evol,
+        "pgf_evol": pgf_evol,           # original (ragged)
+        "reward_env_evol": reward_env_evol,  # original
+        "pgf_evol_padded": pgf_padded.tolist(),  # para export / for export
+        "reward_env_evol_padded": reward_env_padded.tolist(),
+        "q_optimal_evol": q_optimal,
+        "survival_evol": survival_evol,
+        "flex_recov": flex_recov,
+        "robust_evol": robust_evol,
+        "policy": agent.model.state_dict() if use_dqn else agent.policy
+    }
+>>>>>>> dd9ac1d (Refactor metodológico: eliminación del oráculo en DQN)
 
 def transfer_test(agent_policy, seed, risk_scale=1.0):
     from sim.environment import SimbiosisEnv

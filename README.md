@@ -693,10 +693,17 @@ Visualizaciones avanzadas y comparativas:
   - Todas las funcionalidades de la GUI (reset, exportar, comparación, ayuda) están cubiertas por tests robustos y reproducibles.
   - Validación de edge cases y exportación profesional.
 
-- **Limpieza y trazabilidad de resultados:**
+- **Limpieza y trazabilidad de resultados:** (Actualizado 2025-11-17)
   - Los archivos de test y resultados experimentales generados durante el desarrollo (`test.csv`, `test.json`, `test_control.csv`, `test_simbiosis.csv`, `test_sweep.json`, `test_sweep_control.csv`) fueron movidos de la raíz a la carpeta `results/`.
   - El archivo temporal vacío `test_export_empty.json` fue eliminado.
   - Motivo: En etapas de desarrollo y pruebas rápidas, es común exportar resultados en la raíz. Ahora, siguiendo la estructura profesional, todos los resultados se centralizan en `results/` para facilitar la trazabilidad y limpieza.
+
+- **Refactor Metodológico - Eliminación del Oráculo en DQN** (2025-11-17, 3:19 PM):
+  - Eliminado el método `calcular_metricas` interno del agente DQN para evitar bias metodológico (oráculo).
+  - Externalizado el cálculo de métricas PGF a `EvaluatorPGF` independiente.
+  - El agente DQN ahora recibe recompensas como valores negros, asegurando pureza en experimentos RL.
+  - Actualizados todos los tests para validar la independencia de lógica PGF.
+  - Cobertura mantenida en 97%.
 
 - **Interfaz Streamlit avanzada:**
   - Botón "Reset to default" para restaurar parámetros.
@@ -871,16 +878,17 @@ numpy, torch, matplotlib
 Este proyecto mantiene estándares profesionales de calidad de código, con un enfoque en reproducibilidad, robustez y mejores prácticas. Se han implementado 281 tests automatizados que cubren excepciones, edge cases y visualizaciones avanzadas.
 
 ### Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente docstrings no ejecutables).
+- **Cobertura global en módulos sim/**: 97% (42 líneas faltantes, principalmente docstrings no ejecutables y código legacy).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
+  - `sim/evaluator_pgf.py`
   - `sim/gui_streamlit.py`
   - `sim/gui_utils.py`
   - `sim/toy_ped_rl.py`
   - `sim/visualizaciones.py`
 - **Módulos con cobertura alta**:
-  - `sim/prototipo_rl_simbiosis.py`: 97% (16 líneas faltantes en branches específicos y docstrings).
+  - `sim/prototipo_rl_simbiosis.py`: 96% (26 líneas faltantes en branches específicos y docstrings).
   - `sim/toy_ped_rl_excel.py`: 99% (1 línea faltante en exportación).
 - **Mejores prácticas aplicadas**:
   - Tests con monkeypatch para simular excepciones sin hardcoding.

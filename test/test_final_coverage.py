@@ -318,6 +318,9 @@ def test_agent_uses_external_evaluator():
     env.reset()
     info = {'tripwire': True, 'shock': False, 'distractor': False, 'help': True, 'low_resources': False}
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> dd9ac1d (Refactor metodológico: eliminación del oráculo en DQN)
     # Call calcular_metricas via evaluator
     from sim.evaluator_pgf import EvaluatorPGF
     evaluator = EvaluatorPGF()
@@ -326,6 +329,7 @@ def test_agent_uses_external_evaluator():
     assert 'PGF' in metrics
     assert 'I_op' in metrics
     assert 'P_riesgo' in metrics
+<<<<<<< HEAD
     # Check some values
     assert metrics['PGF'] != 0.0  # Should be calculated
 =======
@@ -338,6 +342,10 @@ def test_agent_uses_external_evaluator():
     # Check some values
     assert agent.PGF != 0.0  # Should be calculated
 >>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
+=======
+    # Check some values
+    assert metrics['PGF'] != 0.0  # Should be calculated
+>>>>>>> dd9ac1d (Refactor metodológico: eliminación del oráculo en DQN)
 
 
 def test_transfer_test():
