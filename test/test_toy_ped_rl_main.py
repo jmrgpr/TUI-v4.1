@@ -2,14 +2,19 @@
 Cobertura del bloque main de toy_ped_rl.py
 """
 <<<<<<< HEAD
+<<<<<<< HEAD
 import runpy
 =======
 import subprocess
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+import runpy
+>>>>>>> 54163b9 (Mejora cobertura de pruebas a 91% combinada, agrega documentos en docs: protocolo TUI v4.2, impacto potencial, lista de pruebas revolucionarias. Actualiza tests para cubrir más ramas.)
 import sys
 import os
 
 def test_main_block_runs():
+<<<<<<< HEAD
 <<<<<<< HEAD
     # Ejecuta el script como CLI usando runpy para cobertura
     sys.argv = ['toy_ped_rl.py']
@@ -23,6 +28,11 @@ def test_main_block_runs():
     assert any("SIMULACIONES" in line for line in result.stdout.splitlines())
     assert any("FIN" in line for line in result.stdout.splitlines())
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+    # Ejecuta el script como CLI usando runpy para cobertura
+    sys.argv = ['toy_ped_rl.py']
+    runpy.run_module('sim.toy_ped_rl', run_name='__main__')
+>>>>>>> 54163b9 (Mejora cobertura de pruebas a 91% combinada, agrega documentos en docs: protocolo TUI v4.2, impacto potencial, lista de pruebas revolucionarias. Actualiza tests para cubrir más ramas.)
 
 def test_calculate_pgf():
     from sim.toy_ped_rl import calculate_pgf

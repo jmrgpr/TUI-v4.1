@@ -1,48 +1,3 @@
-def test_agent_load_policy_exception(tmp_path):
-    from sim.prototipo_rl_simbiosis import Agent
-    agent = Agent(name="Test", resources=100.0)
-    # Archivo inexistente para forzar excepción
-    agent.load_policy(str(tmp_path / "no_file.json"))
-    assert isinstance(agent.policy, dict)
-
-def test_stringify_policy_dict_and_array():
-    from sim.prototipo_rl_simbiosis import stringify_policy
-    policy = {('a', 'b'): np.array([1,2,3])}
-    result = stringify_policy(policy)
-    assert isinstance(result, dict)
-    assert isinstance(list(result.values())[0], list)
-
-def test_progress_callback_branch(capsys):
-    # Cubre la función de callback de progreso
-    def progress_callback(ep, total):
-        if ep % max(1, total // 20) == 0 or ep == total:
-            pct = int(100 * ep / total)
-            print(f"Progreso: {ep}/{total} ({pct}%)")
-    progress_callback(0, 10)
-    progress_callback(10, 10)
-    captured = capsys.readouterr()
-    assert "Progreso" in captured.out
-
-def test_export_csv_and_json(tmp_path):
-    import csv, json
-    from sim.prototipo_rl_simbiosis import run_experiment, stringify_policy
-    results = run_experiment(episodes=2, seed=42, risk_scale=1.0, agent_name="Test", use_pgf=False, use_dqn=False)
-    # Serializar claves antes de exportar a JSON
-    results_serialized = results.copy()
-    if isinstance(results_serialized.get('policy'), dict):
-        results_serialized['policy'] = stringify_policy(results_serialized['policy'])
-    export_path = tmp_path / "test_export.json"
-    with open(export_path, 'w') as f:
-        json.dump({'control': results_serialized, 'simbiosis': results_serialized}, f, indent=2)
-    assert export_path.exists()
-    # Export CSV
-    export_path_csv = tmp_path / "test_export_control.csv"
-    with open(export_path_csv, 'w', newline='') as f:
-        writer = csv.writer(f)
-        writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control'])
-        for i, (r, t) in enumerate(zip(results['total_rewards'], results['tripwire_steps'])):
-            writer.writerow([i+1, r, t])
-    assert export_path_csv.exists()
 #!/usr/bin/env python3
 """
 test_prototipo_rl_simbiosis_coverage.py — Tests adicionales para aumentar cobertura en prototipo_rl_simbiosis.py
@@ -412,4 +367,38 @@ def test_run_experiment_logging(monkeypatch):
     assert result.returncode == 0
     assert "Barrido de risk_scale: 0.5" in result.stdout
     assert "Barrido de risk_scale: 2.0" in result.stdout
+<<<<<<< HEAD
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
+=======
+
+def test_simbiosis_env_init():
+    """Test SimbiosisEnv initialization."""
+    from sim.prototipo_rl_simbiosis import SimbiosisEnv
+    env = SimbiosisEnv()
+    assert env.size == 5
+    assert env.agent_pos == [0, 0]
+    assert env.resources == 100.0
+    assert env.tripwires == [(2, 2)]
+    assert env.shocks == [(3, 3)]
+    assert env.distractors == [(1, 1)]
+    assert env.risk_scale == 1.0
+    assert env.timestep == 0
+    assert env.done == False
+    assert env.history == []
+    # Call reset to cover reset lines
+    env.reset()
+
+def test_run_experiment_episodes_20(capsys):
+    """Test run_experiment with episodes=20 to cover progress logging."""
+    result = run_experiment(episodes=20, seed=42, risk_scale=1.0, agent_name="Test", use_pgf=False, use_dqn=False)
+    captured = capsys.readouterr()
+    assert "Progreso" in captured.out or "Progress" in captured.out
+
+def test_env_step_on_shock():
+    """Test env step on shock position to cover shock handling."""
+    env = SimbiosisEnv()
+    env.agent_pos = [3, 3]
+    state, reward, done, info = env.step('stay')  # Invalid action, stays in place
+    assert info.get('shock') == True
+    assert reward == -10.0
+>>>>>>> 54163b9 (Mejora cobertura de pruebas a 91% combinada, agrega documentos en docs: protocolo TUI v4.2, impacto potencial, lista de pruebas revolucionarias. Actualiza tests para cubrir más ramas.)
