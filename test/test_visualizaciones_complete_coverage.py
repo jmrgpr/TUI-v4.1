@@ -106,6 +106,7 @@ def test_boxplot_metricas_labels_fallback(monkeypatch):
 
 def test_boxplot_metricas_labels_fallback_real(monkeypatch):
     """Cubre el fallback real de labels en boxplot_metricas simulando matplotlib antiguo."""
+<<<<<<< HEAD
     import sim.visualizaciones
     from sim.visualizaciones import boxplot_metricas
     import matplotlib.pyplot as plt
@@ -131,6 +132,22 @@ def test_boxplot_metricas_labels_fallback_real(monkeypatch):
     assert 'tick_labels' in mock_boxplot.call_args_list[0].kwargs
     # Verificar que la segunda llamada usó 'labels'.
     assert 'labels' in mock_boxplot.call_args_list[1].kwargs
+=======
+    from sim.visualizaciones import boxplot_metricas
+    import matplotlib.pyplot as plt
+    called = {'labels': 0}
+    def fake_boxplot(data, **kwargs):
+        # Simula matplotlib antiguo: solo acepta 'labels', rechaza 'tick_labels'
+        if 'tick_labels' in kwargs:
+            raise TypeError('tick_labels no soportado')
+        if 'labels' in kwargs:
+            called['labels'] += 1
+            return None
+        raise TypeError('Argumento no soportado')
+    monkeypatch.setattr(plt, 'boxplot', fake_boxplot)
+    boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
+    assert called['labels'] == 1
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 def test_heatmap_metricas_empty():
     """Test heatmap_metricas with empty data."""
     heatmap_metricas([], show=False)
@@ -425,6 +442,7 @@ def test_dashboard_metricas_empty_agg_export_csv_json(tmp_path_fixture):
     assert os.path.exists(export_json)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def test_dashboard_metricas_profesional_len1_ci(capsys, tmp_path_fixture):
     """Cubre la rama else en CI cuando len(arr) == 1."""
     from sim.visualizaciones import dashboard_metricas
@@ -448,15 +466,28 @@ def test_dashboard_metricas_profesional_with_nans(capsys, tmp_path_fixture):
 =======
 def test_dashboard_metricas_prints_full(capsys, tmp_path_fixture):
     """Cubre todos los prints y ramas de dashboard_metricas (alias y agg)."""
+=======
+def test_dashboard_metricas_profesional_len1_ci(capsys, tmp_path_fixture):
+    """Cubre la rama else en CI cuando len(arr) == 1."""
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
     from sim.visualizaciones import dashboard_metricas
-    # Dict vacío
-    dashboard_metricas({})
+    data = {
+        'Control': {'Flexibilidad': [1.0]},  # len=1, cubre else en CI
+    }
+    dashboard_metricas(data, export_path=str(tmp_path_fixture / "len1.json"))
     captured = capsys.readouterr()
-    assert "Sin datos" in captured.out
-    # Dict con datos
-    data = {'Control': {'Flexibilidad': [1,2,3], 'Robustez': [4,5,6]}}
-    dashboard_metricas(data)
+    assert 'media=1.00' in captured.out
+
+def test_dashboard_metricas_profesional_with_nans(capsys, tmp_path_fixture):
+    """Cubre el filtro de NaNs en dashboard_metricas."""
+    from sim.visualizaciones import dashboard_metricas
+    import numpy as np
+    data = {
+        'Control': {'Flexibilidad': [1.0, np.nan, 3.0]},  # Tiene NaN, cubre arr = arr[~np.isnan(arr)]
+    }
+    dashboard_metricas(data, export_path=str(tmp_path_fixture / "nans.json"))
     captured = capsys.readouterr()
+<<<<<<< HEAD
     assert "Dashboard" in captured.out or "dashboard" in captured.out
     # Exportación CSV
     export_csv = str(tmp_path_fixture / "dashboard_full.csv")
@@ -467,6 +498,9 @@ def test_dashboard_metricas_prints_full(capsys, tmp_path_fixture):
     dashboard_metricas(data, export_path=export_json)
     assert tmp_path_fixture.joinpath("dashboard_full.json").exists()
 >>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
+=======
+    assert 'media=2.00' in captured.out  # (1+3)/2 = 2
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 
 
 def test_boxplot_metricas_prints_full(capsys):
@@ -532,6 +566,7 @@ def test_boxplot_metricas_labels_fallback(monkeypatch):
     boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 def test_plot_risk_curve_empty_show():
     """Test plot_risk_curve with empty data and show=True to cover if show branch."""
     plot_risk_curve([], show=True)
@@ -548,10 +583,24 @@ def test_plot_empty_data():
     from sim.visualizaciones import plot_risk_curve
     fig = plot_risk_curve([])
     assert fig is None or fig is not None  # Solo verifica ejecución
+=======
+def test_plot_risk_curve_empty_show():
+    """Test plot_risk_curve with empty data and show=True to cover if show branch."""
+    plot_risk_curve([], show=True)
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 
+def test_boxplot_metricas_empty_show():
+    """Test boxplot_metricas with empty data and show=True."""
+    boxplot_metricas([], show=True)
 
+<<<<<<< HEAD
 def test_heatmap_no_data():
     from sim.visualizaciones import heatmap_metricas
     fig = heatmap_metricas([])
     assert fig is None or fig is not None
 >>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
+=======
+def test_heatmap_metricas_empty_show():
+    """Test heatmap_metricas with empty data and show=True."""
+    heatmap_metricas([], show=True)
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)

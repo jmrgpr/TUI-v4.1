@@ -32,6 +32,26 @@ Bilingual comments and docstrings for international reproducibility.
 Uso / Usage:
     python tui_toy_rl.py --episodes 1000 --seed 42 --grid_size 5 --risk_scale 1.0 --visualize --plot --export results/run1.json
 """
+<<<<<<< HEAD
+=======
+
+import random
+import math
+import numpy as np
+from typing import List, Dict, Tuple
+from dataclasses import dataclass, field
+import argparse
+import json
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from sim.dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
+import torch  # Necesario para DQN / Required for DQN
+# Visualización avanzada
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 
 import argparse
 import csv
@@ -139,6 +159,7 @@ def transfer_test(agent_policy, seed, risk_scale=1.0):
         if done:
             break
     return tripwire_count
+<<<<<<< HEAD
 
 
 def prepare_results(results: dict):
@@ -166,6 +187,26 @@ def write_episode_rows(writer, agent_name: str, results: dict):
         pgf_costo_ep = float(np.mean(pgf_costo[i])) if i < len(pgf_costo) and pgf_costo[i] else 0.0
         writer.writerow([agent_name, i + 1, reward, trip, flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep])
 
+=======
+# Serialización profesional de políticas para exportación y pruebas
+def stringify_policy(policy):
+    import numpy as np
+    import torch
+    def to_serializable(val):
+        if isinstance(val, dict):
+            return {str(k): to_serializable(v) for k, v in val.items()}
+        elif isinstance(val, (list, tuple)):
+            return [to_serializable(v) for v in val]
+        elif isinstance(val, np.ndarray):
+            return val.tolist()
+        elif hasattr(torch, 'Tensor') and isinstance(val, torch.Tensor):
+            return val.detach().cpu().tolist() if val.dim() > 0 else float(val.detach().cpu())
+        elif isinstance(val, (float, int, str, bool)) or val is None:
+            return val
+        else:
+            return str(val)
+    return to_serializable(policy)
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 
 def main():
     if np is None or torch is None or Agent is None:  # pragma: no cover - entorno degradado o invocado sin deps
@@ -181,6 +222,7 @@ def main():
     parser.add_argument('--risk_scale', type=float, default=1.0, help='Escala de riesgo / Risk scale')
     parser.add_argument('--visualize', action='store_true', help='Visualiza el agente B en ASCII / Visualize agent B in ASCII')
     parser.add_argument('--plot', action='store_true', help='Grafica I_op vs P_riesgo / Plot I_op vs P_riesgo')
+<<<<<<< HEAD
     parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON (y CSV auxiliar) / Export results to JSON (plus CSV)')
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk-scale y exporta resultados / Run risk-scale sweep and export results')
     parser.add_argument('--risk_level', type=str, default='low', choices=['low', 'high'], help='Nivel de riesgo para intervención (low/high)')
@@ -204,10 +246,19 @@ def main():
     args = parser.parse_args()
 
     # Modo rapido/test
+=======
+    parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON / Export results to JSON')
+    parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk_scale y exporta resultados / Run risk_scale sweep and export results')
+    parser.add_argument('--fast', action='store_true', help='Modo rápido/test: menos episodios, sin visualización ni gráficos')
+    args = parser.parse_args()
+
+    # Modo rápido/test: fuerza parámetros bajos y desactiva visualización
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
     if getattr(args, 'fast', False):
         args.episodes = min(args.episodes, 10)
         args.visualize = False
         args.plot = False
+<<<<<<< HEAD
         print("[Modo rapido/test activado: episodios=10, sin visualizacion ni graficos]")
 
     # Overrides opcionales de hiperparametros PGF (disponibles tanto en risk_sweep como en modo normal)
@@ -230,6 +281,34 @@ def main():
         for rs in [0.5, 1.0, 1.5, 2.0]:
             print(f"Barrido de risk_scale: {rs}")
             res_ctrl = run_fn(
+=======
+        print("[Modo rápido/test activado: episodios=10, sin visualización ni gráficos]")
+
+
+    if args.risk_sweep:
+        import os
+        os.makedirs('results', exist_ok=True)
+        import matplotlib.pyplot as plt
+        import csv
+        # Suprimir warnings específicos en barridos estadísticos para código limpio
+        warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
+        warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
+        # Barrido de risk_scale
+        risk_values = [0.5, 1.0, 1.5, 2.0, 3.0]
+        sweep_results = {}
+        all_rewards_control = []
+        all_rewards_simbiosis = []
+        all_tripwires_control = []
+        all_tripwires_simbiosis = []
+        for risk in risk_values:
+            print(f"\n=== Barrido de risk_scale: {risk} ===")
+            # Mensaje de progreso en porcentaje
+            def progress_callback(ep, total):
+                if ep % max(1, total // 20) == 0 or ep == total:
+                    pct = int(100 * ep / total)
+                    print(f"Progreso: {ep}/{total} ({pct}%)")
+            res_A = run_experiment(
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
                 episodes=args.episodes,
                 seed=args.seed,
                 risk_scale=rs,
@@ -251,6 +330,7 @@ def main():
                 use_dqn=True,
                 pgf_mix=pgf_mix,
             )
+<<<<<<< HEAD
             if args.tui_only:
                 res_tui = run_fn(
                     episodes=args.episodes,
@@ -271,6 +351,258 @@ def main():
             os.makedirs(os.path.dirname(args.output_prefix), exist_ok=True)
             with open(f"{args.output_prefix}_risk_sweep.json", "w", encoding="utf-8") as jf:
                 json.dump(results_sweep, jf, indent=2, default=str)
+=======
+            sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
+            # Exportar JSON
+            export_path = args.export or f"results/sweep_risk_{risk}.json"
+            export_A = res_A.copy()
+            export_B = res_B.copy()
+            if isinstance(export_A.get('policy'), dict):
+                export_A['policy'] = stringify_policy(export_A['policy'])
+            if isinstance(export_B.get('policy'), dict):
+                export_B['policy'] = stringify_policy(export_B['policy'])
+            with open(export_path, 'w') as f:
+                json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
+            # Exportar CSV para control
+            csv_control = export_path.replace('.json', '_control.csv')
+            with open(csv_control, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control'])
+                for i, (r, t) in enumerate(zip(res_A['total_rewards'], res_A['tripwire_steps'])):
+                    writer.writerow([i+1, r, t])
+            # Exportar CSV para simbiosis
+            csv_simbiosis = export_path.replace('.json', '_simbiosis.csv')
+            with open(csv_simbiosis, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis'])
+                for i, (r, t) in enumerate(zip(res_B['total_rewards'], res_B['tripwire_steps'])):
+                    writer.writerow([i+1, r, t])
+        # ...gráficos y resumen estadístico...
+        # ...return...
+            export_B = res_B.copy()
+            if isinstance(export_A.get('policy'), dict):
+                export_A['policy'] = stringify_policy(export_A['policy'])
+            if isinstance(export_B.get('policy'), dict):
+                export_B['policy'] = stringify_policy(export_B['policy'])
+            with open(export_path, 'w') as f:
+                json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
+            # Exportar CSV para control
+            csv_control = export_path.replace('.json', '_control.csv')
+            with open(csv_control, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control'])
+                for i, (r, t) in enumerate(zip(res_A['total_rewards'], res_A['tripwire_steps'])):
+                    writer.writerow([i+1, r, t])
+            # Exportar CSV para simbiosis
+            csv_simbiosis = export_path.replace('.json', '_simbiosis.csv')
+            with open(csv_simbiosis, 'w', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis'])
+                for i, (r, t) in enumerate(zip(res_B['total_rewards'], res_B['tripwire_steps'])):
+                    writer.writerow([i+1, r, t])
+            # Acumular para análisis global
+            all_rewards_control.append(res_A['total_rewards'])
+            all_rewards_simbiosis.append(res_B['total_rewards'])
+            all_tripwires_control.append(res_A['tripwire_steps'])
+            all_tripwires_simbiosis.append(res_B['tripwire_steps'])
+            # Gráficos avanzados y análisis bilingüe
+            # Análisis estadístico avanzado
+            from scipy.stats import ttest_ind, f_oneway, sem
+            def print_ci_metric(metric_A, metric_B, name):
+                mean_A, mean_B = np.mean(metric_A), np.mean(metric_B)
+                ci_A = sem(metric_A)
+                ci_B = sem(metric_B)
+                print(f"{name} Control: {mean_A:.2f} ± {ci_A:.2f} | Simbiosis: {mean_B:.2f} ± {ci_B:.2f}")
+            print('\nIntervalos de confianza (±SEM) / Confidence intervals (±SEM):')
+            print_ci_metric(res_A['flex_recov'], res_B['flex_recov'], 'Flexibilidad / Flexibility')
+            print_ci_metric(res_A['shocks_evol'], res_B['shocks_evol'], 'Robustez / Robustness')
+            print_ci_metric(res_A['q_optimal_evol'], res_B['q_optimal_evol'], 'Q-optimal')
+            # t-test y ANOVA
+            print('\nTests estadísticos / Statistical tests:')
+            t_flex = ttest_ind(res_A['flex_recov'], res_B['flex_recov'])
+            t_robust = ttest_ind(res_A['shocks_evol'], res_B['shocks_evol'])
+            t_qopt = ttest_ind(res_A['q_optimal_evol'], res_B['q_optimal_evol'])
+            print(f"t-test Flexibilidad: p={t_flex.pvalue:.4f}")
+            print(f"t-test Robustez: p={t_robust.pvalue:.4f}")
+            print(f"t-test Q-optimal: p={t_qopt.pvalue:.4f}")
+            anova_flex = f_oneway(res_A['flex_recov'], res_B['flex_recov'])
+            print(f"ANOVA Flexibilidad: p={anova_flex.pvalue:.4f}")
+            # Interpretación automática bilingüe
+            print('\nInterpretación estadística:')
+            print('Si p < 0.05, la diferencia entre agentes es significativa. / If p < 0.05, difference between agents is significant.')
+            # Evolución temporal de flexibilidad, robustez y Q-optimal
+            plt.figure(figsize=(12,6))
+            plt.subplot(3,1,1)
+            plt.plot(np.nanmean(res_A['pgf_evol_padded'], axis=0), label='Control PGF', color='blue')
+            plt.plot(np.nanmean(res_B['pgf_evol_padded'], axis=0), label='Simbiosis PGF', color='red')
+            plt.title('Evolución PGF / PGF Evolution')
+            plt.legend()
+            plt.subplot(3,1,2)
+            plt.plot(np.nanmean(res_A['reward_env_evol_padded'], axis=0), label='Control Reward', color='blue')
+            plt.plot(np.nanmean(res_B['reward_env_evol_padded'], axis=0), label='Simbiosis Reward', color='red')
+            plt.title('Evolución Reward / Reward Evolution')
+            plt.legend()
+            plt.subplot(3,1,3)
+            plt.plot(res_A['q_optimal_evol'], label='Control Q-optimal', color='blue')
+            plt.plot(res_B['q_optimal_evol'], label='Simbiosis Q-optimal', color='red')
+            plt.title('Acción óptima por episodio / Optimal action per episode')
+            plt.legend()
+            plt.tight_layout()
+            plt.savefig(export_path.replace('.json', '_evol_metrics.png'), dpi=200)
+            plt.close()
+            # Scatterplot PGF vs Reward
+            plt.figure(figsize=(6,5))
+            plt.scatter(res_A['total_rewards'], [row[-1] for row in res_A['pgf_evol_padded']], label='Control', color='blue', alpha=0.5)
+            plt.scatter(res_B['total_rewards'], [row[-1] for row in res_B['pgf_evol_padded']], label='Simbiosis', color='red', alpha=0.5)
+            plt.xlabel('Reward final')
+            plt.ylabel('PGF final')
+            plt.title('PGF vs Reward final / PGF vs Final Reward')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.savefig(export_path.replace('.json', '_scatter_pgf_reward.png'), dpi=200)
+            plt.close()
+            # Heatmap de tripwires por episodio
+            import seaborn as sns
+            plt.figure(figsize=(8,4))
+            data_tw = np.vstack([res_A['tripwire_steps'], res_B['tripwire_steps']])
+            sns.heatmap(data_tw, cmap='coolwarm', annot=True, fmt='.1f', cbar=True, yticklabels=['Control','Simbiosis'])
+            plt.title('Tripwires por episodio / Tripwires per episode')
+            plt.xlabel('Episodio / Episode')
+            plt.ylabel('Agente / Agent')
+            plt.tight_layout()
+            plt.savefig(export_path.replace('.json', '_heatmap_tripwires.png'), dpi=200)
+            plt.close()
+            # Interpretación automática bilingüe
+            interp_pgf = 'Simbiosis supera a Control en PGF si la curva roja está por encima de la azul. / Simbiosis outperforms Control in PGF if the red curve is above the blue.'
+            interp_qopt = 'Mayor Q-optimal indica mejor alineación de política. / Higher Q-optimal indicates better policy alignment.'
+            print('\nInterpretación automática:')
+            print(interp_pgf)
+            print(interp_qopt)
+            pgf_control_pad = np.array(res_A['pgf_evol_padded'])
+            pgf_simbiosis_pad = np.array(res_B['pgf_evol_padded'])
+            reward_control_pad = np.array(res_A['reward_env_evol_padded'])
+            reward_simbiosis_pad = np.array(res_B['reward_env_evol_padded'])
+            max_steps = pgf_control_pad.shape[1]
+            # Curvas PGF y Reward
+            plt.figure(figsize=(12,6))
+            plt.subplot(2,2,1)
+            plt.plot(np.nanmean(pgf_control_pad, axis=0), label='Control PGF', linewidth=2)
+            plt.plot(np.nanmean(pgf_simbiosis_pad, axis=0), label='Simbiosis PGF', linewidth=2)
+            plt.title(f'PGF Evolución (risk_scale={risk})')
+            plt.xlabel('Paso / Step')
+            plt.ylabel('PGF promedio (solo pasos vivos) / Mean PGF (alive steps only)')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.subplot(2,2,2)
+            plt.plot(np.nanmean(reward_control_pad, axis=0), label='Control Reward', linewidth=2)
+            plt.plot(np.nanmean(reward_simbiosis_pad, axis=0), label='Simbiosis Reward', linewidth=2)
+            plt.title(f'Reward Evolución (risk_scale={risk})')
+            plt.xlabel('Paso / Step')
+            plt.ylabel('Reward promedio (solo pasos vivos) / Mean Reward (alive steps only)')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            # Tasa de supervivencia por paso
+            survival_control = [np.mean(~np.isnan(pgf_control_pad[:, t])) for t in range(max_steps)]
+            survival_simbiosis = [np.mean(~np.isnan(pgf_simbiosis_pad[:, t])) for t in range(max_steps)]
+            plt.subplot(2,2,3)
+            plt.plot(survival_control, label='Control', color='blue')
+            plt.plot(survival_simbiosis, label='Simbiosis', color='red')
+            plt.title('Tasa de supervivencia por paso / Survival rate per step')
+            plt.xlabel('Paso / Step')
+            plt.ylabel('Tasa de supervivencia / Survival rate')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            # Boxplot PGF final por episodio
+            # Gráfico de intervalos de confianza para PGF final
+            import scipy.stats as stats
+            def conf_int(data):
+                arr = np.array(data)
+                arr = arr[~np.isnan(arr)]
+                mean = np.nanmean(arr)
+                sem = stats.sem(arr)
+                ci = stats.t.interval(0.95, len(arr)-1, loc=mean, scale=sem) if len(arr) > 1 else (mean, mean)
+                return mean, ci
+            final_pgf_control = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_control_pad]
+            final_pgf_simbiosis = [row[-1] if not np.isnan(row[-1]) else np.nanmax(row) for row in pgf_simbiosis_pad]
+            mean_control, ci_control = conf_int(final_pgf_control)
+            mean_simbiosis, ci_simbiosis = conf_int(final_pgf_simbiosis)
+            plt.errorbar([1], [mean_control], yerr=[[mean_control-ci_control[0]], [ci_control[1]-mean_control]], fmt='o', color='blue', label='Control CI')
+            plt.errorbar([2], [mean_simbiosis], yerr=[[mean_simbiosis-ci_simbiosis[0]], [ci_simbiosis[1]-mean_simbiosis]], fmt='o', color='red', label='Simbiosis CI')
+            plt.legend()
+            plt.subplot(2,2,4)
+            plt.boxplot([final_pgf_control, final_pgf_simbiosis], tick_labels=['Control', 'Simbiosis'])
+            plt.title('Distribución PGF final por episodio / Final PGF per episode')
+            plt.ylabel('PGF final')
+            # Interpretación automática
+            mean_control = np.nanmean(final_pgf_control)
+            mean_simbiosis = np.nanmean(final_pgf_simbiosis)
+            interp = f"Control: {mean_control:.2f} | Simbiosis: {mean_simbiosis:.2f}"
+            plt.figtext(0.5, 0.01, f"Interpretación: Simbiosis mejora PGF si su media supera a Control. {interp}", ha='center', fontsize=10, color='darkgreen')
+            plt.tight_layout(rect=[0,0.03,1,0.95])
+            plt.savefig(export_path.replace('.json', '_evol_advanced.png'), dpi=200)
+            plt.close()
+            # Boxplot tripwires
+            # Gráfico de intervalos de confianza para tripwires
+            mean_tw_control, ci_tw_control = conf_int(res_A['tripwire_steps'])
+            mean_tw_simbiosis, ci_tw_simbiosis = conf_int(res_B['tripwire_steps'])
+            plt.errorbar([1], [mean_tw_control], yerr=[[mean_tw_control-ci_tw_control[0]], [ci_tw_control[1]-mean_tw_control]], fmt='o', color='blue', label='Control CI')
+            plt.errorbar([2], [mean_tw_simbiosis], yerr=[[mean_tw_simbiosis-ci_tw_simbiosis[0]], [ci_tw_simbiosis[1]-mean_tw_simbiosis]], fmt='o', color='red', label='Simbiosis CI')
+            plt.legend()
+            plt.figure(figsize=(6,4))
+            plt.boxplot([res_A['tripwire_steps'], res_B['tripwire_steps']], tick_labels=['Control', 'Simbiosis'])
+            plt.title(f'Tripwires por episodio (risk_scale={risk})')
+            plt.ylabel('Tripwires')
+            # Interpretación automática
+            mean_tw_control = np.mean(res_A['tripwire_steps'])
+            mean_tw_simbiosis = np.mean(res_B['tripwire_steps'])
+            interp_tw = f"Control: {mean_tw_control:.2f} | Simbiosis: {mean_tw_simbiosis:.2f}"
+            plt.figtext(0.5, 0.01, f"Interpretación: Menos tripwires indica mejor desempeño. {interp_tw}", ha='center', fontsize=10, color='darkred')
+            plt.tight_layout(rect=[0,0.03,1,0.95])
+            plt.savefig(export_path.replace('.json', '_tripwires_boxplot.png'))
+            plt.close()
+        import pandas as pd
+        # Dispersión de recompensa media vs risk_scale
+        avg_rewards_control = [np.mean(r) for r in all_rewards_control]
+        avg_rewards_simbiosis = [np.mean(r) for r in all_rewards_simbiosis]
+        plt.figure(figsize=(7,5))
+        plt.scatter(risk_values, avg_rewards_control, label='Control', color='blue')
+        plt.scatter(risk_values, avg_rewards_simbiosis, label='Simbiosis', color='red')
+        plt.plot(risk_values, avg_rewards_control, '--', color='blue')
+        plt.plot(risk_values, avg_rewards_simbiosis, '--', color='red')
+        plt.xlabel('risk_scale')
+        plt.ylabel('Recompensa media')
+        plt.title('Recompensa media vs risk_scale')
+        plt.legend()
+        plt.savefig('results/sweep_rewards_vs_risk.png')
+        plt.close()
+        # Boxplot global de tripwires
+        plt.figure(figsize=(7,5))
+        # Matplotlib >=3.9: usar tick_labels
+        plt.boxplot(all_tripwires_control, positions=np.array(risk_values)-0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='blue', alpha=0.3), tick_labels=[str(r) for r in risk_values])
+        plt.boxplot(all_tripwires_simbiosis, positions=np.array(risk_values)+0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='red', alpha=0.3))
+        plt.xlabel('risk_scale')
+        plt.ylabel('Tripwires por episodio / Tripwires per episode')
+        plt.title('Tripwires por episodio vs risk_scale / Tripwires per episode vs risk_scale')
+        plt.grid(True, alpha=0.3)
+        plt.tight_layout()
+        plt.savefig('results/sweep_tripwires_vs_risk.png')
+        plt.close()
+        # Métricas adicionales: varianza de recompensa, supervivencia
+        # Resumen estadístico avanzado bilingüe
+        print('\nResumen estadístico avanzado / Advanced statistical summary:')
+        for i, risk in enumerate(risk_values):
+            print(f"risk_scale={risk} | Control PGF: {avg_rewards_control[i]:.2f} ± {stats.sem(all_rewards_control[i]):.2f} | Simbiosis PGF: {avg_rewards_simbiosis[i]:.2f} ± {stats.sem(all_rewards_simbiosis[i]):.2f}")
+            print(f"risk_scale={risk} | Control Tripwires: {np.mean(all_tripwires_control[i]):.2f} ± {stats.sem(all_tripwires_control[i]):.2f} | Simbiosis Tripwires: {np.mean(all_tripwires_simbiosis[i]):.2f} ± {stats.sem(all_tripwires_simbiosis[i]):.2f}")
+        var_rewards_control = [np.var(r) for r in all_rewards_control]
+        var_rewards_simbiosis = [np.var(r) for r in all_rewards_simbiosis]
+        print('\nResumen estadístico global:')
+        print('risk_scale | Control (media, varianza) | Simbiosis (media, varianza)')
+        for i, risk in enumerate(risk_values):
+            interp = "Simbiosis supera a Control" if avg_rewards_simbiosis[i] > avg_rewards_control[i] else "Control supera a Simbiosis"
+            print(f'{risk:>9} | {avg_rewards_control[i]:>8.2f}, {var_rewards_control[i]:>8.2f} | {avg_rewards_simbiosis[i]:>8.2f}, {var_rewards_simbiosis[i]:>8.2f} | {interp}')
+        print("\n=== Barrido de risk_scale completado. Resultados exportados, gráficos y análisis generados. ===")
+        print("Interpretación automática: Si Simbiosis tiene mayor recompensa media y menor varianza, es preferible. Todos los valores están en formato bilingüe.")
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
         return
 
     # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
@@ -349,6 +681,39 @@ def main():
             for agent_name, results in raw_data.items():
                 write_episode_rows(writer, agent_name, results)
 
+<<<<<<< HEAD
+=======
+    import csv
+    # ...existing code...
+    if args.export:
+        export_A = res_A.copy()
+        export_B = res_B.copy()
+        export_A['policy'] = stringify_policy(export_A.get('policy'))
+        export_B['policy'] = stringify_policy(export_B.get('policy'))
+        with open(args.export, 'w') as f:
+            json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
+        # Exportar CSV para control con métricas avanzadas
+        csv_control = args.export.replace('.json', '_control.csv')
+        with open(csv_control, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control', 'Flexibilidad', 'Robustez', 'Q-optimal'])
+            for i in range(len(res_A['total_rewards'])):
+                flex = res_A.get('flex_recov', [None]*len(res_A['total_rewards']))[i]
+                robust = res_A.get('shocks_evol', [None]*len(res_A['total_rewards']))[i]
+                qopt = res_A.get('q_optimal_evol', [None]*len(res_A['total_rewards']))[i]
+                writer.writerow([i+1, res_A['total_rewards'][i], res_A['tripwire_steps'][i], flex, robust, qopt])
+        # Exportar CSV para simbiosis con métricas avanzadas
+        csv_simbiosis = args.export.replace('.json', '_simbiosis.csv')
+        with open(csv_simbiosis, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis', 'Flexibilidad', 'Robustez', 'Q-optimal'])
+            for i in range(len(res_B['total_rewards'])):
+                flex = res_B.get('flex_recov', [None]*len(res_B['total_rewards']))[i]
+                robust = res_B.get('shocks_evol', [None]*len(res_B['total_rewards']))[i]
+                qopt = res_B.get('q_optimal_evol', [None]*len(res_B['total_rewards']))[i]
+                writer.writerow([i+1, res_B['total_rewards'][i], res_B['tripwire_steps'][i], flex, robust, qopt])
+        # Mostrar resumen tabular en consola
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
         print('\nResumen tabular:')
         print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
         print(f"{'Control':<12}{res_A.get('avg_reward',0):>12.2f}{res_A.get('avg_tripwire',0):>12.2f}{res_A.get('avg_flex',0):>14.2f}{res_A.get('avg_q_opt',0):>16.2f}")

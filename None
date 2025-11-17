@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 {
   "control": {
     "dqn_params": null,
@@ -6631,3 +6632,8 @@
     }
   }
 }
+=======
+Episodio,Recompensa_Simbiosis,Tripwires_Simbiosis,Flexibilidad,Robustez,Q-optimal
+1,-7.964009090454187,0,0.5,0,0.74
+2,-11.94601363568128,0,0.5,0,0.74
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)

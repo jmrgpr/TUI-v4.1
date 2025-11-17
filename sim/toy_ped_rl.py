@@ -360,10 +360,15 @@ def pad_trajectories(trajectories, max_len=50, pad_value=0.0):
     Pads trajectories to maximum length with padding value.
     """
 <<<<<<< HEAD
+<<<<<<< HEAD
     if not trajectories:
         return np.zeros((0, max_len))
 =======
 >>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
+=======
+    if not trajectories:
+        return np.zeros((0, max_len))
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
     padded = []
     for traj in trajectories:
         if len(traj) < max_len:
@@ -374,6 +379,9 @@ def pad_trajectories(trajectories, max_len=50, pad_value=0.0):
     return np.array(padded)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 def calculate_pgf(reward1, reward2, factor1, factor2, config):
     """
     Calcula ganancia potencial (Potential Gain Function).
@@ -381,8 +389,11 @@ def calculate_pgf(reward1, reward2, factor1, factor2, config):
     """
     return reward1 - reward2 - config['cost']
 
+<<<<<<< HEAD
 =======
 >>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
+=======
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 # ===============================================================================
 # Main: Ejecutar las 3 simulaciones
 # ===============================================================================

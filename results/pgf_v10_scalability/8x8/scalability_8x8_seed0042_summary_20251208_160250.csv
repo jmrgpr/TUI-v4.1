@@ -1,0 +1,2 @@
+grid,grid_size,seed,episodes,success_rate_total,success_last_100,gate,gate_passed,first_success_episode,duration_min
+8x8,8,42,1500,0.75,0.89,0.1,True,7,5.486455821990967

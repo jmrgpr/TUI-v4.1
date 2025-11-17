@@ -70,10 +70,16 @@ def test_simulation_execution_control(mock_run_experiment, mock_st):
     sim.gui_streamlit.main()
 
     # Verify run_experiment was called correctly
+<<<<<<< HEAD
     kwargs = mock_run_experiment.call_args.kwargs
     assert kwargs["episodes"] == 1000
     assert kwargs["seed"] == 42
     assert kwargs["agent_name"] == "Control"
+=======
+    mock_run_experiment.assert_called_with(
+        episodes=1000, seed=42, risk_scale=1.0, agent_name="Control", use_pgf=False, use_dqn=False
+    )
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
     mock_st.success.assert_called_with("Simulación completada y registrada. / Simulation completed and logged.")
 
 @patch('sim.gui_streamlit.st')
@@ -184,6 +190,7 @@ def test_export_functionality(mock_st):
     # Verify export UI was created
     mock_st.subheader.assert_any_call("Exportar historial / Export history")
     mock_st.download_button.assert_called()
+<<<<<<< HEAD
 
 @patch('sim.gui_streamlit.st')
 def test_invalid_seed_exception(mock_st):
@@ -252,3 +259,5 @@ def test_seed_validation_error(mock_json_dumps, mock_run_experiment, mock_st):
 #     at.session_state["runs"] = [{"params": {}, "control": {}, "simbiosis": {}}, {"params": {}, "control": {}, "simbiosis": {}}]
 #     at.run()
 #     # Should cover the comparison
+=======
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)

@@ -1,5 +1,8 @@
+<<<<<<< HEAD
 import matplotlib
 matplotlib.use("Agg")
+=======
+>>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 from pathlib import Path
 import sys
 ROOT = Path(__file__).resolve().parents[1]
