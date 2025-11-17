@@ -176,7 +176,14 @@ def heatmap_metricas_profesional(matriz, etiquetas, nombre, export_path=None):
         plt.savefig(export_path, dpi=200)
     plt.close()
 
-def exportar_metricas(metricas, filename="export.json"):
+def exportar_metricas(metricas, filename="results/export.json"):
+    """
+    Exporta métricas en formato JSON. Por defecto, guarda en 'results/export.json'.
+    Nunca se debe guardar archivos de test/resultados en la raíz del proyecto.
+    ---
+    Exports metrics in JSON format. By default, saves to 'results/export.json'.
+    Test/result files should never be saved in the project root.
+    """
     import json
     with open(filename, 'w') as f:
         json.dump(metricas, f)

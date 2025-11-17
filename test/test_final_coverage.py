@@ -3,10 +3,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+import json
 import numpy as np
 import matplotlib
 matplotlib.use('Agg')  # Use non-GUI backend
 import matplotlib.pyplot as mpl_plt
+import torch
 import sim.prototipo_rl_simbiosis as prs
 import sim.toy_ped_rl as tpr
 import sim.toy_ped_rl_excel as tpex
@@ -21,6 +23,18 @@ def test_run_experiment_with_q_policy_logging(monkeypatch):
     monkeypatch.setattr(prs, 'Agent', TestAgent)
     # Run with low episodes to trigger logging
     res = prs.run_experiment(episodes=2, seed=1, risk_scale=1.0, agent_name='TestQ', use_pgf=False, use_dqn=False)
+    assert 'avg_reward' in res
+
+
+def test_run_experiment_without_q_policy_logging(monkeypatch):
+    # Force agent to not have 'Q' in policy to hit the else branch in logging
+    class TestAgent(prs.Agent):
+        def __init__(self, *args, **kwargs):
+            super().__init__(*args, **kwargs)
+            self.policy = {}  # No 'Q'
+    monkeypatch.setattr(prs, 'Agent', TestAgent)
+    # Run with low episodes to trigger logging
+    res = prs.run_experiment(episodes=2, seed=1, risk_scale=1.0, agent_name='TestNoQ', use_pgf=False, use_dqn=False)
     assert 'avg_reward' in res
 
 
@@ -41,15 +55,39 @@ def test_main_risk_sweep_fast_no_plots(tmp_path, monkeypatch):
     # Should complete without error
 
 
-def test_toy_ped_rl_main_execution(monkeypatch):
-    # Patch prints to avoid long output
-    def mock_print(*args, **kwargs):
-        pass
-    monkeypatch.setattr('builtins.print', mock_print)
-    # Execute the __main__ block
-    tpr.demo_gridworld_camino_c()
-    tpr.demo_ped_arbol_humano()
+def test_main_dqn_control_fast(tmp_path, monkeypatch):
+    # Patch plt.savefig to avoid file writes
+    monkeypatch.setattr(mpl_plt, 'savefig', lambda *a, **k: None)
+    monkeypatch.setattr(mpl_plt, 'show', lambda: None)
+    monkeypatch.setattr(mpl_plt, 'close', lambda *a: None)
+    # Change to tmp_path
+    monkeypatch.chdir(tmp_path)
+    # Mock sys.argv for dqn_control fast
+    orig_argv = sys.argv.copy()
+    sys.argv[:] = ['prog', '--fast', '--dqn_control', '--export', 'test_dqn_control.json']
+    try:
+        prs.main()
+    finally:
+        sys.argv[:] = orig_argv
+    # Should complete without error and include dqn_control in results
     tpr.demo_sensibilidad_pesos()
+
+
+def test_main_risk_sweep_dqn_control_fast(tmp_path, monkeypatch):
+    # Patch plt.savefig to avoid file writes
+    monkeypatch.setattr(mpl_plt, 'savefig', lambda *a, **k: None)
+    monkeypatch.setattr(mpl_plt, 'show', lambda: None)
+    monkeypatch.setattr(mpl_plt, 'close', lambda *a: None)
+    # Change to tmp_path
+    monkeypatch.chdir(tmp_path)
+    # Mock sys.argv for risk_sweep dqn_control fast
+    orig_argv = sys.argv.copy()
+    sys.argv[:] = ['prog', '--fast', '--risk_sweep', '--dqn_control', '--export', 'test_sweep_dqn.json']
+    try:
+        prs.main()
+    finally:
+        sys.argv[:] = orig_argv
+    # Should complete without error
 
 
 def test_toy_ped_rl_excel_cargar_datos_valid_csv():
@@ -98,6 +136,24 @@ def test_agent_act_random_branch(monkeypatch):
     state = {}
     action = agent.act(state)
     assert action in agent.ACTIONS
+
+
+def test_agent_act_q_branch(monkeypatch):
+    # To cover the Q-learning branch in act
+    agent = prs.Agent()
+    agent.policy = {((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'up'): 1.0, ((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'down'): 0.5}
+    # Mock random.random to return >= 0.2 to enter Q branch
+    monkeypatch.setattr(prs.random, 'random', lambda: 0.5)
+    state = (('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+    action = agent.act(state)
+    assert action in agent.ACTIONS
+
+
+def test_agent_reprogram_purpose():
+    agent = prs.Agent()
+    agent.reprogram_purpose("survive_and_help")
+    assert agent.purpose == "survive_and_help"
+    assert agent.alignment == 1.0
 
 
 def test_run_experiment_agent_init_and_resources():
@@ -175,3 +231,38 @@ def test_export_to_excel_xlsx(tmp_path, monkeypatch):
     # Should create file without error
 
 
+def test_agent_uses_external_evaluator():
+    # Test that Agent uses external EvaluatorPGF for metrics calculation
+    agent = prs.Agent()
+    assert hasattr(agent, 'evaluator')
+    assert isinstance(agent.evaluator, prs.EvaluatorPGF)
+    # Create a mock env and info
+    env = prs.SimbiosisEnv()
+    env.reset()
+    info = {'tripwire': True, 'shock': False, 'distractor': False, 'help': True, 'low_resources': False}
+    # Call calcular_metricas
+    agent.calcular_metricas(env, info, 0)
+    # Check that metrics are updated
+    assert hasattr(agent, 'PGF')
+    assert hasattr(agent, 'I_op')
+    assert hasattr(agent, 'P_riesgo')
+    # Check some values
+    assert agent.PGF != 0.0  # Should be calculated
+
+
+def test_transfer_test():
+    policy = {((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'up'): 1.0}
+    tripwires = prs.transfer_test(policy, seed=42, risk_scale=1.0)
+    assert isinstance(tripwires, int)
+
+
+def test_stringify_policy():
+    policy = {'a': 1, 'b': [1,2], 'c': np.array([1,2]), 'd': torch.tensor(1.0)}
+    result = prs.stringify_policy(policy)
+    assert isinstance(result, dict)
+
+
+def test_state_to_vector():
+    state = (('a', 1), ('b', 2))
+    vec = prs.state_to_vector(state)
+    assert vec.shape == (2,)

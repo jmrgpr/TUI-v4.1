@@ -49,7 +49,10 @@ import json
 import sys
 import os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from sim.dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
+from sim.evaluator_pgf import EvaluatorPGF  # Evaluador externo de métricas / External metrics evaluator
+
 import torch  # Necesario para DQN / Required for DQN
 # Visualización avanzada
 import matplotlib.pyplot as plt
@@ -69,6 +72,17 @@ class Event:
 
 # ===================== Clase Agent =====================
 class Agent(Event):
+    # Atributos de clase para compatibilidad con tests
+    T = 0.0
+    I_op = 0.0
+    P_riesgo = 0.0
+    P_genuino = 0.0
+    eta_extendido = 0.0
+    PGF = 0.0
+    C_costo = 0.0
+    S_auto = 0.0
+    R_robust = 0.0
+    I_rep = 0.0
     """
     Agente RL base para control y simbiosis. Hereda de Event para compatibilidad métrica.
     RL base agent for control and symbiosis. Inherits from Event for metric compatibility.
@@ -81,6 +95,7 @@ class Agent(Event):
         self.policy = {}
         self.purpose = "survive"
         self.alignment = 1.0
+        self.evaluator = EvaluatorPGF()  # Evaluador externo / External evaluator
 
     def act(self, state):
         # Política simple: elige acción aleatoria
@@ -114,19 +129,29 @@ class Agent(Event):
         >>> from sim.visualizaciones import curva_riesgo_comparativa
         >>> curva_riesgo_comparativa(riesgo_control, riesgo_simbiosis, export_path='results/risk_curves.png')
     """
-    T: float = 0.0  # Transferencia / Transfer
-    I_op: float = 0.0  # Índice de oportunidad / Opportunity index
-    P_riesgo: float = 0.0  # Riesgo acumulado / Accumulated risk
-    P_genuino: float = 0.0  # Propósito genuino / Genuine purpose
-    eta_extendido: float = 0.0  # Eficiencia extendida / Extended efficiency
-    PGF: float = 0.0  # Principio de Gradiente de Fracaso / Failure Gradient Principle
-    # Componentes propósito genuino / Genuine purpose components
-    C_costo: float = 0.0  # Costo / Cost
-    S_auto: float = 0.0  # Autonomía / Autonomy
-    R_robust: float = 0.0  # Robustez / Robustness
-    I_rep: float = 0.0  # Reputación / Reputation
-    # Acciones posibles / Possible actions
     ACTIONS = ['up','down','left','right']
+    def __init__(self, name="Agent", resources=100.0):
+        super().__init__()
+        self.name = name
+        self.resources = resources
+        self.memory = []
+        self.policy = {}
+        self.purpose = "survive"
+        self.alignment = 1.0
+        self.evaluator = EvaluatorPGF()  # Evaluador externo / External evaluator
+        # Métricas TUI/PGF
+        self.T = 0.0  # Transferencia / Transfer
+        self.I_op = 0.0  # Índice de oportunidad / Opportunity index
+        self.P_riesgo = 0.0  # Riesgo acumulado / Accumulated risk
+        self.P_genuino = 0.0  # Propósito genuino / Genuine purpose
+        self.eta_extendido = 0.0  # Eficiencia extendida / Extended efficiency
+        self.PGF = 0.0  # Principio de Gradiente de Fracaso / Failure Gradient Principle
+        self.C_costo = 0.0  # Costo / Cost
+        self.S_auto = 0.0  # Autonomía / Autonomy
+        self.R_robust = 0.0  # Robustez / Robustness
+        self.I_rep = 0.0  # Reputación / Reputation
+        self.P_riesgo_actual = 0.0  # Riesgo actual
+        self.P_riesgo_prev = 0.0  # Riesgo previo
     def update_policy(self, state, action, reward, next_state, use_pgf=False):
         key = (state, action)
         old_q = self.policy.get(key, 0.0)
@@ -150,53 +175,17 @@ class Agent(Event):
 
     def calcular_metricas(self, env, info, step):
         """
-        Calcula métricas TUI y PGF prudencial (bilingüe).
-        Compute TUI metrics and prudential PGF (bilingual).
+        Calcula métricas TUI y PGF prudencial usando evaluador externo (bilingüe).
+        Compute TUI metrics and prudential PGF using external evaluator (bilingual).
         Args:
             env: SimbiosisEnv
             info: dict
             step: int
         """
-        # Capacidad predictiva / Predictive capacity
-        self.C = max(0.0, env.resources / 100.0)
-        # Flexibilidad / Flexibility
-        self.F = 1.0 if info.get('shock') else 0.5
-        # Transferencia / Transfer
-        self.T = 1.0 if info.get('help') else 0.5
-        w_C, w_F, w_T = 0.4, 0.3, 0.3
-        # Índice de oportunidad / Opportunity index
-        self.I_op = w_C * self.C + w_F * self.F + w_T * self.T
-        # Guardar riesgo previo / Store previous risk
-        if not hasattr(self, 'P_riesgo_prev'):
-            self.P_riesgo_prev = 0.0
-        # Riesgo acumulado / Accumulated risk
-        self.P_riesgo_actual = self.P_riesgo + abs(info.get('tripwire', 0)*20.0 + info.get('shock', 0)*10.0 + info.get('distractor', 0)*5.0)
-        delta_P = self.P_riesgo_prev - self.P_riesgo_actual
-        self.P_riesgo = self.P_riesgo_actual
-        # Costo / Cost
-        self.C_costo = 1.0 if info.get('low_resources') else 0.8
-        # Autonomía / Autonomy
-        self.S_auto = 1.0 if self.purpose != "survive_and_help" else 0.7
-        # Robustez / Robustness
-        self.R_robust = 1.0 if not info.get('distractor') else 0.6
-        # Reputación / Reputation
-        self.I_rep = 1.0 if info.get('help') else 0.7
-        # Propósito genuino / Genuine purpose
-        self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
-        # Parámetros prudenciales (no hardcodeados) / Prudential parameters (no hardcoded)
-        kappa = 1.0  # Sensibilidad PGF / PGF sensitivity
-        lambda_c = 0.1  # Penalización costo / Cost penalty
-        S_t = 1.0 if info.get('shock') or info.get('tripwire') else 0.5
-        A_t = self.alignment * self.P_genuino
-        delta_C_t = abs(env.resources - self.resources)
-        # PGF prudencial: premia reducción de riesgo / PGF: rewards risk reduction
-        self.PGF = kappa * delta_P * A_t - lambda_c * delta_C_t
-        self.P_riesgo_prev = self.P_riesgo_actual
-        # Eficiencia extendida / Extended efficiency
-        beta = 1.0
-        C_total_norm = 1.0
-        delta_I_useful = self.I_op
-        self.eta_extendido = (delta_I_useful * self.alignment) / (C_total_norm + beta * self.P_riesgo)
+        metrics = self.evaluator.calcular_metricas(env, info, step, self.resources, self.purpose, self.alignment)
+        self.__dict__.update(metrics)
+        # Exponer P_riesgo_prev para trazabilidad científica y compatibilidad con test
+        self.P_riesgo_prev = getattr(self.evaluator, 'P_riesgo_prev', None)
 
     def save_policy(self, filename):
         with open(filename, 'w') as f:
@@ -548,6 +537,7 @@ def main():
     parser.add_argument('--plot', action='store_true', help='Grafica I_op vs P_riesgo / Plot I_op vs P_riesgo')
     parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON / Export results to JSON')
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk_scale y exporta resultados / Run risk_scale sweep and export results')
+    parser.add_argument('--dqn_control', action='store_true', help='Ejecuta agente DQN-Control (DQN con recompensa ambiental) / Run DQN-Control agent (DQN with environmental reward)')
     parser.add_argument('--fast', action='store_true', help='Modo rápido/test: menos episodios, sin visualización ni gráficos')
     args = parser.parse_args()
 
@@ -574,6 +564,8 @@ def main():
         all_rewards_simbiosis = []
         all_tripwires_control = []
         all_tripwires_simbiosis = []
+        all_rewards_dqn_control = []
+        all_tripwires_dqn_control = []
         for risk in risk_values:
             print(f"\n=== Barrido de risk_scale: {risk} ===")
             # Mensaje de progreso en porcentaje
@@ -597,7 +589,19 @@ def main():
                 use_pgf=True,
                 use_dqn=True
             )
+            res_C = None
+            if args.dqn_control:
+                res_C = run_experiment(
+                    episodes=args.episodes,
+                    seed=args.seed,
+                    risk_scale=risk,
+                    agent_name="DQN-Control",
+                    use_pgf=False,
+                    use_dqn=True
+                )
             sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
+            if res_C:
+                sweep_results[risk]['dqn_control'] = res_C
             # Exportar JSON
             export_path = args.export or f"results/sweep_risk_{risk}.json"
             export_A = res_A.copy()
@@ -606,8 +610,14 @@ def main():
                 export_A['policy'] = stringify_policy(export_A['policy'])
             if isinstance(export_B.get('policy'), dict):
                 export_B['policy'] = stringify_policy(export_B['policy'])
+            export_data = {'control': export_A, 'simbiosis': export_B}
+            if res_C:
+                export_C = res_C.copy()
+                if isinstance(export_C.get('policy'), dict):
+                    export_C['policy'] = stringify_policy(export_C['policy'])
+                export_data['dqn_control'] = export_C
             with open(export_path, 'w') as f:
-                json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
+                json.dump(export_data, f, indent=2)
             # Exportar CSV para control
             csv_control = export_path.replace('.json', '_control.csv')
             with open(csv_control, 'w', newline='') as f:
@@ -622,6 +632,14 @@ def main():
                 writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis'])
                 for i, (r, t) in enumerate(zip(res_B['total_rewards'], res_B['tripwire_steps'])):
                     writer.writerow([i+1, r, t])
+            # Exportar CSV para DQN-Control
+            if res_C:
+                csv_dqn_control = export_path.replace('.json', '_dqn_control.csv')
+                with open(csv_dqn_control, 'w', newline='') as f:
+                    writer = csv.writer(f)
+                    writer.writerow(['Episodio', 'Recompensa_DQN-Control', 'Tripwires_DQN-Control'])
+                    for i, (r, t) in enumerate(zip(res_C['total_rewards'], res_C['tripwire_steps'])):
+                        writer.writerow([i+1, r, t])
         # ...gráficos y resumen estadístico...
         # ...return...
             export_B = res_B.copy()
@@ -650,6 +668,9 @@ def main():
             all_rewards_simbiosis.append(res_B['total_rewards'])
             all_tripwires_control.append(res_A['tripwire_steps'])
             all_tripwires_simbiosis.append(res_B['tripwire_steps'])
+            if res_C:
+                all_rewards_dqn_control.append(res_C['total_rewards'])
+                all_tripwires_dqn_control.append(res_C['tripwire_steps'])
             # Gráficos avanzados y análisis bilingüe
             # Análisis estadístico avanzado
             from scipy.stats import ttest_ind, f_oneway, sem
@@ -809,11 +830,16 @@ def main():
         # Dispersión de recompensa media vs risk_scale
         avg_rewards_control = [np.mean(r) for r in all_rewards_control]
         avg_rewards_simbiosis = [np.mean(r) for r in all_rewards_simbiosis]
+        avg_rewards_dqn_control = [np.mean(r) for r in all_rewards_dqn_control] if all_rewards_dqn_control else []
         plt.figure(figsize=(7,5))
         plt.scatter(risk_values, avg_rewards_control, label='Control', color='blue')
         plt.scatter(risk_values, avg_rewards_simbiosis, label='Simbiosis', color='red')
+        if avg_rewards_dqn_control:
+            plt.scatter(risk_values, avg_rewards_dqn_control, label='DQN-Control', color='green')
         plt.plot(risk_values, avg_rewards_control, '--', color='blue')
         plt.plot(risk_values, avg_rewards_simbiosis, '--', color='red')
+        if avg_rewards_dqn_control:
+            plt.plot(risk_values, avg_rewards_dqn_control, '--', color='green')
         plt.xlabel('risk_scale')
         plt.ylabel('Recompensa media')
         plt.title('Recompensa media vs risk_scale')
@@ -823,8 +849,10 @@ def main():
         # Boxplot global de tripwires
         plt.figure(figsize=(7,5))
         # Matplotlib >=3.9: usar tick_labels
-        plt.boxplot(all_tripwires_control, positions=np.array(risk_values)-0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='blue', alpha=0.3), tick_labels=[str(r) for r in risk_values])
-        plt.boxplot(all_tripwires_simbiosis, positions=np.array(risk_values)+0.1, widths=0.15, patch_artist=True, boxprops=dict(facecolor='red', alpha=0.3))
+        plt.boxplot(all_tripwires_control, positions=np.array(risk_values)-0.15, widths=0.1, patch_artist=True, boxprops=dict(facecolor='blue', alpha=0.3), tick_labels=[str(r) for r in risk_values])
+        plt.boxplot(all_tripwires_simbiosis, positions=np.array(risk_values)-0.05, widths=0.1, patch_artist=True, boxprops=dict(facecolor='red', alpha=0.3))
+        if all_tripwires_dqn_control:
+            plt.boxplot(all_tripwires_dqn_control, positions=np.array(risk_values)+0.05, widths=0.1, patch_artist=True, boxprops=dict(facecolor='green', alpha=0.3))
         plt.xlabel('risk_scale')
         plt.ylabel('Tripwires por episodio / Tripwires per episode')
         plt.title('Tripwires por episodio vs risk_scale / Tripwires per episode vs risk_scale')
@@ -836,15 +864,22 @@ def main():
         # Resumen estadístico avanzado bilingüe
         print('\nResumen estadístico avanzado / Advanced statistical summary:')
         for i, risk in enumerate(risk_values):
-            print(f"risk_scale={risk} | Control PGF: {avg_rewards_control[i]:.2f} ± {stats.sem(all_rewards_control[i]):.2f} | Simbiosis PGF: {avg_rewards_simbiosis[i]:.2f} ± {stats.sem(all_rewards_simbiosis[i]):.2f}")
-            print(f"risk_scale={risk} | Control Tripwires: {np.mean(all_tripwires_control[i]):.2f} ± {stats.sem(all_tripwires_control[i]):.2f} | Simbiosis Tripwires: {np.mean(all_tripwires_simbiosis[i]):.2f} ± {stats.sem(all_tripwires_simbiosis[i]):.2f}")
+            line = f"risk_scale={risk} | Control PGF: {avg_rewards_control[i]:.2f} ± {stats.sem(all_rewards_control[i]):.2f} | Simbiosis PGF: {avg_rewards_simbiosis[i]:.2f} ± {stats.sem(all_rewards_simbiosis[i]):.2f}"
+            if avg_rewards_dqn_control:
+                line += f" | DQN-Control PGF: {avg_rewards_dqn_control[i]:.2f} ± {stats.sem(all_rewards_dqn_control[i]):.2f}"
+            print(line)
+            line_tw = f"risk_scale={risk} | Control Tripwires: {np.mean(all_tripwires_control[i]):.2f} ± {stats.sem(all_tripwires_control[i]):.2f} | Simbiosis Tripwires: {np.mean(all_tripwires_simbiosis[i]):.2f} ± {stats.sem(all_tripwires_simbiosis[i]):.2f}"
+            if all_tripwires_dqn_control:
+                line_tw += f" | DQN-Control Tripwires: {np.mean(all_tripwires_dqn_control[i]):.2f} ± {stats.sem(all_tripwires_dqn_control[i]):.2f}"
+            print(line_tw)
         var_rewards_control = [np.var(r) for r in all_rewards_control]
         var_rewards_simbiosis = [np.var(r) for r in all_rewards_simbiosis]
+        var_rewards_dqn_control = [np.var(r) for r in all_rewards_dqn_control] if all_rewards_dqn_control else []
         print('\nResumen estadístico global:')
-        print('risk_scale | Control (media, varianza) | Simbiosis (media, varianza)')
+        print('risk_scale | Control (media, varianza) | Simbiosis (media, varianza) | DQN-Control (media, varianza)')
         for i, risk in enumerate(risk_values):
-            interp = "Simbiosis supera a Control" if avg_rewards_simbiosis[i] > avg_rewards_control[i] else "Control supera a Simbiosis"
-            print(f'{risk:>9} | {avg_rewards_control[i]:>8.2f}, {var_rewards_control[i]:>8.2f} | {avg_rewards_simbiosis[i]:>8.2f}, {var_rewards_simbiosis[i]:>8.2f} | {interp}')
+            dqn_part = f" | {avg_rewards_dqn_control[i]:.2f}, {var_rewards_dqn_control[i]:.2f}" if avg_rewards_dqn_control else ""
+            print(f'{risk:>9} | {avg_rewards_control[i]:>8.2f}, {var_rewards_control[i]:>8.2f} | {avg_rewards_simbiosis[i]:>8.2f}, {var_rewards_simbiosis[i]:>8.2f}{dqn_part}')
         print("\n=== Barrido de risk_scale completado. Resultados exportados, gráficos y análisis generados. ===")
         print("Interpretación automática: Si Simbiosis tiene mayor recompensa media y menor varianza, es preferible. Todos los valores están en formato bilingüe.")
         return
@@ -867,6 +902,16 @@ def main():
         use_pgf=True,
         use_dqn=True
     )
+    res_C = None
+    if args.dqn_control:
+        res_C = run_experiment(
+            episodes=args.episodes,
+            seed=args.seed,
+            risk_scale=args.risk_scale,
+            agent_name="DQN-Control",
+            use_pgf=False,
+            use_dqn=True
+        )
 
     import csv
     # ...existing code...
@@ -875,8 +920,13 @@ def main():
         export_B = res_B.copy()
         export_A['policy'] = stringify_policy(export_A.get('policy'))
         export_B['policy'] = stringify_policy(export_B.get('policy'))
+        export_data = {'control': export_A, 'simbiosis': export_B}
+        if res_C:
+            export_C = res_C.copy()
+            export_C['policy'] = stringify_policy(export_C.get('policy'))
+            export_data['dqn_control'] = export_C
         with open(args.export, 'w') as f:
-            json.dump({'control': export_A, 'simbiosis': export_B}, f, indent=2)
+            json.dump(export_data, f, indent=2)
         # Exportar CSV para control con métricas avanzadas
         csv_control = args.export.replace('.json', '_control.csv')
         with open(csv_control, 'w', newline='') as f:
@@ -902,6 +952,8 @@ def main():
         print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Acción óptima':>16}")
         print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
         print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
+        if res_C:
+            print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")
 
 if __name__ == "__main__":
     main()
