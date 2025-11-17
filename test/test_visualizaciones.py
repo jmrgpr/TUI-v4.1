@@ -104,3 +104,28 @@ def test_dashboard_metricas():
         dashboard_metricas(metricas_dict, export_path='test.json')
     except Exception:
         assert False, "dashboard_metricas json debe ejecutarse sin error"
+
+def test_boxplot_metricas_edge_cases():
+    # Exportación a archivo temporal
+    import tempfile
+    datos1 = np.random.normal(0, 1, 10)
+    datos2 = np.random.normal(1, 1, 10)
+    with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
+        export_path = f.name
+    boxplot_metricas(datos1, datos2, 'Test', export_path=export_path)
+    boxplot_metricas_profesional(datos1, datos2, 'Test', export_path=export_path)
+
+def test_heatmap_metricas_edge_cases():
+    import tempfile
+    matriz = np.random.rand(3, 3)
+    etiquetas = {'x': ['A', 'B', 'C'], 'y': ['1', '2', '3']}
+    with tempfile.NamedTemporaryFile(suffix='.png', delete=False) as f:
+        export_path = f.name
+    heatmap_metricas(matriz, etiquetas, 'Test Heatmap', export_path=export_path)
+    heatmap_metricas_profesional(matriz, etiquetas, 'Test Heatmap', export_path=export_path)
+
+def test_curva_riesgo_comparativa_empty():
+    curva_riesgo_comparativa(np.array([]), np.array([]), export_path=None)
+
+def test_analisis_estadistico_empty():
+    analisis_estadistico([], [], 'Test')

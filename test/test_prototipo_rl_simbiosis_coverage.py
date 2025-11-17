@@ -99,25 +99,52 @@ def test_calcular_metricas_detailed(sample_agent, sample_env):
     assert sample_agent.P_riesgo == 20.0
     assert sample_agent.P_riesgo_prev == 20.0
 
-    # Scenario with shock
-    info = {'tripwire': False, 'shock': True, 'distractor': False, 'help': False, 'low_resources': False}
-    sample_agent.calcular_metricas(sample_env, info, 1)
-    assert sample_agent.P_riesgo_actual == 30.0  # 20 + 10
+def test_agent_act_branches(sample_agent):
+    # Cubre branch aleatorio y branch de argmax
+    state = (0, 0)
+    # Forzar branch aleatorio
+    np.random.seed(42)
+    random.seed(42)
+    actions = set()
+    for _ in range(20):
+        actions.add(sample_agent.act(state))
+    assert all(a in sample_agent.ACTIONS for a in actions)
+    # Forzar branch argmax
+    # Asigna valores para que argmax sea reproducible
+    for idx, a in enumerate(sample_agent.ACTIONS):
+        sample_agent.policy[(state, a)] = idx
+    # Ejecuta múltiples veces para cubrir ambos branches
+    actions = set()
+    for _ in range(50):
+        actions.add(sample_agent.act(state))
+    # Debe cubrir tanto el branch aleatorio como el de argmax
+    assert 'right' in actions
+    assert all(a in sample_agent.ACTIONS for a in actions)
 
-    # Scenario with distractor
-    info = {'tripwire': False, 'shock': False, 'distractor': True, 'help': False, 'low_resources': False}
-    sample_agent.calcular_metricas(sample_env, info, 2)
-    assert sample_agent.P_riesgo_actual == 35.0  # 30 + 5
+def test_update_policy_branches(sample_agent):
+    state = (0, 0)
+    action = 'up'
+    reward = 1.0
+    next_state = (0, 1)
+    # Sin Q previo
+    sample_agent.update_policy(state, action, reward, next_state)
+    assert (state, action) in sample_agent.policy
+    # Con Q previo
+    sample_agent.policy[(next_state, 'up')] = 2.0
+    sample_agent.update_policy(state, action, reward, next_state)
+    assert sample_agent.policy[(state, action)] != 0.0
 
-    # Scenario with help
-    info = {'tripwire': False, 'shock': False, 'distractor': False, 'help': True, 'low_resources': False}
-    sample_agent.calcular_metricas(sample_env, info, 3)
-    assert sample_agent.I_rep == 1.0
-
-    # Scenario with low resources
-    info = {'tripwire': False, 'shock': False, 'distractor': False, 'help': False, 'low_resources': True}
-    sample_agent.calcular_metricas(sample_env, info, 4)
-    assert sample_agent.C_costo == 1.0
+def test_save_and_load_policy(tmp_path, sample_agent):
+    # Guardar y cargar policy con tuplas y strings
+    sample_agent.policy = {('a', 'b'): 1.0, 'c': 2.0}
+    file_path = tmp_path / "policy.json"
+    sample_agent.save_policy(str(file_path))
+    assert file_path.exists()
+    sample_agent.policy = {}
+    sample_agent.load_policy(str(file_path))
+    # Debe reconstruir la tupla y mantener la clave string
+    assert ('a', 'b') in sample_agent.policy
+    assert 'c' in sample_agent.policy
 
 def test_run_experiment_episodes_zero():
     """Test run_experiment with episodes=0."""

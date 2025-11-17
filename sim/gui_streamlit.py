@@ -46,7 +46,13 @@ def main():
         st.session_state["agent_type"] = PARAMS["agent_type"]["options"][0]
 
     episodes = st.sidebar.slider(PARAMS["episodes"]["label"], min_value=PARAMS["episodes"]["min_value"], max_value=PARAMS["episodes"]["max_value"], step=PARAMS["episodes"]["step"], value=st.session_state.get("episodes", PARAMS["episodes"]["value"]), help=PARAMS["episodes"]["help"])
-    seed = st.sidebar.slider(PARAMS["seed"]["label"], min_value=PARAMS["seed"]["min_value"], max_value=PARAMS["seed"]["max_value"], step=PARAMS["seed"]["step"], value=st.session_state.get("seed", PARAMS["seed"]["value"]), help=PARAMS["seed"]["help"])
+    # Garantizar que la semilla sea siempre un entero válido
+    seed_raw = st.session_state.get("seed", PARAMS["seed"]["value"])
+    try:
+        seed = int(seed_raw)
+    except (TypeError, ValueError):
+        seed = PARAMS["seed"]["value"]
+    seed = st.sidebar.slider(PARAMS["seed"]["label"], min_value=PARAMS["seed"]["min_value"], max_value=PARAMS["seed"]["max_value"], step=PARAMS["seed"]["step"], value=seed, help=PARAMS["seed"]["help"])
     risk_scale = st.sidebar.slider(PARAMS["risk_scale"]["label"], min_value=PARAMS["risk_scale"]["min_value"], max_value=PARAMS["risk_scale"]["max_value"], step=PARAMS["risk_scale"]["step"], value=st.session_state.get("risk_scale", PARAMS["risk_scale"]["value"]), help=PARAMS["risk_scale"]["help"])
     grid_size = st.sidebar.slider(PARAMS["grid_size"]["label"], min_value=PARAMS["grid_size"]["min_value"], max_value=PARAMS["grid_size"]["max_value"], step=PARAMS["grid_size"]["step"], value=st.session_state.get("grid_size", PARAMS["grid_size"]["value"]), help=PARAMS["grid_size"]["help"])
     initial_resources = st.sidebar.slider(PARAMS["initial_resources"]["label"], min_value=PARAMS["initial_resources"]["min_value"], max_value=PARAMS["initial_resources"]["max_value"], step=PARAMS["initial_resources"]["step"], value=st.session_state.get("initial_resources", PARAMS["initial_resources"]["value"]), help=PARAMS["initial_resources"]["help"])

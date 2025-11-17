@@ -99,6 +99,35 @@ def test_pearson_correlation():
     corr = pearson_correlation([], [])
     assert corr == 0.0
 
+def test_pad_trajectories_empty():
+    arr = pad_trajectories([])
+    assert arr.shape == (0, 50)
+
+def test_pad_trajectories_padding():
+    trajs = [[1,2,3], [4,5]]
+    arr = pad_trajectories(trajs, max_len=5, pad_value=-1)
+    assert arr.shape == (2, 5)
+    assert arr[0, -1] == -1
+
+def test_calculate_pgf():
+    config = {'cost': 2.0}
+    val = calculate_pgf(10, 5, 1, 1, config)
+    assert val == 3.0
+
+def test_demo_sensibilidad_pesos(capsys):
+    demo_sensibilidad_pesos()
+    out = capsys.readouterr().out
+    assert "correlación" in out or "correlacion" in out
+
+def test_main_execution(monkeypatch):
+    monkeypatch.setattr("builtins.print", lambda *args, **kwargs: None)
+    monkeypatch.setattr("sim.toy_ped_rl.demo_gridworld_camino_c", lambda: None)
+    monkeypatch.setattr("sim.toy_ped_rl.demo_ped_arbol_humano", lambda: None)
+    monkeypatch.setattr("sim.toy_ped_rl.demo_sensibilidad_pesos", lambda: None)
+    import sim.toy_ped_rl as mod
+    if hasattr(mod, "__main__"):
+        mod.__main__
+
 def test_demo_gridworld_camino_c(capsys):
     """Test demo_gridworld_camino_c."""
     demo_gridworld_camino_c()
