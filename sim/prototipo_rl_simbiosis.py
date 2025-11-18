@@ -441,8 +441,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     agent = None
     # Instrumentación Fase 2: inicializar listas para desglose PGF
     pgf_neto_evol = []
-    pgf_benefit_evol = []
-    pgf_cost_evol = []
+    pgf_bruto_evol = []
+    pgf_costo_evol = []
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")  # pragma: no cover  # Logging condicional de progreso, ejecutado en tests pero no siempre detectado
@@ -460,9 +460,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_count = 0
         shock_count = 0
         pgf_steps = []
-        pgf_neto_steps = []
-        pgf_benefit_steps = []
-        pgf_cost_steps = []
+    pgf_neto_steps = []
+    pgf_bruto_steps = []
+    pgf_costo_steps = []
         reward_env_steps = []
         q_optimal_steps = []
         flex_steps = []
@@ -480,12 +480,12 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             metrics = evaluator.calcular_metricas(env, info, step, agent.resources if hasattr(agent, 'resources') else env.resources, getattr(agent, 'purpose', 'survive_and_help'), getattr(agent, 'alignment', 1.0))
             last_metrics = metrics
             # Instrumentación Fase 2: registrar desglose PGF
-            pgf_neto = metrics.get('pgf_neto', metrics['PGF'])
-            pgf_benefit = metrics.get('pgf_beneficio_bruto', 0.0)
-            pgf_cost = metrics.get('pgf_costo_ambiental', 0.0)
+            pgf_neto = metrics.get('PGF', 0.0)
+            pgf_bruto = metrics.get('PGF_Bruto', 0.0)
+            pgf_costo = metrics.get('PGF_Costo', 0.0)
             pgf_neto_steps.append(pgf_neto)
-            pgf_benefit_steps.append(pgf_benefit)
-            pgf_cost_steps.append(pgf_cost)
+            pgf_bruto_steps.append(pgf_bruto)
+            pgf_costo_steps.append(pgf_costo)
             r_pgf = pgf_neto if use_pgf else reward_env
             # Aprendizaje / Learning
             if use_dqn:
@@ -524,9 +524,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_steps.append(tripwire_count)
         shocks_evol.append(shock_count)
         pgf_evol.append(pgf_steps)
-        pgf_neto_evol.append(pgf_neto_steps)
-        pgf_benefit_evol.append(pgf_benefit_steps)
-        pgf_cost_evol.append(pgf_cost_steps)
+    pgf_neto_evol.append(pgf_neto_steps)
+    pgf_bruto_evol.append(pgf_bruto_steps)
+    pgf_costo_evol.append(pgf_costo_steps)
         reward_env_evol.append(reward_env_steps)
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
@@ -575,8 +575,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     pgf_padded = pad_trajectories(pgf_evol, max_steps)
     reward_env_padded = pad_trajectories(reward_env_evol, max_steps)
     pgf_neto_padded = pad_trajectories(pgf_neto_evol, max_steps)
-    pgf_benefit_padded = pad_trajectories(pgf_benefit_evol, max_steps)
-    pgf_cost_padded = pad_trajectories(pgf_cost_evol, max_steps)
+    pgf_bruto_padded = pad_trajectories(pgf_bruto_evol, max_steps)
+    pgf_costo_padded = pad_trajectories(pgf_costo_evol, max_steps)
     return {
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
@@ -593,11 +593,11 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "pgf_evol_padded": pgf_padded.tolist(),  # para export / for export
         "reward_env_evol_padded": reward_env_padded.tolist(),
         "pgf_neto_evol": pgf_neto_evol,
-        "pgf_benefit_evol": pgf_benefit_evol,
-        "pgf_cost_evol": pgf_cost_evol,
+        "pgf_bruto_evol": pgf_bruto_evol,
+        "pgf_costo_evol": pgf_costo_evol,
         "pgf_neto_evol_padded": pgf_neto_padded.tolist(),
-        "pgf_benefit_evol_padded": pgf_benefit_padded.tolist(),
-        "pgf_cost_evol_padded": pgf_cost_padded.tolist(),
+        "pgf_bruto_evol_padded": pgf_bruto_padded.tolist(),
+        "pgf_costo_evol_padded": pgf_costo_padded.tolist(),
         "q_optimal_evol": q_optimal,
         "survival_evol": survival_evol,
         "flex_recov": flex_recov,
@@ -670,29 +670,6 @@ def stringify_policy(policy):
             return val
         else:
             return str(val)
-    return to_serializable(policy)
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-
-def main():
-    if np is None or torch is None or Agent is None:  # pragma: no cover - entorno degradado o invocado sin deps
-        for rs in [0.5, 1.0, 1.5, 2.0]:
-            print(f"Barrido de risk_scale: {rs}")
-        sys.exit(0)
-    run_fn = globals().get("run_experiment")
-    from sim.runner import run_experiment
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios / Number of episodes')
-    parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria / Random seed')
-    parser.add_argument('--grid_size', type=int, default=5, help='Tamano del grid / Grid size')
-    parser.add_argument('--risk_scale', type=float, default=1.0, help='Escala de riesgo / Risk scale')
-    parser.add_argument('--visualize', action='store_true', help='Visualiza el agente B en ASCII / Visualize agent B in ASCII')
-    parser.add_argument('--plot', action='store_true', help='Grafica I_op vs P_riesgo / Plot I_op vs P_riesgo')
-<<<<<<< HEAD
-    parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON (y CSV auxiliar) / Export results to JSON (plus CSV)')
-    parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk-scale y exporta resultados / Run risk-scale sweep and export results')
-    parser.add_argument('--risk_level', type=str, default='low', choices=['low', 'high'], help='Nivel de riesgo para intervención (low/high)')
-    parser.add_argument('--red_team', action='store_true', help='Activa modo red team/perturbaciones en el entorno')
-    parser.add_argument('--sigma_thr', type=float, default=None, help='Umbral de gating por incertidumbre')
     parser.add_argument('--gamma_lcb', type=float, default=None, help='Factor de prudencia para LCB')
     parser.add_argument('--lambda_gaming', type=float, default=None, help='Penalización por gaming detectado')
     parser.add_argument('--tui_only', action='store_true', help='Incluye variante TUI/PGF sin DQN-Control en el barrido')

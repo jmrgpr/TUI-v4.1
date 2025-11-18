@@ -4,13 +4,8 @@ evaluator_pgf.py — Evaluador externo de métricas TUI y PGF prudencial
 External evaluator for TUI metrics and prudential PGF.
 """
 
-<<<<<<< HEAD
-
 from typing import Dict, Any
 from . import config
-=======
-from typing import Dict, Any
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 
 
 class EvaluatorPGF:
@@ -36,27 +31,10 @@ class EvaluatorPGF:
 
     def calcular_metricas(self, env, info: Dict[str, Any], step: int, agent_resources: float, agent_purpose: str, agent_alignment: float) -> Dict[str, float]:
         """
-<<<<<<< HEAD
         Calcula métricas TUI y PGF prudencial (bilingüe) con desglose para Fase 2.
         """
         # Capacidad predictiva / Predictive capacity
         self.C = max(0.0, agent_resources / config.ENV_INITIAL_RESOURCES)
-=======
-        Calcula métricas TUI y PGF prudencial (bilingüe).
-        Compute TUI metrics and prudential PGF (bilingual).
-        Args:
-            env: SimbiosisEnv
-            info: dict
-            step: int
-            agent_resources: float
-            agent_purpose: str
-            agent_alignment: float
-        Returns:
-            dict: Métricas calculadas / Computed metrics
-        """
-        # Capacidad predictiva / Predictive capacity
-        self.C = max(0.0, agent_resources / 100.0)
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
         # Flexibilidad / Flexibility
         self.F = 1.0 if info.get('shock') else 0.5
         # Transferencia / Transfer
@@ -146,17 +124,19 @@ class EvaluatorPGF:
             'eta_extendido': self.eta_extendido,
             'PGF': self.PGF,
 <<<<<<< HEAD
+<<<<<<< HEAD
             'PGF_Bruto': pgf_bruto,   # <--- NUEVO FASE 2
             'PGF_Costo': pgf_costo,   # <--- NUEVO FASE 2
 =======
 >>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
+=======
+            'PGF_Bruto': pgf_beneficio_bruto,
+            'PGF_Costo': pgf_costo_ambiental,
+>>>>>>> 5bfc9b1 (Fase 2: instrumentación completa de métricas, documentación y tracking actualizados para protocolo oficial)
             'C_costo': self.C_costo,
             'S_auto': self.S_auto,
             'R_robust': self.R_robust,
             'I_rep': self.I_rep,
             'F': self.F,
-            'P_riesgo_actual': self.P_riesgo_actual,
-            'pgf_neto': pgf_neto,
-            'pgf_beneficio_bruto': pgf_beneficio_bruto,
-            'pgf_costo_ambiental': pgf_costo_ambiental
+            'P_riesgo_actual': self.P_riesgo_actual
         }

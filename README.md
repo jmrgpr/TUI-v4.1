@@ -665,6 +665,11 @@ TUI-v4.1/
 Visualizaciones avanzadas y comparativas:
 ## Novedades Noviembre 2025 (actualizado 18/11/2025)
 
+### Fase 2 (actualizado 18/11/2025)
+
+- Instrumentación completa de métricas para la hipótesis de la Tensión del Riesgo:
+  - Exportación por episodio de pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental.
+  - Resultados listos para análisis y generación de los tres gráficos obligatorios.
 - Refactorización final y merge a `main`.
 - Eliminado código muerto (Agent.__init__ duplicado) en `sim/prototipo_rl_simbiosis.py`.
 - Añadidos tests de integración con subprocess para CLI y cobertura de ramas visualización, export, plot y risk_sweep.
