@@ -119,14 +119,17 @@ class EvaluatorPGF:
         self.I_rep = 1.0 if info.get('help') else 0.7
         # Propósito genuino / Genuine purpose
         self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
-        # Parámetros prudenciales (no hardcodeados) / Prudential parameters (no hardcoded)
-        kappa = 1.0  # Sensibilidad PGF / PGF sensitivity
-        lambda_c = 0.1  # Penalización costo / Cost penalty
+        # --- Parámetros prudenciales Fase 2 ---
+        self.kappa = 1.0  # Sensibilidad PGF / PGF sensitivity
+        self.lambda_c = 0.1  # Penalización costo / Cost penalty
         S_t = 1.0 if info.get('shock') or info.get('tripwire') else 0.5
         A_t = agent_alignment * self.P_genuino
         delta_C_t = abs(env.resources - agent_resources)
-        # PGF prudencial: premia reducción de riesgo / PGF: rewards risk reduction
-        self.PGF = kappa * delta_P * A_t - lambda_c * delta_C_t
+        # Desglose Fase 2
+        pgf_beneficio_bruto = self.kappa * delta_P * A_t
+        pgf_costo_ambiental = self.lambda_c * delta_C_t
+        pgf_neto = pgf_beneficio_bruto - pgf_costo_ambiental
+        self.PGF = pgf_neto
         self.P_riesgo_prev = self.P_riesgo_actual
         # Eficiencia extendida / Extended efficiency
         beta = 1.0
@@ -152,5 +155,8 @@ class EvaluatorPGF:
             'R_robust': self.R_robust,
             'I_rep': self.I_rep,
             'F': self.F,
-            'P_riesgo_actual': self.P_riesgo_actual
+            'P_riesgo_actual': self.P_riesgo_actual,
+            'pgf_neto': pgf_neto,
+            'pgf_beneficio_bruto': pgf_beneficio_bruto,
+            'pgf_costo_ambiental': pgf_costo_ambiental
         }
