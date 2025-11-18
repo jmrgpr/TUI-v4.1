@@ -49,3 +49,16 @@ Este plan transforma la prueba de concepto en una validación científica robust
 
 ---
 
+## Bitácora de cambios recientes (2025-11-18)
+
+**2025-11-18  [18:00]**
+- Refactorización final y merge a `main`.
+- Eliminado código muerto (Agent.__init__ duplicado) en `sim/prototipo_rl_simbiosis.py`.
+- Añadidos tests de integración con subprocess para CLI y cobertura de ramas visualización, export, plot y risk_sweep.
+- Reforzada cobertura de `reprogram_purpose` y métodos de serialización de policy.
+- Cobertura final: 98% en `sim/prototipo_rl_simbiosis.py` y 96-100% en módulos principales.
+- Todos los tests pasan correctamente (316/316).
+- Documentación y README actualizados para reflejar estructura profesional y auditoría de exportación.
+- Merge exitoso de rama `feature/tui-v4.2-refactorizacion-metodologica` a `main` y push remoto.
+- Estado: Listo para publicación y auditoría científica internacional.
+

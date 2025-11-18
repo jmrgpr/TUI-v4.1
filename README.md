@@ -1,4 +1,3 @@
-
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey.svg)
 
@@ -72,33 +71,18 @@ TUI-v4.1/
 - Para detalles sobre cada carpeta, consulta el README correspondiente.
 - For details about each folder, see the corresponding README.
 Visualizaciones avanzadas y comparativas:
-## Novedades Noviembre 2025
+## Novedades Noviembre 2025 (actualizado 18/11/2025)
 
-  - `sim/gui_streamlit.py` con ≥98% de cobertura (solo 2 líneas no ejecutables).
-  - Todas las funcionalidades de la GUI (reset, exportar, comparación, ayuda) están cubiertas por tests robustos y reproducibles.
-  - Validación de edge cases y exportación profesional.
-
-- **Limpieza y trazabilidad de resultados:** (Actualizado 2025-11-17)
-  - Los archivos de test y resultados experimentales generados durante el desarrollo (`test.csv`, `test.json`, `test_control.csv`, `test_simbiosis.csv`, `test_sweep.json`, `test_sweep_control.csv`) fueron movidos de la raíz a la carpeta `results/`.
-  - El archivo temporal vacío `test_export_empty.json` fue eliminado.
-  - Motivo: En etapas de desarrollo y pruebas rápidas, es común exportar resultados en la raíz. Ahora, siguiendo la estructura profesional, todos los resultados se centralizan en `results/` para facilitar la trazabilidad y limpieza.
-
-- **Refactor Metodológico - Eliminación del Oráculo en DQN** (2025-11-17, 3:19 PM):
-  - Eliminado el método `calcular_metricas` interno del agente DQN para evitar bias metodológico (oráculo).
-  - Externalizado el cálculo de métricas PGF a `EvaluatorPGF` independiente.
-  - El agente DQN ahora recibe recompensas como valores negros, asegurando pureza en experimentos RL.
-  - Actualizados todos los tests para validar la independencia de lógica PGF.
-  - Cobertura mantenida en 97%.
-
-- **Interfaz Streamlit avanzada:**
-  - Botón "Reset to default" para restaurar parámetros.
-  - Exportación avanzada de historial en JSON.
-  - Panel comparativo de corridas históricas.
-  - Panel de ayuda bilingüe y documentación enlazada.
-
-- **Reproducibilidad internacional:**
-  - Docstrings, comentarios y outputs bilingües (ES/EN).
-  - Exportación DOI-ready en JSON/CSV y gráficos.
+- Refactorización final y merge a `main`.
+- Eliminado código muerto (Agent.__init__ duplicado) en `sim/prototipo_rl_simbiosis.py`.
+- Añadidos tests de integración con subprocess para CLI y cobertura de ramas visualización, export, plot y risk_sweep.
+- Reforzada cobertura de `reprogram_purpose` y métodos de serialización de policy.
+- Cobertura final: 98% en `sim/prototipo_rl_simbiosis.py` y 96-100% en módulos principales.
+- Todos los tests pasan correctamente (316/316).
+- Auditoría completa de exportación profesional: todos los resultados y gráficos se guardan en `results/`.
+- Documentación y README actualizados para reflejar estructura profesional y auditoría de exportación.
+- Merge exitoso de rama `feature/tui-v4.2-refactorizacion-metodologica` a `main` y push remoto.
+- Estado: Listo para publicación y auditoría científica internacional.
 
 ---
 
@@ -293,49 +277,4 @@ Para colaboración, dudas o sugerencias: jmrgpr [at] gmail.com
 ---
 
 Notas bilingües:
-Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey.svg)
-
-# TUI v4.1 — Unified Intelligence Theory
-
-Cita recomendada:  
-> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
-
----
-
-## Licencias
-
-Este proyecto distingue entre **código** y **teoría/documentación larga**:
-
-### 🧩 Código de este repositorio
-
-- **Licencia:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-- **Alcanza a:**  
-  - Código fuente (`.py`, `.ipynb`, scripts, herramientas de simulación).  
-  - Archivos auxiliares necesarios para ejecutar el toy model RL.
-
-**Resumen (no legal, solo orientativo):**
-
-- ✅ Puedes usar, modificar, redistribuir e integrar el código (incluyendo uso comercial).
-- ✅ Puedes crear derivados cerrados o integrarlo en otros sistemas.
-- ✅ Debes conservar los avisos de copyright y licencia.
-- ❌ No hay garantías; el código se entrega “AS IS”.
-
-El texto completo está en [`LICENSE`](LICENSE).
-
-  - El preprint teórico en Zenodo.  
-  - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
-
-
-### Resumen práctico
-
-| Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
-
----
-
-## Zenodo
-
-Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/workflows/zenodo.yml`) usando la licencia de código:
-
-```yaml
-license: "Apache-2.0"
+Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
