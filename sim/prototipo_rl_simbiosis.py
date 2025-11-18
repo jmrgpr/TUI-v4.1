@@ -460,9 +460,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_count = 0
         shock_count = 0
         pgf_steps = []
-    pgf_neto_steps = []
-    pgf_bruto_steps = []
-    pgf_costo_steps = []
+        pgf_neto_steps = []
+        pgf_bruto_steps = []
+        pgf_costo_steps = []
         reward_env_steps = []
         q_optimal_steps = []
         flex_steps = []
@@ -524,9 +524,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_steps.append(tripwire_count)
         shocks_evol.append(shock_count)
         pgf_evol.append(pgf_steps)
-    pgf_neto_evol.append(pgf_neto_steps)
-    pgf_bruto_evol.append(pgf_bruto_steps)
-    pgf_costo_evol.append(pgf_costo_steps)
+        pgf_neto_evol.append(pgf_neto_steps)
+        pgf_bruto_evol.append(pgf_bruto_steps)
+        pgf_costo_evol.append(pgf_costo_steps)
         reward_env_evol.append(reward_env_steps)
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
