@@ -631,24 +631,30 @@ def main():
             csv_control = export_path.replace('.json', '_control.csv')
             with open(csv_control, 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control'])
+                writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control', 'PGF_Bruto', 'PGF_Costo'])
                 for i, (r, t) in enumerate(zip(res_A['total_rewards'], res_A['tripwire_steps'])):
-                    writer.writerow([i+1, r, t])
+                    pgf_bruto_avg = np.mean(res_A['pgf_bruto_evol'][i]) if i < len(res_A['pgf_bruto_evol']) and res_A['pgf_bruto_evol'][i] else 0.0
+                    pgf_costo_avg = np.mean(res_A['pgf_costo_evol'][i]) if i < len(res_A['pgf_costo_evol']) and res_A['pgf_costo_evol'][i] else 0.0
+                    writer.writerow([i+1, r, t, pgf_bruto_avg, pgf_costo_avg])
             # Exportar CSV para simbiosis
             csv_simbiosis = export_path.replace('.json', '_simbiosis.csv')
             with open(csv_simbiosis, 'w', newline='') as f:
                 writer = csv.writer(f)
-                writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis'])
+                writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis', 'PGF_Bruto', 'PGF_Costo'])
                 for i, (r, t) in enumerate(zip(res_B['total_rewards'], res_B['tripwire_steps'])):
-                    writer.writerow([i+1, r, t])
+                    pgf_bruto_avg = np.mean(res_B['pgf_bruto_evol'][i]) if i < len(res_B['pgf_bruto_evol']) and res_B['pgf_bruto_evol'][i] else 0.0
+                    pgf_costo_avg = np.mean(res_B['pgf_costo_evol'][i]) if i < len(res_B['pgf_costo_evol']) and res_B['pgf_costo_evol'][i] else 0.0
+                    writer.writerow([i+1, r, t, pgf_bruto_avg, pgf_costo_avg])
             # Exportar CSV para DQN-Control
             if res_C:
                 csv_dqn_control = export_path.replace('.json', '_dqn_control.csv')
                 with open(csv_dqn_control, 'w', newline='') as f:
                     writer = csv.writer(f)
-                    writer.writerow(['Episodio', 'Recompensa_DQN-Control', 'Tripwires_DQN-Control'])
+                    writer.writerow(['Episodio', 'Recompensa_DQN-Control', 'Tripwires_DQN-Control', 'PGF_Bruto', 'PGF_Costo'])
                     for i, (r, t) in enumerate(zip(res_C['total_rewards'], res_C['tripwire_steps'])):
-                        writer.writerow([i+1, r, t])
+                        pgf_bruto_avg = np.mean(res_C['pgf_bruto_evol'][i]) if i < len(res_C['pgf_bruto_evol']) and res_C['pgf_bruto_evol'][i] else 0.0
+                        pgf_costo_avg = np.mean(res_C['pgf_costo_evol'][i]) if i < len(res_C['pgf_costo_evol']) and res_C['pgf_costo_evol'][i] else 0.0
+                        writer.writerow([i+1, r, t, pgf_bruto_avg, pgf_costo_avg])
         # ...gráficos y resumen estadístico...
         # ...return...
             export_B = res_B.copy()
@@ -724,6 +730,27 @@ def main():
             plt.legend()
             plt.tight_layout()
             plt.savefig(export_path.replace('.json', '_evol_metrics.png'), dpi=200)
+            plt.close()
+            # Gráficos Fase 2: PGF_Bruto y PGF_Costo
+            plt.figure(figsize=(12,6))
+            plt.subplot(2,1,1)
+            plt.plot(np.nanmean(res_A['pgf_bruto_evol_padded'], axis=0), label='Control PGF_Bruto', color='blue')
+            plt.plot(np.nanmean(res_B['pgf_bruto_evol_padded'], axis=0), label='Simbiosis PGF_Bruto', color='red')
+            plt.title(f'PGF Beneficio Bruto Evolución (risk_scale={risk})')
+            plt.xlabel('Paso / Step')
+            plt.ylabel('PGF_Bruto promedio')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.subplot(2,1,2)
+            plt.plot(np.nanmean(res_A['pgf_costo_evol_padded'], axis=0), label='Control PGF_Costo', color='blue')
+            plt.plot(np.nanmean(res_B['pgf_costo_evol_padded'], axis=0), label='Simbiosis PGF_Costo', color='red')
+            plt.title(f'PGF Costo Ambiental Evolución (risk_scale={risk})')
+            plt.xlabel('Paso / Step')
+            plt.ylabel('PGF_Costo promedio')
+            plt.legend()
+            plt.grid(True, alpha=0.3)
+            plt.tight_layout()
+            plt.savefig(export_path.replace('.json', '_pgf_desglose.png'), dpi=200)
             plt.close()
             # Scatterplot PGF vs Reward
             plt.figure(figsize=(6,5))
