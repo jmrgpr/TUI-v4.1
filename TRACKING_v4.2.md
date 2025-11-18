@@ -2,6 +2,12 @@
 
 ## Estado actual (18/11/2025)
 
+- Validación científica completa y reproducible el 18/11/2025 a las 15:05.
+- Todos los tests pasan (319/319), cobertura 98% en sim/prototipo_rl_simbiosis.py.
+- Refactorización de tests de integración para máxima reproducibilidad (sin dependencias externas).
+- Organización de la raíz: archivos generados fuera de lugar archivados en test/, results/ y scripts/.
+- Documentación y tracking actualizados para reflejar la auditoría y trazabilidad científica.
+
 
 - Corrida de prueba ejecutada y validada el 18/11/2025 a las 14:46.
 - Exportación profesional de métricas: pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental por episodio en JSON y CSV.

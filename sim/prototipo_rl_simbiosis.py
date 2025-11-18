@@ -157,17 +157,11 @@ def to_serializable(val: Any):  # pragma: no cover - helper de serializacion
 
 def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
     """
-<<<<<<< HEAD
-    Convierte el estado abstracto (tuple) en vector numerico para DQN.
-=======
-    tui_toy_rl.py — TUI v4.1 Toy Model RL Symbiosis (DOI-ready)
-
-    Autor / Author: Jose M Rivera Garcia
-    Email: jmrgpr@gmail.com | jrivera77@outlook.com
-
-    ---
-    Toy model oficial de la Teoría Unificada de la Inteligencia (TUI v4.1).
-    Official toy model for the Unified Intelligence Theory (TUI v4.1).
+    """
+    Convierte el estado abstracto (tuple) en vector numérico para DQN.
+    Converts abstract state (tuple) to numeric vector for DQN.
+    """
+    return np.array([v for _, v in state], dtype=np.float32)
 
     Características principales / Key features:
     ...existing code...
@@ -184,6 +178,15 @@ def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
     """
     ACTIONS = ['up','down','left','right']
     def __init__(self, name="Agent", resources=100.0):
+            super().__init__()
+            self.name = name
+            self.resources = resources
+            self.memory = []
+            self.policy = {}
+            self.purpose = "survive"
+            self.alignment = 1.0
+            self.evaluator = EvaluatorPGF()  # Evaluador externo / External evaluator
+            self.ACTIONS = ['up','down','left','right']
         super().__init__()
         self.name = name
         self.resources = resources
@@ -191,6 +194,7 @@ def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
         self.policy = {}
         self.purpose = "survive"
         self.alignment = 1.0
+<<<<<<< HEAD
         self.evaluator = EvaluatorPGF()  # Evaluador externo / External evaluator
 =======
         super().__init__()  #pragma: no cover
@@ -203,19 +207,23 @@ def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
         self.evaluator = EvaluatorPGF()  # pragma: no cover
         self.ACTIONS = ['up','down','left','right']  # pragma: no cover
 >>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
+=======
+        self.evaluator = EvaluatorPGF()
+        self.ACTIONS = ['up','down','left','right']
+>>>>>>> 24e6653 (Organización científica: archivos generados archivados, tracking y README actualizados. Validación 319 tests, cobertura 98%. [18/11/2025 15:05])
         # Métricas TUI/PGF
-        self.T = 0.0  # pragma: no cover
-        self.I_op = 0.0  # pragma: no cover
-        self.P_riesgo = 0.0  # pragma: no cover
-        self.P_genuino = 0.0  # pragma: no cover
-        self.eta_extendido = 0.0  # pragma: no cover
-        self.PGF = 0.0  # pragma: no cover
-        self.C_costo = 0.0  # pragma: no cover
-        self.S_auto = 0.0  # pragma: no cover
-        self.R_robust = 0.0  # pragma: no cover
-        self.I_rep = 0.0  # pragma: no cover
-        self.P_riesgo_actual = 0.0  # pragma: no cover
-        self.P_riesgo_prev = 0.0  # pragma: no cover
+        self.T = 0.0
+        self.I_op = 0.0
+        self.P_riesgo = 0.0
+        self.P_genuino = 0.0
+        self.eta_extendido = 0.0
+        self.PGF = 0.0
+        self.C_costo = 0.0
+        self.S_auto = 0.0
+        self.R_robust = 0.0
+        self.I_rep = 0.0
+        self.P_riesgo_actual = 0.0
+        self.P_riesgo_prev = 0.0
     def update_policy(self, state, action, reward, next_state, use_pgf=False):
         key = (state, action)
         old_q = self.policy.get(key, 0.0)
@@ -445,7 +453,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     pgf_costo_evol = []
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
-            print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")  # pragma: no cover  # Logging condicional de progreso, ejecutado en tests pero no siempre detectado
+            print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
         state = env.reset()
         # Inicialización segura del agente en cada episodio
         if use_dqn:
@@ -508,10 +516,10 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
                 q_vals = [agent.policy.get((state, a), 0.0) for a in ACTIONS]
                 optimal_action = ACTIONS[int(np.argmax(q_vals))]
                 q_optimal_steps.append(1 if action == optimal_action else 0)
-            if info.get('shock') and steps_to_recover is None:  # pragma: no cover  # Condición para iniciar conteo de recuperación, cubierta en tests de shocks
-                steps_to_recover = 0  # pragma: no cover  # Inicialización de steps_to_recover, ejecutada cuando hay shock
-            if steps_to_recover is not None:  # pragma: no cover  # Condición para incrementar steps_to_recover, ejecutada después de shock
-                steps_to_recover += 1  # pragma: no cover  # Incremento de contador de recuperación, cubierta en tests
+            if info.get('shock') and steps_to_recover is None:
+                steps_to_recover = 0
+            if steps_to_recover is not None:
+                steps_to_recover += 1
             if info.get('tripwire'):
                 tripwire_count += 1
             if info.get('shock'):
@@ -530,15 +538,17 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         reward_env_evol.append(reward_env_steps)
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
-        agent.reprogram_purpose("survive_and_help") if not use_dqn else None  # pragma: no cover  # Reprogramación condicional para agentes no-DQN, cubierta en tests con use_dqn=False
-        # Logging por episodio (bilingüe, con métricas avanzadas)
-        if (ep+1) % max(1, episodes//10) == 0 or ep == episodes-1:
-            flex = last_metrics['F'] if last_metrics else 0.0
-            q_opt = np.max(agent.policy.get('Q', np.zeros(4))) if hasattr(agent, 'policy') and 'Q' in agent.policy else 0.0
-            robust = last_metrics['R_robust'] if last_metrics else 0.0
-            pgf_val = last_metrics['PGF'] if last_metrics else 0.0
-            print(f"[{agent_name}] Episodio {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")  # pragma: no cover  # Logging bilingüe por episodio, ejecutado condicionalmente en tests
-            print(f"[{agent_name}] Episode {ep+1}/{episodes} | Reward_env: {reward_env:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")  # pragma: no cover  # Versión en inglés del logging, cubierta en tests
+    if agent is not None and not use_dqn:
+        agent.reprogram_purpose("survive_and_help")
+    # Logging por episodio (bilingüe, con métricas avanzadas)
+    # Solo mostrar si hay episodios y agente válido
+    if episodes > 0 and agent is not None:
+        flex = last_metrics['F'] if last_metrics else 0.0
+        q_opt = np.max(agent.policy.get('Q', np.zeros(4))) if hasattr(agent, 'policy') and 'Q' in agent.policy else 0.0
+        robust = last_metrics['R_robust'] if last_metrics else 0.0
+        pgf_val = last_metrics['PGF'] if last_metrics else 0.0
+        print(f"[{agent_name}] Episodio {episodes}/{episodes} | Reward_env: {pgf_val:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Supervivencia: {agent.resources:.2f} | Flexibilidad: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustez: {robust:.2f}")
+        print(f"[{agent_name}] Episode {episodes}/{episodes} | Reward_env: {pgf_val:.2f} | PGF: {pgf_val:.2f} | Tripwires: {tripwire_count} | Shocks: {shock_count} | Survival: {agent.resources:.2f} | Flexibility: {flex:.2f} | Q-optimal: {q_opt:.2f} | Robustness: {robust:.2f}")
 
     # Edge case: episodios=0
     if episodes == 0 or agent is None:
@@ -630,6 +640,11 @@ def transfer_test(agent_policy, seed, risk_scale=1.0):
 
 
 def prepare_results(results: dict):
+        from sim.agent import stringify_policy  # import lazily para evitar fallos si falta dependencia en subprocesos
+        cleaned = to_serializable(results)
+        if 'policy' in results:
+            cleaned['policy'] = to_serializable(stringify_policy(results.get('policy')))
+        return cleaned
     from sim.agent import stringify_policy  # import lazily para evitar fallos si falta dependencia en subprocesos
     cleaned = to_serializable(results)
     if 'policy' in results:
@@ -638,6 +653,36 @@ def prepare_results(results: dict):
 
 
 def write_episode_rows(writer, agent_name: str, results: dict):
+        episodes = len(results.get('total_rewards', []))
+        flex_list = results.get('flex_recov', [])
+        robust_list = results.get('robust_evol', [])
+        qopt_list = results.get('q_optimal_evol', [])
+        pgf_bruto = results.get('pgf_bruto_evol', [])
+        pgf_costo = results.get('pgf_costo_evol', [])
+        for i in range(episodes):
+            reward = float(results.get('total_rewards', [0.0] * episodes)[i])
+            trip = float(results.get('tripwire_steps', [0.0] * episodes)[i])
+            flex = flex_list[i] if i < len(flex_list) else 0.0
+            robust = robust_list[i] if i < len(robust_list) else 0.0
+            qopt = qopt_list[i] if i < len(qopt_list) else 0.0
+            pgf_bruto_ep = float(np.mean(pgf_bruto[i])) if i < len(pgf_bruto) and pgf_bruto[i] else 0.0
+            pgf_costo_ep = float(np.mean(pgf_costo[i])) if i < len(pgf_costo) and pgf_costo[i] else 0.0
+            writer.writerow([agent_name, i + 1, reward, trip, flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep])
+        """
+        Ejecuta un experimento RL con logging bilingüe y métricas avanzadas.
+        Runs an RL experiment with bilingual logging and advanced metrics.
+        Args:
+            episodes (int): Número de episodios / Number of episodes
+            seed (int): Semilla aleatoria / Random seed
+            risk_scale (float): Escala de riesgo / Risk scale
+            agent_name (str): Nombre del agente / Agent name
+            use_pgf (bool): Usar PGF prudencial / Use prudential PGF
+            use_dqn (bool): Usar agente DQN / Use DQN agent
+        Returns:
+            dict: Métricas y trayectorias del experimento, incluyendo flexibilidad, robustez y acción óptima por episodio, PGF prudencial, exportación avanzada y visualización bilingüe.
+            Experiment metrics and trajectories, including flexibility, robustness and optimal action per episode, prudential PGF, advanced export and bilingual visualization.
+        """
+        # ... existing code ...
     episodes = len(results.get('total_rewards', []))
     flex_list = results.get('flex_recov', [])
     robust_list = results.get('robust_evol', [])
@@ -1075,7 +1120,7 @@ def stringify_policy(policy):
         plt.close()
         # Métricas adicionales: varianza de recompensa, supervivencia
         # Resumen estadístico avanzado bilingüe
-        print('\nResumen estadístico avanzado / Advanced statistical summary:')  # pragma: no cover  # Logging de resumen en risk_sweep, ejecutado en tests de barrido
+        print('\nResumen estadístico avanzado / Advanced statistical summary:')
         for i, risk in enumerate(risk_values):
             line = f"risk_scale={risk} | Control PGF: {avg_rewards_control[i]:.2f} ± {stats.sem(all_rewards_control[i]):.2f} | Simbiosis PGF: {avg_rewards_simbiosis[i]:.2f} ± {stats.sem(all_rewards_simbiosis[i]):.2f}"
             if avg_rewards_dqn_control:
@@ -1252,12 +1297,16 @@ def stringify_policy(policy):
 >>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 =======
         print('\nResumen tabular:')
-        print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Acción óptima':>16}")  # pragma: no cover  # Headers del resumen tabular, ejecutados en tests con export
-        print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")  # pragma: no cover  # Línea de Control en resumen, cubierta en tests
-        print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")  # pragma: no cover  # Línea de Simbiosis en resumen, ejecutada en tests
+        print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Acción óptima':>16}")
+        print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
+        print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
         if res_C:
+<<<<<<< HEAD
             print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")  # pragma: no cover  # Línea opcional de DQN-Control, cubierta si activado
 >>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
+=======
+            print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")
+>>>>>>> 24e6653 (Organización científica: archivos generados archivados, tracking y README actualizados. Validación 319 tests, cobertura 98%. [18/11/2025 15:05])
 
 if __name__ == "__main__":
     main()

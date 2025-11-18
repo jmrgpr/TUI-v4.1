@@ -1,8 +1,0 @@
-with open('test/test_final_coverage.py', 'r') as f:
-    content = f.read()
-# Replace the incorrect policy lines
-content = content.replace("agent.policy = {(('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'up': 1.0, (('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'down': 0.5}", "agent.policy = {((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'up'): 1.0, ((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'down'): 0.5}")
-content = content.replace("agent.policy = {(('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'up': -1.0, (('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'down': -0.5}", "agent.policy = {((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'up'): -1.0, ((('recursos_altos', 0), ('recursos_bajos', 1), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0)), 'down'): -0.5}")
-with open('test/test_final_coverage.py', 'w') as f:
-    f.write(content)
-print('Fixed')

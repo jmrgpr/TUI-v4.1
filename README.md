@@ -134,7 +134,7 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - El notebook de análisis produce tablas y gráficos comparativos.
 - La estructura del repositorio está limpia y documentada.
 
-Cita recomendada:  
+Cita recomendada:
 > Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
 
 
@@ -916,4 +916,18 @@ license: "Apache-2.0"
 >>>>>>> 6f926b7 (Update README with TUI v4.1 details and instructions)
 =======
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
+<<<<<<< HEAD
 >>>>>>> ff431b8 (Docs: Bitácora y README actualizados con auditoría y refactorización final 18/11/2025)
+=======
+
+## Organización de archivos
+
+### Estado científico y organización (18/11/2025)
+- Validación científica completa: 319 tests pasan, cobertura 98%.
+- Refactorización de tests para máxima reproducibilidad.
+- Archivos generados fuera de lugar archivados correctamente:
+  - test.csv, test.json, coverage_missing.txt → test/
+  - dummy.png, test_integration_*.png, test_integration_*.csv → results/
+  - fix.py → scripts/
+- Documentación y tracking actualizados.
+>>>>>>> 24e6653 (Organización científica: archivos generados archivados, tracking y README actualizados. Validación 319 tests, cobertura 98%. [18/11/2025 15:05])
