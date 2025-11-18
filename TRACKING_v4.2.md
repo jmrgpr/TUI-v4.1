@@ -2,12 +2,12 @@
 
 ## Estado actual (18/11/2025)
 
-- Refactorización completa y merge a main.
-- Instrumentación completa de métricas para Fase 2 (pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental) exportadas por episodio y listas para análisis.
-- Exportación y validación de resultados en JSON.
-- Cobertura de código: 98% en sim/prototipo_rl_simbiosis.py.
-- Todos los tests unitarios y de integración pasan (316/316).
-- Documentación y README actualizados.
+
+- Corrida de prueba ejecutada y validada el 18/11/2025 a las 14:30.
+- Exportación profesional de métricas: pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental por episodio en JSON y CSV.
+- Resultados y gráficos generados en `results/` para todos los valores de risk_scale (0.5, 1.0, 1.5, 2.0, 3.0).
+- Auditoría científica completa: todos los tests pasan (316/316), cobertura 98% en sim/prototipo_rl_simbiosis.py.
+- Documentación y tracking actualizados para reflejar la validación y reproducibilidad.
 
 ## Próximos pasos
 - Generar gráficos obligatorios para Fase 2.
