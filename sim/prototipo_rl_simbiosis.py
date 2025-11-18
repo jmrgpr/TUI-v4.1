@@ -489,6 +489,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "pgf_neto_evol_padded": pgf_neto_padded.tolist(),
         "pgf_bruto_evol_padded": pgf_bruto_padded.tolist(),
         "pgf_costo_evol_padded": pgf_costo_padded.tolist(),
+        "avg_pgf_beneficio_bruto": np.mean([np.nanmean(ep) for ep in pgf_bruto_evol]),
+        "avg_pgf_costo_ambiental": np.mean([np.nanmean(ep) for ep in pgf_costo_evol]),
         "q_optimal_evol": q_optimal,
         "survival_evol": survival_evol,
         "flex_recov": flex_recov,

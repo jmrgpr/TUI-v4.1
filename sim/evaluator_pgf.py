@@ -90,8 +90,8 @@ class EvaluatorPGF:
             'P_genuino': self.P_genuino,
             'eta_extendido': self.eta_extendido,
             'PGF': self.PGF,
-            'PGF_Bruto': pgf_beneficio_bruto,
-            'PGF_Costo': pgf_costo_ambiental,
+                'PGF_Bruto': pgf_beneficio_bruto,  # Asegurar que PGF_Bruto se exporta correctamente
+                'PGF_Costo': pgf_costo_ambiental,  # Asegurar que PGF_Costo se exporta correctamente
             'C_costo': self.C_costo,
             'S_auto': self.S_auto,
             'R_robust': self.R_robust,
