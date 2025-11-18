@@ -90,13 +90,12 @@ class EvaluatorPGF:
             'P_genuino': self.P_genuino,
             'eta_extendido': self.eta_extendido,
             'PGF': self.PGF,
+            'PGF_Bruto': pgf_beneficio_bruto,
+            'PGF_Costo': pgf_costo_ambiental,
             'C_costo': self.C_costo,
             'S_auto': self.S_auto,
             'R_robust': self.R_robust,
             'I_rep': self.I_rep,
             'F': self.F,
-            'P_riesgo_actual': self.P_riesgo_actual,
-            'pgf_neto': pgf_neto,
-            'pgf_beneficio_bruto': pgf_beneficio_bruto,
-            'pgf_costo_ambiental': pgf_costo_ambiental
+            'P_riesgo_actual': self.P_riesgo_actual
         }

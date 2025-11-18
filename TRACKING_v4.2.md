@@ -3,7 +3,7 @@
 ## Estado actual (18/11/2025)
 
 - Refactorización completa y merge a main.
-- Instrumentación de métricas para Fase 2 (pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental).
+- Instrumentación completa de métricas para Fase 2 (pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental) exportadas por episodio y listas para análisis.
 - Exportación y validación de resultados en JSON.
 - Cobertura de código: 98% en sim/prototipo_rl_simbiosis.py.
 - Todos los tests unitarios y de integración pasan (316/316).
