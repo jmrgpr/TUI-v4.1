@@ -74,9 +74,10 @@ Visualizaciones avanzadas y comparativas:
 ## Novedades Noviembre 2025 (actualizado 18/11/2025)
 
 
+
 ### Fase 2 (actualizado 18/11/2025)
 
-- Corrida de prueba ejecutada y validada el 18/11/2025 a las 14:30.
+- Corrida de prueba ejecutada y validada el 18/11/2025 a las 14:46.
 - Exportación profesional de métricas: pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental por episodio en JSON y CSV.
 - Resultados y gráficos generados en `results/` para todos los valores de risk_scale (0.5, 1.0, 1.5, 2.0, 3.0).
 - Auditoría científica completa: todos los tests pasan (316/316), cobertura 98% en sim/prototipo_rl_simbiosis.py.
