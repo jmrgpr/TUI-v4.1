@@ -1,42 +1,3 @@
-# scripts/ (menú rápido) [ENGLISH]
-
-Utilidades y runners para TUI-v4.1.
-
-## Experimentos
-- **Exp1 (baseline sweep)**: `sim/prototipo_rl_simbiosis.py --risk_sweep ...`  
-  *Incluye control/dqn_control/simbiosis.*  
-  Salidas típicas: `results/sweep/fase1` o `results/sweep/fase2/...`.
-
-- **Exp2 (TUI/PGF instrumentado)**:
-  - Rápido: `python scripts/run_ablation_quick.py [--test]` (tui_only, tui_pgf_light, tui_pgf_heavy con seeds/risks predefinidos).
-  - Pipeline completo: `python scripts/run_full_experiment.py` (barridos default/tuning con dqn_control + bloque `sweep_tui` para TUI/PGF puro + robustez + SOTA + consolidado). Usa `--stop_on_fail`, `--output_base` y flags PGF/risks/red_team según sea necesario.
-
-- **Exp3 (búsqueda PGF)**: `scripts/run_search_pgf.py` (placeholder; definir grids y activar ejecución cuando se apruebe).
-
-Consulta el archivo `scripts/EXPERIMENTS.md` para un índice rápido de Exp1/Exp2, parámetros recomendados, rutas de salida y estado de ejecución.
-
-## Plan Experimento 2 + SOTA (versión final)
-
-1. Ejecutar el pipeline principal (TUI + variantes)
-python scripts/run_full_experiment.py --seeds 42 123 456 --episodes_default 1000 --episodes_robust 1000 --output_base results/sweep/fase2_full --stop_on_fail
-(Puedes ajustar episodios para smoke test.)
-
-2. Ejecutar comparativa SOTA (PPO/A2C/DQN, solo red_team=False)
-python scripts/run_sota_a2c_dqn.py
-
-3. Consolidar todos los resultados
-No limpies ni borres outputs antes de consolidar.
-python scripts/consolidate_results.py
-
-4. Verificar artefactos generados
-results/master_results.csv
-results/sota_ppo_global_summary.csv
-results/sota_a2c_global_summary.csv
-results/sota_dqn_global_summary.csv
-results/sota_all_global_summary.csv
-sweep_*_summary.csv y CSV individuales
-
-5. Documentar en experiment_log.txt y README
 Parámetros: seeds 42/123/456, episodios 1000, riesgos 0.5–3.0, red_team=False en SOTA, limitaciones (solo Gridworld).
 
 6. Si hay notebook de análisis, ejecútalo
@@ -85,3 +46,10 @@ Ejemplo de workflow robusto:
 
 Fecha: 2025-11-25
 Autor: jmrgpr
+=======
+# scripts/
+
+Esta carpeta contiene utilidades y scripts auxiliares para el proyecto TUI-v4.1.
+
+- fix.py: script archivado desde la raíz para organización.
+>>>>>>> 482f801 (Organización: archivos de test y utilidades archivados en carpetas correspondientes (test/, results/, scripts/). Documentación actualizada en README. Estructura más clara y reproducible.)
