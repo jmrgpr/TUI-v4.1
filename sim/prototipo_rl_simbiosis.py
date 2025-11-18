@@ -443,14 +443,13 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     q_optimal = []   # Acción óptima por episodio / Optimal action per episode
     tripwire_steps = []
     pgf_evol = []
+    pgf_bruto_evol = []  # <--- NUEVO
+    pgf_costo_evol = []  # <--- NUEVO
     reward_env_evol = []
     survival_evol = []
     shocks_evol = []
     agent = None
-    # Instrumentación Fase 2: inicializar listas para desglose PGF
-    pgf_neto_evol = []
-    pgf_bruto_evol = []
-    pgf_costo_evol = []
+
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -468,9 +467,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_count = 0
         shock_count = 0
         pgf_steps = []
-        pgf_neto_steps = []
-        pgf_bruto_steps = []
-        pgf_costo_steps = []
+        pgf_bruto_steps = [] # <--- NUEVO
+        pgf_costo_steps = [] # <--- NUEVO
         reward_env_steps = []
         q_optimal_steps = []
         flex_steps = []
@@ -487,14 +485,13 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             # Calcular métricas externamente usando evaluador / Compute metrics externally using evaluator
             metrics = evaluator.calcular_metricas(env, info, step, agent.resources if hasattr(agent, 'resources') else env.resources, getattr(agent, 'purpose', 'survive_and_help'), getattr(agent, 'alignment', 1.0))
             last_metrics = metrics
-            # Instrumentación Fase 2: registrar desglose PGF
-            pgf_neto = metrics.get('PGF', 0.0)
-            pgf_bruto = metrics.get('PGF_Bruto', 0.0)
-            pgf_costo = metrics.get('PGF_Costo', 0.0)
-            pgf_neto_steps.append(pgf_neto)
-            pgf_bruto_steps.append(pgf_bruto)
-            pgf_costo_steps.append(pgf_costo)
-            r_pgf = pgf_neto if use_pgf else reward_env
+            
+            # Captura de métricas FASE 2
+            pgf_steps.append(metrics['PGF'])
+            pgf_bruto_steps.append(metrics.get('PGF_Bruto', 0.0)) # <--- NUEVO
+            pgf_costo_steps.append(metrics.get('PGF_Costo', 0.0)) # <--- NUEVO
+
+            r_pgf = metrics['PGF'] if use_pgf else reward_env
             # Aprendizaje / Learning
             if use_dqn:
                 next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
@@ -504,7 +501,6 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
                 agent.update_policy(state, action, r_pgf, next_state)
                 agent.remember(Event())  # Hardening: Event no acepta argumentos, solo se registra el evento
             total_reward += r_pgf
-            pgf_steps.append(metrics['PGF'])
             reward_env_steps.append(reward_env)
             flex_steps.append(metrics['F'])
             robust_steps.append(metrics['R_robust'])
@@ -532,9 +528,8 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_steps.append(tripwire_count)
         shocks_evol.append(shock_count)
         pgf_evol.append(pgf_steps)
-        pgf_neto_evol.append(pgf_neto_steps)
-        pgf_bruto_evol.append(pgf_bruto_steps)
-        pgf_costo_evol.append(pgf_costo_steps)
+        pgf_bruto_evol.append(pgf_bruto_steps) # <--- NUEVO
+        pgf_costo_evol.append(pgf_costo_steps) # <--- NUEVO
         reward_env_evol.append(reward_env_steps)
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
@@ -564,8 +559,12 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             "tripwire_steps": [],
             "shocks_evol": [],
             "pgf_evol": [],
+            "pgf_bruto_evol": [],
+            "pgf_costo_evol": [],
             "reward_env_evol": [],
             "pgf_evol_padded": [],
+            "pgf_bruto_padded": [],
+            "pgf_costo_padded": [],
             "reward_env_evol_padded": [],
             "q_optimal_evol": [],
             "survival_evol": [],
@@ -583,10 +582,10 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     # === Homogeneizar trayectorias antes de devolver ===
     max_steps = 50
     pgf_padded = pad_trajectories(pgf_evol, max_steps)
+    pgf_bruto_padded = pad_trajectories(pgf_bruto_evol, max_steps) # <--- NUEVO
+    pgf_costo_padded = pad_trajectories(pgf_costo_evol, max_steps) # <--- NUEVO
     reward_env_padded = pad_trajectories(reward_env_evol, max_steps)
-    pgf_neto_padded = pad_trajectories(pgf_neto_evol, max_steps)
-    pgf_bruto_padded = pad_trajectories(pgf_bruto_evol, max_steps)
-    pgf_costo_padded = pad_trajectories(pgf_costo_evol, max_steps)
+
     return {
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
@@ -598,18 +597,14 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "total_rewards": total_rewards,
         "tripwire_steps": tripwire_steps,
         "shocks_evol": shocks_evol,
-        "pgf_evol": pgf_evol,           # original (ragged)
-        "reward_env_evol": reward_env_evol,  # original
-        "pgf_evol_padded": pgf_padded.tolist(),  # para export / for export
+        "pgf_evol": pgf_evol,
+        "pgf_bruto_evol": pgf_bruto_evol, # <--- NUEVO (Datos crudos)
+        "pgf_costo_evol": pgf_costo_evol, # <--- NUEVO (Datos crudos)
+        "reward_env_evol": reward_env_evol,
+        "pgf_evol_padded": pgf_padded.tolist(),
+        "pgf_bruto_padded": pgf_bruto_padded.tolist(), # <--- NUEVO (Para JSON/Numpy)
+        "pgf_costo_padded": pgf_costo_padded.tolist(), # <--- NUEVO (Para JSON/Numpy)
         "reward_env_evol_padded": reward_env_padded.tolist(),
-        "pgf_neto_evol": pgf_neto_evol,
-        "pgf_bruto_evol": pgf_bruto_evol,
-        "pgf_costo_evol": pgf_costo_evol,
-        "pgf_neto_evol_padded": pgf_neto_padded.tolist(),
-        "pgf_bruto_evol_padded": pgf_bruto_padded.tolist(),
-        "pgf_costo_evol_padded": pgf_costo_padded.tolist(),
-        "avg_pgf_beneficio_bruto": np.mean([np.nanmean(ep) for ep in pgf_bruto_evol]),
-        "avg_pgf_costo_ambiental": np.mean([np.nanmean(ep) for ep in pgf_costo_evol]),
         "q_optimal_evol": q_optimal,
         "survival_evol": survival_evol,
         "flex_recov": flex_recov,
@@ -640,11 +635,6 @@ def transfer_test(agent_policy, seed, risk_scale=1.0):
 
 
 def prepare_results(results: dict):
-        from sim.agent import stringify_policy  # import lazily para evitar fallos si falta dependencia en subprocesos
-        cleaned = to_serializable(results)
-        if 'policy' in results:
-            cleaned['policy'] = to_serializable(stringify_policy(results.get('policy')))
-        return cleaned
     from sim.agent import stringify_policy  # import lazily para evitar fallos si falta dependencia en subprocesos
     cleaned = to_serializable(results)
     if 'policy' in results:
@@ -1290,22 +1280,31 @@ def stringify_policy(policy):
             export_data['dqn_control'] = export_C
         with open(args.export, 'w') as f:
             json.dump(export_data, f, indent=2)
-        # Exportar CSV para control con métricas avanzadas
-        csv_control = args.export.replace('.json', '_control.csv')
-        with open(csv_control, 'w', newline='') as f:
+            # ... (dentro de risk_sweep o exportación normal)
             writer = csv.writer(f)
-            writer.writerow(['Episodio', 'Recompensa_Control', 'Tripwires_Control', 'Flexibilidad', 'Robustez', 'Q-optimal'])
+            # ACTUALIZAR HEADERS
+            writer.writerow(['Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
+            
             for i in range(len(res_A['total_rewards'])):
-                flex = res_A.get('flex_recov', [None]*len(res_A['total_rewards']))[i]
-                robust = res_A.get('shocks_evol', [None]*len(res_A['total_rewards']))[i]
-                qopt = res_A.get('q_optimal_evol', [None]*len(res_A['total_rewards']))[i]
-                writer.writerow([i+1, res_A['total_rewards'][i], res_A['tripwire_steps'][i], flex, robust, qopt])
+                # ... (cálculos existentes)
+                flex = res_A.get('flex_recov', [0.0]*len(res_A['total_rewards']))[i]
+                robust = res_A.get('robust_evol', [0.0]*len(res_A['total_rewards']))[i]
+                qopt = res_A.get('q_optimal_evol', [0.0]*len(res_A['total_rewards']))[i]
+
+                # CALCULAR PROMEDIOS FASE 2
+                pgf_bruto_ep = np.mean(res_A['pgf_bruto_evol'][i]) if res_A['pgf_bruto_evol'][i] else 0.0
+                pgf_costo_ep = np.mean(res_A['pgf_costo_evol'][i]) if res_A['pgf_costo_evol'][i] else 0.0
+                
+                writer.writerow([i+1, res_A['total_rewards'][i], res_A['tripwire_steps'][i], flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep])
         # Exportar CSV para simbiosis con métricas avanzadas
         csv_simbiosis = args.export.replace('.json', '_simbiosis.csv')
         with open(csv_simbiosis, 'w', newline='') as f:
             writer = csv.writer(f)
-            writer.writerow(['Episodio', 'Recompensa_Simbiosis', 'Tripwires_Simbiosis', 'Flexibilidad', 'Robustez', 'Q-optimal'])
+            # ACTUALIZAR HEADERS
+            writer.writerow(['Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
+            
             for i in range(len(res_B['total_rewards'])):
+<<<<<<< HEAD
                 flex = res_B.get('flex_recov', [None]*len(res_B['total_rewards']))[i]
                 robust = res_B.get('shocks_evol', [None]*len(res_B['total_rewards']))[i]
                 qopt = res_B.get('q_optimal_evol', [None]*len(res_B['total_rewards']))[i]
@@ -1323,6 +1322,18 @@ def stringify_policy(policy):
             print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")
 >>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 =======
+=======
+                # ... (cálculos existentes)
+                flex = res_B.get('flex_recov', [0.0]*len(res_B['total_rewards']))[i]
+                robust = res_B.get('robust_evol', [0.0]*len(res_B['total_rewards']))[i]
+                qopt = res_B.get('q_optimal_evol', [0.0]*len(res_B['total_rewards']))[i]
+
+                # CALCULAR PROMEDIOS FASE 2
+                pgf_bruto_ep = np.mean(res_B['pgf_bruto_evol'][i]) if res_B['pgf_bruto_evol'][i] else 0.0
+                pgf_costo_ep = np.mean(res_B['pgf_costo_evol'][i]) if res_B['pgf_costo_evol'][i] else 0.0
+                
+                writer.writerow([i+1, res_B['total_rewards'][i], res_B['tripwire_steps'][i], flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep])
+>>>>>>> c2ae36e (Limpiar código duplicado y agregar comentarios Fase 2 en prototipo_rl_simbiosis.py)
         print('\nResumen tabular:')
         print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Acción óptima':>16}")
         print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
