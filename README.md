@@ -40,9 +40,6 @@ This README documents the professional and bilingual organization of the TUI-v4.
 
 ## Principios clave / Key principles
 
-- Separación clara entre teoría, datos, código, resultados, notebooks y tests.
-- El simulador no se modifica ni se rompe; solo se reubican archivos de teoría y resultados.
-- El README se actualiza para reflejar la nueva estructura y facilitar onboarding científico.
 
 Clear separation between theory, data, code, results, notebooks, and tests.
 Simulator code is not modified or broken; only theory and results files are relocated.
@@ -63,16 +60,16 @@ TUI-v4.1/
 ├── CHANGELOG.md
 ├── requirements.txt
 ├── LICENSE
+├── scripts/
 └── ...otros archivos
 ```
 
 ## Notas / Notes
 
-- Para detalles sobre cada carpeta, consulta el README correspondiente.
-- For details about each folder, see the corresponding README.
 Visualizaciones avanzadas y comparativas:
 ## Novedades Noviembre 2025 (actualizado 18/11/2025)
 
+fix.py archivado en scripts/ para organización.
 
 
 ### Fase 2 (actualizado 18/11/2025)

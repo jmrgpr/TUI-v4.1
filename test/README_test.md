@@ -21,6 +21,4 @@ Esta carpeta contiene pruebas unitarias y de integración para el simulador y lo
 This folder contains unit and integration tests for the simulator and modules of the TUI-v4.1 project.
 
 ## Uso / Usage
-- Solo archivos de test.
-- Only test files.
-- Priorizar pruebas científicas y de reproducibilidad.
+test.csv, test.json y coverage_missing.txt han sido archivados desde la raíz para organización.
