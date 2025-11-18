@@ -113,6 +113,41 @@ def test_save_and_load_policy(tmp_path, sample_agent):
     assert 'c' in sample_agent.policy
     # ...existing code...
 
+def test_agent_save_load_policy(monkeypatch):
+    """
+    Test para cubrir save_policy y load_policy (líneas 143-146, 170-171, 174-175)
+    """
+    from sim.prototipo_rl_simbiosis import Agent
+    import tempfile
+    import os
+    
+    agent = Agent(name="Test", resources=100.0)
+    agent.policy = {('state1', 'up'): 1.0, ('state2', 'down'): 0.5}
+    
+    # Test save_policy
+    with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.json') as f:
+        temp_file = f.name
+    
+    try:
+        agent.save_policy(temp_file)
+        assert os.path.exists(temp_file)
+        
+        # Test load_policy
+        agent2 = Agent(name="Test2", resources=100.0)
+        agent2.load_policy(temp_file)
+        assert agent2.policy == agent.policy
+        
+        # Test load_policy con archivo corrupto
+        with open(temp_file, 'w') as f:
+            f.write("invalid json")
+        agent3 = Agent(name="Test3", resources=100.0)
+        agent3.load_policy(temp_file)  # Debería manejar la excepción y setear policy={}
+        assert agent3.policy == {}
+        
+    finally:
+        if os.path.exists(temp_file):
+            os.remove(temp_file)
+
 def test_run_experiment_episodes_zero():
     """Test run_experiment with episodes=0."""
     result = run_experiment(episodes=0, seed=42, risk_scale=1.0, agent_name="Test", use_pgf=False, use_dqn=False)
@@ -226,11 +261,10 @@ def test_run_experiment_with_logging(capsys):
 
 def test_cli_risk_sweep():
     import subprocess
-<<<<<<< HEAD
-<<<<<<< HEAD
+
     import os
     cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
-    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+    cwd = '.' if os.name != 'nt' else 'c:\Proyectos\TUI-v4.1'
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
     assert result.returncode == 0
     assert "Barrido de risk_scale: 0.5" in result.stdout
@@ -304,12 +338,20 @@ def test_run_experiment_with_shock_triggers_flexibility_logic_tabular(monkeypatc
     # Mockear el step del entorno: shock en el primer paso, luego no
     def mock_step(self, action):
         if self.timestep == 0:
+<<<<<<< HEAD
             next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+=======
+            next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+>>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
             reward_env = -10.0
             done = False
             info = {'shock': True}
         else:
+<<<<<<< HEAD
             next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+=======
+            next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+>>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
             reward_env = 0.0
             done = self.timestep >= 49  # Termina al final
             info = {}
@@ -353,6 +395,7 @@ def test_run_experiment_logging(monkeypatch):
         use_pgf=False,
         use_dqn=False
     )
+<<<<<<< HEAD
     assert results['avg_reward'] is not None
 =======
     cmd = ["python", "sim/prototipo_rl_simbiosis.py", "--risk_sweep", "--episodes", "5", "--seed", "42"]
@@ -402,3 +445,6 @@ def test_env_step_on_shock():
     assert info.get('shock') == True
     assert reward == -10.0
 >>>>>>> 54163b9 (Mejora cobertura de pruebas a 91% combinada, agrega documentos en docs: protocolo TUI v4.2, impacto potencial, lista de pruebas revolucionarias. Actualiza tests para cubrir más ramas.)
+=======
+    assert results['avg_reward'] is not None
+>>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)

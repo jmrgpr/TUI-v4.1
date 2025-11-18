@@ -1,8 +1,6 @@
 """
 Cobertura del bloque main de prototipo_rl_simbiosis.py
 """
-<<<<<<< HEAD
-<<<<<<< HEAD
 import runpy
 import sys
 import os
@@ -119,6 +117,7 @@ def test_main_with_risk_sweep():
 
         with patch.object(sys, 'argv', test_args):
             prototipo_main()
+<<<<<<< HEAD
 =======
 import subprocess
 =======
@@ -142,3 +141,5 @@ def test_main_block_runs():
     sys.argv = ['prototipo_rl_simbiosis.py', '--risk_sweep', '--dqn_control', '--episodes', '20', '--seed', '42']
     runpy.run_module('sim.prototipo_rl_simbiosis', run_name='__main__')
 >>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
+=======
+>>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
