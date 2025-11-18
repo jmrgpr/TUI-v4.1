@@ -3,7 +3,7 @@
 
 # TUI v4.1 — Unified Intelligence Theory
 
-Cita recomendada:  
+Cita recomendada:
 > Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
 
 
@@ -275,3 +275,14 @@ Para colaboración, dudas o sugerencias: jmrgpr [at] gmail.com
 
 Notas bilingües:
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
+
+## Organización de archivos
+
+### Estado científico y organización (18/11/2025)
+- Validación científica completa: 319 tests pasan, cobertura 98%.
+- Refactorización de tests para máxima reproducibilidad.
+- Archivos generados fuera de lugar archivados correctamente:
+  - test.csv, test.json, coverage_missing.txt → test/
+  - dummy.png, test_integration_*.png, test_integration_*.csv → results/
+  - fix.py → scripts/
+- Documentación y tracking actualizados.
