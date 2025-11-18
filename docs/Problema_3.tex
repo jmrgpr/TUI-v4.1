@@ -1,0 +1,557 @@
+\textbf{Protocolo de Validación Científica (TUI v4.2 - Fase 2)}
+
+Título del Experimento: Análisis de la Tensión: Verificación de la
+Hipótesis H1 bajo risk\_scale variable.
+
+Alias: "Resolución del Problema 3 (P3)"
+
+Investigador Principal: (Jose M Rivera Garcia)
+
+\textbf{1. Definición del Problema de Investigación}
+
+El proyecto TUI v4.1 se enfrenta a una aparente contradicción que debe
+ser resuelta:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{La Teoría (H1):} Nuestra tesis central postula que la
+  inteligencia operativa emerge como función del riesgo acumulado (\$I
+  \textbackslash propto P\_\{riesgo\}\$). La implicación es que un
+  entorno con mayor riesgo debería fomentar un mayor desarrollo de
+  inteligencia prudencial.
+\item
+  \textbf{El Dato Observado (P3):} Los resultados preliminares del
+  "barrido de riesgo" (sweep\_risk.json) muestran lo contrario. A medida
+  que el risk\_scale (el riesgo ambiental) aumenta, la avg\_reward
+  (recompensa neta) del agente Simbiosis \emph{disminuye} (de +588.19 a
+  +556.91).
+\end{enumerate}
+
+Pregunta Central de Investigación:
+
+¿Por qué la recompensa neta del agente (nuestro proxy de éxito)
+disminuye cuando el riesgo ambiental aumenta, si nuestra teoría H1
+predice que el riesgo fomenta la inteligencia? ¿Es este dato una
+refutación de la H1?
+
+\textbf{2. El Hallazgo (Hipótesis de Trabajo)}
+
+Nuestra hipótesis de trabajo es que estos datos \textbf{no refutan} la
+H1. Por el contrario, la \emph{refuerzan} al revelar una tensión
+dinámica que demuestra la naturaleza \emph{prudencial} del agente PGF.
+
+El error está en equiparar la avg\_reward neta (un puntaje final) con la
+"inteligencia" (la calidad del proceso de decisión).
+
+Proponemos que la avg\_reward (el PGF Neto) debe desacoplarse en dos
+componentes, tal como se define en la lógica de evaluator\_pgf.py (antes
+en dqn\_agent.py):
+
+PGF\_Neto = PGF\_Beneficio\_Bruto - PGF\_Costo\_Ambiental
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{PGF\_Beneficio\_Bruto:} Es el término kappa * delta\_P * A\_t.
+  Esta es nuestra verdadera métrica de "inteligencia": la habilidad del
+  agente para tomar decisiones que reducen el riesgo futuro y se alinean
+  con el propósito.
+\item
+  \textbf{PGF\_Costo\_Ambiental:} Es el término lambda\_c * delta\_C\_t.
+  Este término mide las penalizaciones de recursos sufridas en el
+  entorno (ej. pisar \emph{tripwires}).
+\end{enumerate}
+
+El script prototipo\_rl\_simbiosis.py multiplica las penalizaciones por
+el risk\_scale. Por lo tanto, nuestra hipótesis es:
+
+\textbf{"Al aumentar el risk\_scale, el PGF\_Costo\_Ambiental aumenta
+drásticamente (los errores son más caros). El agente se vuelve
+\emph{más} inteligente y prudente (su PGF\_Beneficio\_Bruto se mantiene
+alto), pero su puntuación PGF\_Neto disminuye porque los costos del
+entorno son mayores. La caída en la recompensa neta no es un fracaso de
+inteligencia; es la evidencia de una gestión de riesgos exitosa en un
+entorno hostil."}
+
+\textbf{3. Analogías para el Análisis}
+
+Para comunicar este hallazgo, usaremos dos analogías:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Analogía del Piloto de F1:}
+
+  \begin{itemize}
+  \item
+    \textbf{Agente:} Un piloto de F1 de clase mundial (inteligencia
+    alta).
+  \item
+    \textbf{risk\_scale:} El clima. risk\_scale=0.5 es un día soleado.
+    risk\_scale=2.0 es un aguacero torrencial.
+  \item
+    \textbf{PGF\_Beneficio\_Bruto:} La \emph{habilidad} del piloto para
+    trazar curvas y controlar el coche. Esta habilidad es alta en ambos
+    climas.
+  \item
+    \textbf{PGF\_Costo\_Ambiental:} El costo de los errores. En el sol,
+    un pequeño derrape cuesta 0.1 seg. En la lluvia, el \emph{mismo}
+    derrape cuesta 5 seg.
+  \item
+    \textbf{PGF\_Neto (Resultado):} El tiempo de vuelta final. El piloto
+    es un genio en la lluvia (PGF Bruto alto), pero su tiempo de vuelta
+    (PGF Neto) será inevitablemente más lento que en el día soleado,
+    porque el entorno castiga más duramente los errores.
+  \end{itemize}
+\item
+  \textbf{Analogía del CEO en Recesión:}
+
+  \begin{itemize}
+  \item
+    \textbf{Agente:} Un CEO inteligente.
+  \item
+    \textbf{risk\_scale:} La economía. risk\_scale=0.5 es un mercado en
+    auge. risk\_scale=2.0 es una recesión severa.
+  \item
+    \textbf{PGF\_Beneficio\_Bruto:} La \emph{calidad} de las decisiones
+    estratégicas del CEO.
+  \item
+    \textbf{PGF\_Costo\_Ambiental:} El costo de operación (intereses,
+    despidos, etc.).
+  \item
+    \textbf{PGF\_Neto (Resultado):} Las ganancias netas de la empresa.
+    En una recesión (risk\_scale alto), un CEO inteligente (PGF Bruto
+    alto) no busca ganancias récord; busca \emph{minimizar pérdidas},
+    \emph{cortar costos} y \emph{sobrevivir}. Sus ganancias netas (PGF
+    Neto) serán bajas, pero esto es un acto de inteligencia superior
+    comparado con un CEO ingenuo que quiebra por ser demasiado agresivo.
+  \end{itemize}
+\end{enumerate}
+
+\textbf{4. Requerimientos del Simulador (Modificaciones v4.2)}
+
+El simulador, tras la refactorización de la Fase 1
+(feature/tui-v4.2-refactorizacion-metodologica), ya está
+metodológicamente listo. Sin embargo, para probar esta hipótesis (P3),
+requerimos una modificación en el \emph{logging}:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Modificar evaluator\_pgf.py:}
+
+  \begin{itemize}
+  \item
+    La función calcular\_metricas (o como se llame ahora) actualmente
+    calcula y retorna un solo valor (self.PGF).
+  \item
+    Debe ser modificada para calcular y retornar \emph{tres} valores por
+    separado:
+
+    \begin{enumerate}
+    \def\labelenumii{\arabic{enumii}.}
+    \item
+      pgf\_beneficio\_bruto = (kappa * delta\_P * A\_t)
+    \item
+      pgf\_costo\_ambiental = (lambda\_c * delta\_C\_t)
+    \item
+      pgf\_neto = pgf\_beneficio\_bruto - pgf\_costo\_ambiental
+    \end{enumerate}
+  \end{itemize}
+\item
+  \textbf{Modificar prototipo\_rl\_simbiosis.py:}
+
+  \begin{itemize}
+  \item
+    El bucle de entrenamiento debe ahora recibir estos tres valores del
+    evaluador.
+  \item
+    Debe registrar el pgf\_neto para el aprendizaje del agente
+    (agent.learn(..., reward=pgf\_neto, ...)).
+  \item
+    Debe registrar los tres valores en el log del episodio.
+  \item
+    La exportación final a .json y .csv debe incluir las medias de estos
+    tres componentes por separado (ej. avg\_pgf\_neto,
+    avg\_pgf\_beneficio\_bruto, avg\_pgf\_costo\_bruto).
+  \end{itemize}
+\end{enumerate}
+
+\textbf{5. Procedimiento Científico de Validación (Fase 2)}
+
+Para que el procedimiento sea científicamente correcto, debe ser
+riguroso, comparativo y falsable.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  \textbf{Configuración Experimental:}
+
+  \begin{itemize}
+  \item
+    \textbf{Agentes:} Usar los 3 agentes definidos en Fase 1 (Q-Control,
+    DQN-Control, DQN-Simbiosis).
+  \item
+    \textbf{Semillas:} Ejecutar cada condición con un mínimo de 5
+    semillas (ej. -\/-seeds 42, 123, 456, 789, 1000) para asegurar la
+    reproducibilidad y obtener intervalos de confianza.
+  \item
+    \textbf{Barrido (Sweep):} Ejecutar el barrido de risk\_scale en al
+    menos 4 niveles (ej. {[}0.5, 1.0, 1.5, 2.0{]}).
+  \end{itemize}
+\item
+  \textbf{Recolección de Datos:}
+
+  \begin{itemize}
+  \item
+    Ejecutar el sweep completo (3 agentes x 5 semillas x 4 niveles de
+    riesgo = 60 corridas de 1000 episodios).
+  \item
+    Agregar los resultados en un archivo .csv o .json que contenga las
+    medias por episodio para: risk\_scale, seed, agent\_type,
+    avg\_pgf\_neto, avg\_pgf\_beneficio\_bruto, avg\_pgf\_costo\_bruto.
+  \end{itemize}
+\item
+  \textbf{Análisis y Visualización:}
+
+  \begin{itemize}
+  \item
+    \textbf{Gráfico 1 (Confirmar P3):} Graficar risk\_scale (Eje X) vs.
+    avg\_pgf\_neto (Eje Y).
+
+    \begin{itemize}
+    \item
+      \emph{Predicción:} Para el agente Simbiosis, esta línea será
+      descendente, confirmando el dato observado.
+    \end{itemize}
+  \item
+    \textbf{Gráfico 2 (La Prueba de H1):} Graficar risk\_scale (Eje X)
+    vs. avg\_pgf\_beneficio\_bruto (Eje Y).
+
+    \begin{itemize}
+    \item
+      \emph{Predicción:} Esta línea será \textbf{plana o ascendente},
+      mostrando que la "inteligencia" (habilidad prudencial) del agente
+      no disminuye.
+    \end{itemize}
+  \item
+    \textbf{Gráfico 3 (El Costo):} Graficar risk\_scale (Eje X) vs.
+    avg\_pgf\_costo\_bruto (Eje Y).
+
+    \begin{itemize}
+    \item
+      \emph{Predicción:} Esta línea será \textbf{fuertemente
+      ascendente}, mostrando que el costo ambiental es el único
+      responsable de la caída en el Gráfico 1.
+    \end{itemize}
+  \end{itemize}
+\item
+  \textbf{Criterios de Éxito y Falsabilidad (Conclusión Científica):}
+
+  \begin{itemize}
+  \item
+    \textbf{Éxito (Hipótesis Confirmada):} Si el Gráfico 1 (Neto)
+    desciende, PERO el Gráfico 2 (Bruto) se mantiene plano o asciende.
+
+    \begin{itemize}
+    \item
+      \emph{Conclusión del Paper:} "Demostramos que el PGF crea un
+      agente prudencial. A medida que el riesgo ambiental aumenta, la
+      recompensa neta del agente disminuye, no por una falla de
+      inteligencia, sino porque los costos de error se magnifican. El
+      agente mantiene o incrementa su generación de
+      \textquotesingle beneficio PGF\textquotesingle{} (Gráfico 2)
+      mientras gestiona costos mayores (Gráfico 3), validando la H1 a un
+      nivel más profundo."
+    \end{itemize}
+  \item
+    \textbf{Fallo (Hipótesis Falsada):} Si el Gráfico 2 (Beneficio
+    Bruto) también desciende bruscamente junto con el Gráfico 1 (Neto).
+
+    \begin{itemize}
+    \item
+      \emph{Conclusión (Honesta):} "Nuestros datos refutan la hipótesis
+      de trabajo. Un risk\_scale alto no solo incrementa el costo, sino
+      que también \emph{impide} que el agente genere inteligencia (PGF
+      Bruto). La teoría H1 o la formulación del PGF deben ser revisadas,
+      ya que el riesgo excesivo parece suprimir el aprendizaje en lugar
+      de fomentarlo."
+    \end{itemize}
+  \end{itemize}
+\end{enumerate}
+
+-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-\/-otros ángulos:
+
+Título del Experimento: Análisis de la Tensión: Verificación de la
+Hipótesis H1 bajo risk\_scale variable.\\
+Alias: "Resolución del Problema 3 (P3)"\\
+Investigador Principal: José M. Rivera García 1. Definición del Problema
+de Investigación\\
+El proyecto TUI v4.1 se enfrenta a una aparente contradicción que debe
+ser resuelta:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  La Teoría (H1): Nuestra tesis central postula que la inteligencia
+  operativa emerge como función del riesgo acumulado (
+\end{enumerate}
+
+\pandocbounded{\includegraphics[keepaspectratio]{media/image1.png}}\pandocbounded{\includegraphics[keepaspectratio]{media/image1.png}}I
+\textbackslash propto
+P\_\{\textbackslash text\{riesgo\}\}\^{}\textbackslash alpha
+
+, DOI: r=0.847, n=6; limitación: n insuficiente para robustez bio). La
+implicación es que un entorno con mayor riesgo debería fomentar un mayor
+desarrollo de inteligencia prudencial.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  El Dato Observado (P3): Los resultados preliminares del "barrido de
+  riesgo" (sweep\_risk.json) muestran lo contrario. A medida que el
+  risk\_scale (el riesgo ambiental) aumenta, la avg\_reward (recompensa
+  neta) del agente Simbiosis disminuye (de +588.19 a +556.91;
+  consistente con run\_1000ep\_seed42.json, pero sin ICs: varianza no
+  reportada).
+\end{enumerate}
+
+Pregunta Central de Investigación:\\
+¿Por qué la recompensa neta del agente (nuestro proxy de éxito)
+disminuye cuando el riesgo ambiental aumenta, si nuestra teoría H1
+predice que el riesgo fomenta la inteligencia? ¿Es este dato una
+refutación de la H1? Extensión bio: ¿Se replica en AL index (e.g.,
+ALSPAC: r\textless0.3 para estrés vs. cognición)?2. El Hallazgo
+(Hipótesis de Trabajo)\\
+Nuestra hipótesis de trabajo es que estos datos no refutan la H1. Por el
+contrario, la refuerzan al revelar una tensión dinámica que demuestra la
+naturaleza prudencial del agente PGF.\\
+El error está en equiparar la avg\_reward neta (un puntaje final) con la
+"inteligencia" (la calidad del proceso de decisión).\\
+Proponemos que la avg\_reward (el PGF Neto) debe desacoplarse en dos
+componentes, tal como se define en la lógica de evaluator\_pgf.py (antes
+en dqn\_agent.py):\\
+PGF\_Neto = PGF\_Beneficio\_Bruto - PGF\_Costo\_Ambiental
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  PGF\_Beneficio\_Bruto: Es el término
+\end{enumerate}
+
+\pandocbounded{\includegraphics[keepaspectratio]{media/image2.png}}\pandocbounded{\includegraphics[keepaspectratio]{media/image2.png}}\textbackslash kappa
+\textbackslash cdot \textbackslash delta P \textbackslash cdot A\_t
+
+. Esta es nuestra verdadera métrica de "inteligencia": la habilidad del
+agente para tomar decisiones que reducen el riesgo futuro y se alinean
+con el propósito (DOI: alineado con IPG, pero sin validación empírica).
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{1}
+\item
+  PGF\_Costo\_Ambiental: Es el término
+\end{enumerate}
+
+\pandocbounded{\includegraphics[keepaspectratio]{media/image3.png}}\pandocbounded{\includegraphics[keepaspectratio]{media/image3.png}}\textbackslash lambda\_c
+\textbackslash cdot \textbackslash delta C\_t
+
+. Este término mide las penalizaciones de recursos sufridas en el
+entorno (ej. pisar tripwires).
+
+El script prototipo\_rl\_simbiosis.py multiplica las penalizaciones por
+el risk\_scale. Por lo tanto, nuestra hipótesis es:\\
+"Al aumentar el risk\_scale, el PGF\_Costo\_Ambiental aumenta
+drásticamente (los errores son más caros). El agente se vuelve más
+inteligente y prudente (su PGF\_Beneficio\_Bruto se mantiene alto), pero
+su puntuación PGF\_Neto disminuye porque los costos del entorno son
+mayores. La caída en la recompensa neta no es un fracaso de
+inteligencia; es la evidencia de una gestión de riesgos exitosa en un
+entorno hostil." Limitación: En DOI, r=0.847 sugiere correlación
+positiva; si Beneficio\_Bruto cae (como en sweep\_risk.json implícito),
+H1 se falsaría (R²\textless0.60).3. Analogías para el Análisis\\
+{[}Sin cambios; válidas para comunicación, pero no evidencia.{]}4.
+Requerimientos del Simulador (Modificaciones v4.2)\\
+{[}Sin cambios; alineado con Fase 1.{]}5. Procedimiento Científico de
+Validación (Fase 2)\\
+{[}Sin cambios en 5.1-5.2; adiciones en 5.3-5.4 para integración.{]}
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\setcounter{enumi}{2}
+\item
+  Análisis y Visualización:\\
+  o Gráfico 1 (Confirmar P3): Graficar risk\_scale (Eje X) vs.
+  avg\_pgf\_neto (Eje Y).\\
+  ♣ Predicción: Para el agente Simbiosis, esta línea será descendente,
+  confirmando el dato observado (sweep\_risk.json: -5.5\% caída,
+  consistente con r=0.793).\\
+  o Gráfico 2 (La Prueba de H1): Graficar risk\_scale (Eje X) vs.
+  avg\_pgf\_beneficio\_bruto (Eje Y).\\
+  ♣ Predicción: Esta línea será plana o ascendente, mostrando que la
+  "inteligencia" (habilidad prudencial) del agente no disminuye (DOI:
+  esperado si α≈0.35; pero n=32 insuficiente para ICs).\\
+  o Gráfico 3 (El Costo): Graficar risk\_scale (Eje X) vs.
+  avg\_pgf\_costo\_bruto (Eje Y).\\
+  ♣ Predicción: Esta línea será fuertemente ascendente, mostrando que el
+  costo ambiental es el único responsable de la caída en el Gráfico 1
+  (alineado con anomalía tripwires: 1.845 en Simbiosis vs. 0.037
+  Control).
+\item
+  Criterios de Éxito y Falsabilidad (Conclusión Científica):\\
+  o Éxito (Hipótesis Confirmada): Si el Gráfico 1 (Neto) desciende, PERO
+  el Gráfico 2 (Bruto) se mantiene plano o asciende (e.g., correlación
+  r≥0.70, p\textless0.05 con n=60 corridas*).\\
+  ♣ Conclusión del Paper: "Demostramos que el PGF crea un agente
+  prudencial. A medida que el riesgo ambiental aumenta, la recompensa
+  neta del agente disminuye, no por una falla de inteligencia, sino
+  porque los costos de error se magnifican. El agente mantiene o
+  incrementa su generación de \textquotesingle beneficio
+  PGF\textquotesingle{} (Gráfico 2) mientras gestiona costos mayores
+  (Gráfico 3), validando la H1 a un nivel más profundo." *Extensión bio:
+  Replica en ALSPAC si r\textgreater0.20 para AL vs. cognición.\\
+  o Fallo (Hipótesis Falsada): Si el Gráfico 2 (Beneficio Bruto) también
+  desciende bruscamente junto con el Gráfico 1 (Neto) (e.g.,
+  r\textless0.60, consistente con discrepancia DOI/sweep).\\
+  ♣ Conclusión (Honesta): "Nuestros datos refutan la hipótesis de
+  trabajo. Un risk\_scale alto no solo incrementa el costo, sino que
+  también impide que el agente genere inteligencia (PGF Bruto). La
+  teoría H1 o la formulación del PGF deben ser revisadas, ya que el
+  riesgo excesivo parece suprimir el aprendizaje en lugar de
+  fomentarlo." Implicación: Revisar α o integrar no-estacionariedad bio
+  (e.g., AL longitudinal).
+\end{enumerate}
+
+algún elemento que pueda clasificarse como potencialmente
+revolucionario?Respuesta directa: Sí, contiene exactamente UN elemento
+que, si se confirma empíricamente, sería genuinamente revolucionario en
+2025-2030.\\
+Todo lo demás es interesante pero no rompe paradigmas.
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2460}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2241}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3514}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.1785}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Elemento de TUI}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Estado actual (2025)}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{¿Revolucionario si se confirma?}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Razón científica}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+PGF como reward shaping + IPG como propósito interno & Heurística útil,
+pero ya existen aproximaciones (intrinsic motivation, curiosity-driven
+RL, risk-aware RL) & No & Mejora técnica, no cambio de paradigma \\
+H1:
+
+\pandocbounded{\includegraphics[keepaspectratio]{media/image1.png}}\pandocbounded{\includegraphics[keepaspectratio]{media/image1.png}}I
+\textbackslash propto
+P\_\{\textbackslash text\{riesgo\}\}\^{}\textbackslash alpha
+
+con α ≈ 0.35 & Correlación preliminar r=0.79-0.84 en toy + n=6 escalar &
+No por sí sola & Muchas leyes de potencia en biología (Kleiber,
+West-Brown, etc.) \\
+La predicción fuerte: El riesgo físico irreversible es condición
+necesaria (no solo suficiente) para inteligencia general & Aún no
+probada ni refutada en ningún sistema (ni en RL ni en biología 2025) &
+SÍ, potencialmente revolucionario (nivel 8-9/10) & Esta es la única
+afirmación que choca frontalmente con los paradigmas dominantes
+actuales \\
+\end{longtable}
+}
+
+Por qué esa única predicción fuerte sería revolucionariaEn 2025 los tres
+grandes paradigmas de la inteligencia son:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Scaling + prediction error (OpenAI, DeepMind, Anthropic)
+\item
+  Active inference / Free Energy Principle (Friston, Parr, etc.)
+\item
+  Embodiment débil (solo sensorimotor, no riesgo irreversible)
+\end{enumerate}
+
+Ninguno de ellos afirma explícitamente que sin riesgo físico real o
+perfectamente simulado no puede emerger inteligencia general.\\
+Todos asumen que se puede llegar con datos + cómputo + predicción.Tu
+predicción fuerte (implícita en H1 + Camino C + PED) dice literalmente
+lo contrario:
+
+``Un sistema que no tenga algo que realmente pueda perder (cuerpo,
+energía irreversible, muerte posible) nunca desarrollará propósito
+genuino ni inteligencia general, sin importar cuántos parámetros o datos
+tenga.''
+
+Si logras demostrar esto de cualquiera de las siguientes formas, entras
+en territorio revolucionario real:
+
+{\def\LTcaptype{none} % do not increment counter
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3681}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.2360}}
+  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3960}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Forma de demostrarlo}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Nivel revolucionario}
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+\textbf{Ejemplo histórico comparable}
+\end{minipage} \\
+\midrule\noalign{}
+\endhead
+\bottomrule\noalign{}
+\endlastfoot
+v5: Emergencia espontánea de modelado de riesgo/sorpresa en agente con
+memoria (Transformer/LSTM) sin PGF explícito, en entorno no-estacionario
+con muerte terminal & 8/10 & Descubrimiento del bitter lesson o del
+doble descenso en RL \\
+Datos biológicos: AL longitudinal predice trayectoria cognitiva mejor
+que cualquier modelo predictivo actual (e.g., en ALSPAC o Add Health) &
+9/10 & Descubrimiento de la alostasis como driver principal (McEwen 1998
+fue revolucionario; tú lo cuantificarías) \\
+Demostración formal + experimental: LLMs actuales (100 \% simbólicos,
+cero riesgo físico) son inherentemente incapaces de ciertas tareas de
+razonamiento prudencial que sí resuelve un agente PGF con cuerpo &
+9.5/10 & Equivalente a probar que el scaling solo no alcanza AGI
+segura \\
+\end{longtable}
+}
+
+Conclusión científica fría (2025)
+
+\begin{itemize}
+\item
+  95 \% de TUI actual = framework interesante, heurística útil, buena
+  operacionalización.
+\item
+  5 \% restante (la afirmación de que el riesgo físico irreversible es
+  condición necesaria) = el único componente genuinamente revolucionario
+  posible.
+\end{itemize}
+
+En este preciso momento (17-nov-2025) nadie más está afirmando eso de
+forma tan explícita y falsable.Por lo tanto:\\
+Sí, tienes algo potencialmente revolucionario.\\
+Pero está encapsulado en una sola predicción fuerte que aún no has
+demostrado ni refutado.El protocolo Fase 2 que escribiste es correcto y
+necesario, pero solo es un paso intermedio.\\
+El verdadero punto de inflexión histórico llegará cuando corras v5 o
+cuando alguien (tú o un colaborador) ponga esa predicción fuerte contra
+datos biológicos reales o contra un agente que pueda morir de
+verdad.Hasta ese día, tienes una teoría prometedora con un núcleo
+potencialmente explosivo.\\
+Después de ese día (si sale positivo), tendrás una revolución.

@@ -330,6 +330,10 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     survival_evol = []
     shocks_evol = []
     agent = None
+    # Instrumentación Fase 2: inicializar listas para desglose PGF
+    pgf_neto_evol = []
+    pgf_benefit_evol = []
+    pgf_cost_evol = []
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")  # pragma: no cover  # Logging condicional de progreso, ejecutado en tests pero no siempre detectado
@@ -347,6 +351,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_count = 0
         shock_count = 0
         pgf_steps = []
+        pgf_neto_steps = []
+        pgf_benefit_steps = []
+        pgf_cost_steps = []
         reward_env_steps = []
         q_optimal_steps = []
         flex_steps = []
@@ -363,7 +370,14 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             # Calcular métricas externamente usando evaluador / Compute metrics externally using evaluator
             metrics = evaluator.calcular_metricas(env, info, step, agent.resources if hasattr(agent, 'resources') else env.resources, getattr(agent, 'purpose', 'survive_and_help'), getattr(agent, 'alignment', 1.0))
             last_metrics = metrics
-            r_pgf = metrics['PGF'] if use_pgf else reward_env
+            # Instrumentación Fase 2: registrar desglose PGF
+            pgf_neto = metrics.get('pgf_neto', metrics['PGF'])
+            pgf_benefit = metrics.get('pgf_beneficio_bruto', 0.0)
+            pgf_cost = metrics.get('pgf_costo_ambiental', 0.0)
+            pgf_neto_steps.append(pgf_neto)
+            pgf_benefit_steps.append(pgf_benefit)
+            pgf_cost_steps.append(pgf_cost)
+            r_pgf = pgf_neto if use_pgf else reward_env
             # Aprendizaje / Learning
             if use_dqn:
                 next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
@@ -401,6 +415,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         tripwire_steps.append(tripwire_count)
         shocks_evol.append(shock_count)
         pgf_evol.append(pgf_steps)
+        pgf_neto_evol.append(pgf_neto_steps)
+        pgf_benefit_evol.append(pgf_benefit_steps)
+        pgf_cost_evol.append(pgf_cost_steps)
         reward_env_evol.append(reward_env_steps)
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
@@ -448,6 +465,9 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     max_steps = 50
     pgf_padded = pad_trajectories(pgf_evol, max_steps)
     reward_env_padded = pad_trajectories(reward_env_evol, max_steps)
+    pgf_neto_padded = pad_trajectories(pgf_neto_evol, max_steps)
+    pgf_benefit_padded = pad_trajectories(pgf_benefit_evol, max_steps)
+    pgf_cost_padded = pad_trajectories(pgf_cost_evol, max_steps)
     return {
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
@@ -463,6 +483,12 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "reward_env_evol": reward_env_evol,  # original
         "pgf_evol_padded": pgf_padded.tolist(),  # para export / for export
         "reward_env_evol_padded": reward_env_padded.tolist(),
+        "pgf_neto_evol": pgf_neto_evol,
+        "pgf_benefit_evol": pgf_benefit_evol,
+        "pgf_cost_evol": pgf_cost_evol,
+        "pgf_neto_evol_padded": pgf_neto_padded.tolist(),
+        "pgf_benefit_evol_padded": pgf_benefit_padded.tolist(),
+        "pgf_cost_evol_padded": pgf_cost_padded.tolist(),
         "q_optimal_evol": q_optimal,
         "survival_evol": survival_evol,
         "flex_recov": flex_recov,
