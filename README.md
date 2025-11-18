@@ -7,22 +7,10 @@
 ![Reproducible](https://img.shields.io/badge/reproducible-validated-success)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-
-# TUI v4.2 - Unified Intelligence Theory (toy simulator)
-
-<<<<<<< HEAD
-ES: Simulador Gridworld para ejercer la Teoria Unificada de la Inteligencia (TUI v4.2). Incluye agentes Control (Q-table) y Simbiosis (DQN+PGF), exportacion DOI-ready, analisis estadistico y visualizaciones.  
-EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
-
-## Logros recientes / Recent achievements
-- Refactor del simulador y runners (v4.2).
-- Cobertura de pruebas **100%** en `sim/`; integracion completa.
-- Exportacion robusta (JSON/CSV) y trazabilidad por semilla (`--output_prefix`).
 - Scripts de Fase 2 y comparacion SOTA (PPO/A2C/DQN) listos para reproducibilidad.
 - Visualizaciones y estadistica (ANOVA, t-test) bilingues; notebooks de quickstart.
 
 ## Entorno recomendado / Reference environment
-- Python 3.10 o 3.11  
 - Dependencias clave (ver `requirements.txt` / `environment.yml`):  
   torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
 
@@ -30,21 +18,14 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 1) Crear entorno (Conda o venv) e instalar dependencias:  
    `pip install -r requirements.txt`
 2) Experimento base:  
-   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
-3) Barrido de riesgo:  
    `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
 4) Comparacion SOTA (opcional):  
    `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
 
 ## Estructura / Layout
-- `sim/` : codigo del simulador, agentes, evaluador PGF, visualizaciones.
-- `test/` : pruebas unitarias e integracion (pytest).
-- `results/` : salidas JSON/CSV/PNG de experimentos.  
-  - `sweep/` barridos de risk_scale (p.ej. `fase2/seed42/...`).  
   - `runs/` corridas individuales
   - `sota/` modelos y resúmenes PPO/A2C/DQN.  
   - `global_summaries/` consolidados (p.ej. `fase2_global_summary.csv`).  
-- `docs/` : analisis y notas de resultados.
 - `TUI/` : documentos de teoria (TUI v4.x, LaTeX/Markdown).
 - `notebooks/` : cuadernos de analisis y graficos.
 - `scripts/` : utilidades (fase2, merge de resumenes, comparacion SOTA).
@@ -61,11 +42,6 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 
 - **Escenarios donde la metodología puede no ser aplicable:**  
   El enfoque TUI/PGF está optimizado para entornos discretos y problemas de decisión secuencial. No se recomienda para tareas de control continuo, simulaciones físicas realistas, ni benchmarks de alta dimensionalidad (MuJoCo, Procgen, etc.).
-=======
-Cita recomendada:  
-> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
-
----
 
 ## Licencias
 
@@ -687,33 +663,18 @@ TUI-v4.1/
 - Para detalles sobre cada carpeta, consulta el README correspondiente.
 - For details about each folder, see the corresponding README.
 Visualizaciones avanzadas y comparativas:
-## Novedades Noviembre 2025
+## Novedades Noviembre 2025 (actualizado 18/11/2025)
 
-  - `sim/gui_streamlit.py` con ≥98% de cobertura (solo 2 líneas no ejecutables).
-  - Todas las funcionalidades de la GUI (reset, exportar, comparación, ayuda) están cubiertas por tests robustos y reproducibles.
-  - Validación de edge cases y exportación profesional.
-
-- **Limpieza y trazabilidad de resultados:** (Actualizado 2025-11-17)
-  - Los archivos de test y resultados experimentales generados durante el desarrollo (`test.csv`, `test.json`, `test_control.csv`, `test_simbiosis.csv`, `test_sweep.json`, `test_sweep_control.csv`) fueron movidos de la raíz a la carpeta `results/`.
-  - El archivo temporal vacío `test_export_empty.json` fue eliminado.
-  - Motivo: En etapas de desarrollo y pruebas rápidas, es común exportar resultados en la raíz. Ahora, siguiendo la estructura profesional, todos los resultados se centralizan en `results/` para facilitar la trazabilidad y limpieza.
-
-- **Refactor Metodológico - Eliminación del Oráculo en DQN** (2025-11-17, 3:19 PM):
-  - Eliminado el método `calcular_metricas` interno del agente DQN para evitar bias metodológico (oráculo).
-  - Externalizado el cálculo de métricas PGF a `EvaluatorPGF` independiente.
-  - El agente DQN ahora recibe recompensas como valores negros, asegurando pureza en experimentos RL.
-  - Actualizados todos los tests para validar la independencia de lógica PGF.
-  - Cobertura mantenida en 97%.
-
-- **Interfaz Streamlit avanzada:**
-  - Botón "Reset to default" para restaurar parámetros.
-  - Exportación avanzada de historial en JSON.
-  - Panel comparativo de corridas históricas.
-  - Panel de ayuda bilingüe y documentación enlazada.
-
-- **Reproducibilidad internacional:**
-  - Docstrings, comentarios y outputs bilingües (ES/EN).
-  - Exportación DOI-ready en JSON/CSV y gráficos.
+- Refactorización final y merge a `main`.
+- Eliminado código muerto (Agent.__init__ duplicado) en `sim/prototipo_rl_simbiosis.py`.
+- Añadidos tests de integración con subprocess para CLI y cobertura de ramas visualización, export, plot y risk_sweep.
+- Reforzada cobertura de `reprogram_purpose` y métodos de serialización de policy.
+- Cobertura final: 98% en `sim/prototipo_rl_simbiosis.py` y 96-100% en módulos principales.
+- Todos los tests pasan correctamente (316/316).
+- Auditoría completa de exportación profesional: todos los resultados y gráficos se guardan en `results/`.
+- Documentación y README actualizados para reflejar estructura profesional y auditoría de exportación.
+- Merge exitoso de rama `feature/tui-v4.2-refactorizacion-metodologica` a `main` y push remoto.
+- Estado: Listo para publicación y auditoría científica internacional.
 
 ---
 
@@ -908,6 +869,7 @@ Para colaboración, dudas o sugerencias: jmrgpr [at] gmail.com
 ---
 
 Notas bilingües:
+<<<<<<< HEAD
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey.svg)
 
@@ -955,3 +917,6 @@ Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/wo
 ```yaml
 license: "Apache-2.0"
 >>>>>>> 6f926b7 (Update README with TUI v4.1 details and instructions)
+=======
+Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
+>>>>>>> ff431b8 (Docs: Bitácora y README actualizados con auditoría y refactorización final 18/11/2025)
