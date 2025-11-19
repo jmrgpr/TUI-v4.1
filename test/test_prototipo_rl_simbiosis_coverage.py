@@ -261,10 +261,16 @@ def test_run_experiment_with_logging(capsys):
 
 def test_cli_risk_sweep():
     import subprocess
+<<<<<<< HEAD
 
     import os
     cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
     cwd = '.' if os.name != 'nt' else 'c:\Proyectos\TUI-v4.1'
+=======
+    import os
+    cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
+    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+>>>>>>> ae60c54 (Fix: test_cli_risk_sweep ahora es multiplataforma y compatible con CI/CD (19/11/2025))
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
     assert result.returncode == 0
     assert "Barrido de risk_scale: 0.5" in result.stdout
