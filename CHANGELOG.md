@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-11-19] Upload a Zenodo: Timestamp de Evidencia Preliminar
+- Subido dataset a Zenodo v2: https://doi.org/10.5281/zenodo.17654593
+- Archivos incluidos: CSVs de comparación PPO vs TUI, análisis bilingüe `analisis_sota_concepto.md`.
+- Descripción: Evidencia preliminar de parálisis prudencial en RL SOTA vs resiliencia en TUI.
+- DOI blindado para prioridad intelectual y citabilidad.
+- Actualizado README.md con nueva cita recomendada.
+- Fecha y hora: 19/11/2025.
+
 ## [2025-11-19] Comparación SOTA con PPO: Evidencia empírica de superioridad TUI
 - Ejecutado `run_sota_comparison.py`: Entrenamiento de PPO en 5 escalas de riesgo (0.5-3.0).
 - Resultados: PPO optimiza recompensa (371 en riesgo bajo) pero falla en PGF (-0.29 vs -0.06 de TUI).

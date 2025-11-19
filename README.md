@@ -4,7 +4,7 @@
 # TUI v4.2 — Unified Intelligence Theory
 
 Cita recomendada:
-> Rivera Garcia, J. M. (2025). *TUI v4.2: First empirical evidence of scalable alignment via Constitutive Symbiosis*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+> Rivera Garcia, J. M. (2025). *Preliminary Evidence of Prudential Paralysis in State-of-the-Art Reinforcement Learning vs. Resilience in TUI* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17654593
 
 
 ## Licencias
