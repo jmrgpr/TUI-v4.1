@@ -30,6 +30,21 @@ PARAMS = {
 }
 
 def main():
+    # ===================== Unir resúmenes Fase 2 =====================
+    st.markdown("---")
+    st.subheader("Unir resúmenes Fase 2 / Merge Fase 2 summaries")
+    if st.button("Unir y mostrar resumen global de Fase 2"):
+        import subprocess
+        import pandas as pd
+        # Ejecutar el script merge_summaries.py
+        result = subprocess.run([sys.executable, "merge_summaries.py"], capture_output=True, text=True)
+        st.info(result.stdout if result.stdout else "Resúmenes unidos. Archivo generado: results/fase2_global_summary.csv")
+        # Mostrar el resumen global en la interfaz
+        try:
+            df_global = pd.read_csv("results/fase2_global_summary.csv")
+            st.dataframe(df_global)
+        except Exception as e:
+            st.error(f"No se pudo cargar el resumen global: {e}")
     # ===================== Sidebar: Parámetros =====================
     st.sidebar.title("TUI v4.1 Simulador — Parámetros")
     # Botón de reset a valores por defecto
