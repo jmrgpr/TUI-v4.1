@@ -668,7 +668,11 @@ Visualizaciones avanzadas y comparativas:
 - **Nuevo notebook de quickstart**: `notebooks/quickstart_graficos.ipynb` para generación automática de gráficos bilingües desde resultados CSV.
 - **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
 - **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
+<<<<<<< HEAD
 - **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
+=======
+- **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable.
+>>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)
 - **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).

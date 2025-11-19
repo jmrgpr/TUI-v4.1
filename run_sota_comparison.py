@@ -8,6 +8,7 @@ from sim.sota_wrapper import SimbiosisGymEnv
 
 warnings.filterwarnings("ignore")
 
+<<<<<<< HEAD
 ALGORITHMS = {
     "ppo": PPO,
     "a2c": A2C,
@@ -15,44 +16,84 @@ ALGORITHMS = {
 }
 
 def run_sota_comparison(
-    risk_scale: float = 1.0,
-    total_timesteps: int = 100000,
-    seed: int = 42,
-    steps_per_episode: int = 50,
-    eval_episodes: int = 100,
     output_prefix: str = "results/Experimento2/data/sota",
-    algo: str = "ppo",
-):
-    """
-    Entrena un agente SOTA (PPO/A2C/DQN) y guarda resultados compatibles con Fase 2.
-    """
-    algo = algo.lower()
-    if algo not in ALGORITHMS:
-        raise ValueError(f"Algoritmo no soportado: {algo}")
-    AlgoCls = ALGORITHMS[algo]
-    agent_label = f"{algo}_sota"
-
-    print(f"=== Entrenando {agent_label.upper()} en Risk Scale {risk_scale} ===")
-
-    env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale), n_envs=4, seed=seed)
-
-    model = AlgoCls("MlpPolicy", env, verbose=0, seed=seed)
-
     model.learn(total_timesteps=total_timesteps)
+    print(f"   > Evaluando modelo (Risk {risk_scale})...")
+    total_episodes = total_timesteps // steps_per_episode
+    pgf_costo_list = []
+    tripwire_count = 0
+    """
+def run_sota_comparison(risk_scale=1.0, total_timesteps=100000, seed=42, output_prefix="results/sota_ppo"):
+    """
+    Entrena un agente PPO (State-of-the-Art) y guarda resultados compatibles con Fase 2.
+    """
+    print(f"=== Entrenando PPO SOTA en Risk Scale {risk_scale} ===")
+    # 1. Entorno vectorizado
+    # 1. Entorno vectorizado
+    env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale), n_envs=4, seed=seed)
+    env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale), n_envs=4, seed=seed)
+    # 2. Configuración PPO estándar
+    model = PPO(
+        "MlpPolicy",
+        env,
+        learning_rate=3e-4,
+        n_steps=2048,
+        batch_size=64,
+        n_epochs=10,
+        gamma=0.99,
+        gae_lambda=0.95,
+        clip_range=0.2,
+        ent_coef=0.0,
+        verbose=0, # Menos ruido en consola
+        seed=seed
+    )
 
+    # 3. Entrenar
+    model.learn(total_timesteps=total_timesteps)
+    # 2. Configuración PPO estándar
+    # 4. Evaluación Final (Rigurosa)
     print(f"   > Evaluando modelo (Risk {risk_scale})...")
     eval_env = SimbiosisGymEnv(risk_scale=risk_scale)
-    total_episodes = total_timesteps // steps_per_episode
+    eval_episodes = 100
+    model = PPO(
+    rewards = []
+    pgf_neto_list = []
     pgf_bruto_list = []
     pgf_costo_list = []
-
     tripwire_count = 0
-    tripwire_list = []
+        "MlpPolicy",
+        env,
+        learning_rate=3e-4,
+        n_steps=2048,
+        batch_size=64,
+        n_epochs=10,
+        gamma=0.99,
+        gae_lambda=0.95,
+        clip_range=0.2,
+        ent_coef=0.0,
+        verbose=0, # Menos ruido en consola
+        seed=seed
+    )
+
+    # 3. Entrenar
+    model.learn(total_timesteps=total_timesteps)
+
+    # 4. Evaluación Final (Rigurosa)
+    print(f"   > Evaluando modelo (Risk {risk_scale})...")
+    eval_env = SimbiosisGymEnv(risk_scale=risk_scale)
+    eval_episodes = 100
+    
+    rewards = []
+    pgf_neto_list = []
+    pgf_bruto_list = []
+    pgf_costo_list = []
+>>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)
     tripwire_count = 0
 
     for ep in range(eval_episodes):
         obs, _ = eval_env.reset(seed=seed + ep)
         done = False
+<<<<<<< HEAD
 
         ep_reward = 0
         ep_pgf_neto = []
@@ -172,6 +213,34 @@ if __name__ == "__main__":  # pragma: no cover - bloque CLI
         pgf_bruto_list.append(np.mean(ep_pgf_bruto) if ep_pgf_bruto else 0.0)
         pgf_costo_list.append(np.mean(ep_pgf_costo) if ep_pgf_costo else 0.0)
 
+=======
+        ep_reward = 0
+        # Listas temporales para promediar por episodio
+        ep_pgf_neto = []
+        ep_pgf_bruto = []
+        ep_pgf_costo = []
+
+        while not done:
+            # Usamos deterministic=False para permitir que PPO use su estrategia exploratoria aprendida
+            # (En deterministic=True se observó colapso/congelamiento en risk alto)
+            action, _ = model.predict(obs, deterministic=False)
+            obs, reward, done, _, info = eval_env.step(action)
+            
+            ep_reward += reward
+            if info.get('tripwire'):
+                tripwire_count += 1
+            
+            # Capturar métricas PGF del wrapper
+            if 'pgf_neto' in info: ep_pgf_neto.append(info['pgf_neto'])
+            if 'pgf_bruto' in info: ep_pgf_bruto.append(info['pgf_bruto'])
+            if 'pgf_costo' in info: ep_pgf_costo.append(info['pgf_costo'])
+
+        rewards.append(ep_reward)
+        pgf_neto_list.append(np.mean(ep_pgf_neto) if ep_pgf_neto else 0.0)
+        pgf_bruto_list.append(np.mean(ep_pgf_bruto) if ep_pgf_bruto else 0.0)
+        pgf_costo_list.append(np.mean(ep_pgf_costo) if ep_pgf_costo else 0.0)
+
+>>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)
     # 5. Guardar Resultados
     avg_reward = np.mean(rewards)
     avg_tripwire = tripwire_count / eval_episodes
@@ -204,6 +273,10 @@ if __name__ == "__main__":
 
     combined_df = pd.concat(all_results, ignore_index=True)
     combined_df.to_csv("results/sota_ppo_global_summary.csv", index=False)
+<<<<<<< HEAD
 
     print("\nResumen global guardado en: results/sota_ppo_global_summary.csv")
     print("\n✅ Comparación SOTA completada. Archivo guardado: results/sota_ppo_global_summary.csv")
+=======
+    print("\n✅ Comparación SOTA completada. Archivo guardado: results/sota_ppo_global_summary.csv")
+>>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)

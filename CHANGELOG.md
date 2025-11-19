@@ -11,6 +11,7 @@
 - Visualizaciones y análisis estadístico bilingües en notebooks y scripts dedicados.
 ---
 
+<<<<<<< HEAD
 ## [2025-11-27] Smoke test DQN: interpretación, varianza y export protocolizado
 - Interpretaciones ampliadas y análisis de varianza en `results/smoke_test/RESULTADOS_TUNING_DQN.md`, con recomendaciones accionables.
 - Flujo de exportación corregido y protocolizado; nombres de archivos por semilla/configuración y datasets regenerados (JSON/CSV seeds 42/99/123/456) en `results/smoke_test/`.
@@ -93,6 +94,8 @@
 - Actualizado README.md con nueva cita recomendada.
 - Fecha y hora: 19/11/2025.
 
+=======
+>>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)
 ## [2025-11-19] Comparación SOTA con PPO: Evidencia empírica de superioridad TUI
 - Ejecutado `run_sota_comparison.py`: Entrenamiento de PPO en 5 escalas de riesgo (0.5-3.0).
 - Resultados: PPO optimiza recompensa (371 en riesgo bajo) pero falla en PGF (-0.29 vs -0.06 de TUI).
