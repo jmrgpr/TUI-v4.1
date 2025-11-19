@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-11-19] Análisis Estadístico y Comparación SOTA
+- Implementado `results/stats.py`: Análisis ANOVA Two-Way + Tukey HSD para validar hipótesis estadísticamente.
+- Agregadas dependencias: statsmodels, stable-baselines3, shimmy, gymnasium.
+- Creado `sim/sota_wrapper.py`: Wrapper Gymnasium para entorno SimbiosisEnv.
+- Creado `run_sota_comparison.py`: Entrenamiento de agentes PPO SOTA y exportación de resultados.
+- Habilita comparación con baselines state-of-the-art (PPO/A2C) para benchmarking científico.
+- Fecha y hora de documentación: 19/11/2025.
+
 ## [2025-11-19] Pinnear dependencias para reproducibilidad científica
 - Actualizado `requirements.txt` con versiones fijas (ej: torch==2.1.0, numpy==1.24.3).
 - Eliminadas entradas duplicadas y agregado nbformat==5.9.2.
