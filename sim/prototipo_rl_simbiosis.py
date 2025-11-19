@@ -543,6 +543,8 @@ def main():
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk_scale y exporta resultados / Run risk_scale sweep and export results')
     parser.add_argument('--dqn_control', action='store_true', help='Ejecuta agente DQN-Control (DQN con recompensa ambiental) / Run DQN-Control agent (DQN with environmental reward)')
     parser.add_argument('--fast', action='store_true', help='Modo rápido/test: menos episodios, sin visualización ni gráficos')
+
+    parser.add_argument('--output_prefix', type=str, default=None, help='Prefijo para los archivos de salida por semilla')
     args = parser.parse_args()
 
     # Modo rápido/test: fuerza parámetros bajos y desactiva visualización
@@ -563,22 +565,26 @@ def main():
 
         warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
         warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
-        
+
         risk_values = [0.5, 1.0, 1.5, 2.0, 3.0]
         sweep_results = {}
-        
+
+        # Definir prefijo de salida
+        output_prefix = args.output_prefix or "results/sweep_risk"
+
         for risk in risk_values:
             print(f"\n=== Barrido de risk_scale: {risk} ===")
             res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="Control", use_pgf=False, use_dqn=False)
             res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="Simbiosis", use_pgf=True, use_dqn=True)
             res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="DQN-Control", use_pgf=False, use_dqn=True) if args.dqn_control else None
-            
+
             sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
             if res_C:
                 sweep_results[risk]['dqn_control'] = res_C
 
-            export_path = args.export or f"results/sweep_risk_{risk}.json"
-            
+            # Usar prefijo para los archivos
+            export_path = f"{output_prefix}_seed{args.seed}_risk{risk}.json"
+
             # Exportar JSON
             # (código de exportación JSON omitido para brevedad, ya que no es la fuente del error)
 
@@ -586,7 +592,7 @@ def main():
             for agent_name, results_data in [('control', res_A), ('simbiosis', res_B), ('dqn_control', res_C)]:
                 if results_data is None:
                     continue
-                csv_path = export_path.replace('.json', f'_{agent_name}.csv')
+                csv_path = f"{output_prefix}_seed{args.seed}_risk{risk}_{agent_name}.csv"
                 with open(csv_path, 'w', newline='') as f:
                     writer = csv.writer(f)
                     writer.writerow(['Episodio', f'Recompensa_{agent_name.capitalize()}', f'Tripwires_{agent_name.capitalize()}', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
