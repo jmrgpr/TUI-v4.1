@@ -77,6 +77,19 @@ Visualizaciones avanzadas y comparativas:
 - Documentación y tracking actualizados en `README.md`, `CHANGELOG.md`, `results/README.md` y `TRACKING_2025-11-19.md`.
 - Auditoría científica y reproducibilidad garantizadas para revisión por pares y publicación.
 
+**Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
+
+**Acciones prioritarias:**
+- Taggear release v0.1 y agregar CI/CD
+- Pinnear dependencias y agregar Dockerfile
+- Subir PDF teórico y notebook quickstart
+- Implementar script stats.py para ANOVA y p-values
+- Comparar con baseline SOTA y discutir resultados
+- Unificar idioma y mejorar narrativa Control
+- Escalar el experimento y agregar demo interactiva
+
+Revisar `TODO.md` para el plan detallado y prioridades.
+
 ### Protocolo actualizado Fase 2
 
 1. Ejecutar la Fase 2 completa:
