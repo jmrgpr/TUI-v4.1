@@ -902,10 +902,25 @@ def stringify_policy(policy):
 
         print("\n=== Barrido de risk_scale completado. Resultados exportados, gráficos y análisis generados. ===")
 <<<<<<< HEAD
+<<<<<<< HEAD
         print("Interpretación automática: Si Simbiosis tiene mayor recompensa media y menor varianza, es preferible. Todos los valores están en formato bilingüe.")
 >>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 =======
 >>>>>>> a627500 (Arreglar bugs en risk_sweep: corregir KeyError y eliminar CSV duplicado)
+=======
+        
+        # Exportar CSV resumen Fase 2 con promedios por risk_scale
+        with open('results/fase2_summary.csv', 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['risk_scale', 'agent', 'avg_pgf_neto', 'avg_pgf_bruto', 'avg_pgf_costo', 'avg_tripwire', 'avg_reward'])
+            for risk, agents in sweep_results.items():
+                for agent_name, res in agents.items():
+                    avg_pgf_neto = np.mean([np.mean(ep) for ep in res['pgf_evol'] if ep]) if res['pgf_evol'] else 0.0
+                    avg_pgf_bruto = np.mean([np.mean(ep) for ep in res['pgf_bruto_evol'] if ep]) if res['pgf_bruto_evol'] else 0.0
+                    avg_pgf_costo = np.mean([np.mean(ep) for ep in res['pgf_costo_evol'] if ep]) if res['pgf_costo_evol'] else 0.0
+                    writer.writerow([risk, agent_name, avg_pgf_neto, avg_pgf_bruto, avg_pgf_costo, res['avg_tripwire'], res['avg_reward']])
+        
+>>>>>>> a3742f8 (Fase 2: Exportación y desglose PGF_Bruto y PGF_Costo en CSV, cumple peer review)
         return
 
     # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
@@ -1040,6 +1055,7 @@ def stringify_policy(policy):
                 qopt = res_A.get('q_optimal_evol', [0.0]*len(res_A['total_rewards']))[i]
 
                 # CALCULAR PROMEDIOS FASE 2
+<<<<<<< HEAD
                 pgf_bruto_ep = np.mean(res_A['pgf_bruto_evol'][i]) if res_A['pgf_bruto_evol'][i] else 0.0
                 pgf_costo_ep = np.mean(res_A['pgf_costo_evol'][i]) if res_A['pgf_costo_evol'][i] else 0.0
                 
@@ -1071,6 +1087,8 @@ def stringify_policy(policy):
 >>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 =======
 =======
+=======
+>>>>>>> a3742f8 (Fase 2: Exportación y desglose PGF_Bruto y PGF_Costo en CSV, cumple peer review)
                 # ... (cálculos existentes)
                 flex = res_B.get('flex_recov', [0.0]*len(res_B['total_rewards']))[i]
                 robust = res_B.get('robust_evol', [0.0]*len(res_B['total_rewards']))[i]
