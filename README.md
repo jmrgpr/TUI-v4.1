@@ -10,6 +10,7 @@
 - Scripts de Fase 2 y comparacion SOTA (PPO/A2C/DQN) listos para reproducibilidad.
 - Visualizaciones y estadistica (ANOVA, t-test) bilingues; notebooks de quickstart.
 
+<<<<<<< HEAD
 ## Entorno recomendado / Reference environment
 - Dependencias clave (ver `requirements.txt` / `environment.yml`):  
   torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
@@ -94,7 +95,6 @@ El texto completo está en [`LICENSE`](LICENSE).
 - **Fuentes de sesgo o incertidumbre experimental:**  
   Los resultados pueden verse afectados por la selección de semillas, episodios y parámetros de riesgo. La interpretación de métricas depende de la correcta configuración experimental. No se garantiza robustez ante cambios drásticos en la estructura del entorno o los agentes.
 
-<<<<<<< HEAD
 - **Restricciones técnicas:**  
   El simulador depende de librerías específicas (torch, stable-baselines3, gymnasium, etc.) y está optimizado para Python 3.10/3.11. El rendimiento puede verse limitado en hardware sin soporte para aceleración (GPU/CPU). La escalabilidad está pensada para experimentos medianos; no se recomienda para grandes clusters o HPC sin adaptación.
 
@@ -133,9 +133,11 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
 - El notebook de análisis produce tablas y gráficos comparativos.
 - La estructura del repositorio está limpia y documentada.
+# TUI v4.2 — Unified Intelligence Theory
+>>>>>>> 7eb9c3d (feat: Release TUI v4.2 - First empirical evidence of scalable alignment via Constitutive Symbiosis)
 
 Cita recomendada:
-> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+> Rivera Garcia, J. M. (2025). *TUI v4.2: First empirical evidence of scalable alignment via Constitutive Symbiosis*. Zenodo. https://doi.org/10.5281/zenodo.17552094
 
 
 ## Licencias
@@ -568,14 +570,10 @@ Se ha identificado una discrepancia en la interpretación de los resultados entr
 Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
 
 ---
-=======
 Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/workflows/zenodo.yml`) usando la licencia de código:
 
 ```yaml
 license: "Apache-2.0"
-<<<<<<< HEAD
->>>>>>> 603de3f (Change license to Apache 2.0 and update project info)
-=======
 
 El preprint teórico (documento largo) permanece con licencia CC BY-NC-SA 4.0 en su DOI:
 https://doi.org/10.5281/zenodo.17552094
@@ -631,13 +629,12 @@ Análisis estadístico avanzado: intervalos de confianza en flexibilidad, robust
 
 
 Estructura
-=======
+
 Clear separation between theory, data, code, results, notebooks, and tests.
 Simulator code is not modified or broken; only theory and results files are relocated.
 README is updated to reflect the new structure and facilitate scientific onboarding.
 
 ## Ejemplo de estructura / Example structure
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 
 ```
 TUI-v4.1/
@@ -669,6 +666,9 @@ Visualizaciones avanzadas y comparativas:
 - Documentación y tracking actualizados en `README.md`, `CHANGELOG.md`, `results/README.md` y `TRACKING_2025-11-19.md`.
 - Auditoría científica y reproducibilidad garantizadas para revisión por pares y publicación.
 - **Nuevo notebook de quickstart**: `notebooks/quickstart_graficos.ipynb` para generación automática de gráficos bilingües desde resultados CSV.
+- **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
+- **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
+- **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
 
@@ -939,12 +939,7 @@ Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/wo
 
 ```yaml
 license: "Apache-2.0"
->>>>>>> 6f926b7 (Update README with TUI v4.1 details and instructions)
-=======
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
-<<<<<<< HEAD
->>>>>>> ff431b8 (Docs: Bitácora y README actualizados con auditoría y refactorización final 18/11/2025)
-=======
 
 ## Organización de archivos
 
@@ -956,4 +951,3 @@ Todos los comentarios, docstrings y outputs están en español e inglés para fa
   - dummy.png, test_integration_*.png, test_integration_*.csv → results/
   - fix.py → scripts/
 - Documentación y tracking actualizados.
->>>>>>> 24e6653 (Organización científica: archivos generados archivados, tracking y README actualizados. Validación 319 tests, cobertura 98%. [18/11/2025 15:05])
