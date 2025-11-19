@@ -121,10 +121,6 @@ def test_export_no_file():
     results = {"data": [1,2,3]}
     with patch("pathlib.Path.exists", return_value=False):
         export_to_excel(results, "nonexistent/path")
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
     # No crash
 
 def test_demo_ped_real_edge(monkeypatch, tmp_path):
@@ -201,11 +197,4 @@ def test_demo_sensibilidad_real_edge(monkeypatch, tmp_path):
     # Forzar error en pearson_correlation
     import sim.toy_ped_rl_excel as mod
     monkeypatch.setattr(mod, 'pearson_correlation', lambda x, y: 0.0)
-<<<<<<< HEAD
     demo_sensibilidad_real(str(csv_path))
-=======
-    # No crash
->>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
-=======
-    demo_sensibilidad_real(str(csv_path))
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)

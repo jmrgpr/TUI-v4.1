@@ -3,27 +3,12 @@ import sys
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 import json
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as mpl_plt
 import torch
-=======
-=======
-import json
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
-import numpy as np
-import matplotlib
-matplotlib.use('Agg')  # Use non-GUI backend
-import matplotlib.pyplot as mpl_plt
-<<<<<<< HEAD
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
-import torch
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 import sim.prototipo_rl_simbiosis as prs
 import sim.toy_ped_rl as tpr
 import sim.toy_ped_rl_excel as tpex
@@ -41,10 +26,6 @@ def test_run_experiment_with_q_policy_logging(monkeypatch):
     assert 'avg_reward' in res
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_run_experiment_without_q_policy_logging(monkeypatch):
     # Force agent to not have 'Q' in policy to hit the else branch in logging
     class TestAgent(prs.Agent):
@@ -57,11 +38,6 @@ def test_run_experiment_without_q_policy_logging(monkeypatch):
     assert 'avg_reward' in res
 
 
-<<<<<<< HEAD
-=======
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_main_risk_sweep_fast_no_plots(tmp_path, monkeypatch):
     # Patch plt.savefig to avoid file writes
     monkeypatch.setattr(mpl_plt, 'savefig', lambda *a, **k: None)
@@ -79,10 +55,6 @@ def test_main_risk_sweep_fast_no_plots(tmp_path, monkeypatch):
     # Should complete without error
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_main_dqn_control_fast(tmp_path, monkeypatch):
     # Patch plt.savefig to avoid file writes
     monkeypatch.setattr(mpl_plt, 'savefig', lambda *a, **k: None)
@@ -98,7 +70,6 @@ def test_main_dqn_control_fast(tmp_path, monkeypatch):
     finally:
         sys.argv[:] = orig_argv
     # Should complete without error and include dqn_control in results
-<<<<<<< HEAD
     tpr.demo_sensibilidad_pesos()
 
 
@@ -119,41 +90,6 @@ def test_main_risk_sweep_dqn_control_fast(tmp_path, monkeypatch):
     # Should complete without error
 
 
-=======
-def test_toy_ped_rl_main_execution(monkeypatch):
-    # Patch prints to avoid long output
-    def mock_print(*args, **kwargs):
-        pass
-    monkeypatch.setattr('builtins.print', mock_print)
-    # Execute the __main__ block
-    tpr.demo_gridworld_camino_c()
-    tpr.demo_ped_arbol_humano()
-    tpr.demo_sensibilidad_pesos()
-
-
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
-    tpr.demo_sensibilidad_pesos()
-
-
-def test_main_risk_sweep_dqn_control_fast(tmp_path, monkeypatch):
-    # Patch plt.savefig to avoid file writes
-    monkeypatch.setattr(mpl_plt, 'savefig', lambda *a, **k: None)
-    monkeypatch.setattr(mpl_plt, 'show', lambda: None)
-    monkeypatch.setattr(mpl_plt, 'close', lambda *a: None)
-    # Change to tmp_path
-    monkeypatch.chdir(tmp_path)
-    # Mock sys.argv for risk_sweep dqn_control fast
-    orig_argv = sys.argv.copy()
-    sys.argv[:] = ['prog', '--fast', '--risk_sweep', '--dqn_control', '--export', 'test_sweep_dqn.json']
-    try:
-        prs.main()
-    finally:
-        sys.argv[:] = orig_argv
-    # Should complete without error
-
-
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_toy_ped_rl_excel_cargar_datos_valid_csv():
     # Use the real CSV file
     csv_path = ROOT / 'data' / 'Sistemas_naturales_IA_utf8_limpio.csv'
@@ -202,10 +138,6 @@ def test_agent_act_random_branch(monkeypatch):
     assert action in agent.ACTIONS
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_agent_act_q_branch(monkeypatch):
     # To cover the Q-learning branch in act
     agent = prs.Agent()
@@ -224,11 +156,6 @@ def test_agent_reprogram_purpose():
     assert agent.alignment == 1.0
 
 
-<<<<<<< HEAD
-=======
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_run_experiment_agent_init_and_resources():
     # This should cover agent = Agent(...) and agent.resources = env.resources
     res = prs.run_experiment(episodes=1, seed=1, risk_scale=1.0, agent_name='Test', use_pgf=False, use_dqn=False)
@@ -304,10 +231,6 @@ def test_export_to_excel_xlsx(tmp_path, monkeypatch):
     # Should create file without error
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_agent_uses_external_evaluator():
     # Test that Agent uses external EvaluatorPGF for metrics calculation
     agent = prs.Agent()
@@ -317,10 +240,6 @@ def test_agent_uses_external_evaluator():
     env = prs.SimbiosisEnv()
     env.reset()
     info = {'tripwire': True, 'shock': False, 'distractor': False, 'help': True, 'low_resources': False}
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> dd9ac1d (Refactor metodológico: eliminación del oráculo en DQN)
     # Call calcular_metricas via evaluator
     from sim.evaluator_pgf import EvaluatorPGF
     evaluator = EvaluatorPGF()
@@ -329,23 +248,8 @@ def test_agent_uses_external_evaluator():
     assert 'PGF' in metrics
     assert 'I_op' in metrics
     assert 'P_riesgo' in metrics
-<<<<<<< HEAD
     # Check some values
     assert metrics['PGF'] != 0.0  # Should be calculated
-=======
-    # Call calcular_metricas
-    agent.calcular_metricas(env, info, 0)
-    # Check that metrics are updated
-    assert hasattr(agent, 'PGF')
-    assert hasattr(agent, 'I_op')
-    assert hasattr(agent, 'P_riesgo')
-    # Check some values
-    assert agent.PGF != 0.0  # Should be calculated
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
-=======
-    # Check some values
-    assert metrics['PGF'] != 0.0  # Should be calculated
->>>>>>> dd9ac1d (Refactor metodológico: eliminación del oráculo en DQN)
 
 
 def test_transfer_test():
@@ -360,7 +264,6 @@ def test_stringify_policy():
     assert isinstance(result, dict)
 
 
-<<<<<<< HEAD
 def test_stringify_policy_custom_object():
     """Test stringify_policy with custom object to cover else branch."""
     class CustomObj:
@@ -371,14 +274,7 @@ def test_stringify_policy_custom_object():
     assert isinstance(result['custom'], str)
 
 
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
 def test_state_to_vector():
     state = (('a', 1), ('b', 2))
     vec = prs.state_to_vector(state)
     assert vec.shape == (2,)
-<<<<<<< HEAD
-=======
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)

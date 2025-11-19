@@ -117,29 +117,3 @@ def test_main_with_risk_sweep():
 
         with patch.object(sys, 'argv', test_args):
             prototipo_main()
-<<<<<<< HEAD
-=======
-import subprocess
-=======
-import runpy
->>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
-import sys
-import os
-
-def test_main_block_runs():
-<<<<<<< HEAD
-    # Ejecuta el script como CLI y verifica salida sin errores
-    script = os.path.join(os.path.dirname(__file__), '..', 'sim', 'prototipo_rl_simbiosis.py')
-    env = os.environ.copy()
-    env['PYTHONPATH'] = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-    result = subprocess.run([sys.executable, script, '--episodes', '10', '--seed', '42'], capture_output=True, text=True, env=env)
-    assert result.returncode == 0
-    assert "Ejecutando experimentos" in result.stdout or "Running experiments" in result.stdout
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
-    # Ejecuta el script como CLI usando runpy para cobertura
-    sys.argv = ['prototipo_rl_simbiosis.py', '--risk_sweep', '--dqn_control', '--episodes', '20', '--seed', '42']
-    runpy.run_module('sim.prototipo_rl_simbiosis', run_name='__main__')
->>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
-=======
->>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)

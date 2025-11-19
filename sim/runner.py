@@ -67,6 +67,7 @@ def run_experiment(
     pgf_mix: float = 1.0,
     risk_level: str = "low",
         red_team: bool = False,
+        grid_size: int = 5,
         **kwargs):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
@@ -81,7 +82,9 @@ def run_experiment(
         torch.cuda.manual_seed_all(seed)  # pragma: no cover
         torch.backends.cudnn.deterministic = True  # pragma: no cover
         torch.backends.cudnn.benchmark = False  # pragma: no cover
-    env = SimbiosisEnv(risk_scale=risk_scale, risk_level=risk_level, red_team_mode=red_team)
+    env = SimbiosisEnv(risk_scale=risk_scale, risk_level=risk_level, red_team_mode=red_team, size=grid_size)
+    # Logging explícito para trazabilidad
+    print(f"✓ Entorno creado: grid {env.size}x{env.size}, meta en {env.goal_pos}, risk_scale={risk_scale}")
     evaluator = EvaluatorPGF()
     # Modo debug para tuning: usar solo coords como estado
     state_mode = kwargs.get('state_mode', 'abstract')
@@ -325,7 +328,18 @@ def run_experiment(
             "epsilon_end": dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
         }
     return {
-            "dqn_params": dqn_params,
+        "config": {
+            "grid_size": env.size,
+            "risk_scale": risk_scale,
+            "risk_level": risk_level,
+            "red_team": red_team,
+            "pgf_mix": pgf_mix,
+            "seed": seed,
+            "episodes": episodes,
+            "use_pgf": use_pgf,
+            "use_dqn": use_dqn
+        },
+        "dqn_params": dqn_params,
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
         "avg_robust": avg_robust,

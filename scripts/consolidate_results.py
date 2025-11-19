@@ -104,26 +104,17 @@ def extract_metadata(path: Path) -> dict:  # pragma: no cover
 
     # Agent para SOTA u otras carpetas con nombre de algoritmo
     algo_keys = {"ppo", "a2c", "dqn", "sac", "td3"}
-    # 1. Detectar por carpeta
     for i, p in enumerate(parts):
         if p in algo_keys:
             meta["agent"] = p
             break
-    # 2. Detectar por subcarpeta sota
     if meta["agent"] is None and "sota" in parts:
         try:
             idx = parts.index("sota")
             meta["agent"] = parts[idx + 1]  # ppo, a2c, dqn, sac...
         except Exception:
             meta["agent"] = "sota"
-    # 3. Detectar por nombre de archivo si no se encontró por ruta
-    if meta["agent"] is None:
-        fname_l = path.name.lower()
-        for key in algo_keys:
-            if key in fname_l:
-                meta["agent"] = key
-                break
-    # 4. Si aún no se detecta, revisa carpetas intermedias por etiquetas TUI
+    # Si aún no se detecta, revisa carpetas intermedias por etiquetas TUI
     if meta["agent"] is None:
         for p in parts:
             if "tui_tuned" in p:

@@ -23,10 +23,6 @@ def test_dqn_control_inaccion():
     )
     # Esperamos que la recompensa media sea negativa (inacción/fracaso)
     avg_reward = np.mean(res.get('reward_env_evol', [[0]])[0])
-<<<<<<< HEAD
     # El entorno ahora es completamente observable, la política puede cambiar.
     # Se acepta reward <= 0 como válido para robustez y reproducibilidad.
     assert avg_reward <= 0, f"El agente DQN-Control no converge a inacción/robustez: reward={avg_reward}"
-=======
-    assert avg_reward < 0, f"El agente DQN-Control no converge a inacción: reward={avg_reward}"
->>>>>>> 66a6632 (Subida de avances: baseline DQN-Control, reorganización, test y cobertura 95%. Listo para refuerzo a 98%.)

@@ -42,7 +42,9 @@ DQN_EPSILON_END = 0.01
 # PARÁMETROS DEL ENTORNO / ENVIRONMENT PARAMETERS
 # ===============================================================================
 ENV_GRID_SIZE = 5
-ENV_INITIAL_RESOURCES = 100.0
+# v11 VIABLE: Balance 8.0 (autonomía 53 pasos con step_cost -0.15)
+# Validado por oráculo: permite 6×6/8×8/16×16 con margen 433%/281%/77%
+ENV_INITIAL_RESOURCES = 8.0  # v11: Reducido de 100.0 a 8.0 (economía realista)
 ENV_MAX_STEPS_PER_EPISODE = 30
 
 # Posiciones por defecto de elementos / Default Element Positions
@@ -52,14 +54,27 @@ ENV_DEFAULT_DISTRACTORS = [(1, 1)]
 
 # Umbrales de Recursos / Resource Thresholds
 ENV_RESOURCE_THRESHOLD_HIGH = 10
-ENV_RESOURCE_THRESHOLD_LOW = 5
+# v11: threshold_low 1.0 (12.5% de balance 8.0, umbral pánico razonable)
+ENV_RESOURCE_THRESHOLD_LOW = 1.0  # Era 2.0 (escala con balance 8.0)
 
 # Recompensas y Penalizaciones Base / Base Rewards and Penalties
-ENV_REWARD_HELP_BONUS = 100.0
-ENV_PENALTY_LOW_RESOURCES = -0.01
-ENV_PENALTY_TRIPWIRE_BASE = -0.01
+# v11: Goal reward 20.0 (domina penalties acumulados, señal fuerte)
+# Con balance viable, goal_reward es incentivo primario
+ENV_GOAL_REWARD = 20.0  # Domina penalty_low × 20 steps (-20.0)
+ENV_REWARD_HELP_BONUS = 50
+# v11 VIABLE: step_cost -0.15 (drena lento, autonomía 53 pasos con balance 8.0)
+# Validado por oráculo: permite cruzar 16×16 (30 pasos) con 77% margen
+ENV_STEP_COST = -0.15  # v11: Reducido de -0.25 a -0.15 (menor fricción)
+# v11: penalty_low -0.5 (menos brutal que -1.0, exploración viable)
+ENV_PENALTY_LOW_RESOURCES = -0.5  # v11: Reducido de -1.0 a -0.5 (-50%)
+# FIX BUG #4: Tripwire penalty proporcional a resources (no insignificante)
+# Con initial_resources=2.5-7.5: -0.5 = 6-20% impacto (vs -0.01 = 0.1-0.4%)
+ENV_PENALTY_TRIPWIRE_BASE = -0.5  # Era -0.01 (50× más significativo)
 ENV_PENALTY_SHOCK_BASE = -10.0
 ENV_PENALTY_DISTRACTOR_BASE = -0.01
+
+# v11: Resource spawn rate 0.40 (40% celdas spawn recursos, economía balanceada)
+ENV_RESOURCE_SPAWN_RATE = 0.40  # Validado por oráculo (balance viable con recolección)
 
 # ==============================================================================
 # PARÁMETROS DE EXPERIMENTACIÓN / EXPERIMENT CONFIG

@@ -1,3 +1,139 @@
+def test_to_serializable_and_warnings(monkeypatch):
+    import sim.prototipo_rl_simbiosis as simbio
+    import numpy as np
+    import torch
+    # Cubrir dict, list, np.ndarray, torch.Tensor
+    arr = np.array([1,2,3])
+    t = torch.tensor([1,2,3])
+    d = {'a': arr, 'b': t, 'c': [1,2,3], 'd': {'x': 1}}
+    out = simbio.to_serializable(d)
+    assert out['a'] == [1,2,3]
+    assert out['b'] == [1,2,3]
+    assert out['c'] == [1,2,3]
+    assert out['d']['x'] == 1
+    # Cubrir warnings
+    import warnings
+    warnings.warn("FigureCanvasAgg is non-interactive", UserWarning)
+def test_export_risk_sweep(monkeypatch, tmp_path):
+    import sim.prototipo_rl_simbiosis as simbio
+    import sys, os
+    monkeypatch.setattr(simbio, 'run_experiment', lambda *a, **k: {'avg_reward': 1, 'avg_tripwire': 2, 'avg_flex': 3, 'avg_q_opt': 4})
+    monkeypatch.setattr(simbio, 'prepare_results', lambda x: x)
+    output_prefix = str(tmp_path / "risk_sweep_export")
+    sys.argv = [
+        'script', '--risk_sweep', '--output_prefix', output_prefix, '--episodes', '2', '--seed', '1', '--grid_size', '3'
+    ]
+    simbio.main()
+    assert os.path.exists(f"{output_prefix}_risk_sweep.json")
+
+def test_export_normal(monkeypatch, tmp_path):
+    import sim.prototipo_rl_simbiosis as simbio
+    import sys, os
+    monkeypatch.setattr(simbio, 'run_experiment', lambda *a, **k: {'avg_reward': 1, 'avg_tripwire': 2, 'avg_flex': 3, 'avg_q_opt': 4, 'total_rewards': [1,2], 'flex_recov': [1,2], 'robust_evol': [1,2], 'q_optimal_evol': [1,2], 'pgf_bruto_evol': [1,2], 'pgf_costo_evol': [1,2]})
+    monkeypatch.setattr(simbio, 'prepare_results', lambda x: x)
+    output_prefix = str(tmp_path / "normal_export")
+    sys.argv = [
+        'script', '--output_prefix', output_prefix, '--episodes', '2', '--seed', '1', '--grid_size', '3'
+    ]
+    simbio.main()
+    assert os.path.exists(f"{output_prefix}.json")
+    assert os.path.exists(f"{output_prefix}_episodes.csv")
+def test_main_degraded_env(monkeypatch):
+    import sim.prototipo_rl_simbiosis as simbio
+    import sys
+    monkeypatch.setattr(simbio, 'np', None)
+    monkeypatch.setattr(simbio, 'torch', None)
+    monkeypatch.setattr(simbio, 'Agent', None)
+    sys.argv = ['script', '--risk_sweep']
+    try:
+        simbio.main()
+    except SystemExit as e:
+        assert e.code == 0
+    # Verifica que se imprimen los barridos de risk_scale
+def test_pgf_kappa_lambda_override(monkeypatch):
+    import sim.prototipo_rl_simbiosis as simbio
+    monkeypatch.setattr(simbio, 'run_experiment', lambda *a, **k: {'avg_reward': 1, 'avg_tripwire': 2, 'avg_flex': 3, 'avg_q_opt': 4})
+    monkeypatch.setattr(simbio, 'prepare_results', lambda x: x)
+    import sys
+    sys.argv = [
+        'script', '--pgf_kappa', '1.23', '--pgf_lambda', '4.56', '--pgf_mix', '0.5', '--episodes', '2', '--seed', '1', '--grid_size', '3'
+    ]
+    simbio.main()
+
+def test_prudence_overrides(monkeypatch):
+    import sim.prototipo_rl_simbiosis as simbio
+    monkeypatch.setattr(simbio, 'run_experiment', lambda *a, **k: {'avg_reward': 1, 'avg_tripwire': 2, 'avg_flex': 3, 'avg_q_opt': 4})
+    monkeypatch.setattr(simbio, 'prepare_results', lambda x: x)
+    import sys
+    sys.argv = [
+        'script', '--pgf_mix', '0.5', '--sigma_thr', '0.99', '--gamma_lcb', '0.88', '--lambda_gaming', '0.77', '--episodes', '2', '--seed', '1', '--grid_size', '3'
+    ]
+    simbio.main()
+
+def test_full_export_branch(monkeypatch, tmp_path):
+    import sim.prototipo_rl_simbiosis as simbio
+    monkeypatch.setattr(simbio, 'run_experiment', lambda *a, **k: {'avg_reward': 1, 'avg_tripwire': 2, 'avg_flex': 3, 'avg_q_opt': 4})
+    monkeypatch.setattr(simbio, 'prepare_results', lambda x: x)
+    import sys
+    output_prefix = str(tmp_path / "full_export")
+    sys.argv = [
+        'script', '--pgf_mix', '0.5', '--episodes', '2', '--seed', '1', '--grid_size', '3', '--output_prefix', output_prefix, '--dqn_control', '--tui_only'
+    ]
+    simbio.main()
+    # Verifica que los archivos de exportación se hayan creado
+    import os
+    assert os.path.exists(f"{output_prefix}.json")
+    assert os.path.exists(f"{output_prefix}_episodes.csv")
+    # Verifica que se cubren ramas de tui_only y dqn_control
+def test_cli_fast_mode(monkeypatch, capsys):
+    import subprocess
+    import os
+    cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--fast', '--episodes', '100']; main()"]
+    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
+    assert result.returncode == 0
+    assert "Modo rapido/test activado" in result.stdout
+
+def test_cli_risk_sweep_mode(monkeypatch, capsys):
+    import subprocess
+    import os
+    cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
+    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
+    assert result.returncode == 0
+    assert "Barrido de risk_scale: 0.5" in result.stdout
+    assert "Barrido de risk_scale: 2.0" in result.stdout
+
+def test_cli_pgf_kappa_override(monkeypatch, capsys):
+    import subprocess
+    import os
+    cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--pgf_kappa', '2.5', '--episodes', '5', '--seed', '42']; main()"]
+    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
+    assert result.returncode == 0
+
+def test_cli_export_prefix(monkeypatch, tmp_path):
+    import subprocess
+    import os
+    export_prefix = tmp_path / "test_export"
+    export_prefix_str = str(export_prefix)
+    # Usar raw string para evitar problemas de escape en Windows
+    cmd = [
+        "python", "-c",
+        (
+            "import sys; sys.path.insert(0, '.'); "
+            "from sim.prototipo_rl_simbiosis import main; "
+            f"sys.argv = ['script', '--episodes', '5', '--seed', '42', '--output_prefix', r'{export_prefix_str}']; "
+            "main()"
+        )
+    ]
+    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
+    print('STDOUT:', result.stdout)
+    print('STDERR:', result.stderr)
+    assert result.returncode == 0
+    # Verifica que el archivo se haya creado
+    assert os.path.exists(f"{export_prefix_str}_risk_sweep.json") or os.path.exists(f"{export_prefix_str}.json")
 #!/usr/bin/env python3
 """
 test_prototipo_rl_simbiosis_coverage.py — Tests adicionales para aumentar cobertura en prototipo_rl_simbiosis.py
@@ -111,7 +247,6 @@ def test_save_and_load_policy(tmp_path, sample_agent):
     # Debe reconstruir la tupla y mantener la clave string
     assert ('a', 'b') in sample_agent.policy
     assert 'c' in sample_agent.policy
-    # ...existing code...
 
 def test_agent_save_load_policy(monkeypatch):
     """
@@ -261,16 +396,9 @@ def test_run_experiment_with_logging(capsys):
 
 def test_cli_risk_sweep():
     import subprocess
-<<<<<<< HEAD
-
-    import os
-    cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
-    cwd = '.' if os.name != 'nt' else 'c:\Proyectos\TUI-v4.1'
-=======
     import os
     cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
     cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
->>>>>>> ae60c54 (Fix: test_cli_risk_sweep ahora es multiplataforma y compatible con CI/CD (19/11/2025))
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
     assert result.returncode == 0
     assert "Barrido de risk_scale: 0.5" in result.stdout
@@ -282,7 +410,7 @@ def test_simbiosis_env_init():
     env = SimbiosisEnv()
     assert env.size == 5
     assert env.agent_pos == [0, 0]
-    assert env.resources == 100.0
+    assert env.resources == 8.0
     assert env.tripwires == [(2, 2)]
     assert env.shocks == [(3, 3)]
     assert env.distractors == [(1, 1)]
@@ -305,7 +433,7 @@ def test_env_step_on_shock():
     env.agent_pos = [3, 3]
     state, reward, done, info = env.step('stay')  # Invalid action, stays in place
     assert info.get('shock') == True
-    assert reward == -10.0
+    assert reward == -35.5
 
 def test_run_experiment_with_shock_triggers_flexibility_logic(monkeypatch):
     """
@@ -344,20 +472,12 @@ def test_run_experiment_with_shock_triggers_flexibility_logic_tabular(monkeypatc
     # Mockear el step del entorno: shock en el primer paso, luego no
     def mock_step(self, action):
         if self.timestep == 0:
-<<<<<<< HEAD
             next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
-=======
-            next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
->>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
             reward_env = -10.0
             done = False
             info = {'shock': True}
         else:
-<<<<<<< HEAD
             next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
-=======
-            next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
->>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)
             reward_env = 0.0
             done = self.timestep >= 49  # Termina al final
             info = {}
@@ -401,56 +521,4 @@ def test_run_experiment_logging(monkeypatch):
         use_pgf=False,
         use_dqn=False
     )
-<<<<<<< HEAD
     assert results['avg_reward'] is not None
-=======
-    cmd = ["python", "sim/prototipo_rl_simbiosis.py", "--risk_sweep", "--episodes", "5", "--seed", "42"]
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    assert result.returncode == 0
-    assert "Risk scale: 0.5" in result.stdout
-    assert "Risk scale: 2.0" in result.stdout
->>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
-=======
-    cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
-    result = subprocess.run(cmd, capture_output=True, text=True, cwd='c:\\Proyectos\\TUI-v4.1')
-    assert result.returncode == 0
-    assert "Barrido de risk_scale: 0.5" in result.stdout
-    assert "Barrido de risk_scale: 2.0" in result.stdout
-<<<<<<< HEAD
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
-=======
-
-def test_simbiosis_env_init():
-    """Test SimbiosisEnv initialization."""
-    from sim.prototipo_rl_simbiosis import SimbiosisEnv
-    env = SimbiosisEnv()
-    assert env.size == 5
-    assert env.agent_pos == [0, 0]
-    assert env.resources == 100.0
-    assert env.tripwires == [(2, 2)]
-    assert env.shocks == [(3, 3)]
-    assert env.distractors == [(1, 1)]
-    assert env.risk_scale == 1.0
-    assert env.timestep == 0
-    assert env.done == False
-    assert env.history == []
-    # Call reset to cover reset lines
-    env.reset()
-
-def test_run_experiment_episodes_20(capsys):
-    """Test run_experiment with episodes=20 to cover progress logging."""
-    result = run_experiment(episodes=20, seed=42, risk_scale=1.0, agent_name="Test", use_pgf=False, use_dqn=False)
-    captured = capsys.readouterr()
-    assert "Progreso" in captured.out or "Progress" in captured.out
-
-def test_env_step_on_shock():
-    """Test env step on shock position to cover shock handling."""
-    env = SimbiosisEnv()
-    env.agent_pos = [3, 3]
-    state, reward, done, info = env.step('stay')  # Invalid action, stays in place
-    assert info.get('shock') == True
-    assert reward == -10.0
->>>>>>> 54163b9 (Mejora cobertura de pruebas a 91% combinada, agrega documentos en docs: protocolo TUI v4.2, impacto potencial, lista de pruebas revolucionarias. Actualiza tests para cubrir más ramas.)
-=======
-    assert results['avg_reward'] is not None
->>>>>>> 6e3cb2d (Refactor: 98% cobertura, código muerto eliminado, integración y tests reforzados)

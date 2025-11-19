@@ -4,11 +4,8 @@ Cobertura del bloque main de toy_ped_rl_excel.py
 import subprocess
 import sys
 import os
-<<<<<<< HEAD
 import matplotlib
 matplotlib.use("Agg")
-=======
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 
 def test_main_block_runs():
     # Ejecuta el script como CLI y verifica salida sin errores

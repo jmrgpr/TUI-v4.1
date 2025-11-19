@@ -115,7 +115,6 @@ def safe_plot(data, title="Safe Plot"):
         import matplotlib
         matplotlib.use('Agg', force=True)
         fig, ax = plt.subplots()
-        fig, ax = plt.subplots()
         ax.text(0.5, 0.5, 'Error en plotting / Plotting error', ha='center', va='center', fontsize=14)
         ax.set_title(title)
         return fig

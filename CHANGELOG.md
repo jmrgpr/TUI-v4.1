@@ -85,6 +85,13 @@
 - Cobertura global mejorada de 92% a 95%, con módulos principales en 96-99%.
 - Fecha y hora de documentación: 11-17-2025.
 
+## [2025-11-19] Notebook de Quickstart para Gráficos Automáticos
+- Creado `notebooks/quickstart_graficos.ipynb`: Notebook bilingüe para generación automática de gráficos desde archivos CSV de resultados.
+- Incluye ejemplos de gráficos de línea, barras e interactivos con Plotly.
+- Actualizado `requirements.txt` con dependencias adicionales (nbformat para Plotly).
+- Documentación actualizada en `README.md` y `notebooks/README_notebooks.md`.
+- Fecha y hora de documentación: 19/11/2025.
+
 ## [2025-11-17] Refactor Metodológico - Eliminación del Oráculo en DQN (3:19 PM)
 - Eliminado el método `calcular_metricas` interno del agente DQN para evitar bias metodológico (oráculo) y asegurar pureza en experimentos RL.
 - Externalizado el cálculo de métricas PGF a `EvaluatorPGF` independiente, garantizando que el agente reciba recompensas como valores negros.

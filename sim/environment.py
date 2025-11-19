@@ -17,6 +17,7 @@ class SimbiosisEnv:
                  goal_pos=None):
         self.size = size
         self.agent_pos = [0,0]
+        self.initial_resources = initial_resources  # GUARDAR para reset()
         self.resources = initial_resources
         self.tripwires = list(tripwires)
         self.shocks = list(shocks)
@@ -53,7 +54,7 @@ class SimbiosisEnv:
         return base + goal_bonus
     def reset(self):
         self.agent_pos = [0,0]
-        self.resources = config.ENV_INITIAL_RESOURCES
+        self.resources = self.initial_resources  # FIX: usar configurado, no default
         self.timestep = 0
         self.done = False
         self.history = []
@@ -158,27 +159,43 @@ class SimbiosisEnv:
             self.resources += distractor_penalty
             reward += distractor_penalty
             info['distractor'] = True
-        if self.agent_pos == self.goal_pos and self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH:
+        
+        # FIX CRÍTICO: Terminar episodio al alcanzar meta (anti-camping)
+        # Antes requería resources > threshold_high (10), lo que hacía inalcanzable el goal.
+        # Ahora cualquier llegada a la meta se marca como éxito.
+        if self.agent_pos == self.goal_pos:
             help_bonus = config.ENV_REWARD_HELP_BONUS
             self.resources += help_bonus
             reward += help_bonus
             info['help'] = True
+            self.done = True  # ← TERMINAR EPISODIO INMEDIATAMENTE
+            info['goal_reached'] = True
+        
         if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
-        self.done = self.resources <= 0 or self.timestep >= config.ENV_MAX_STEPS_PER_EPISODE
+        
+        # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
+        # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
+        max_steps = getattr(self, 'max_steps', config.ENV_MAX_STEPS_PER_EPISODE)
+        
+        # Solo aplicar timeout si no se alcanzó la meta
+        if not self.done:
+            self.done = self.resources <= 0 or self.timestep >= max_steps
         # Bonus por episodio limpio (no tripwire/shock/distractor) solo en riesgo bajo/medio
         if self.done and self.risk_level != "high":
             if not info.get('tripwire') and not info.get('shock') and not info.get('distractor'):
                 reward += 1.0
 
         # Riesgo: penalización terminal si aplica
+        # FIX BUG #2: penalty ya es negativo (-25/-60), usar += no -=
         risk_penalty_applied = False
         if self.done and self.risk_level == "high":
-            reward -= config.EXP_CONFIG["risk_penalty_high"]
+            reward += config.EXP_CONFIG["risk_penalty_high"]  # reward += (-60) = reward - 60
             risk_penalty_applied = True
-        if self.done and self.risk_level == "low":
-            reward -= config.EXP_CONFIG["risk_penalty_low"]
+        elif self.done and self.risk_level == "low":  # ELIF para evitar doble penalty
+            reward += config.EXP_CONFIG["risk_penalty_low"]  # reward += (-25) = reward - 25
+            risk_penalty_applied = True
 
         # Utilidad alineada y gap
         u_humans = self._calculate_u_humans(reward, self.done)

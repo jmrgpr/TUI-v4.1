@@ -26,7 +26,6 @@ def test_render_main():
         pass
 
 def test_gui_full_flow():
-    # ...existing code...
     import sim.gui_streamlit as gui
     from unittest.mock import patch, MagicMock
     import numpy as np
@@ -85,10 +84,6 @@ def test_gui_full_flow():
         # Verifica que la ayuda se muestra
         mock_st.markdown.assert_any_call("**Ayuda / Help:**")
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
 def test_gui_run_with_invalid_seed_stops_execution():
     """
     Prueba científica: Verifica que la GUI se niega a correr si la semilla (seed) es None.
@@ -120,60 +115,10 @@ def test_gui_run_with_invalid_seed_stops_execution():
         mock_st.sidebar.error.assert_called_once()
         assert "La 'Semilla (seed)' debe ser un número entero válido" in mock_st.sidebar.error.call_args[0][0]
 
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
-=======
->>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
 def test_gui_edge_cases():
     import sim.gui_streamlit as gui
     from unittest.mock import patch, MagicMock
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-    # Error en UI (best practice: type check)
-    with patch('sim.gui_streamlit.st') as mock_st:
-        mock_st.session_state = {"runs": [], "seed": int(42)}
-        mock_st.sidebar.title = MagicMock(side_effect=Exception("UI error"))
-        try:
-            gui.main()
-        except Exception:
-            pass
-
-    # Exportación con historial vacío (best practice: type check)
-    with patch('sim.gui_streamlit.st') as mock_st:
-        mock_st.session_state = {"runs": [], "seed": int(42)}
-        mock_st.sidebar.slider = MagicMock(side_effect=[1000, 42, 1.0, 5, 100.0, 1, 1, 1, 50])
-        mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
-        mock_st.sidebar.title = MagicMock()
-=======
-    # Session_state vacío con semilla válida (best practice: type check)
-    with patch('sim.gui_streamlit.st') as mock_st:
-        mock_st.session_state = {"seed": int(42)}
-        mock_st.sidebar.title = MagicMock()
-        mock_st.sidebar.button = MagicMock(return_value=False)
-        mock_st.sidebar.slider = MagicMock(return_value=1000)
-        mock_st.sidebar.selectbox = MagicMock(return_value="Control (Q-table)")
->>>>>>> ea4f450 (Refuerzo de cobertura, validación robusta de semilla en GUI, tests edge y visualización. Corrección científica para reproducibilidad.)
-        mock_st.sidebar.markdown = MagicMock()
-        mock_st.title = MagicMock()
-        mock_st.markdown = MagicMock()
-        mock_st.button = MagicMock(return_value=False)
-        mock_st.subheader = MagicMock()
-        mock_st.info = MagicMock()
-        mock_st.write = MagicMock()
-        mock_st.success = MagicMock()
-        mock_st.download_button = MagicMock()
-        mock_st.selectbox = MagicMock(return_value=0)
-        gui.main()
-
-<<<<<<< HEAD
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)
-=======
-=======
->>>>>>> c547074 (Improve test coverage to 95% - Add tests for missing lines in gui_streamlit, prototipo_rl_simbiosis, toy_ped_rl_excel. Update README and CHANGELOG.)
     # Error en UI (best practice: type check)
     with patch('sim.gui_streamlit.st') as mock_st:
         mock_st.session_state = {"runs": [], "seed": int(42)}
@@ -201,7 +146,6 @@ def test_gui_edge_cases():
         mock_st.selectbox = MagicMock(return_value=0)
         gui.main()
 
->>>>>>> ea4f450 (Refuerzo de cobertura, validación robusta de semilla en GUI, tests edge y visualización. Corrección científica para reproducibilidad.)
     # Caso: sin runs
     with patch('sim.gui_streamlit.st') as mock_st:
         mock_st.session_state = {"runs": []}
@@ -452,16 +396,3 @@ def test_gui_edge_cases():
             # Debe mostrar el panel de ayuda y el mensaje de comparación insuficiente
             mock_st.info.assert_any_call("Ejecuta al menos dos simulaciones para comparar históricamente. / Run at least two simulations to compare historically.")
             mock_st.markdown.assert_any_call("**Ayuda / Help:**")
-<<<<<<< HEAD
-=======
-    # Simulación de flujo completo de la GUI Streamlit
-    # Este test requiere mocking avanzado o librería de testing de Streamlit
-    # Aquí se documenta el flujo esperado
-    # from sim.gui_streamlit import main
-    # main()  # Lanzar la app
-    # Simular sliders, selectbox, botón, exportación y verificar resultados
-    # assert True  # Placeholder para cobertura
-    pass
->>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
-=======
->>>>>>> edce04c (Reorganización profesional: centralización de resultados, imágenes y tests en results/, auditoría y documentación de exportación, actualización README y CHANGELOG)

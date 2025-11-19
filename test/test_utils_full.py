@@ -33,10 +33,6 @@ def test_plot_dashboard():
     fig = plot_dashboard(metrics)
     assert fig is not None
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)
 def test_confidence_interval_len1():
     """Cubre la rama len(arr) == 1 en confidence_interval."""
     datos = [5.0]
@@ -53,7 +49,6 @@ def test_safe_plot_normal():
 def test_safe_plot_not_dict():
     """Test safe_plot with not dict."""
     data = [1,2,3]
-<<<<<<< HEAD
     fig = safe_plot(data)
     assert fig is not None
 
@@ -139,97 +134,3 @@ def test_scientific_report():
     report = scientific_report(results_A, results_B)
     assert isinstance(report, str)
     assert 'flex_recov' in report
-=======
-def test_safe_plot_invalid():
-    from sim.gui_utils import safe_plot
-    data = {"x": "not_a_list"}
-    fig = safe_plot(data)
-    assert fig is not None
->>>>>>> c226c67 (Cobertura 100%: implementaciones finales de pad_trajectories y safe_plot, tests completos)
-=======
-    fig = safe_plot(data)
-    assert fig is not None
-
-def test_safe_plot_no_x():
-    """Test safe_plot without 'x'."""
-    data = {"y": [1,2,3]}
-    fig = safe_plot(data)
-    assert fig is not None
-
-def test_safe_plot_no_y():
-    """Test safe_plot without 'y'."""
-    data = {"x": [1,2,3]}
-    fig = safe_plot(data)
-    assert fig is not None
-
-def test_safe_plot_empty_x():
-    """Test safe_plot with empty x."""
-    data = {"x": [], "y": [1,2,3]}
-    fig = safe_plot(data)
-    assert fig is not None
-
-def test_safe_plot_empty_y():
-    """Test safe_plot with empty y."""
-    data = {"x": [1,2,3], "y": []}
-    fig = safe_plot(data)
-    assert fig is not None
-
-def test_safe_plot_different_len():
-    """Test safe_plot with different lengths."""
-    data = {"x": [1,2], "y": [1,2,3]}
-    fig = safe_plot(data)
-    assert fig is not None
-
-def test_safe_plot_exception():
-    """Test safe_plot with exception."""
-    # Mock to raise exception
-    import matplotlib.pyplot as plt
-    original_plot = plt.plot
-    def raise_exc(*args, **kwargs):
-        raise ValueError("Test exception")
-    plt.plot = raise_exc
-    try:
-        data = {"x": [1,2,3], "y": [4,5,6]}
-        fig = safe_plot(data)
-        assert fig is not None
-    finally:
-        plt.plot = original_plot
-
-def test_t_test():
-    """Test t_test."""
-    from sim.gui_utils import t_test
-    a = [1,2,3]
-    b = [4,5,6]
-    stat, p = t_test(a, b)
-    assert isinstance(stat, float)
-    assert isinstance(p, float)
-
-def test_anova():
-    """Test anova."""
-    from sim.gui_utils import anova
-    groups = [[1,2,3], [4,5,6], [7,8,9]]
-    stat, p = anova(groups)
-    assert isinstance(stat, float)
-    assert isinstance(p, float)
-
-def test_scientific_report():
-    """Test scientific_report."""
-    from sim.gui_utils import scientific_report
-    results_A = {
-        'flex_recov': [1,2,3],
-        'robust_evol': [4,5,6],
-        'q_optimal_evol': [7,8,9],
-        'total_rewards': [10,11,12],
-        'tripwire_steps': [13,14,15]
-    }
-    results_B = {
-        'flex_recov': [2,3,4],
-        'robust_evol': [5,6,7],
-        'q_optimal_evol': [8,9,10],
-        'total_rewards': [11,12,13],
-        'tripwire_steps': [14,15,16]
-    }
-    report = scientific_report(results_A, results_B)
-    assert isinstance(report, str)
-    assert 'flex_recov' in report
->>>>>>> 37b5e82 (Update README with code quality and coverage section, sync with remote changes for unified CC BY-NC-SA 4.0 license)

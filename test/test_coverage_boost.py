@@ -180,14 +180,15 @@ def test_runner_branches(monkeypatch):
     config.EXP_CONFIG["sigma_thr"] = -1.0
 
     class FakeEnv:
-        def __init__(self, risk_scale, risk_level, red_team_mode):
+        def __init__(self, risk_scale, risk_level, red_team_mode, size=None):
             self.risk_scale = risk_scale
             self.risk_level = risk_level
             self.red_team_mode = red_team_mode
-            self.size = 2
+            self.size = size or 2
             self.resources = 1.0
             self.incident_count = 0
             self.step_count = 0
+            self.goal_pos = (self.size - 1, self.size - 1)
 
         def reset(self):
             self.step_count = 0
