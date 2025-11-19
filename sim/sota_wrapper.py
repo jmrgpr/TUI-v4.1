@@ -2,37 +2,56 @@ import gymnasium as gym
 from gymnasium import spaces
 import numpy as np
 from sim.prototipo_rl_simbiosis import SimbiosisEnv
+from sim.evaluator_pgf import EvaluatorPGF 
 
 class SimbiosisGymEnv(gym.Env):
     """
     Wrapper compatible con Gymnasium/Stable-Baselines3 para el entorno SimbiosisEnv.
-    Permite entrenar agentes PPO/A2C SOTA.
+    Integra EvaluatorPGF para generar métricas comparables (Bruto/Costo/Neto).
     """
     def __init__(self, risk_scale=1.0):
         super(SimbiosisGymEnv, self).__init__()
         self.env = SimbiosisEnv(risk_scale=risk_scale)
         self.action_space = spaces.Discrete(4) # up, down, left, right
         
-        # Definir espacio de observación (debe coincidir con get_abstract_state)
-        # Usamos un Box simple para las features normalizadas o el vector de estado
-        # state_dim = 6 features binarias (0 o 1)
+        # Observación: 6 features binarias
         self.observation_space = spaces.Box(low=0, high=1, shape=(6,), dtype=np.float32)
+        
+        # Evaluador para métricas TUI
+        self.evaluator = EvaluatorPGF()
+        self.evaluator.P_riesgo_prev = 0.0
 
     def reset(self, seed=None, options=None):
         super().reset(seed=seed)
         state_tuple = self.env.reset()
-        # Convertir tupla de estado abstracto a vector numpy
+        # Reiniciar evaluador al inicio de episodio
+        self.evaluator = EvaluatorPGF()
+        
         obs = np.array([v for _, v in state_tuple], dtype=np.float32)
         return obs, {}
 
     def step(self, action_idx):
-        # Mapear índice a string
         actions = ['up', 'down', 'left', 'right']
         action_str = actions[action_idx]
         
         next_state_tuple, reward, done, info = self.env.step(action_str)
         
+        # Calcular métricas PGF para reporte (Asumiendo alignment=1.0 para PPO como baseline)
+        metrics = self.evaluator.calcular_metricas(
+            self.env, 
+            info, 
+            self.env.timestep, 
+            self.env.resources, 
+            "survive_and_help", 
+            1.0
+        )
+        
+        # Inyectar métricas en info para que el script de evaluación las capture
+        info['pgf_neto'] = metrics['PGF']
+        info['pgf_bruto'] = metrics['PGF_Bruto']
+        info['pgf_costo'] = metrics['PGF_Costo']
+        
         obs = np.array([v for _, v in next_state_tuple], dtype=np.float32)
-        truncated = False # No usamos truncamiento por tiempo externo
+        truncated = False 
         
         return obs, reward, done, truncated, info
