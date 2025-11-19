@@ -16,7 +16,6 @@ results/**/*_episodes.csv
 !results/**/phase2_summary.md
 
 # results/ descomentado para permitir versionar archivos de resultados
->>>>>>> 968a747 (cleanup: Remove cache files and loose test artifacts)
 # Puedes añadir más patrones según tus necesidades
 <<<<<<< HEAD
 None
@@ -49,3 +48,6 @@ dummy.png
 docs/PROTOCOLO_ALINEACION.md
 scripts/experimentos_previos/
 test/smoke_test/
+=======
+docs/PROTOCOLO_ALINEACION.md
+>>>>>>> e7715d3 (docs: Finalize protocol and bilingual analysis for TUI v4.2)
