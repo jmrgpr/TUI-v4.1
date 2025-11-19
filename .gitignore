@@ -15,6 +15,8 @@ results/**/*_episodes.csv
 !results/**/*summary*.csv
 !results/**/phase2_summary.md
 
+# results/ descomentado para permitir versionar archivos de resultados
+>>>>>>> 968a747 (cleanup: Remove cache files and loose test artifacts)
 # Puedes añadir más patrones según tus necesidades
 None
 None_episodes.csv
