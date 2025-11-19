@@ -659,19 +659,31 @@ TUI-v4.1/
 ## Notas / Notes
 
 Visualizaciones avanzadas y comparativas:
-## Novedades Noviembre 2025 (actualizado 18/11/2025)
 
-fix.py archivado en scripts/ para organización.
+## Novedades Noviembre 2025 (actualizado 19/11/2025)
 
+- Se implementó el runner `run_fase2.py` para automatizar la Fase 2 (60 corridas × 1000 episodios).
+- Todos los resultados se guardan con prefijo único por semilla usando `--output_prefix` (ejemplo: `results/fase2/seed_42_seed42_risk1.0_control.csv`).
+- El archivo de resumen también se guarda por semilla (ejemplo: `seed_42_seed42_summary.csv`).
+- Se creó el script `merge_summaries.py` para unir todos los resúmenes en un solo archivo global (`results/fase2_global_summary.csv`).
+- Documentación y tracking actualizados en `README.md`, `CHANGELOG.md`, `results/README.md` y `TRACKING_2025-11-19.md`.
+- Auditoría científica y reproducibilidad garantizadas para revisión por pares y publicación.
 
-### Fase 2 (actualizado 18/11/2025)
+### Protocolo actualizado Fase 2
 
-- Corrida de prueba ejecutada y validada el 18/11/2025 a las 14:46.
-- Exportación profesional de métricas: pgf_neto, pgf_beneficio_bruto, pgf_costo_ambiental por episodio en JSON y CSV.
-- Resultados y gráficos generados en `results/` para todos los valores de risk_scale (0.5, 1.0, 1.5, 2.0, 3.0).
-- Auditoría científica completa: todos los tests pasan (316/316), cobertura 98% en sim/prototipo_rl_simbiosis.py.
-- Documentación y tracking actualizados para reflejar la validación y reproducibilidad.
-- Estado: Listo para análisis final y generación de reporte científico internacional.
+1. Ejecutar la Fase 2 completa:
+  ```powershell
+  python run_fase2.py
+  ```
+  Resultados en `results/fase2/` con nombres únicos por semilla.
+
+2. Unir los resúmenes en un solo archivo global:
+  ```powershell
+  python merge_summaries.py
+  ```
+  Archivo final: `results/fase2_global_summary.csv`.
+
+---
 
 ---
 
