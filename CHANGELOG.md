@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## [2025-11-19] Pinnear dependencias para reproducibilidad científica
+- Actualizado `requirements.txt` con versiones fijas (ej: torch==2.1.0, numpy==1.24.3).
+- Eliminadas entradas duplicadas y agregado nbformat==5.9.2.
+- Garantiza reproducibilidad exacta para experimentos y publicación.
+- Fecha y hora de documentación: 19/11/2025.
+
 ## [2025-11-19] Notebook de Quickstart para Gráficos Automáticos
 - Creado `notebooks/quickstart_graficos.ipynb`: Notebook bilingüe para generación automática de gráficos desde archivos CSV de resultados.
 - Incluye ejemplos de gráficos de línea, barras e interactivos con Plotly.
