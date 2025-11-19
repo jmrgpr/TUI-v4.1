@@ -18,6 +18,28 @@ results/**/*_episodes.csv
 # results/ descomentado para permitir versionar archivos de resultados
 >>>>>>> 968a747 (cleanup: Remove cache files and loose test artifacts)
 # Puedes añadir más patrones según tus necesidades
+<<<<<<< HEAD
+None
+None_episodes.csv
+test.csv
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.DS_Store
+*.sqlite3
+*.log
+
+# Excluir archivos JSON/CSV grandes de results (mantener solo archivos pequeños y documentación)
+results/**/*.json
+results/**/*_episodes.csv
+!results/**/README*.md
+!results/**/*summary*.csv
+!results/**/phase2_summary.md
+
+# Puedes añadir más patrones según tus necesidades
 None
 None_episodes.csv
 test.csv
