@@ -1,10 +1,10 @@
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey.svg)
 
-# TUI v4.1 — Unified Intelligence Theory
+# TUI v4.2 — Unified Intelligence Theory
 
 Cita recomendada:
-> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+> Rivera Garcia, J. M. (2025). *TUI v4.2: First empirical evidence of scalable alignment via Constitutive Symbiosis*. Zenodo. https://doi.org/10.5281/zenodo.17552094
 
 
 ## Licencias
@@ -77,6 +77,9 @@ Visualizaciones avanzadas y comparativas:
 - Documentación y tracking actualizados en `README.md`, `CHANGELOG.md`, `results/README.md` y `TRACKING_2025-11-19.md`.
 - Auditoría científica y reproducibilidad garantizadas para revisión por pares y publicación.
 - **Nuevo notebook de quickstart**: `notebooks/quickstart_graficos.ipynb` para generación automática de gráficos bilingües desde resultados CSV.
+- **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
+- **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
+- **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
 

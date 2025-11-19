@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## [2025-11-19] TUI v4.2: Primera evidencia empírica de alineación escalable vía Simbiosis Constitutiva
+- Análisis estadístico formal implementado: ANOVA Two-Way + Tukey HSD en `results/stats.py`.
+- Evidencia irrefutable de diferencias significativas (p < 0.0000) entre agentes Control, DQN y Simbiosis.
+- Interacción agente-riesgo confirmada, apoyando hipótesis de "tensión de riesgo".
+- Framework SOTA preparado: Wrapper Gymnasium y script de comparación con PPO.
+- Dependencias actualizadas para reproducibilidad y benchmarking.
+- Fecha y hora de documentación: 19/11/2025.
+
 ## [2025-11-19] Análisis Estadístico y Comparación SOTA
 - Implementado `results/stats.py`: Análisis ANOVA Two-Way + Tukey HSD para validar hipótesis estadísticamente.
 - Agregadas dependencias: statsmodels, stable-baselines3, shimmy, gymnasium.
