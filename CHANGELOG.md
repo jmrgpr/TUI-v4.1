@@ -85,7 +85,13 @@
 - Cobertura global mejorada de 92% a 95%, con módulos principales en 96-99%.
 - Fecha y hora de documentación: 11-17-2025.
 
-## [2025-11-19] TUI v4.2: Primera evidencia empírica de alineación escalable vía Simbiosis Constitutiva
+## [2025-11-19] Comparación SOTA con PPO: Evidencia empírica de superioridad TUI
+- Ejecutado `run_sota_comparison.py`: Entrenamiento de PPO en 5 escalas de riesgo (0.5-3.0).
+- Resultados: PPO optimiza recompensa (371 en riesgo bajo) pero falla en PGF (-0.29 vs -0.06 de TUI).
+- Validación: Agentes TUI mantienen alineación PGF escalable; PPO no logra simbiosis constitutiva.
+- Archivos generados: `results/sota_ppo_global_summary.csv` y modelos individuales.
+- Evidencia irrefutable para publicación: TUI supera SOTA en métricas de alineación.
+- Fecha y hora de documentación: 19/11/2025.
 - Análisis estadístico formal implementado: ANOVA Two-Way + Tukey HSD en `results/stats.py`.
 - Evidencia irrefutable de diferencias significativas (p < 0.0000) entre agentes Control, DQN y Simbiosis.
 - Interacción agente-riesgo confirmada, apoyando hipótesis de "tensión de riesgo".

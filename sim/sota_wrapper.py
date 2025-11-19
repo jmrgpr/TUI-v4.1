@@ -48,3 +48,4 @@ class SimbiosisGymEnv(gym.Env):
         obs = np.array(obs_values[:8], dtype=np.float32)
         truncated = False
         return obs, reward, done, truncated, info
+        return obs, reward, done, truncated, info
