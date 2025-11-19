@@ -631,7 +631,8 @@ def main():
         print("\n=== Barrido de risk_scale completado. Resultados exportados, gráficos y análisis generados. ===")
         
         # Exportar CSV resumen Fase 2 con promedios por risk_scale
-        with open('results/fase2_summary.csv', 'w', newline='') as f:
+        summary_csv_path = f"{output_prefix}_seed{args.seed}_summary.csv"
+        with open(summary_csv_path, 'w', newline='') as f:
             writer = csv.writer(f)
             writer.writerow(['risk_scale', 'agent', 'avg_pgf_neto', 'avg_pgf_bruto', 'avg_pgf_costo', 'avg_tripwire', 'avg_reward'])
             for risk, agents in sweep_results.items():
