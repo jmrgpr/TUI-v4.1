@@ -76,6 +76,7 @@ Visualizaciones avanzadas y comparativas:
 - Se creó el script `merge_summaries.py` para unir todos los resúmenes en un solo archivo global (`results/fase2_global_summary.csv`).
 - Documentación y tracking actualizados en `README.md`, `CHANGELOG.md`, `results/README.md` y `TRACKING_2025-11-19.md`.
 - Auditoría científica y reproducibilidad garantizadas para revisión por pares y publicación.
+- **Nuevo notebook de quickstart**: `notebooks/quickstart_graficos.ipynb` para generación automática de gráficos bilingües desde resultados CSV.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
 
