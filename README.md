@@ -7,6 +7,88 @@
 ![Reproducible](https://img.shields.io/badge/reproducible-validated-success)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+## Entorno recomendado / Reference environment
+- Dependencias clave (ver `requirements.txt` / `environment.yml`):  
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Reproducibilidad rapida / Quick start
+1) Crear entorno (Conda o venv) e instalar dependencias:  
+  `pip install -r requirements.txt`
+2) Experimento base:  
+  `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) Comparacion SOTA (opcional):  
+  `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
+
+## Estructura / Layout
+  - `runs/` corridas individuales
+  - `sota/` modelos y resúmenes PPO/A2C/DQN.  
+  - `global_summaries/` consolidados (p.ej. `fase2_global_summary.csv`).  
+  - `TUI/` : documentos de teoria (TUI v4.x, LaTeX/Markdown).
+  - `notebooks/` : cuadernos de analisis y graficos.
+  - `scripts/` : utilidades (fase2, merge de resumenes, comparacion SOTA).
+
+## Limitaciones actuales / Current limitations
+- Entorno "toy" Gridworld; sin benchmarks complejos (MuJoCo/Procgen).
+- Comparacion SOTA centrada en PPO; otros algoritmos no evaluados.
+- Algunos docs historicos mantienen acentos/LaTeX legacy para preservar la teoria.
+
+### Ampliación de limitaciones
+
+- **Supuestos del modelo y experimentos:**  
+  El entorno simulado es un Gridworld simplificado, diseñado para ilustrar conceptos de la Teoría Unificada de la Inteligencia. Se asume que los agentes operan en un espacio discreto, con recompensas y penalizaciones definidas por el usuario. No se modelan dinámicas físicas complejas ni interacciones multiagente avanzadas.
+
+- **Escenarios donde la metodología puede no ser aplicable:**  
+  El enfoque TUI/PGF está optimizado para entornos discretos y problemas de decisión secuencial. No se recomienda para tareas de control continuo, simulaciones físicas realistas, ni benchmarks de alta dimensionalidad (MuJoCo, Procgen, etc.).
+
+- **Fuentes de sesgo o incertidumbre experimental:**  
+  Los resultados pueden verse afectados por la selección de semillas, episodios y parámetros de riesgo. La interpretación de métricas depende de la correcta configuración experimental. No se garantiza robustez ante cambios drásticos en la estructura del entorno o los agentes.
+
+- **Restricciones técnicas:**  
+  El simulador depende de librerías específicas (torch, stable-baselines3, gymnasium, etc.) y está optimizado para Python 3.10/3.11. El rendimiento puede verse limitado en hardware sin soporte para aceleración (GPU/CPU). La escalabilidad está pensada para experimentos medianos; no se recomienda para grandes clusters o HPC sin adaptación.
+
+- **Limitaciones en la interpretación y generalización:**  
+  Las métricas y visualizaciones reflejan el comportamiento en el entorno toy; no deben extrapolarse directamente a sistemas reales sin validación adicional. Los resultados son útiles para comparar variantes de agentes y estrategias, pero no constituyen pruebas definitivas de superioridad en otros dominios.
+
+- **Limitaciones en la consolidación y comparativa SOTA:**  
+  Los resultados SOTA (PPO, A2C, DQN) se consolidan automáticamente porque los archivos CSV incluyen el parámetro `risk` en el nombre y en las columnas. Sin embargo, el campo `red_team` queda siempre en `False` para SOTA, por lo que la comparativa en el master solo cubre ese modo. Esto difiere del pipeline principal, donde los agentes TUI pueden tener resultados tanto con `red_team=True` como `False`.  
+  **Implicación:** La comparación entre SOTA y TUI debe realizarse considerando que SOTA solo opera en modo no adversarial (`red_team=False`). Se recomienda explicitar esta diferencia en los análisis y reportes para mantener la trazabilidad científica.
+
+## Cobertura y calidad / Coverage & quality
+- Cobertura `sim/`: **100%** (pytest con `--cov=sim`).  
+- Target network en DQN; sin `eval()` inseguro (se usa `ast.literal_eval`).  
+- Warnings graficos mitigados cerrando figuras; exportaciones en UTF-8.
+- Comparacion SOTA ampliada (PPO, A2C, DQN) con sumarios por riesgo y global.
+
+## Cómo citar / How to cite
+- Teoría: https://doi.org/10.5281/zenodo.17552094  
+- Dataset: https://doi.org/10.5281/zenodo.17654593  
+La versión oficial del software es TUI v4.1. Consulta y usa el archivo `CITATION.cff` para BibTeX y detalles de la cita, incluyendo el identificador del software y commit hash.
+
+## Contacto / Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## FAQ rapida
+- CI/CD y backend grafico? Se fuerza backend `Agg` en modulos de visualizacion para correr en entornos headless.
+- Como reproducir coberturas? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Entorno recomendado? Python 3.10/3.11 + dependencias fijadas en `requirements.txt` / `environment.yml`.
+
+--- 
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+...
+**Próximos pasos:**
+...
+
+![CI](https://github.com/jmrgpr/TUI-v4.1/actions/workflows/python-tests.yml/badge.svg)
+![Version](https://img.shields.io/badge/version-4.2-blue)
+![Docs](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey)
+![DOI Dataset](https://zenodo.org/badge/DOI/10.5281/zenodo.17654593.svg)
+![DOI Theory](https://img.shields.io/badge/DOI-10.5281/zenodo.17552094-blue)
+![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)
+![Reproducible](https://img.shields.io/badge/reproducible-validated-success)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
+![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 - Scripts de Fase 2 y comparacion SOTA (PPO/A2C/DQN) listos para reproducibilidad.
 - Visualizaciones y estadistica (ANOVA, t-test) bilingues; notebooks de quickstart.
 
@@ -669,10 +751,14 @@ Visualizaciones avanzadas y comparativas:
 - **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
 - **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
 <<<<<<< HEAD
+<<<<<<< HEAD
 - **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
 =======
 - **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable.
 >>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)
+=======
+- **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
+>>>>>>> f0eeee2 (docs: Add conceptual analysis of PPO vs TUI comparison)
 - **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
