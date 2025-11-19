@@ -623,6 +623,18 @@ def main():
             plt.close()
 
         print("\n=== Barrido de risk_scale completado. Resultados exportados, gráficos y análisis generados. ===")
+        
+        # Exportar CSV resumen Fase 2 con promedios por risk_scale
+        with open('results/fase2_summary.csv', 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['risk_scale', 'agent', 'avg_pgf_neto', 'avg_pgf_bruto', 'avg_pgf_costo', 'avg_tripwire', 'avg_reward'])
+            for risk, agents in sweep_results.items():
+                for agent_name, res in agents.items():
+                    avg_pgf_neto = np.mean([np.mean(ep) for ep in res['pgf_evol'] if ep]) if res['pgf_evol'] else 0.0
+                    avg_pgf_bruto = np.mean([np.mean(ep) for ep in res['pgf_bruto_evol'] if ep]) if res['pgf_bruto_evol'] else 0.0
+                    avg_pgf_costo = np.mean([np.mean(ep) for ep in res['pgf_costo_evol'] if ep]) if res['pgf_costo_evol'] else 0.0
+                    writer.writerow([risk, agent_name, avg_pgf_neto, avg_pgf_bruto, avg_pgf_costo, res['avg_tripwire'], res['avg_reward']])
+        
         return
 
     # Caso normal: ejecutar experimentos control y simbiosis
@@ -680,18 +692,6 @@ def main():
                 qopt = res_A.get('q_optimal_evol', [0.0]*len(res_A['total_rewards']))[i]
 
                 # CALCULAR PROMEDIOS FASE 2
-                pgf_bruto_ep = np.mean(res_A['pgf_bruto_evol'][i]) if res_A['pgf_bruto_evol'][i] else 0.0
-                pgf_costo_ep = np.mean(res_A['pgf_costo_evol'][i]) if res_A['pgf_costo_evol'][i] else 0.0
-                
-                writer.writerow([i+1, res_A['total_rewards'][i], res_A['tripwire_steps'][i], flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep])
-        # Exportar CSV para simbiosis con métricas avanzadas
-        csv_simbiosis = args.export.replace('.json', '_simbiosis.csv')
-        with open(csv_simbiosis, 'w', newline='') as f:
-            writer = csv.writer(f)
-            # ACTUALIZAR HEADERS
-            writer.writerow(['Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-            
-            for i in range(len(res_B['total_rewards'])):
                 # ... (cálculos existentes)
                 flex = res_B.get('flex_recov', [0.0]*len(res_B['total_rewards']))[i]
                 robust = res_B.get('robust_evol', [0.0]*len(res_B['total_rewards']))[i]
