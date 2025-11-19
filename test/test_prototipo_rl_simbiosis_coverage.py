@@ -260,8 +260,10 @@ def test_run_experiment_with_logging(capsys):
 
 def test_cli_risk_sweep():
     import subprocess
+    import os
     cmd = ["python", "-c", "import sys; sys.path.insert(0, '.'); from sim.prototipo_rl_simbiosis import main; import sys; sys.argv = ['script', '--risk_sweep', '--episodes', '5', '--seed', '42']; main()"]
-    result = subprocess.run(cmd, capture_output=True, text=True, cwd='c:\\Proyectos\\TUI-v4.1')
+    cwd = '.' if os.name != 'nt' else 'c:\\Proyectos\\TUI-v4.1'
+    result = subprocess.run(cmd, capture_output=True, text=True, cwd=cwd)
     assert result.returncode == 0
     assert "Barrido de risk_scale: 0.5" in result.stdout
     assert "Barrido de risk_scale: 2.0" in result.stdout
