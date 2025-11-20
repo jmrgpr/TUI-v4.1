@@ -29,33 +29,36 @@ warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 warnings.filterwarnings("ignore", category=UserWarning, module="seaborn")
 
 import numpy as np
+import matplotlib
+matplotlib.use("Agg")  # Backend seguro para entornos headless
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy import stats
 
 def plot_risk_curve(data, title="Curva de riesgo", show=False):
     arr = np.array(data)
-    plt.figure()
+    fig = plt.figure()
     if arr.size == 0:
-        plt.title(title)
-        plt.figtext(0.5, 0.5, 'Sin datos / No data', ha='center', fontsize=14, color='red')
-        plt.tight_layout()
+        fig.suptitle(title)
+        fig.text(0.5, 0.5, 'Sin datos / No data', ha='center', fontsize=14, color='red')
+        fig.tight_layout()
         if show:
             try:
                 plt.show()
             except Exception:
                 pass
-        plt.close()
+        plt.close(fig)
         return
-    plt.plot(arr)
-    plt.title(title)
-    plt.tight_layout()
+    ax = fig.add_subplot(111)
+    ax.plot(arr)
+    ax.set_title(title)
+    fig.tight_layout()
     if show:
         try:
             plt.show()
         except Exception:
             pass
-    plt.close()
+    plt.close(fig)
 
 def boxplot_metricas(*args, **kwargs):
     """
@@ -73,34 +76,36 @@ def boxplot_metricas(*args, **kwargs):
     data = args[0] if args else None
     labels = kwargs.get('labels', None)
     show = kwargs.get('show', False)
-    plt.figure()
+    fig = plt.figure()
     if not data or not any(data):
-        plt.title('Boxplot vacío / Empty boxplot')
-        plt.figtext(0.5, 0.5, 'Sin datos / No data', ha='center', fontsize=14, color='red')
-        plt.tight_layout()
+        fig.suptitle('Boxplot vacío / Empty boxplot')
+        fig.text(0.5, 0.5, 'Sin datos / No data', ha='center', fontsize=14, color='red')
+        fig.tight_layout()
         if show:
             try:
                 plt.show()
             except Exception:
                 pass
-        plt.close()
+        plt.close(fig)
         return
     # Matplotlib recomienda tick_labels desde v3.9, pero soporta labels para compatibilidad
+    ax = fig.add_subplot(111)
     if labels is not None:
         try:
-            plt.boxplot(data, tick_labels=labels)
+            ax.boxplot(data, tick_labels=labels)
         except TypeError:
-            plt.boxplot(data, labels=labels)  # Fallback to labels
+            # Fallback real: llama a boxplot con labels como argumento de palabra clave
+            ax.boxplot(data, labels=labels)
     else:
-        plt.boxplot(data)
-    plt.title('Boxplot')
-    plt.tight_layout()
+        ax.boxplot(data)
+    ax.set_title('Boxplot')
+    fig.tight_layout()
     if show:
         try:
             plt.show()
         except Exception:
             pass
-    plt.close()
+    plt.close(fig)
 
 def boxplot_metricas_profesional(metricas_control, metricas_simbiosis, nombre, export_path=None):
     # Manejo profesional de datos vacíos
@@ -109,18 +114,18 @@ def boxplot_metricas_profesional(metricas_control, metricas_simbiosis, nombre, e
     if arr_control.size == 0 or arr_simbiosis.size == 0:
         print(f"Boxplot {nombre}: Sin datos / No data")
         return
-    plt.figure(figsize=(8,5))
+    fig, ax = plt.subplots(figsize=(8,5))
     data = [arr_control, arr_simbiosis]
-    plt.boxplot(data, tick_labels=['Control','Simbiosis'])
-    plt.title(f'Boxplot {nombre} / {nombre} Boxplot')
-    plt.ylabel(nombre)
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
+    ax.boxplot(data, tick_labels=['Control','Simbiosis'])
+    ax.set_title(f'Boxplot {nombre} / {nombre} Boxplot')
+    ax.set_ylabel(nombre)
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
     interp = f'Mediana más alta indica mejor desempeño en {nombre}. / Higher median indicates better {nombre} performance.'
-    plt.figtext(0.5, 0.01, interp, ha='center', fontsize=10, color='darkblue')
+    fig.text(0.5, 0.01, interp, ha='center', fontsize=10, color='darkblue')
     if export_path:
-        plt.savefig(export_path, dpi=200)
-    plt.close()
+        fig.savefig(export_path, dpi=200)
+    plt.close(fig)
 
 def heatmap_metricas(*args, **kwargs):
     """
@@ -138,43 +143,44 @@ def heatmap_metricas(*args, **kwargs):
     data = args[0] if args else None
     title = kwargs.get('title', "Heatmap")
     show = kwargs.get('show', False)
-    plt.figure()
+    fig = plt.figure()
     arr = np.array(data)
     if arr.size == 0:
-        plt.title(title)
-        plt.figtext(0.5, 0.5, 'Sin datos / No data', ha='center', fontsize=14, color='red')
-        plt.tight_layout()
+        fig.suptitle(title)
+        fig.text(0.5, 0.5, 'Sin datos / No data', ha='center', fontsize=14, color='red')
+        fig.tight_layout()
         if show:
             try:
                 plt.show()
             except Exception:
                 pass
-        plt.close()
+        plt.close(fig)
         return
-    sns.heatmap(arr, annot=True)
-    plt.title(title)
-    plt.tight_layout()
+    ax = fig.add_subplot(111)
+    sns.heatmap(arr, annot=True, ax=ax)
+    ax.set_title(title)
+    fig.tight_layout()
     if show:
         try:
             plt.show()
         except Exception:
             pass
-    plt.close()
+    plt.close(fig)
 
 def heatmap_metricas_profesional(matriz, etiquetas, nombre, export_path=None):
     # Manejo profesional de matrices vacías
     if matriz.size == 0:
         print(f"Heatmap {nombre}: Sin datos / No data")
         return
-    plt.figure(figsize=(10,6))
-    sns.heatmap(matriz, annot=True, fmt='.2f', cmap='coolwarm', xticklabels=etiquetas['x'], yticklabels=etiquetas['y'])
-    plt.title(f'Heatmap {nombre} / {nombre} Heatmap')
-    plt.tight_layout()
+    fig, ax = plt.subplots(figsize=(10,6))
+    sns.heatmap(matriz, annot=True, fmt='.2f', cmap='coolwarm', xticklabels=etiquetas['x'], yticklabels=etiquetas['y'], ax=ax)
+    ax.set_title(f'Heatmap {nombre} / {nombre} Heatmap')
+    fig.tight_layout()
     interp = f'Colores más intensos indican mayor {nombre}. / More intense colors indicate higher {nombre}.'
-    plt.figtext(0.5, 0.01, interp, ha='center', fontsize=10, color='darkred')
+    fig.text(0.5, 0.01, interp, ha='center', fontsize=10, color='darkred')
     if export_path:
-        plt.savefig(export_path, dpi=200)
-    plt.close()
+        fig.savefig(export_path, dpi=200)
+    plt.close(fig)
 
 def exportar_metricas(metricas, filename="results/export.json"):
     """
@@ -200,29 +206,29 @@ def curva_riesgo_comparativa(riesgo_control, riesgo_simbiosis, export_path=None)
     if riesgo_control.size == 0 or riesgo_simbiosis.size == 0:
         print('Curvas de riesgo comparativas: Sin datos / No data')
         return
-    plt.figure(figsize=(10,6))
+    fig, ax = plt.subplots(figsize=(10,6))
     # ...visualización normal...
-    plt.plot(np.nanmean(riesgo_control, axis=0), label='Control', color='blue')
-    plt.plot(np.nanmean(riesgo_simbiosis, axis=0), label='Simbiosis', color='red')
-    plt.fill_between(range(len(riesgo_control[0])),
+    ax.plot(np.nanmean(riesgo_control, axis=0), label='Control', color='blue')
+    ax.plot(np.nanmean(riesgo_simbiosis, axis=0), label='Simbiosis', color='red')
+    ax.fill_between(range(len(riesgo_control[0])),
                      np.nanmean(riesgo_control, axis=0) - stats.sem(riesgo_control, axis=0, nan_policy='omit'),
                      np.nanmean(riesgo_control, axis=0) + stats.sem(riesgo_control, axis=0, nan_policy='omit'),
                      color='blue', alpha=0.2)
-    plt.fill_between(range(len(riesgo_simbiosis[0])),
+    ax.fill_between(range(len(riesgo_simbiosis[0])),
                      np.nanmean(riesgo_simbiosis, axis=0) - stats.sem(riesgo_simbiosis, axis=0, nan_policy='omit'),
                      np.nanmean(riesgo_simbiosis, axis=0) + stats.sem(riesgo_simbiosis, axis=0, nan_policy='omit'),
                      color='red', alpha=0.2)
-    plt.title('Curvas de riesgo comparativas / Comparative risk curves')
-    plt.xlabel('Paso / Step')
-    plt.ylabel('Riesgo / Risk')
-    plt.legend()
-    plt.grid(True, alpha=0.3)
-    plt.tight_layout()
+    ax.set_title('Curvas de riesgo comparativas / Comparative risk curves')
+    ax.set_xlabel('Paso / Step')
+    ax.set_ylabel('Riesgo / Risk')
+    ax.legend()
+    ax.grid(True, alpha=0.3)
+    fig.tight_layout()
     interp = 'Simbiosis supera a Control si la curva roja está por debajo de la azul. / Symbiosis outperforms Control if the red curve is below the blue.'
-    plt.figtext(0.5, 0.01, interp, ha='center', fontsize=10, color='darkgreen')
+    fig.text(0.5, 0.01, interp, ha='center', fontsize=10, color='darkgreen')
     if export_path:
-        plt.savefig(export_path, dpi=200)
-    plt.close()
+        fig.savefig(export_path, dpi=200)
+    plt.close(fig)
 
 def analisis_estadistico(metricas_control, metricas_simbiosis, nombre):
     """

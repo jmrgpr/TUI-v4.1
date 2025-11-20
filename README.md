@@ -54,6 +54,11 @@ Ver `CITATION.cff` para BibTeX.
 ## Contacto / Contact
 jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
 
+## FAQ rapida
+- ¿CI/CD y backend gráfico? Se fuerza backend `Agg` en módulos de visualización para correr en entornos headless.
+- ¿Cómo reproducir coberturas? `python -m pytest --cov=sim --cov-report=term-missing`.
+- ¿Entorno recomendado? Python 3.10/3.11 + dependencias fijadas en `requirements.txt` / `environment.yml`.
+
 ---
 
 ## Dedicatoria / Dedication

@@ -4,6 +4,8 @@ Incluye: intervalos de confianza, t-test, ANOVA, interpretación automática bil
 """
 import numpy as np
 import pandas as pd
+import matplotlib
+matplotlib.use("Agg")  # Backend seguro para entornos headless
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import ttest_ind, f_oneway, sem
