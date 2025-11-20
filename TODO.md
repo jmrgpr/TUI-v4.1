@@ -18,34 +18,30 @@
 
 ---
 
-Este To Do actualizado refleja el progreso hacia evidencia empírica irrefutable de alineación escalable vía Simbiosis Constitutiva.
+Este To Do refleja el avance hacia evidencia empirica preliminar de alineacion escalable via Simbiosis Constitutiva y los siguientes pasos para robustez, reproducibilidad y publicacion.
 
-## 🔄 Próximos pasos ampliados / Expanded Next Steps
+## Proximos pasos ampliados
 
-### Expansión y robustez experimental
+### Expansion y robustez experimental
+- Expandir experimentos a mas semillas y episodios (robustez estadistica y validacion cruzada).
+- Agregar comparacion con A2C y SAC (framework SOTA listo; falta ejecucion y analisis).
+- Planificar experimentos en benchmarks mas complejos (MuJoCo, Procgen, etc.).
+- Documentar y automatizar la exportacion de resultados para auditoria y reproducibilidad.
 
-- Expandir experimentos a más semillas y episodios (mayor robustez estadística y validación cruzada).
-- Agregar comparación con algoritmos A2C y SAC (framework SOTA ya preparado, falta ejecución y análisis).
-- Planificar experimentos adicionales con benchmarks más complejos (MuJoCo, Procgen, etc.).
-- Documentar y automatizar la exportación de resultados para facilitar auditoría y reproducibilidad.
-
-### Visualización y análisis
-
-- Mejorar visualizaciones y análisis estadístico: agregar más métricas, gráficos avanzados y interpretación bilingüe.
-- Mantener y ampliar el notebook de gráficos automáticos (`notebooks/quickstart_graficos.ipynb`).
+### Visualizacion y analisis
+- Mejorar visualizaciones y analisis estadistico: mas metricas, graficos avanzados, interpretacion bilingue.
+- Mantener y ampliar el notebook de graficos automaticos (`notebooks/quickstart_graficos.ipynb`).
 
 ### Infraestructura y reproducibilidad
+- Subir a Zenodo/GitHub: preparar DOI para publicacion cientifica.
+- Evaluar integracion de Dockerfile para despliegue y replicacion.
+- Revisar y actualizar el protocolo de reproducibilidad y checklist de publicacion.
+- Mantener cobertura de tests y agregar pruebas para nuevos modulos/algoritmos.
 
-- Subir a Zenodo/GitHub: preparar DOI para publicación científica.
-- Explorar integración de Dockerfile para facilitar despliegue y replicación.
-- Revisar y actualizar el protocolo de reproducibilidad y checklist de publicación.
-- Mantener la cobertura de tests y agregar pruebas para nuevos módulos/algoritmos.
-
-### Documentación y publicación
-
-- Consolidar documentación bilingüe y preparar versión en inglés para publicación internacional.
-- Preparar materiales para onboarding científico y colaborativo.
-- Paper submission: preparar manuscrito con evidencia TUI vs SOTA.
+### Documentacion y publicacion
+- Consolidar documentacion bilingue y preparar version en ingles para publicacion internacional.
+- Preparar materiales de onboarding cientifico y colaborativo.
+- Redactar manuscrito con evidencia TUI vs SOTA para envio a revista/conferencia.
 
 ---
 

@@ -14,30 +14,6 @@ results/**/*_episodes.csv
 !results/**/README*.md
 !results/**/*summary*.csv
 !results/**/phase2_summary.md
-
-# results/ descomentado para permitir versionar archivos de resultados
-# Puedes añadir más patrones según tus necesidades
-<<<<<<< HEAD
-None
-None_episodes.csv
-test.csv
-.venv/
-__pycache__/
-*.pyc
-*.pyo
-*.pyd
-.env
-.DS_Store
-*.sqlite3
-*.log
-
-# Excluir archivos JSON/CSV grandes de results (mantener solo archivos pequeños y documentación)
-results/**/*.json
-results/**/*_episodes.csv
-!results/**/README*.md
-!results/**/*summary*.csv
-!results/**/phase2_summary.md
-
 # Puedes añadir más patrones según tus necesidades
 None
 None_episodes.csv
@@ -48,6 +24,3 @@ dummy.png
 docs/PROTOCOLO_ALINEACION.md
 scripts/experimentos_previos/
 test/smoke_test/
-=======
-docs/PROTOCOLO_ALINEACION.md
->>>>>>> e7715d3 (docs: Finalize protocol and bilingual analysis for TUI v4.2)
