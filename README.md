@@ -1,9 +1,82 @@
+## Limitaciones y amenazas a la validez / Limitations & Threats to Validity
+
+**ES:**
+- Los experimentos se realizaron en un entorno tipo “toy RL”, no en entornos complejos como MuJoCo o Procgen.
+- La comparación SOTA solo incluye PPO; no se han evaluado otros algoritmos como A2C o SAC.
+- Los resultados de SOTA se basan en una sola semilla, lo que puede limitar la robustez estadística.
+- El número de episodios y configuraciones es limitado; los resultados pueden variar con otros parámetros.
+- La métrica η_acumulativo no se ha calculado explícitamente.
+- Los resultados y conclusiones deben interpretarse como evidencia preliminar y no como validación definitiva.
+
+**EN:**
+- Experiments were conducted in a “toy RL” environment, not in complex benchmarks like MuJoCo or Procgen.
+- SOTA comparison includes only PPO; other algorithms (A2C, SAC) were not evaluated.
+- SOTA results are based on a single seed, which may limit statistical robustness.
+- The number of episodes and configurations is limited; results may vary with different parameters.
+- The η_acumulativo metric was not explicitly calculated.
+- Results and conclusions should be interpreted as preliminary evidence, not definitive validation.
+
+![CI](https://github.com/jmrgpr/TUI-v4.1/actions/workflows/python-tests.yml/badge.svg)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey.svg)
+![DOI Dataset](https://zenodo.org/badge/DOI/10.5281/zenodo.17654593.svg)
+![DOI Theory](https://zenodo.org/badge/DOI/10.5281/zenodo.17552094.svg)
+![Version](https://img.shields.io/badge/version-4.2-blue)
+![Test Coverage](https://img.shields.io/badge/coverage-99%25-success)
+
 
 # TUI v4.2 — Unified Intelligence Theory
 
-Cita recomendada:
+
+## Checklist de replicación / Replication checklist
+
+Sigue estos pasos para reproducir los resultados principales (Fase 2):
+
+1. Clona el repositorio / Clone the repository
+  ```bash
+  git clone https://github.com/jmrgpr/TUI-v4.1.git
+  cd TUI-v4.1
+  ```
+2. Crea y activa el entorno virtual / Create and activate virtual environment
+  ```bash
+  python -m venv .venv
+  .\.venv\Scripts\activate  # Windows
+  # source .venv/bin/activate  # Linux/MacOS
+  ```
+3. Instala las dependencias / Install dependencies
+  ```bash
+  pip install -r requirements.txt
+  ```
+4. Ejecuta la Fase 2 / Run Fase 2
+  ```bash
+  python run_fase2.py
+  python merge_summaries.py
+  python results/stats.py
+  python run_sota_comparison.py  # (opcional, para comparar PPO)
+  ```
+5. Visualiza los resultados / Visualize results
+  - Revisa los archivos en `results/` y usa el notebook `notebooks/quickstart_graficos.ipynb` para generar gráficos automáticos.
+
+Recursos clave / Key resources:
+- [Protocolo de reproducibilidad](PROTOCOLO_REPRODUCIBILIDAD.md)
+- [Checklist de publicación científica](CHECKLIST_PUBLICACION.md)
+
+## Cómo citar / How to cite
+
+Si usas TUI v4.2 en tu investigación, por favor cita ambos:
+
+**Teoría:**
+> Rivera Garcia, J. M. (2025). *Teoría Unificada de la Inteligencia (v4.1): Marco Falsable para Inteligencia como Función del Riesgo Acumulado*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+
+**Dataset:**
+> Rivera Garcia, J. M. (2025). *Preliminary Evidence of Prudential Paralysis in State-of-the-Art Reinforcement Learning vs. Resilience in TUI* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17654593
+
+If you use TUI v4.2 in your research, please cite both:
+
+**Theory:**
+> Rivera Garcia, J. M. (2025). *Unified Intelligence Theory (v4.1): Falsifiable Framework for Intelligence as a Function of Accumulated Risk*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+
+**Dataset:**
 > Rivera Garcia, J. M. (2025). *Preliminary Evidence of Prudential Paralysis in State-of-the-Art Reinforcement Learning vs. Resilience in TUI* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17654593
 
 
@@ -29,6 +102,7 @@ Este README documenta la organización profesional y bilingüe del proyecto TUI-
 This README documents the professional and bilingual organization of the TUI-v4.1 project, following scientific and engineering best practices.
 
 ## Carpetas principales / Main folders
+*Consulta los recursos clave arriba para reproducibilidad y auditoría científica.*
 
 - docs/: Teoría, papers, documentación formal / Theory, papers, formal documentation
 - data/: Datasets y documentación asociada / Datasets and associated documentation
@@ -80,7 +154,7 @@ Visualizaciones avanzadas y comparativas:
 - **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
 - **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
 - **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
-- **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
+- **Evidencia empírica preliminar**: Evidencia indicativa de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
 
@@ -167,7 +241,7 @@ All scripts and tests have been audited to ensure no image or result file is exp
 ---
 
 ## Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 95% (203 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
+- **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
@@ -275,7 +349,7 @@ numpy, torch, matplotlib
 Este proyecto mantiene estándares profesionales de calidad de código, con un enfoque en reproducibilidad, robustez y mejores prácticas. Se han implementado 281 tests automatizados que cubren excepciones, edge cases y visualizaciones avanzadas.
 
 ### Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 95% (203 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
+- **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
@@ -296,9 +370,12 @@ Este proyecto mantiene estándares profesionales de calidad de código, con un e
 
 Esta cobertura refleja dedicación a la perfección, validando la hipótesis H1 de TUI v4.1 con código confiable y listo para publicación científica.
 
-Contacto
 
-Para colaboración, dudas o sugerencias: jmrgpr [at] gmail.com
+## Contacto / Contact
+
+Para colaboración, dudas o sugerencias: jmrgpr@gmail.com
+
+For collaboration, questions or suggestions: jmrgpr@gmail.com
 
 
 ---

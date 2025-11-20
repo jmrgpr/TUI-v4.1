@@ -1,0 +1,49 @@
+cff-version: 1.2.0
+message: "If you use TUI v4.2 in your research, please cite this dataset and software as below."
+title: "TUI v4.2: Toy Model RL para Teoría Unificada de la Inteligencia"
+authors:
+  - family-names: "Rivera Garcia"
+    given-names: "José M."
+    orcid: "https://orcid.org/0009-0000-3013-725X"
+    affiliation: "Independent Researcher"
+version: "4.2"
+message: "Si usas TUI v4.2 en tu investigación, por favor cita tanto la teoría como el dataset como se indica abajo."
+title: "TUI v4.2: Toy Model RL para Teoría Unificada de la Inteligencia"
+authors:
+  - family-names: "Rivera Garcia"
+    given-names: "José M."
+    orcid: "https://orcid.org/0009-0000-3013-725X"
+    affiliation: "Independent Researcher"
+    email: "jmrgpr@gmail.com"
+version: "4.2"
+repository-code: "https://github.com/jmrgpr/TUI-v4.1"
+date-released: "2025-11-20"
+license: "Apache-2.0"
+
+preferred-citation:
+  type: article
+  title: "Teoría Unificada de la Inteligencia (v4.1): Marco Falsable para Inteligencia como Función del Riesgo Acumulado"
+  authors:
+    - family-names: "Rivera Garcia"
+      given-names: "José M."
+      orcid: "https://orcid.org/0009-0000-3013-725X"
+      affiliation: "Independent Researcher"
+      email: "jmrgpr@gmail.com"
+  version: "v4.1"
+  doi: "10.5281/zenodo.17552094"
+  date: "2025-11-19"
+  url: "https://zenodo.org/records/17552094"
+
+additional-citations:
+  - type: dataset
+    title: "Preliminary Evidence of Prudential Paralysis in State-of-the-Art Reinforcement Learning vs. Resilience in TUI"
+    authors:
+      - family-names: "Rivera Garcia"
+        given-names: "José M."
+        orcid: "https://orcid.org/0009-0000-3013-725X"
+        affiliation: "Independent Researcher"
+        email: "jmrgpr@gmail.com"
+    version: "v2"
+    doi: "10.5281/zenodo.17654593"
+    date: "2025-11-19"
+    url: "https://zenodo.org/records/17654593"

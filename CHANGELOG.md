@@ -13,10 +13,10 @@
 - Resultados: PPO optimiza recompensa (371 en riesgo bajo) pero falla en PGF (-0.29 vs -0.06 de TUI).
 - Validación: Agentes TUI mantienen alineación PGF escalable; PPO no logra simbiosis constitutiva.
 - Archivos generados: `results/sota_ppo_global_summary.csv` y modelos individuales.
-- Evidencia irrefutable para publicación: TUI supera SOTA en métricas de alineación.
+- Evidencia empírica preliminar para publicación: TUI supera SOTA en métricas de alineación (interpretar con cautela; ver sección de limitaciones).
 - Fecha y hora de documentación: 19/11/2025.
 - Análisis estadístico formal implementado: ANOVA Two-Way + Tukey HSD en `results/stats.py`.
-- Evidencia irrefutable de diferencias significativas (p < 0.0000) entre agentes Control, DQN y Simbiosis.
+- Resultados estadísticos significativos (p < 0.0000) entre agentes Control, DQN y Simbiosis; interpretación preliminar en el contexto experimental.
 - Interacción agente-riesgo confirmada, apoyando hipótesis de "tensión de riesgo".
 - Framework SOTA preparado: Wrapper Gymnasium y script de comparación con PPO.
 - Dependencias actualizadas para reproducibilidad y benchmarking.
