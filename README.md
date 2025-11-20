@@ -31,6 +31,37 @@
 ## Cita recomendada / Recommended citation
 
 ## Checklist de replicación / Replication checklist
+## Entorno de referencia / Reference environment
+
+Se recomienda el siguiente entorno para máxima reproducibilidad:
+
+**Python:** 3.10 o 3.11
+
+**Dependencias principales (requirements.txt):**
+
+```
+tqdm==4.66.1
+pillow==10.0.1
+jupyter==1.0.0
+torch==2.1.0
+numpy==1.24.3
+matplotlib==3.7.2
+pytest==7.4.0
+seaborn==0.12.2
+streamlit==1.28.1
+scipy==1.11.3
+pandas==2.0.3
+scikit-learn==1.3.0
+plotly==5.15.0
+altair==5.1.2
+nbformat==5.9.2
+statsmodels==0.14.0
+stable-baselines3>=2.0.0
+shimmy>=0.2.1
+gymnasium>=0.28.1
+```
+
+Para mayor facilidad de replicación, se recomienda crear el entorno con venv o Conda y usar el archivo requirements.txt incluido.
 
 Sigue estos pasos para reproducir los resultados principales (Fase 2):
 
