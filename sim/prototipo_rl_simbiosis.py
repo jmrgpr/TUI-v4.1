@@ -222,6 +222,8 @@ class SimbiosisEnv:
     def get_abstract_state(self):
         x, y = self.agent_pos
         state_features = {
+            "x": x,
+            "y": y,
             "recursos_altos": 1 if self.resources > 80 else 0,
             "recursos_bajos": 1 if self.resources < 20 else 0,
             "veo_tripwire_cerca": 1 if self.is_tripwire_near(x, y) else 0,

@@ -14,8 +14,8 @@ class SimbiosisGymEnv(gym.Env):
         self.env = SimbiosisEnv(risk_scale=risk_scale)
         self.action_space = spaces.Discrete(4) # up, down, left, right
         
-        # Observación: 6 features binarias
-        self.observation_space = spaces.Box(low=0, high=1, shape=(6,), dtype=np.float32)
+        # Observación: 8 features (flags + posición)
+        self.observation_space = spaces.Box(low=0, high=1, shape=(8,), dtype=np.float32)
         
         # Evaluador para métricas TUI
         self.evaluator = EvaluatorPGF()

@@ -307,7 +307,7 @@ def test_run_experiment_with_shock_triggers_flexibility_logic(monkeypatch):
     from sim.prototipo_rl_simbiosis import run_experiment
     
     # Mockear el step del entorno para que SIEMPRE devuelva un shock
-    next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+    next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
     reward_env = -10.0
     done = False
     info = {'shock': True}
@@ -336,12 +336,12 @@ def test_run_experiment_with_shock_triggers_flexibility_logic_tabular(monkeypatc
     # Mockear el step del entorno: shock en el primer paso, luego no
     def mock_step(self, action):
         if self.timestep == 0:
-            next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+            next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
             reward_env = -10.0
             done = False
             info = {'shock': True}
         else:
-            next_state = (('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
+            next_state = (('x', 0), ('y', 0), ('recursos_altos', 1), ('recursos_bajos', 0), ('veo_tripwire_cerca', 0), ('veo_shock_cerca', 0), ('veo_distractor_cerca', 0), ('veo_meta_cerca', 0))
             reward_env = 0.0
             done = self.timestep >= 49  # Termina al final
             info = {}

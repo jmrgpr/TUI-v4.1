@@ -21,11 +21,11 @@ from collections import deque
 
 # Red neuronal simple para DQN / Simple neural network for DQN
 class DQNNet(nn.Module):
-    def __init__(self, input_dim, output_dim):
+    def __init__(self, input_dim, output_dim, hidden_dim=64):
         super(DQNNet, self).__init__()
-        self.fc1 = nn.Linear(input_dim, 64)  # Capa oculta / Hidden layer
-        self.fc2 = nn.Linear(64, 64)
-        self.fc3 = nn.Linear(64, output_dim)  # Salida / Output layer
+        self.fc1 = nn.Linear(input_dim, hidden_dim)  # Capa oculta / Hidden layer
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc3 = nn.Linear(hidden_dim, output_dim)  # Salida / Output layer
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         x = torch.relu(self.fc2(x))
@@ -36,7 +36,7 @@ class DQNAgent:
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.
     """
-    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100):
+    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma
@@ -44,9 +44,9 @@ class DQNAgent:
         self.batch_size = batch_size
         self.memory = deque(maxlen=memory_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = DQNNet(state_dim, action_dim).to(self.device)
+        self.model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim).to(self.device)
         # Target network para estabilidad (DQN clásico)
-        self.target_model = DQNNet(state_dim, action_dim).to(self.device)
+        self.target_model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim).to(self.device)
         # Inicializar target igual que modelo principal
         self.target_model.load_state_dict(self.model.state_dict())
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
@@ -62,17 +62,18 @@ class DQNAgent:
             q_values = self.model(state)
         return int(torch.argmax(q_values).item())
     def remember(self, state, action, reward, next_state, done):
+        state = np.array(state, dtype=np.float32)
+        next_state = np.array(next_state, dtype=np.float32)
         self.memory.append((state, action, reward, next_state, done))
     def learn(self):
         if len(self.memory) < self.batch_size:
             return
         batch = random.sample(self.memory, self.batch_size)
         states, actions, rewards, next_states, dones = zip(*batch)
-        import numpy as np
-        states = torch.FloatTensor(np.array(states)).to(self.device)
+        states = torch.FloatTensor(np.stack(states)).to(self.device)
         actions = torch.LongTensor(np.array(actions)).unsqueeze(1).to(self.device)
         rewards = torch.FloatTensor(np.array(rewards)).to(self.device)
-        next_states = torch.FloatTensor(np.array(next_states)).to(self.device)
+        next_states = torch.FloatTensor(np.stack(next_states)).to(self.device)
         dones = torch.FloatTensor(np.array(dones)).to(self.device)
         q_values = self.model(states).gather(1, actions).squeeze()
         # Usar la target network para calcular next_q y estabilizar el objetivo

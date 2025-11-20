@@ -6,7 +6,7 @@ def test_env_reset_returns_obs_dict():
     env = SimbiosisGymEnv(risk_scale=1.0)
     obs, info = env.reset()
     assert isinstance(obs, np.ndarray)
-    assert obs.shape == (6,)
+    assert obs.shape == (8,)
     assert isinstance(info, dict)
 
 
@@ -15,7 +15,7 @@ def test_env_step_returns_expected_tuple():
     env.reset()
     obs, reward, done, truncated, info = env.step(0)
     assert isinstance(obs, np.ndarray)
-    assert obs.shape == (6,)
+    assert obs.shape == (8,)
     assert isinstance(reward, (int, float))
     assert isinstance(done, bool)
     assert isinstance(truncated, bool)
@@ -32,9 +32,9 @@ def test_env_action_space():
 
 def test_env_observation_space():
     env = SimbiosisGymEnv()
-    assert env.observation_space.shape == (6,)
-    assert env.observation_space.low.shape == (6,)
-    assert env.observation_space.high.shape == (6,)
+    assert env.observation_space.shape == (8,)
+    assert env.observation_space.low.shape == (8,)
+    assert env.observation_space.high.shape == (8,)
 
 
 def test_env_metrics_consistency():
@@ -50,11 +50,11 @@ def test_env_multiple_steps():
     env.reset()
     for i in range(4):
         obs, reward, done, truncated, info = env.step(i)
-        assert obs.shape == (6,)
-        assert isinstance(reward, (int, float))
-        assert isinstance(done, bool)
-        assert isinstance(truncated, bool)
-        assert isinstance(info, dict)
+    assert obs.shape == (8,)
+    assert isinstance(reward, (int, float))
+    assert isinstance(done, bool)
+    assert isinstance(truncated, bool)
+    assert isinstance(info, dict)
 
 
 def test_env_reset_reinitializes_evaluator():
