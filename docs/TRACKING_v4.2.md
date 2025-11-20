@@ -1,0 +1,1 @@
+[Archivo movido desde la raíz. Copiar el contenido original aquí.]
