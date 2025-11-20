@@ -91,6 +91,12 @@ if Agent is not None:
 def run_experiment(*args, **kwargs):
     from sim.runner import run_experiment as _run
     return _run(*args, **kwargs)
+import torch  # Necesario para DQN / Required for DQN
+import ast
+# Visualización avanzada
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
 warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")

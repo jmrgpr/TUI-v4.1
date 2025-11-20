@@ -42,7 +42,7 @@ class DQNAgent:
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.
     """
-    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, epsilon_decay=0.995, epsilon_end=0.01, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64, weight_decay: float = 0.0, dropout: float = 0.0):
+    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma
@@ -51,11 +51,14 @@ class DQNAgent:
         self.epsilon_end = epsilon_end
         self.batch_size = batch_size
         self.memory = deque(maxlen=memory_size)
-        self.device = torch.device("cpu")
-        self.model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim, dropout=dropout).to(self.device)
-        self.target_model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim, dropout=dropout).to(self.device)
+        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        self.model = DQNNet(state_dim, action_dim).to(self.device)
+        # Target network para estabilidad (DQN clásico)
+        self.target_model = DQNNet(state_dim, action_dim).to(self.device)
+        # Inicializar target igual que modelo principal
         self.target_model.load_state_dict(self.model.state_dict())
-        self.optimizer = optim.Adam(self.model.parameters(), lr=lr, weight_decay=weight_decay)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
+        # Contador y frecuencia de actualización de target
         self._learn_steps = 0
         self.target_update_freq = target_update_freq
     def act(self, state):
@@ -87,7 +90,7 @@ class DQNAgent:
         rewards = torch.FloatTensor(np.array(rewards)).to(self.device)
         next_states = torch.FloatTensor(np.stack(next_states)).to(self.device)
         dones = torch.FloatTensor(np.array(dones)).to(self.device)
-        q_values = self.model(states).gather(1, actions).squeeze(1)
+        q_values = self.model(states).gather(1, actions).squeeze()
         # Usar la target network para calcular next_q y estabilizar el objetivo
         with torch.no_grad():
             next_q = self.target_model(next_states).max(1)[0]
