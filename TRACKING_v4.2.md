@@ -1,3 +1,7 @@
+# Tracking TUI v4.2
+
+- Registro de cambios, experimentos y resultados relevantes para la versión 4.2.
+
 # TRACKING_v4.2
 
 ## Estado actual (18/11/2025)

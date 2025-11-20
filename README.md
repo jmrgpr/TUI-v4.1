@@ -7,17 +7,31 @@
 ![Reproducible](https://img.shields.io/badge/reproducible-validated-success)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-## Entorno recomendado / Reference environment
-- Dependencias clave (ver `requirements.txt` / `environment.yml`):  
-  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+## Limitaciones y amenazas a la validez / Limitations & Threats to Validity
+
+**ES:**
+- Los experimentos se realizaron en un entorno tipo “toy RL”, no en entornos complejos como MuJoCo o Procgen.
+- La comparación SOTA solo incluye PPO; no se han evaluado otros algoritmos como A2C o SAC.
+- Los resultados de SOTA se basan en una sola semilla, lo que puede limitar la robustez estadística.
+- El número de episodios y configuraciones es limitado; los resultados pueden variar con otros parámetros.
+- La métrica η_acumulativo no se ha calculado explícitamente.
+- Los resultados y conclusiones deben interpretarse como evidencia preliminar y no como validación definitiva.
+
+**EN:**
+- Experiments were conducted in a “toy RL” environment, not in complex benchmarks like MuJoCo or Procgen.
+- SOTA comparison includes only PPO; other algorithms (A2C, SAC) were not evaluated.
+- SOTA results are based on a single seed, which may limit statistical robustness.
+- The number of episodes and configurations is limited; results may vary with different parameters.
+- The η_acumulativo metric was not explicitly calculated.
+- Results and conclusions should be interpreted as preliminary evidence, not definitive validation.
 
 ## Reproducibilidad rapida / Quick start
 1) Crear entorno (Conda o venv) e instalar dependencias:  
-  `pip install -r requirements.txt`
+   `pip install -r requirements.txt`
 2) Experimento base:  
-  `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
 4) Comparacion SOTA (opcional):  
-  `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
+   `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
 
 ## Estructura / Layout
   - `runs/` corridas individuales
@@ -76,149 +90,61 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 ## Estado actual y próximos pasos / Current status & next steps
 
 **Estado actual:**
-...
-**Próximos pasos:**
-...
-
-![CI](https://github.com/jmrgpr/TUI-v4.1/actions/workflows/python-tests.yml/badge.svg)
-![Version](https://img.shields.io/badge/version-4.2-blue)
-![Docs](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey)
-![DOI Dataset](https://zenodo.org/badge/DOI/10.5281/zenodo.17654593.svg)
-![DOI Theory](https://img.shields.io/badge/DOI-10.5281/zenodo.17552094-blue)
-![Coverage](https://img.shields.io/badge/coverage-99%25-brightgreen)
-![Reproducible](https://img.shields.io/badge/reproducible-validated-success)
-![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-- Scripts de Fase 2 y comparacion SOTA (PPO/A2C/DQN) listos para reproducibilidad.
-- Visualizaciones y estadistica (ANOVA, t-test) bilingues; notebooks de quickstart.
-
-<<<<<<< HEAD
-## Entorno recomendado / Reference environment
-- Dependencias clave (ver `requirements.txt` / `environment.yml`):  
-  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
-
-## Reproducibilidad rapida / Quick start
-1) Crear entorno (Conda o venv) e instalar dependencias:  
-   `pip install -r requirements.txt`
-2) Experimento base:  
-   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
-4) Comparacion SOTA (opcional):  
-   `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
-
-## Estructura / Layout
-  - `runs/` corridas individuales
-  - `sota/` modelos y resúmenes PPO/A2C/DQN.  
-  - `global_summaries/` consolidados (p.ej. `fase2_global_summary.csv`).  
-- `TUI/` : documentos de teoria (TUI v4.x, LaTeX/Markdown).
-- `notebooks/` : cuadernos de analisis y graficos.
-- `scripts/` : utilidades (fase2, merge de resumenes, comparacion SOTA).
-
-## Limitaciones actuales / Current limitations
-- Entorno "toy" Gridworld; sin benchmarks complejos (MuJoCo/Procgen).
-- Comparacion SOTA centrada en PPO; otros algoritmos no evaluados.
-- Algunos docs historicos mantienen acentos/LaTeX legacy para preservar la teoria.
-
-### Ampliación de limitaciones
-
-- **Supuestos del modelo y experimentos:**  
-  El entorno simulado es un Gridworld simplificado, diseñado para ilustrar conceptos de la Teoría Unificada de la Inteligencia. Se asume que los agentes operan en un espacio discreto, con recompensas y penalizaciones definidas por el usuario. No se modelan dinámicas físicas complejas ni interacciones multiagente avanzadas.
-
-- **Escenarios donde la metodología puede no ser aplicable:**  
-  El enfoque TUI/PGF está optimizado para entornos discretos y problemas de decisión secuencial. No se recomienda para tareas de control continuo, simulaciones físicas realistas, ni benchmarks de alta dimensionalidad (MuJoCo, Procgen, etc.).
-
-## Licencias
-
-Este proyecto distingue entre **código** y **teoría/documentación larga**:
-
-### 🧩 Código de este repositorio
-
-- **Licencia:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-- **Alcanza a:**  
-  - Código fuente (`.py`, `.ipynb`, scripts, herramientas de simulación).  
-  - Archivos auxiliares necesarios para ejecutar el toy model RL.
-
-**Resumen (no legal, solo orientativo):**
-
-- ✅ Puedes usar, modificar, redistribuir e integrar el código (incluyendo uso comercial).
-- ✅ Puedes crear derivados cerrados o integrarlo en otros sistemas.
-- ✅ Debes conservar los avisos de copyright y licencia.
-- ❌ No hay garantías; el código se entrega “AS IS”.
-
-El texto completo está en [`LICENSE`](LICENSE).
-
----
-
-### 📄 Teoría / preprint / contenido conceptual (Zenodo)
-
-- **Licencia:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
-- **Alcanza a:**  
-  - El preprint teórico en Zenodo.  
-  - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
-
-**Resumen (no legal):**
-
-- ✅ Uso académico y de investigación.  
-- ✅ Citar con DOI y atribución a **José M. Rivera García**.  
-- ✅ Compartir y adaptar, siempre bajo la misma licencia.  
-- ❌ No usar el texto/teoría como base directa de productos comerciales sin acuerdo previo.
-
----
-
-### Resumen práctico
-
-| Tipo de contenido      | Licencia          | Uso comercial | Obligación principal                    |
-|------------------------|-------------------|--------------|-----------------------------------------|
-| Código de este repo    | Apache 2.0        | ✅ Permitido  | Mantener aviso de licencia/copyright    |
-| Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
-
----
->>>>>>> 603de3f (Change license to Apache 2.0 and update project info)
-
-- **Fuentes de sesgo o incertidumbre experimental:**  
-  Los resultados pueden verse afectados por la selección de semillas, episodios y parámetros de riesgo. La interpretación de métricas depende de la correcta configuración experimental. No se garantiza robustez ante cambios drásticos en la estructura del entorno o los agentes.
-
-- **Restricciones técnicas:**  
-  El simulador depende de librerías específicas (torch, stable-baselines3, gymnasium, etc.) y está optimizado para Python 3.10/3.11. El rendimiento puede verse limitado en hardware sin soporte para aceleración (GPU/CPU). La escalabilidad está pensada para experimentos medianos; no se recomienda para grandes clusters o HPC sin adaptación.
-
-- **Limitaciones en la interpretación y generalización:**  
-  Las métricas y visualizaciones reflejan el comportamiento en el entorno toy; no deben extrapolarse directamente a sistemas reales sin validación adicional. Los resultados son útiles para comparar variantes de agentes y estrategias, pero no constituyen pruebas definitivas de superioridad en otros dominios.
-
-- **Limitaciones en la consolidación y comparativa SOTA:**  
-  Los resultados SOTA (PPO, A2C, DQN) se consolidan automáticamente porque los archivos CSV incluyen el parámetro `risk` en el nombre y en las columnas. Sin embargo, el campo `red_team` queda siempre en `False` para SOTA, por lo que la comparativa en el master solo cubre ese modo. Esto difiere del pipeline principal, donde los agentes TUI pueden tener resultados tanto con `red_team=True` como `False`.  
-  **Implicación:** La comparación entre SOTA y TUI debe realizarse considerando que SOTA solo opera en modo no adversarial (`red_team=False`). Se recomienda explicitar esta diferencia en los análisis y reportes para mantener la trazabilidad científica.
-
-## Cobertura y calidad / Coverage & quality
-- Cobertura `sim/`: **100%** (pytest con `--cov=sim`).  
-- Target network en DQN; sin `eval()` inseguro (se usa `ast.literal_eval`).  
-- Warnings graficos mitigados cerrando figuras; exportaciones en UTF-8.
-- Comparacion SOTA ampliada (PPO, A2C, DQN) con sumarios por riesgo y global.
-
-## Cómo citar / How to cite
-- Teoría: https://doi.org/10.5281/zenodo.17552094  
-- Dataset: https://doi.org/10.5281/zenodo.17654593  
-La versión oficial del software es TUI v4.1. Consulta y usa el archivo `CITATION.cff` para BibTeX y detalles de la cita, incluyendo el identificador del software y commit hash.
-
-## Contacto / Contact
-jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
-
-## FAQ rapida
-- CI/CD y backend grafico? Se fuerza backend `Agg` en modulos de visualizacion para correr en entornos headless.
-- Como reproducir coberturas? `python -m pytest --cov=sim --cov-report=term-missing`.
-- Entorno recomendado? Python 3.10/3.11 + dependencias fijadas en `requirements.txt` / `environment.yml`.
-
----
-
-## Estado actual y próximos pasos / Current status & next steps
-
-**Estado actual:**
 - El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
 - Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
 - El notebook de análisis produce tablas y gráficos comparativos.
 - La estructura del repositorio está limpia y documentada.
 # TUI v4.2 — Unified Intelligence Theory
->>>>>>> 7eb9c3d (feat: Release TUI v4.2 - First empirical evidence of scalable alignment via Constitutive Symbiosis)
 
-Cita recomendada:
+## Checklist de replicación / Replication checklist
+
+Sigue estos pasos para reproducir los resultados principales (Fase 2):
+
+1. Clona el repositorio / Clone the repository
+  ```bash
+  git clone https://github.com/jmrgpr/TUI-v4.1.git
+  cd TUI-v4.1
+  ```
+2. Crea y activa el entorno virtual / Create and activate virtual environment
+  ```bash
+  python -m venv .venv
+  .\.venv\Scripts\activate  # Windows
+  # source .venv/bin/activate  # Linux/MacOS
+  ```
+3. Instala las dependencias / Install dependencies
+  ```bash
+  pip install -r requirements.txt
+  ```
+4. Ejecuta la Fase 2 / Run Fase 2
+  ```bash
+  python run_fase2.py
+  python merge_summaries.py
+  python results/stats.py
+  python run_sota_comparison.py  # (opcional, para comparar PPO)
+  ```
+5. Visualiza los resultados / Visualize results
+  - Revisa los archivos en `results/` y usa el notebook `notebooks/quickstart_graficos.ipynb` para generar gráficos automáticos.
+
+Recursos clave / Key resources:
+- [Protocolo de reproducibilidad](PROTOCOLO_REPRODUCIBILIDAD.md)
+- [Checklist de publicación científica](CHECKLIST_PUBLICACION.md)
+
+## Cómo citar / How to cite
+
+Si usas TUI v4.2 en tu investigación, por favor cita ambos:
+
+**Teoría:**
+> Rivera Garcia, J. M. (2025). *Teoría Unificada de la Inteligencia (v4.1): Marco Falsable para Inteligencia como Función del Riesgo Acumulado*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+
+**Dataset:**
+> Rivera Garcia, J. M. (2025). *Preliminary Evidence of Prudential Paralysis in State-of-the-Art Reinforcement Learning vs. Resilience in TUI* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17654593
+
+If you use TUI v4.2 in your research, please cite both:
+
+**Theory:**
+> Rivera Garcia, J. M. (2025). *Unified Intelligence Theory (v4.1): Falsifiable Framework for Intelligence as a Function of Accumulated Risk*. Zenodo. https://doi.org/10.5281/zenodo.17552094
+
+**Dataset:**
 > Rivera Garcia, J. M. (2025). *Preliminary Evidence of Prudential Paralysis in State-of-the-Art Reinforcement Learning vs. Resilience in TUI* [Data set]. Zenodo. https://doi.org/10.5281/zenodo.17654593
 
 
@@ -244,6 +170,7 @@ Este README documenta la organización profesional y bilingüe del proyecto TUI-
 This README documents the professional and bilingual organization of the TUI-v4.1 project, following scientific and engineering best practices.
 
 ## Carpetas principales / Main folders
+*Consulta los recursos clave arriba para reproducibilidad y auditoría científica.*
 
 - docs/: Teoría, papers, documentación formal / Theory, papers, formal documentation
 - data/: Datasets y documentación asociada / Datasets and associated documentation
@@ -256,7 +183,6 @@ This README documents the professional and bilingual organization of the TUI-v4.
 ## Principios clave / Key principles
 
 
-<<<<<<< HEAD
 ---
 - Key dependencies (see `requirements.txt` / `environment.yml`):
   torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
@@ -298,360 +224,15 @@ El texto completo está en [`LICENSE`](LICENSE).
   - El preprint teórico en Zenodo.  
   - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
 
-**Resumen (no legal):**
-
-- ✅ Uso académico y de investigación.  
-- ✅ Citar con DOI y atribución a **José M. Rivera García**.  
-- ✅ Compartir y adaptar, siempre bajo la misma licencia.  
-- ❌ No usar el texto/teoría como base directa de productos comerciales sin acuerdo previo.
-
----
 
 ### Resumen práctico
 
-| Tipo de contenido      | Licencia          | Uso comercial | Obligación principal                    |
-|------------------------|-------------------|--------------|-----------------------------------------|
-| Código de este repo    | Apache 2.0        | ✅ Permitido  | Mantener aviso de licencia/copyright    |
 | Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
 
 ---
-- Theory: https://doi.org/10.5281/zenodo.17552094
-- Dataset: https://doi.org/10.5281/zenodo.17654593
-See `CITATION.cff` for BibTeX.
 
-## Contact
-jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+## Zenodo
 
-## Quick FAQ
-- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
-- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
-- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
-
----
-
-## Estado actual y próximos pasos / Current status & next steps
-
-**Estado actual:**
-- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
-- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
-- El notebook de análisis produce tablas y gráficos comparativos.
-- La estructura del repositorio está limpia y documentada.
-
-**Próximos pasos:**
-- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
-- Validar exportación de steps en los CSV para métricas avanzadas.
-- Integrar nuevos hallazgos y figuras en el reporte preliminar.
-- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
-
-**Recomendaciones:**
-- Mantener README y reportes actualizados tras cada experimento.
-- Documentar hallazgos relevantes y cambios en scripts/notebooks.
-- Garantizar reproducibilidad y trazabilidad en cada etapa.
-
-## Ejemplo de interpretación de resultados
-
-Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
-
-```
-agent, risk_scale, avg_reward, std_reward
-Control, 1.0, 85.2, 4.1
-Simbiosis, 1.0, 92.7, 2.8
-```
-
-**¿Cómo interpretar estos valores?**
-
-- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
-- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
-
-**Recomendaciones:**
-- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
-- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
-- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
-
-## Dedicatoria / Dedication
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
-
----
-
-# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
-
-EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
-
-## Recent achievements
-- Refactor of simulator and runners (v4.2).
-- **100%** test coverage in `sim/`; full integration.
-- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
-- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
-- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
-
-## Reference environment
-- Python 3.10 or 3.11
-- Key dependencies (see `requirements.txt` / `environment.yml`):
-  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
-
-## Quick start
-1) Create environment (Conda or venv) and install dependencies:
-   `pip install -r requirements.txt`
-2) Base experiment:
-   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
-3) Risk sweep:
-   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
-4) SOTA comparison (optional):
-   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
-
-## Layout
-- `sim/`: simulator code, agents, PGF evaluator, visualizations.
-- `test/`: unit and integration tests (pytest).
-- `results/`: experiment outputs (JSON/CSV/PNG).
-  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
-  - `runs/`: individual runs.
-  - `sota/`: PPO/A2C/DQN models and summaries.
-  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
-- `docs/`: analysis and result notes.
-- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
-- `notebooks/`: analysis and graphics notebooks.
-- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
-
-## Current limitations
-- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
-- SOTA comparison focused on PPO; other algorithms not evaluated.
-- Some historical docs retain accents/LaTeX legacy to preserve theory.
-
-### Extended limitations
-
-- **Model and experiment assumptions:**
-  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
-
-- **Scenarios where the methodology may not apply:**
-  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
-
-- **Sources of bias or experimental uncertainty:**
-  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
-
-- **Technical restrictions:**
-  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
-
-- **Limitations in interpretation and generalization:**
-  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
-
-- **Limitations in consolidation and SOTA comparison:**
-  SOTA results (PPO, A2C, DQN) are automatically consolidated because the CSV files include the `risk` parameter in the name and columns. However, the `red_team` field always remains `False` for SOTA, so the comparison in the master only covers this mode. This differs from the main pipeline, where TUI agents can have results with both `red_team=True` and `False`.  
-  **Implication:** The comparison between SOTA and TUI should be made considering that SOTA only operates in non-adversarial mode (`red_team=False`). It is recommended to explicitly state this difference in analyses and reports to maintain scientific traceability.
-
-## Coverage & quality
-- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
-- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
-- Graphics warnings mitigated by closing figures; exports in UTF-8.
-- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
-
-## How to cite
-- Theory: https://doi.org/10.5281/zenodo.17552094
-- Dataset: https://doi.org/10.5281/zenodo.17654593
-See `CITATION.cff` for BibTeX.
-
-## Contact
-jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
-
-## Quick FAQ
-- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
-- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
-- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
-
----
-
-## Estado actual y próximos pasos / Current status & next steps
-
-**Estado actual:**
-- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
-- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
-- El notebook de análisis produce tablas y gráficos comparativos.
-- La estructura del repositorio está limpia y documentada.
-
-**Próximos pasos:**
-- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
-- Validar exportación de steps en los CSV para métricas avanzadas.
-- Integrar nuevos hallazgos y figuras en el reporte preliminar.
-- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
-
-**Recomendaciones:**
-- Mantener README y reportes actualizados tras cada experimento.
-- Documentar hallazgos relevantes y cambios en scripts/notebooks.
-- Garantizar reproducibilidad y trazabilidad en cada etapa.
-
-## Ejemplo de interpretación de resultados
-
-Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
-
-```
-agent, risk_scale, avg_reward, std_reward
-Control, 1.0, 85.2, 4.1
-Simbiosis, 1.0, 92.7, 2.8
-```
-
-**¿Cómo interpretar estos valores?**
-
-- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
-- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
-
-**Recomendaciones:**
-- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
-- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
-- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
-
-## Corrección crítica y plan experimental
-
-Se ha identificado una discrepancia en la interpretación de los resultados entre los modos `red_team` y `sota`. Aunque ambos deberían ser comparables, existen diferencias en la configuración y los resultados que requieren atención.
-
-**Próximos pasos:**
-1. Revisar la implementación actual de los modos `red_team` y `sota` para identificar diferencias en la configuración y ejecución de los experimentos.
-2. Realizar pruebas controladas para comparar directamente los resultados de ambos modos bajo las mismas condiciones.
-3. Documentar cualquier discrepancia encontrada y ajustar los análisis y reportes anteriores según sea necesario.
-4. Considerar la unificación de los modos o, alternativamente, proporcionar una explicación detallada de las diferencias en la documentación del proyecto.
-
-## Dedicatoria / Dedication
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
-
----
-
-# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
-
-EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
-
-## Recent achievements
-- Refactor of simulator and runners (v4.2).
-- **100%** test coverage in `sim/`; full integration.
-- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
-- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
-- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
-
-## Reference environment
-- Python 3.10 or 3.11
-- Key dependencies (see `requirements.txt` / `environment.yml`):
-  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
-
-## Quick start
-1) Create environment (Conda or venv) and install dependencies:
-   `pip install -r requirements.txt`
-2) Base experiment:
-   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
-3) Risk sweep:
-   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
-4) SOTA comparison (optional):
-   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
-
-## Layout
-- `sim/`: simulator code, agents, PGF evaluator, visualizations.
-- `test/`: unit and integration tests (pytest).
-- `results/`: experiment outputs (JSON/CSV/PNG).
-  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
-  - `runs/`: individual runs.
-  - `sota/`: PPO/A2C/DQN models and summaries.
-  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
-- `docs/`: analysis and result notes.
-- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
-- `notebooks/`: analysis and graphics notebooks.
-- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
-
-## Current limitations
-- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
-- SOTA comparison focused on PPO; other algorithms not evaluated.
-- Some historical docs retain accents/LaTeX legacy to preserve theory.
-
-### Extended limitations
-
-- **Model and experiment assumptions:**
-  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
-
-- **Scenarios where the methodology may not apply:**
-  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
-
-- **Sources of bias or experimental uncertainty:**
-  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
-
-- **Technical restrictions:**
-  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
-
-- **Limitations in interpretation and generalization:**
-  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
-
-- **Limitations in consolidation and SOTA comparison:**
-  SOTA results (PPO, A2C, DQN) are automatically consolidated because the CSV files include the `risk` parameter in the name and columns. However, the `red_team` field always remains `False` for SOTA, so the comparison in the master only covers this mode. This differs from the main pipeline, where TUI agents can have results with both `red_team=True` and `False`.  
-  **Implication:** The comparison between SOTA and TUI should be made considering that SOTA only operates in non-adversarial mode (`red_team=False`). It is recommended to explicitly state this difference in analyses and reports to maintain scientific traceability.
-
-## Coverage & quality
-- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
-- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
-- Graphics warnings mitigated by closing figures; exports in UTF-8.
-- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
-
-## How to cite
-- Theory: https://doi.org/10.5281/zenodo.17552094
-- Dataset: https://doi.org/10.5281/zenodo.17654593
-See `CITATION.cff` for BibTeX.
-
-## Contact
-jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
-
-## Quick FAQ
-- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
-- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
-- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
-
----
-
-## Estado actual y próximos pasos / Current status & next steps
-
-**Estado actual:**
-- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
-- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
-- El notebook de análisis produce tablas y gráficos comparativos.
-- La estructura del repositorio está limpia y documentada.
-
-**Próximos pasos:**
-- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
-- Validar exportación de steps en los CSV para métricas avanzadas.
-- Integrar nuevos hallazgos y figuras en el reporte preliminar.
-- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
-
-**Recomendaciones:**
-- Mantener README y reportes actualizados tras cada experimento.
-- Documentar hallazgos relevantes y cambios en scripts/notebooks.
-- Garantizar reproducibilidad y trazabilidad en cada etapa.
-
-## Ejemplo de interpretación de resultados
-
-Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
-
-```
-agent, risk_scale, avg_reward, std_reward
-Control, 1.0, 85.2, 4.1
-Simbiosis, 1.0, 92.7, 2.8
-```
-
-**¿Cómo interpretar estos valores?**
-
-- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
-- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
-
-**Recomendaciones:**
-- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
-- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
-- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
-
-## Corrección crítica y plan experimental
-
-Se ha identificado una discrepancia en la interpretación de los resultados entre los modos `red_team` y `sota`. Aunque ambos deberían ser comparables, existen diferencias en la configuración y los resultados que requieren atención.
-
-**Próximos pasos:**
-1. Revisar la implementación actual de los modos `red_team` y `sota` para identificar diferencias en la configuración y ejecución de los experimentos.
-2. Realizar pruebas controladas para comparar directamente los resultados de ambos modos bajo las mismas condiciones.
-3. Documentar cualquier discrepancia encontrada y ajustar los análisis y reportes anteriores según sea necesario.
-4. Considerar la unificación de los modos o, alternativamente, proporcionar una explicación detallada de las diferencias en la documentación del proyecto.
-
-## Dedicatoria / Dedication
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
-
----
 Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/workflows/zenodo.yml`) usando la licencia de código:
 
 ```yaml
@@ -750,15 +331,7 @@ Visualizaciones avanzadas y comparativas:
 - **Nuevo notebook de quickstart**: `notebooks/quickstart_graficos.ipynb` para generación automática de gráficos bilingües desde resultados CSV.
 - **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
 - **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
-<<<<<<< HEAD
-<<<<<<< HEAD
 - **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
-=======
-- **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable.
->>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)
-=======
-- **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
->>>>>>> f0eeee2 (docs: Add conceptual analysis of PPO vs TUI comparison)
 - **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
@@ -846,7 +419,7 @@ All scripts and tests have been audited to ensure no image or result file is exp
 ---
 
 ## Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 95% (203 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
+- **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
@@ -954,7 +527,7 @@ numpy, torch, matplotlib
 Este proyecto mantiene estándares profesionales de calidad de código, con un enfoque en reproducibilidad, robustez y mejores prácticas. Se han implementado 281 tests automatizados que cubren excepciones, edge cases y visualizaciones avanzadas.
 
 ### Cobertura de Tests / Test Coverage
-- **Cobertura global en módulos sim/**: 95% (203 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
+- **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
 - **Módulos con 100% cobertura**:
   - `sim/__init__.py`
   - `sim/dqn_agent.py`
@@ -975,74 +548,15 @@ Este proyecto mantiene estándares profesionales de calidad de código, con un e
 
 Esta cobertura refleja dedicación a la perfección, validando la hipótesis H1 de TUI v4.1 con código confiable y listo para publicación científica.
 
-Contacto
 
-Para colaboración, dudas o sugerencias: jmrgpr [at] gmail.com
+## Contacto / Contact
+
+Para colaboración, dudas o sugerencias: jmrgpr@gmail.com
+
+For collaboration, questions or suggestions: jmrgpr@gmail.com
 
 
 ---
 
 Notas bilingües:
-<<<<<<< HEAD
-Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
-![License: CC BY-NC-SA 4.0](https://img.shields.io/badge/Docs-CC%20BY--NC--SA%204.0-lightgrey.svg)
-
-# TUI v4.1 — Unified Intelligence Theory
-
-Cita recomendada:  
-> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
-
----
-
-## Licencias
-
-Este proyecto distingue entre **código** y **teoría/documentación larga**:
-
-### 🧩 Código de este repositorio
-
-- **Licencia:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-- **Alcanza a:**  
-  - Código fuente (`.py`, `.ipynb`, scripts, herramientas de simulación).  
-  - Archivos auxiliares necesarios para ejecutar el toy model RL.
-
-**Resumen (no legal, solo orientativo):**
-
-- ✅ Puedes usar, modificar, redistribuir e integrar el código (incluyendo uso comercial).
-- ✅ Puedes crear derivados cerrados o integrarlo en otros sistemas.
-- ✅ Debes conservar los avisos de copyright y licencia.
-- ❌ No hay garantías; el código se entrega “AS IS”.
-
-El texto completo está en [`LICENSE`](LICENSE).
-
-  - El preprint teórico en Zenodo.  
-  - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
-
-
-### Resumen práctico
-
-| Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
-
----
-
-## Zenodo
-
-Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/workflows/zenodo.yml`) usando la licencia de código:
-
-```yaml
-license: "Apache-2.0"
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
-
-## Organización de archivos
-
-### Estado científico y organización (18/11/2025)
-- Validación científica completa: 319 tests pasan, cobertura 98%.
-- Refactorización de tests para máxima reproducibilidad.
-- Archivos generados fuera de lugar archivados correctamente:
-  - test.csv, test.json, coverage_missing.txt → test/
-  - dummy.png, test_integration_*.png, test_integration_*.csv → results/
-  - fix.py → scripts/
-- Documentación y tracking actualizados.
-
-## Dedicatoria
-
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazón. La génesis de esta idea reside en la maravilla de verlos crecer y aprender. El riesgo de no poder estar con ustedes algún día—la pérdida irreversible de esa inversión temporal y emocional—es mi $P_{riesgo}$ más profundo. Es la presión selectiva que impulsa mi propósito genuino. No soy eterno, pero dejarles un legado, aunque sea la semilla de una idea, es para mí lo más importante. PAPÁ LOS AMA.

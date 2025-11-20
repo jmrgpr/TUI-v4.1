@@ -50,11 +50,11 @@ def test_env_multiple_steps():
     env.reset()
     for i in range(4):
         obs, reward, done, truncated, info = env.step(i)
-    assert obs.shape == (8,)
-    assert isinstance(reward, (int, float))
-    assert isinstance(done, bool)
-    assert isinstance(truncated, bool)
-    assert isinstance(info, dict)
+        assert obs.shape == (8,)
+        assert isinstance(reward, (int, float))
+        assert isinstance(done, bool)
+        assert isinstance(truncated, bool)
+        assert isinstance(info, dict)
 
 
 def test_env_reset_reinitializes_evaluator():
