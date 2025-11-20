@@ -96,11 +96,39 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - La estructura del repositorio está limpia y documentada.
 # TUI v4.2 — Unified Intelligence Theory
 
-## Entorno de referencia / Reference Environment
+## Entorno recomendado / Reference environment
+- Python 3.10 o 3.11  
+- Dependencias clave (ver `requirements.txt` / `environment.yml`):  
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
 
-**ES:**
-Se recomienda el siguiente entorno para máxima reproducibilidad. Las dependencias están fijadas en `requirements.txt` y `environment.yml`.
+## Reproducibilidad rapida / Quick start
+1) Crear entorno (Conda o venv) e instalar dependencias:  
+   `pip install -r requirements.txt`
+2) Experimento base:  
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Barrido de riesgo:  
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep_risk`
+4) Comparacion SOTA (opcional):  
+   `python run_sota_comparison.py`
 
+## Estructura / Layout
+- `sim/` : codigo del simulador, agentes, evaluador PGF, visualizaciones.
+- `test/` : pruebas unitarias e integracion (pytest).
+- `results/` : salidas JSON/CSV/PNG de experimentos.
+- `docs/` : analisis y notas de resultados.
+- `TUI/` : documentos de teoria (TUI v4.x, LaTeX/Markdown).
+- `notebooks/` : cuadernos de analisis y graficos.
+- `scripts/` : utilidades (fase2, merge de resumenes, comparacion SOTA).
+
+## Limitaciones actuales / Current limitations
+- Entorno "toy" Gridworld; sin benchmarks complejos (MuJoCo/Procgen).
+- Comparacion SOTA centrada en PPO; otros algoritmos no evaluados.
+- Algunos docs historicos mantienen acentos/LaTeX legacy para preservar la teoria.
+
+## Cobertura y calidad / Coverage & quality
+- Cobertura `sim/`: **100%** (pytest con `--cov=sim`).  
+- Target network en DQN; sin `eval()` inseguro (se usa `ast.literal_eval`).  
+- Warnings graficos mitigados cerrando figuras; exportaciones en UTF-8.
 
 *   **Python:** 3.10 / 3.11
 *   **Dependencias principales:**
@@ -113,6 +141,7 @@ Se recomienda el siguiente entorno para máxima reproducibilidad. Las dependenci
     matplotlib==3.7.2
     seaborn==0.12.2
     ```
+
 
 **EN:**
 The following environment is recommended for maximum reproducibility. Dependencies are pinned in `requirements.txt` and `environment.yml`.
@@ -537,12 +566,15 @@ Este proyecto mantiene altos estándares de calidad de código, con un enfoque e
 - Implementada target network en DQN para mayor estabilidad y reproducibilidad.
 - Eliminado uso inseguro de `eval()`; ahora se usa `ast.literal_eval()` para cargar policies.
 - Todos los cambios verificados por tests automáticos (pytest).
+=======
+## Como citar / How to cite
+- Teoria: https://doi.org/10.5281/zenodo.17552094  
+- Dataset: https://doi.org/10.5281/zenodo.17654593  
+Ver `CITATION.cff` para BibTeX.
+>>>>>>> ad62803 (docs: limpieza y actualización profesional de README.md para v4.2, cobertura 100%, estructura bilingüe)
 
 ## Contacto / Contact
-
-Para colaboración, dudas o sugerencias: jmrgpr@gmail.com
-
-For collaboration, questions or suggestions: jmrgpr@gmail.com
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
 
 ---
 
@@ -550,5 +582,4 @@ Notas bilingües:
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
 
 ## Dedicatoria / Dedication
-
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazón.
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
