@@ -54,6 +54,7 @@ from sim.dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for 
 from sim.evaluator_pgf import EvaluatorPGF  # Evaluador externo de métricas / External metrics evaluator
 
 import torch  # Necesario para DQN / Required for DQN
+import ast
 # Visualización avanzada
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -166,7 +167,8 @@ class Agent(Event):
                 def try_tuple(k):
                     if k.startswith('(') and k.endswith(')'):
                         try:
-                            return eval(k)
+                            # Usar literal_eval por seguridad en lugar de eval
+                            return ast.literal_eval(k)
                         except Exception:
                             return k
                     return k

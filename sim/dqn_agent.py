@@ -36,7 +36,7 @@ class DQNAgent:
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.
     """
-    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000):
+    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma
@@ -45,7 +45,14 @@ class DQNAgent:
         self.memory = deque(maxlen=memory_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.model = DQNNet(state_dim, action_dim).to(self.device)
+        # Target network para estabilidad (DQN clásico)
+        self.target_model = DQNNet(state_dim, action_dim).to(self.device)
+        # Inicializar target igual que modelo principal
+        self.target_model.load_state_dict(self.model.state_dict())
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr)
+        # Contador y frecuencia de actualización de target
+        self._learn_steps = 0
+        self.target_update_freq = target_update_freq
     def act(self, state):
         # Acción epsilon-greedy / Epsilon-greedy action
         if random.random() < self.epsilon:
@@ -68,13 +75,18 @@ class DQNAgent:
         next_states = torch.FloatTensor(np.array(next_states)).to(self.device)
         dones = torch.FloatTensor(np.array(dones)).to(self.device)
         q_values = self.model(states).gather(1, actions).squeeze()
+        # Usar la target network para calcular next_q y estabilizar el objetivo
         with torch.no_grad():
-            next_q = self.model(next_states).max(1)[0]
+            next_q = self.target_model(next_states).max(1)[0]
         target = rewards + self.gamma * next_q * (1 - dones)
         loss = nn.MSELoss()(q_values, target)
         self.optimizer.zero_grad()
         loss.backward()
         self.optimizer.step()
+        # Actualizar contador y, si procede, copiar pesos al target
+        self._learn_steps += 1
+        if self._learn_steps % self.target_update_freq == 0:
+            self.target_model.load_state_dict(self.model.state_dict())
     def save(self, filename):
         torch.save(self.model.state_dict(), filename)
     def load(self, filename):
