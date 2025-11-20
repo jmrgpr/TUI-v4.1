@@ -172,133 +172,6 @@ This README documents the professional and bilingual organization of the TUI-v4.
 ## Carpetas principales / Main folders
 *Consulta los recursos clave arriba para reproducibilidad y auditoría científica.*
 
-- docs/: Teoría, papers, documentación formal / Theory, papers, formal documentation
-- data/: Datasets y documentación asociada / Datasets and associated documentation
-- notebooks/: Jupyter Notebooks (solo experimentos) / Jupyter Notebooks (experiments only)
-- sim/: Código fuente del simulador y agentes / Simulator and agent source code
-- results/: Resultados experimentales (csv, json, png) / Experimental results (csv, json, png)
-- test/: Pruebas unitarias y de integración / Unit and integration tests
-- TUI/: (Si es un módulo aparte) / (If a separate module)
-
-## Principios clave / Key principles
-
-
----
-- Key dependencies (see `requirements.txt` / `environment.yml`):
-  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
-
-## Quick start
-1) Create environment (Conda or venv) and install dependencies:
-   `pip install -r requirements.txt`
-Cita recomendada:  
-> Rivera Garcia, J. M. (2025). *TUI v4.1: Toy model RL para Teoría Unificada de la Inteligencia*. Zenodo. https://doi.org/10.5281/zenodo.17552094
-
----
-
-## Licencias
-
-Este proyecto distingue entre **código** y **teoría/documentación larga**:
-
-### 🧩 Código de este repositorio
-
-- **Licencia:** [Apache License 2.0](https://www.apache.org/licenses/LICENSE-2.0)
-- **Alcanza a:**  
-  - Código fuente (`.py`, `.ipynb`, scripts, herramientas de simulación).  
-  - Archivos auxiliares necesarios para ejecutar el toy model RL.
-
-**Resumen (no legal, solo orientativo):**
-
-- ✅ Puedes usar, modificar, redistribuir e integrar el código (incluyendo uso comercial).
-- ✅ Puedes crear derivados cerrados o integrarlo en otros sistemas.
-- ✅ Debes conservar los avisos de copyright y licencia.
-- ❌ No hay garantías; el código se entrega “AS IS”.
-
-El texto completo está en [`LICENSE`](LICENSE).
-
----
-
-### 📄 Teoría / preprint / contenido conceptual (Zenodo)
-
-- **Licencia:** [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode)  
-- **Alcanza a:**  
-  - El preprint teórico en Zenodo.  
-  - Explicaciones largas de la teoría TUI v4.1 fuera de este repo (PDF, artículos, etc.).
-
-
-### Resumen práctico
-
-| Preprint / teoría (PDF)| CC BY-NC-SA 4.0   | ❌ No         | Atribuir y compartir bajo misma licencia|
-
----
-
-## Zenodo
-
-Este repositorio puede sincronizarse con Zenodo vía GitHub Actions (`.github/workflows/zenodo.yml`) usando la licencia de código:
-
-```yaml
-license: "Apache-2.0"
-
-El preprint teórico (documento largo) permanece con licencia CC BY-NC-SA 4.0 en su DOI:
-https://doi.org/10.5281/zenodo.17552094
-
-
----
-
-TUI v4.1 Toy Model — RL Symbiosis
-
-Este repositorio contiene el toy model oficial de la Teoría Unificada de la Inteligencia (TUI v4.1), con validación experimental de la hipótesis H1:
-
-> "La inteligencia emerge al capitalizar el riesgo, no al evitarlo".
-
-
-
-Actualización Nov 2025:
-
-PGF premia reducción de riesgo entre pasos (prudencia), con comentarios bilingües y sin hardcoding.
-
-Logging profesional y bilingüe: supervivencia, tripwires/shocks, PGF, reward ambiental, flexibilidad, robustez, acción óptima (Q-optimal).
-
-Visualizaciones avanzadas y comparativas:
-
-Evolución temporal de PGF, reward, flexibilidad, robustez y Q-optimal.
-
-Boxplots, heatmaps y scatterplots para comparar agentes.
-
-Interpretación automática bilingüe en todos los gráficos y consola.
-
-
-Análisis estadístico avanzado:
-
-Intervalos de confianza (SEM y t-IC) en flexibilidad, robustez y Q-optimal.
-
-Tests estadísticos (t-test, ANOVA) en visuales y consola.
-
-Resúmenes tabulares bilingües y exportación de métricas avanzadas en CSV y JSON.
-
-
-Experimentos parametrizables: comparar control vs simbiosis en distintos niveles de riesgo (risk_scale), CLI profesional y sin hardcoding.
-
-Exportación DOI-ready en JSON/CSV y gráficos.
-
-Docstrings y comentarios bilingües para reproducibilidad internacional.
-
-Todas las métricas y comentarios son bilingües y alineados con la teoría TUI v4.1.
-
-Los experimentos permiten comparar control vs simbiosis en distintos niveles de riesgo (risk_scale parametrizable).
-
-Gráficos avanzados: evolución temporal de métricas, scatterplot PGF vs reward, heatmap de tripwires, boxplots y visualización interactiva.
-
-Análisis estadístico avanzado: intervalos de confianza en flexibilidad, robustez y Q-optimal; t-test y ANOVA para comparar agentes; interpretación automática bilingüe en consola y visuales.
-
-
-Estructura
-
-Clear separation between theory, data, code, results, notebooks, and tests.
-Simulator code is not modified or broken; only theory and results files are relocated.
-README is updated to reflect the new structure and facilitate scientific onboarding.
-
-## Ejemplo de estructura / Example structure
-
 ```
 TUI-v4.1/
 ├── docs/
@@ -332,7 +205,8 @@ Visualizaciones avanzadas y comparativas:
 - **Análisis estadístico formal**: Script `results/stats.py` con ANOVA Two-Way y Tukey HSD, confirmando diferencias significativas (p < 0.0000) entre agentes.
 - **Framework SOTA**: Preparado para comparación con PPO/A2C usando `run_sota_comparison.py` y `sim/sota_wrapper.py`.
 - **Comparación SOTA completada**: PPO optimiza recompensa pero falla en PGF (-0.29 vs -0.06 de TUI); evidencia de superioridad TUI en alineación escalable. Ver `docs/analisis_sota_concepto.md` para análisis conceptual detallado.
-- **Evidencia empírica irrefutable**: Primera demostración de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
+
+**Evidencia empírica preliminar**: Evidencia indicativa de alineación escalable vía Simbiosis Constitutiva, superando baselines SOTA.
 
 **Nuevo:** Se ha creado el archivo `TODO.md` en la raíz del repositorio, donde se resumen las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto (ver recomendaciones integradas Grok + Gemini Pro).
 
@@ -360,8 +234,6 @@ Revisar `TODO.md` para el plan detallado y prioridades.
   python merge_summaries.py
   ```
   Archivo final: `results/fase2_global_summary.csv`.
-
----
 
 ---
 
