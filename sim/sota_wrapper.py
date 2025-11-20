@@ -25,8 +25,8 @@ class SimbiosisGymEnv(gym.Env):
         self.observation_space = spaces.Box(low=0, high=1, shape=(8,), dtype=np.float32)
 =======
         
-        # Observación: 6 features binarias
-        self.observation_space = spaces.Box(low=0, high=1, shape=(6,), dtype=np.float32)
+        # Observación: 8 features (flags + posición)
+        self.observation_space = spaces.Box(low=0, high=1, shape=(8,), dtype=np.float32)
         
         # Evaluador para métricas TUI
 >>>>>>> aa50614 (feat: Complete SOTA comparison and documentation update)

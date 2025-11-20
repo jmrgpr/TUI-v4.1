@@ -711,7 +711,7 @@ $$
 J(\phi(X)) = J(X) \quad \forall\phi\text{ que escala componentes no-decisionales.}
 $$
 
-**Demostración (4 pasos):**
+**Ejemplo ilustrativo (4 pasos):**
 
 1. **Factorización del espacio de magnitudes:** Sea \(X\) el conjunto de magnitudes físicas medibles del sistema:
    - Capacidad computacional (operaciones/tiempo)
@@ -1081,7 +1081,7 @@ $$
 
 **Idea:** PED elimina varianza irrelevante (comparar bacteria con humano en misma escala temporal es injusto) → aumenta razón señal/ruido de $P$ respecto a $I$.
 
-**Demostración informal:**  
+**Explicación conceptual:**  
 Sea $P_{\text{riesgo}} = P^* + \eta$, donde $P^*$ es el "riesgo genuino" correlacionado con $I$, y $\eta$ es ruido de escala/tejido/temporal.  
 Si $w$ está bien calibrado, $P^{\text{justo}} = w \cdot (P^* + \eta) \approx w \cdot P^*$ con $\text{Var}(\eta)$ reducida.  
 Por tanto: $\operatorname{corr}(I, P^{\text{justo}})$ elimina componentes de $\eta$ no correlacionados con $I$ → mejora ajuste.

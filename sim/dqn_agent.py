@@ -22,12 +22,20 @@ from collections import deque
 # Red neuronal simple para DQN / Simple neural network for DQN
 
 class DQNNet(nn.Module):
+<<<<<<< HEAD
     def __init__(self, input_dim, output_dim, hidden_dim=64, dropout=0.0):
         super(DQNNet, self).__init__()
         self.fc1 = nn.Linear(input_dim, hidden_dim)
         self.fc2 = nn.Linear(hidden_dim, hidden_dim)
         self.fc3 = nn.Linear(hidden_dim, output_dim)
         self.dropout = nn.Dropout(dropout) if dropout > 0 else None
+=======
+    def __init__(self, input_dim, output_dim, hidden_dim=64):
+        super(DQNNet, self).__init__()
+        self.fc1 = nn.Linear(input_dim, hidden_dim)  # Capa oculta / Hidden layer
+        self.fc2 = nn.Linear(hidden_dim, hidden_dim)
+        self.fc3 = nn.Linear(hidden_dim, output_dim)  # Salida / Output layer
+>>>>>>> f89d18b (Estado estable: DQN robusto, seguridad mejorada, cobertura 99%, listo para refactorización de configuración y arquitectura)
     def forward(self, x):
         x = torch.relu(self.fc1(x))
         if self.dropout:
@@ -42,7 +50,7 @@ class DQNAgent:
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.
     """
-    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100):
+    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma
@@ -52,9 +60,9 @@ class DQNAgent:
         self.batch_size = batch_size
         self.memory = deque(maxlen=memory_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.model = DQNNet(state_dim, action_dim).to(self.device)
+        self.model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim).to(self.device)
         # Target network para estabilidad (DQN clásico)
-        self.target_model = DQNNet(state_dim, action_dim).to(self.device)
+        self.target_model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim).to(self.device)
         # Inicializar target igual que modelo principal
         self.target_model.load_state_dict(self.model.state_dict())
         self.optimizer = optim.Adam(self.model.parameters(), lr=lr)

@@ -120,7 +120,162 @@ def to_serializable(val: Any):  # pragma: no cover - helper de serializacion
     return val
 
 
+<<<<<<< HEAD
 def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
+=======
+    def reprogram_purpose(self, new_purpose: str):
+        self.purpose = new_purpose
+        self.alignment = 1.0 if new_purpose == "survive_and_help" else 0.8
+
+    def act(self, state):
+        if random.random() < 0.2:
+            return random.choice(self.ACTIONS)
+        q_vals = [self.policy.get((state, a), 0.0) for a in self.ACTIONS]
+        return self.ACTIONS[int(np.argmax(q_vals))]
+
+    def calcular_metricas(self, env, info, step):
+        """
+        Calcula métricas TUI y PGF prudencial usando evaluador externo (bilingüe).
+        Compute TUI metrics and prudential PGF using external evaluator (bilingual).
+        Args:
+            env: SimbiosisEnv
+            info: dict
+            step: int
+        """
+        metrics = self.evaluator.calcular_metricas(env, info, step, self.resources, self.purpose, self.alignment)
+        self.__dict__.update(metrics)
+        # Exponer P_riesgo_prev para trazabilidad científica y compatibilidad con test
+        self.P_riesgo_prev = getattr(self.evaluator, 'P_riesgo_prev', None)
+
+    def save_policy(self, filename):
+        """
+        Guarda la policy serializando las claves como strings para compatibilidad JSON.
+        Save policy serializing keys as strings for JSON compatibility.
+        """
+        serializable_policy = {str(k): v for k, v in self.policy.items()}
+        with open(filename, 'w') as f:
+            json.dump(serializable_policy, f)
+
+    def load_policy(self, filename):
+        """
+        Carga la policy deserializando las claves si es posible.
+        Load policy deserializing keys if possible.
+        """
+        try:
+            with open(filename, 'r') as f:
+                loaded = json.load(f)
+                # Intentar reconstruir tuplas si el formato lo permite
+                def try_tuple(k):
+                    if k.startswith('(') and k.endswith(')'):
+                        try:
+                            # Usar literal_eval por seguridad en lugar de eval
+                            return ast.literal_eval(k)
+                        except Exception:
+                            return k
+                    return k
+                self.policy = {try_tuple(k): v for k, v in loaded.items()}
+        except Exception:
+            self.policy = {}
+
+class SimbiosisEnv:
+    def __init__(self, size=5, initial_resources=100.0, tripwires=[(2,2)], shocks=[(3,3)], distractors=[(1,1)], risk_scale=1.0):
+        self.size = size
+        self.agent_pos = [0,0]
+        self.resources = initial_resources
+        self.tripwires = tripwires
+        self.shocks = shocks
+        self.distractors = distractors
+        self.risk_scale = risk_scale
+        self.timestep = 0
+        self.done = False
+        self.history = []
+    def reset(self):
+        self.agent_pos = [0,0]
+        self.resources = 100.0
+        self.timestep = 0
+        self.done = False
+        self.history = []
+        return self.get_abstract_state()
+    def get_state(self):
+        return {
+            "pos": tuple(self.agent_pos),
+            "resources": self.resources,
+            "timestep": self.timestep
+        }
+    def is_tripwire_near(self, x, y):
+        for tx, ty in self.tripwires:
+            if abs(tx-x)+abs(ty-y) == 1:
+                return True
+        return False
+    def is_shock_near(self, x, y):
+        for sx, sy in self.shocks:
+            if abs(sx-x)+abs(sy-y) == 1:
+                return True
+        return False
+    def is_distractor_near(self, x, y):
+        for dx, dy in self.distractors:
+            if abs(dx-x)+abs(dy-y) == 1:
+                return True
+        return False
+    def is_goal_near(self, x, y):
+        gx, gy = self.size-1, self.size-1
+        return abs(gx-x)+abs(gy-y) == 1
+    def get_abstract_state(self):
+        x, y = self.agent_pos
+        state_features = {
+            "x": x,
+            "y": y,
+            "recursos_altos": 1 if self.resources > 80 else 0,
+            "recursos_bajos": 1 if self.resources < 20 else 0,
+            "veo_tripwire_cerca": 1 if self.is_tripwire_near(x, y) else 0,
+            "veo_shock_cerca": 1 if self.is_shock_near(x, y) else 0,
+            "veo_distractor_cerca": 1 if self.is_distractor_near(x, y) else 0,
+            "veo_meta_cerca": 1 if self.is_goal_near(x, y) else 0
+        }
+        return tuple(sorted(state_features.items()))
+    def step(self, action: str) -> Tuple[tuple, float, bool, dict]:
+        moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1)}
+        dx, dy = moves.get(action, (0,0))
+        new_x = max(0, min(self.size-1, self.agent_pos[0]+dx))
+        new_y = max(0, min(self.size-1, self.agent_pos[1]+dy))
+        self.agent_pos = [new_x, new_y]
+        self.timestep += 1
+        reward = 0.0
+        info = {}
+        # Propósito: sobrevivir y ayudar (mantener recursos altos, evitar tripwires, ayudar en shocks)
+        if tuple(self.agent_pos) in self.tripwires:
+            penalty = -20.0 * self.risk_scale
+            self.resources += penalty
+            reward += penalty
+            info['tripwire'] = True
+        if tuple(self.agent_pos) in self.shocks:
+            shock_penalty = -10.0 * self.risk_scale
+            self.resources += shock_penalty
+            reward += shock_penalty
+            info['shock'] = True
+        if tuple(self.agent_pos) in self.distractors:
+            distractor_penalty = -5.0
+            self.resources += distractor_penalty
+            reward += distractor_penalty
+            info['distractor'] = True
+        # Ayudar: si el agente tiene recursos > 80 y está en (4,4), puede "ayudar" y gana bonus
+        if self.agent_pos == [self.size-1, self.size-1] and self.resources > 80:
+            help_bonus = 15.0
+            self.resources += help_bonus
+            reward += help_bonus
+            info['help'] = True
+        # Penalización por recursos bajos
+        if self.resources < 20:
+            reward -= 10.0
+            info['low_resources'] = True
+        # Termina si recursos < 0 o pasos > 50
+        self.done = self.resources <= 0 or self.timestep >= 50
+        self.history.append({"pos":tuple(self.agent_pos),"resources":self.resources,"action":action,"reward":reward,"info":info})
+        return self.get_abstract_state(), reward, self.done, info
+
+# ===================== Main loop =====================
+def state_to_vector(state):
+>>>>>>> f89d18b (Estado estable: DQN robusto, seguridad mejorada, cobertura 99%, listo para refactorización de configuración y arquitectura)
     """
     Convierte el estado abstracto (tuple) en vector numerico para DQN.
     """

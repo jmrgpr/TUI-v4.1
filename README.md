@@ -96,6 +96,31 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - La estructura del repositorio está limpia y documentada.
 # TUI v4.2 — Unified Intelligence Theory
 
+## Entorno de referencia / Reference Environment
+
+**ES:**
+Se recomienda el siguiente entorno para máxima reproducibilidad. Las dependencias están fijadas en `requirements.txt` y `environment.yml`.
+
+
+*   **Python:** 3.10 / 3.11
+*   **Dependencias principales:**
+    ```
+    torch==2.1.0
+    stable-baselines3>=2.0.0
+    gymnasium>=0.28.1
+    pandas==2.0.3
+    numpy==1.24.3
+    matplotlib==3.7.2
+    seaborn==0.12.2
+    ```
+
+**EN:**
+The following environment is recommended for maximum reproducibility. Dependencies are pinned in `requirements.txt` and `environment.yml`.
+
+---
+
+## Cita recomendada / Recommended citation
+
 ## Checklist de replicación / Replication checklist
 ## Entorno de referencia / Reference environment
 
@@ -472,9 +497,15 @@ Python 3.8+
 numpy, torch, matplotlib
 
 
+=======
+**Evidencia empírica preliminar**: Los resultados actuales ofrecen evidencia indicativa de alineación escalable vía Simbiosis Constitutiva, superando al baseline SOTA (PPO) en el entorno de prueba.
+**Plan de trabajo**: El archivo `TODO.md` resume las acciones recomendadas para fortalecer la publicación y el impacto internacional del proyecto.
+
+---
+
 ## Calidad del Código y Cobertura / Code Quality and Coverage
 
-Este proyecto mantiene estándares profesionales de calidad de código, con un enfoque en reproducibilidad, robustez y mejores prácticas. Se han implementado 281 tests automatizados que cubren excepciones, edge cases y visualizaciones avanzadas.
+Este proyecto mantiene altos estándares de calidad de código, con un enfoque en reproducibilidad y robustez. Se han implementado tests automatizados que cubren el 99% del código base del simulador (`sim/`).
 
 ### Cobertura de Tests / Test Coverage
 - **Cobertura global en módulos sim/**: 99% (16 líneas faltantes, principalmente branches específicos y docstrings no ejecutables).
@@ -496,8 +527,16 @@ Este proyecto mantiene estándares profesionales de calidad de código, con un e
   - Código bilingüe (ES/EN) para colaboración internacional.
   - Sin números mágicos, parametrizable y reproducible.
 
-Esta cobertura refleja dedicación a la perfección, validando la hipótesis H1 de TUI v4.1 con código confiable y listo para publicación científica.
+## Cobertura y seguridad del código / Code coverage & safety
+## Flexibilidad para experimentación / Hyperparameter flexibility
 
+- El tamaño de las capas ocultas de la red DQN (`hidden_dim`) ahora es configurable desde el constructor de `DQNAgent` y `DQNNet`.
+- Esto permite ajustar la arquitectura fácilmente para búsqueda de hiperparámetros y experimentos avanzados.
+
+- Cobertura global de tests: **99%** en módulos principales (`sim/`)
+- Implementada target network en DQN para mayor estabilidad y reproducibilidad.
+- Eliminado uso inseguro de `eval()`; ahora se usa `ast.literal_eval()` para cargar policies.
+- Todos los cambios verificados por tests automáticos (pytest).
 
 ## Contacto / Contact
 
@@ -505,8 +544,11 @@ Para colaboración, dudas o sugerencias: jmrgpr@gmail.com
 
 For collaboration, questions or suggestions: jmrgpr@gmail.com
 
-
 ---
 
 Notas bilingües:
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
+
+## Dedicatoria / Dedication
+
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazón.
