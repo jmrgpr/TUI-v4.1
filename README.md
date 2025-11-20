@@ -129,6 +129,53 @@ gymnasium>=0.28.1
 
 Para mayor facilidad de replicación, se recomienda crear el entorno con venv o Conda y usar el archivo requirements.txt incluido.
 
+**Opción recomendada (Conda):**
+1. Clona el repositorio / Clone the repository
+  ```bash
+  git clone https://github.com/jmrgpr/TUI-v4.1.git
+  cd TUI-v4.1
+  ```
+2. Crea el entorno con Conda / Create the environment with Conda
+  ```bash
+  conda env create -f environment.yml
+  conda activate tui-v4.1
+  ```
+3. Ejecuta los scripts principales / Run main scripts
+  ```bash
+  python run_fase2.py
+  python merge_summaries.py
+  python results/stats.py
+  python run_sota_comparison.py  # (opcional, para comparar PPO)
+  ```
+4. Visualiza los resultados / Visualize results
+  - Revisa los archivos en `results/` y usa el notebook `notebooks/quickstart_graficos.ipynb` para generar gráficos automáticos.
+
+**Opción alternativa (venv + pip):**
+1. Clona el repositorio / Clone the repository
+  ```bash
+  git clone https://github.com/jmrgpr/TUI-v4.1.git
+  cd TUI-v4.1
+  ```
+2. Crea el entorno virtual / Create the virtual environment
+  ```bash
+  python -m venv .venv
+  .\.venv\Scripts\activate  # Windows
+  # source .venv/bin/activate  # Linux/MacOS
+  ```
+3. Instala las dependencias / Install dependencies
+  ```bash
+  pip install -r requirements.txt
+  ```
+4. Ejecuta los scripts principales / Run main scripts
+  ```bash
+  python run_fase2.py
+  python merge_summaries.py
+  python results/stats.py
+  python run_sota_comparison.py  # (opcional, para comparar PPO)
+  ```
+5. Visualiza los resultados / Visualize results
+  - Revisa los archivos en `results/` y usa el notebook `notebooks/quickstart_graficos.ipynb` para generar gráficos automáticos.
+
 Sigue estos pasos para reproducir los resultados principales (Fase 2):
 
 1. Clona el repositorio / Clone the repository
