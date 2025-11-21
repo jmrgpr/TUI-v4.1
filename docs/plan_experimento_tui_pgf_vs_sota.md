@@ -15,6 +15,15 @@ Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under
 - Superiority or competitiveness of TUI+PGF in key metrics (PGF_neto, total_reward, robustness, variability, and tripwires).
 - Full reproducibility and traceability of the pipeline via multiple seeds and auditable artifacts.
 - End-to-end automation, generating all outputs needed for statistical analysis and publication without manual intervention.
+
+## Plan científico integral: TUI + PGF vs SOTA (DQN, PPO, A2C)
+
+## Objetivo central
+Demostrar, con evidencia cuantitativa, reproducible y generalizable, que el agente TUI (simbiosis) con ajuste PGF:
+- Mejora métricas clave frente a SOTA (DQN, PPO, A2C), y/o logra igual rendimiento con menor costo/riesgo.
+- Se mantiene robusto al variar semillas, episodios e hiperparámetros, sin overfitting.
+
+## Fase A — Preparación y control experimental
 - **A1. Inventario de datasets**: reunir CSV de barridos risk_scale, semillas (42/123/456), episodios (200 y 500), grid PGF (kappa, lambda, mix). Estandarizar columnas: agent {TUI, DQN, PPO, A2C}, seed, episodes, risk_scale, kappa, lambda, mix, pgf_neto, tripwires, robustez, flexibilidad, reward_total.
 - **A2. Métricas canónicas (fijas)**: PGF_neto; robustez; flexibilidad; tripwires; opcional reward_total, risk_cost. No cambiar definiciones durante el análisis; si se ajusta, marcar como post-hoc. Incluir fórmulas explícitas de robustez y flexibilidad en Métodos.
 - **A3. Baselines SOTA claros**: hiperparámetros razonables (defaults documentados), mismo presupuesto computacional/episodios que TUI.
@@ -34,6 +43,8 @@ Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under
 - Preliminary signal of TUI+PGF competitiveness against SOTA is observed (by PGF_neto and/or reward-tripwires frontier).
 - Scripts and documentation are ready for third-party reproduction.
 - GitHub repository is clean, versioned, and synchronized.
+
+## Fase B — Mejora en métricas relevantes (Claim 1)
 - **B1. Comparativa por riesgo**: para cada risk_scale, comparar TUI vs SOTA en PGF_neto, tripwires, robustez, flexibilidad.
 - **B2. Tablas**:
   - Resumen por riesgo y agente: risk_scale | agent | PGF_neto_mean | PGF_neto_std | tripwires_mean | robustez_mean | flexibilidad_mean.
@@ -41,7 +52,6 @@ Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under
 - **B3. Gráficos core**: PGF_neto vs riesgo; tripwires vs riesgo; robustez vs riesgo; flexibilidad vs riesgo (líneas por agente).
 - **B4. Criterio de éxito**: ventaja si ocurre (al menos uno): TUI > SOTA en PGF_neto con diferencia estadística; o TUI ≈ SOTA en PGF_neto pero con menos tripwires/mayor robustez; o TUI domina frontera recompensa-riesgo.
 - **B5. Reportar casos neutros/negativos**: sub-sección con rangos donde TUI no supera o es neutral, para evitar cherry-picking.
-
 
 ### Micro-mejora A: Definición cuantitativa de “competitivo o superior” / Quantitative definition of “competitive or superior”
 “Consideraremos TUI+PGF competitivo si su PGF_neto medio está dentro de 1 desviación estándar del mejor SOTA en ≥X niveles de riesgo (X = 30% de risk_scales evaluados, o ≥2 niveles si hay pocos riesgos). Consideraremos TUI+PGF superior si excede al mejor SOTA con p < 0.05 (por risk_scale) usando test estadístico apropiado y corrección Holm-Bonferroni.”
@@ -63,6 +73,8 @@ Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under
 - Baselines SOTA incluyen default + tuned light. / SOTA baselines include default + light tuning.
 - Guardado de top-k configs PGF, no solo top-1. / Saving top-k PGF configs, not just top-1.
 - Repo sincronizado y limpio. / Repo synchronized and clean.
+
+## Fase C — Reproducibilidad (Claim 2)
 - **C1. Semillas**: repetir B con seeds 42/123/456; incluir estadística.
 - **C2. Estadística mínima**: media ± sd, IC95% (bootstrap o t), tamaño de efecto (Cohen d o Cliff) para PGF_neto y tripwires por riesgo/agente. Declarar test de significancia (p.ej. Mann-Whitney U por riesgo) y corrección por múltiples comparaciones (Holm-Bonferroni o FDR).
 - **C3. Gráficos**: boxplots (o violin) de PGF_neto y tripwires por seed y agente.
@@ -130,7 +142,7 @@ Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under
 4. Interpretación y reporte  
    - Redactar el reporte según la estructura propuesta (Resumen, Métodos, Resultados, Discusión, Conclusión, Apéndices).  
    - Completar el checklist de éxito de Fase 2:  
-     * ¿TUI domina alguna métrica clave o frontera recompensa-tripwires?  
+     * ¿TUI domina alguna métrica clave o la frontera recompensa-tripwires?  
      * ¿Diferencia reproducible en ≥3 semillas?  
      * ¿Tendencia PGF positiva en varios riesgos?  
      * ¿No depende de un solo set de parámetros?  

@@ -116,14 +116,18 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 2) Experimento base:  
    `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
 3) Barrido de riesgo:  
-   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep_risk`
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
 4) Comparacion SOTA (opcional):  
    `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
 
 ## Estructura / Layout
 - `sim/` : codigo del simulador, agentes, evaluador PGF, visualizaciones.
 - `test/` : pruebas unitarias e integracion (pytest).
-- `results/` : salidas JSON/CSV/PNG de experimentos.
+- `results/` : salidas JSON/CSV/PNG de experimentos.  
+  - `sweep/` barridos de risk_scale (p.ej. `fase2/seed42/...`).  
+  - `runs/` corridas individuales.  
+  - `sota/` modelos y resúmenes PPO/A2C/DQN.  
+  - `global_summaries/` consolidados (p.ej. `fase2_global_summary.csv`).  
 - `docs/` : analisis y notas de resultados.
 - `TUI/` : documentos de teoria (TUI v4.x, LaTeX/Markdown).
 - `notebooks/` : cuadernos de analisis y graficos.
@@ -587,9 +591,9 @@ Ver `CITATION.cff` para BibTeX.
 jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
 
 ## FAQ rapida
-- ¿CI/CD y backend gráfico? Se fuerza backend `Agg` en módulos de visualización para correr en entornos headless.
-- ¿Cómo reproducir coberturas? `python -m pytest --cov=sim --cov-report=term-missing`.
-- ¿Entorno recomendado? Python 3.10/3.11 + dependencias fijadas en `requirements.txt` / `environment.yml`.
+- CI/CD y backend grafico? Se fuerza backend `Agg` en modulos de visualizacion para correr en entornos headless.
+- Como reproducir coberturas? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Entorno recomendado? Python 3.10/3.11 + dependencias fijadas en `requirements.txt` / `environment.yml`.
 
 ---
 
