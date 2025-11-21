@@ -1,48 +1,3 @@
-<<<<<<< HEAD
-agent,seed,episodes,steps,risk_scale,risk_level,red_team,kappa,lambda,mix,pgf_neto,tripwires,robustez,flexibilidad,reward_total,avg_gap,gaming_hits,gating_hits,ipg,u_proxy,u_humans,ope_dr,safety_adj_reward,sau_beta1,sau_beta2,filename
-,,,,,,,,,,a2c,,,,,,,,,,,,,,,best_agents_by_risk.csv
-,,,,,,,,,,a2c,,,,,,,,,,,,,,,best_agents_by_risk.csv
-,,,,,,,,,,a2c,,,,,,,,,,,,,,,best_agents_by_risk.csv
-,,,,,,,,,,a2c,,,,,,,,,,,,,,,best_agents_by_risk.csv
-,,,,,,,,,,a2c,,,,,,,,,,,,,,,best_agents_by_risk.csv
-,,,,,,,,,,mean,mean,mean,mean,mean,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,0.0,0.0,,,0.0,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0013928018180908,0.0,,,-0.1,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,0.0,0.0,,,0.0,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,0.0,0.0,,,0.0,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,0.0,0.0,,,0.0,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0858471939503839,0.011666666666666667,,,-3.23,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0858471939503839,0.011666666666666667,,,-3.35,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0858471939503839,0.011666666666666667,,,-3.47,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.08757179639290907,0.014333333333333333,,,-3.8171833333333334,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.08899801375040463,0.014,,,-4.05,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.1650896278618293,0.02,,,609.4,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0982439819259091,0.07,,,137.75,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0470338934023733,0.02,,,12.4,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0375387230061775,0.02,,,6.55,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0270302039544412,0.04,,,98.65,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.20152209876545088,0.11766666666666667,,,-6.994308333333334,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.2095583700709902,0.11633333333333333,,,-7.922566666666667,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.2129233935832798,0.108,,,-10.645875,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.20600090443724065,0.094,,,-11.259450000000001,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.1989575897234386,0.08366666666666667,,,-12.554683333333333,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.2937855232044619,0.39,,,371.05,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0536228699964972,0.0,,,-3.85,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0417840545427251,0.0,,,-3.0,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0403912527246342,0.0,,,-2.9,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.0396948518155888,0.0,,,-2.85,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.20305883854180146,0.12666666666666668,,,-26.107139944154575,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.2165512025692508,0.12011111111111111,,,-26.419203159908395,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.22161693035059757,0.11288888888888889,,,-26.608490666729747,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.21912331716855338,0.10755555555555556,,,-25.35830571258315,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.21382710153043552,0.09577777777777778,,,-26.859869435747097,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.15069364459919204,0.034,,,-10.750079117301011,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.15228414685367375,0.034,,,-11.039192452935788,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.1584842354310438,0.034,,,-11.664122806607264,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.16180756350946132,0.03133333333333333,,,-11.902832639317019,,,,,,,,,,,summary_agent_risk.csv
-,,,,,,,,,,-0.16330444504793482,0.03,,,-11.930985905797924,,,,,,,,,,,summary_agent_risk.csv
-agent,seed,episodes,risk_scale,kappa,lambda,mix,pgf_neto,tripwires,robustez,flexibilidad,reward_total,filename
-=======
 agent,seed,episodes,risk_scale,kappa,lambda,mix,pgf_neto,tripwires,robustez,flexibilidad,reward_total,filename
 control,123,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed123_risk0.5_control.csv
 control,123,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed123_risk0.5_control.csv
@@ -6074,7 +6029,6 @@ tui,123,,,,,,-0.4533450811041462,0.085,,,1.725,sweep_tuning_seed123_summary.csv
 tui,123,,,,,,-0.2280359469446381,0.02,,,-5.025,sweep_tuning_seed123_summary.csv
 tui,123,,,,,,-0.3946339270317092,0.1,,,-15.92618346270936,sweep_tuning_seed123_summary.csv
 tui,123,,,,,,-0.413898393131817,0.065,,,0.225,sweep_tuning_seed123_summary.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,0.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_control.csv
@@ -6095,8 +6049,6 @@ control,42,,0.5,,,,-0.2284052457503591,0.0,,,-15.0,sweep_default_seed42_risk0.5_
 control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_control.csv
-<<<<<<< HEAD
-=======
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_control.csv
@@ -6277,7 +6229,6 @@ control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk0.5_c
 control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk0.5_dqn_control.csv
@@ -6298,8 +6249,6 @@ dqn_control,42,,0.5,,,,-0.2089202727136256,0.0,,,-15.0,sweep_default_seed42_risk
 dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_dqn_control.csv
@@ -6480,7 +6429,6 @@ dqn_control,42,,0.5,,,,0.0,0.0,,,105.0,sweep_default_seed42_risk0.5_dqn_control.
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_default_seed42_risk0.5_simbiosis.csv
@@ -6501,8 +6449,6 @@ simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_default_
 simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-20.98200454522709,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_simbiosis.csv
@@ -6683,7 +6629,6 @@ simbiosis,42,,0.5,,,,0.0,0.0,,,-45.0,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-23.98200454522709,sweep_default_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk0.5_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,1.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_control.csv
@@ -6704,8 +6649,6 @@ control,42,,1.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_default_seed42_risk1.0_
 control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_control.csv
-<<<<<<< HEAD
-=======
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_control.csv
@@ -6886,7 +6829,6 @@ control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.0_c
 control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.0_dqn_control.csv
@@ -6907,8 +6849,6 @@ dqn_control,42,,1.0,,,,-0.2089202727136256,0.0,,,-15.0,sweep_default_seed42_risk
 dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_dqn_control.csv
@@ -7089,7 +7029,6 @@ dqn_control,42,,1.0,,,,0.0,0.0,,,105.0,sweep_default_seed42_risk1.0_dqn_control.
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_default_seed42_risk1.0_simbiosis.csv
@@ -7110,8 +7049,6 @@ simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_default_
 simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-20.98200454522709,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_simbiosis.csv
@@ -7292,7 +7229,6 @@ simbiosis,42,,1.0,,,,0.0,0.0,,,-45.0,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-23.98200454522709,sweep_default_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.0_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,1.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_control.csv
@@ -7313,8 +7249,6 @@ control,42,,1.5,,,,-0.2284052457503591,0.0,,,-15.0,sweep_default_seed42_risk1.5_
 control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_control.csv
-<<<<<<< HEAD
-=======
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_control.csv
@@ -7495,7 +7429,6 @@ control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.5_c
 control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.5_dqn_control.csv
@@ -7516,8 +7449,6 @@ dqn_control,42,,1.5,,,,-0.2089202727136256,0.0,,,-15.0,sweep_default_seed42_risk
 dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_dqn_control.csv
@@ -7698,7 +7629,6 @@ dqn_control,42,,1.5,,,,0.0,0.0,,,105.0,sweep_default_seed42_risk1.5_dqn_control.
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_default_seed42_risk1.5_simbiosis.csv
@@ -7719,8 +7649,6 @@ simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_default_
 simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-20.98200454522709,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_simbiosis.csv
@@ -7901,7 +7829,6 @@ simbiosis,42,,1.5,,,,0.0,0.0,,,-45.0,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-23.98200454522709,sweep_default_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk1.5_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,2.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_control.csv
@@ -7922,8 +7849,6 @@ control,42,,2.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_default_seed42_risk2.0_
 control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_control.csv
-<<<<<<< HEAD
-=======
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_control.csv
@@ -8104,7 +8029,6 @@ control,42,,2.0,,,,-0.380675409583932,0.0,,,-25.0,sweep_default_seed42_risk2.0_c
 control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk2.0_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk2.0_dqn_control.csv
@@ -8125,8 +8049,6 @@ dqn_control,42,,2.0,,,,-0.2089202727136256,0.0,,,-15.0,sweep_default_seed42_risk
 dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_dqn_control.csv
@@ -8307,7 +8229,6 @@ dqn_control,42,,2.0,,,,0.0,0.0,,,105.0,sweep_default_seed42_risk2.0_dqn_control.
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_default_seed42_risk2.0_simbiosis.csv
@@ -8328,8 +8249,6 @@ simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_default_
 simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-20.98200454522709,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_simbiosis.csv
@@ -8510,7 +8429,6 @@ simbiosis,42,,2.0,,,,0.0,0.0,,,-45.0,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-23.98200454522709,sweep_default_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk2.0_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,3.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_control.csv
@@ -8531,8 +8449,6 @@ control,42,,3.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_default_seed42_risk3.0_
 control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_control.csv
-<<<<<<< HEAD
-=======
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_control.csv
@@ -8713,7 +8629,6 @@ control,42,,3.0,,,,-0.4982947819993416,1.0,,,-70.0,sweep_default_seed42_risk3.0_
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_default_seed42_risk3.0_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk3.0_dqn_control.csv
@@ -8734,8 +8649,6 @@ dqn_control,42,,3.0,,,,-0.2089202727136256,0.0,,,-15.0,sweep_default_seed42_risk
 dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_dqn_control.csv
@@ -8916,7 +8829,6 @@ dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_default_seed42_risk3
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-10.0,sweep_default_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,60.0,sweep_default_seed42_risk3.0_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_default_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_default_seed42_risk3.0_simbiosis.csv
@@ -8937,338 +8849,6 @@ simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_default_
 simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_default_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_default_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_simbiosis.csv
-<<<<<<< HEAD
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2839526179848171,0.05,,,-14.197630899240853,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2425913430816117,0.0,,,-3.75,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2939526179848171,0.05,,,-14.697630899240853,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2465913430816117,0.0,,,-4.25,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.303952617984817,0.05,,,-15.197630899240853,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2505913430816117,0.0,,,-4.75,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.313952617984817,0.05,,,-15.697630899240853,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2545913430816117,0.0,,,-5.25,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.333952617984817,0.05,,,-16.697630899240853,sweep_default_seed42_summary.csv
-tui,42,,,,,,-0.2625913430816117,0.0,,,-6.25,sweep_default_seed42_summary.csv
-control,42,,0.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk0.5_control.csv
-control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.3165056798731905,0.0,,,-10.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.1392801818090837,0.0,,,-10.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.2089202727136256,0.0,,,-15.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_dqn_control.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-21.98200454522709,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-26.98200454522709,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.3861457707777324,1.0,,,-40.80728853888662,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.3165056798731905,0.0,,,-19.825283993659525,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-11.482004545227094,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.1392801818090837,0.0,,,-39.46400909045418,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_risk_seed42_risk0.5_simbiosis.csv
-simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk0.5_simbiosis.csv
-control,42,,1.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.0_control.csv
-control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.3165056798731905,0.0,,,-20.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.1392801818090837,0.0,,,-10.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.2089202727136256,0.0,,,-15.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_dqn_control.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-21.98200454522709,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-26.98200454522709,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.3861457707777324,1.0,,,-46.80728853888662,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.3165056798731905,0.0,,,-23.825283993659525,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-11.482004545227094,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.1392801818090837,0.0,,,-39.46400909045418,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_risk_seed42_risk1.0_simbiosis.csv
-simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.0_simbiosis.csv
-control,42,,1.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk1.5_control.csv
-control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.3165056798731905,0.0,,,-30.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.1392801818090837,0.0,,,-10.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.2089202727136256,0.0,,,-15.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_dqn_control.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-21.98200454522709,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-26.98200454522709,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.3861457707777324,1.0,,,-52.80728853888662,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.3165056798731905,0.0,,,-27.825283993659525,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-11.482004545227094,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.1392801818090837,0.0,,,-39.46400909045418,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_risk_seed42_risk1.5_simbiosis.csv
-simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk1.5_simbiosis.csv
-control,42,,2.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk2.0_control.csv
-control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.3165056798731905,0.0,,,-40.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.1392801818090837,0.0,,,-10.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.2089202727136256,0.0,,,-15.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_dqn_control.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-21.98200454522709,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-26.98200454522709,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.3861457707777324,1.0,,,-58.80728853888662,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.3165056798731905,0.0,,,-31.825283993659525,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-11.482004545227094,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.1392801818090837,0.0,,,-39.46400909045418,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_risk_seed42_risk2.0_simbiosis.csv
-simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk2.0_simbiosis.csv
-control,42,,3.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.1522701638335727,0.0,,,-10.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.2284052457503591,0.0,,,-15.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,-0.0761350819167863,0.0,,,-5.0,sweep_risk_seed42_risk3.0_control.csv
-control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.3165056798731905,0.0,,,-60.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-10.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.2089202727136256,0.0,,,-15.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,-0.0696400909045418,0.0,,,-5.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_dqn_control.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-4.982004545227094,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-25.98200454522709,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-21.98200454522709,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-26.98200454522709,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.3861457707777324,1.0,,,-70.80728853888661,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.3165056798731905,0.0,,,-39.825283993659525,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-11.482004545227094,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.1392801818090837,0.0,,,-39.46400909045418,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-25.48200454522709,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-62.98200454522709,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-3.9820045452270936,sweep_risk_seed42_risk3.0_simbiosis.csv
-simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_risk_seed42_risk3.0_simbiosis.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2839526179848171,0.05,,,-14.197630899240853,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2425913430816117,0.0,,,-3.75,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2939526179848171,0.05,,,-14.697630899240853,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2465913430816117,0.0,,,-4.25,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.303952617984817,0.05,,,-15.197630899240853,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2505913430816117,0.0,,,-4.75,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.313952617984817,0.05,,,-15.697630899240853,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2545913430816117,0.0,,,-5.25,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.3094080655334291,0.0,,,-4.0,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.333952617984817,0.05,,,-16.697630899240853,sweep_risk_seed42_summary.csv
-tui,42,,,,,,-0.2625913430816117,0.0,,,-6.25,sweep_risk_seed42_summary.csv
-=======
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,-0.0696400909045418,0.0,,,-20.98200454522709,sweep_default_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_default_seed42_risk3.0_simbiosis.csv
@@ -9464,7 +9044,6 @@ tui,42,,,,,,-0.516637162678241,0.04,,,5.75,sweep_default_seed42_summary.csv
 tui,42,,,,,,-0.3436845858074113,0.05,,,-6.8,sweep_default_seed42_summary.csv
 tui,42,,,,,,-0.53486764805418,0.055,,,-24.61803196040944,sweep_default_seed42_summary.csv
 tui,42,,,,,,-0.6596746609953718,0.04,,,6.35,sweep_default_seed42_summary.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,0.5,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
@@ -9495,8 +9074,6 @@ control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
-<<<<<<< HEAD
-=======
 control,42,,0.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
@@ -9967,7 +9544,6 @@ control,42,,0.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_co
 control,42,,0.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
 control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
@@ -9998,8 +9574,6 @@ dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,165.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,0.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
@@ -10470,7 +10044,6 @@ dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,120.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
 dqn_control,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.1392801818090837,0.0,,,-7.17120727236335,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.1392801818090837,0.0,,,-15.571207272363324,sweep_tuning_seed42_risk0.5_simbiosis.csv
@@ -10501,8 +10074,6 @@ simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,-43.20000000000002,sweep_tuning_seed42_risk0.5_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,0.5,,,,-0.1392801818090837,0.0,,,-6.97120727236335,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
@@ -10973,7 +10544,6 @@ simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,-0.1392801818090837,0.0,,,-12.971207272363332,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,2.3999999999999906,sweep_tuning_seed42_risk0.5_simbiosis.csv
 simbiosis,42,,0.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk0.5_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,1.0,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
@@ -11004,8 +10574,6 @@ control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
-<<<<<<< HEAD
-=======
 control,42,,1.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
@@ -11476,7 +11044,6 @@ control,42,,1.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_co
 control,42,,1.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
 control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
@@ -11507,8 +11074,6 @@ dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,165.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,1.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
@@ -11979,7 +11544,6 @@ dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,120.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
 dqn_control,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.1392801818090837,0.0,,,-7.17120727236335,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.1392801818090837,0.0,,,-15.571207272363324,sweep_tuning_seed42_risk1.0_simbiosis.csv
@@ -12010,8 +11574,6 @@ simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,-43.20000000000002,sweep_tuning_seed42_risk1.0_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,1.0,,,,-0.1392801818090837,0.0,,,-6.97120727236335,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
@@ -12482,7 +12044,6 @@ simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,-0.1392801818090837,0.0,,,-12.971207272363332,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,2.3999999999999906,sweep_tuning_seed42_risk1.0_simbiosis.csv
 simbiosis,42,,1.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.0_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,1.5,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
@@ -12513,8 +12074,6 @@ control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
-<<<<<<< HEAD
-=======
 control,42,,1.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
@@ -12985,7 +12544,6 @@ control,42,,1.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_co
 control,42,,1.5,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
 control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
@@ -13016,8 +12574,6 @@ dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,165.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,1.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
@@ -13488,7 +13044,6 @@ dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,120.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
 dqn_control,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.1392801818090837,0.0,,,-7.17120727236335,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.1392801818090837,0.0,,,-15.571207272363324,sweep_tuning_seed42_risk1.5_simbiosis.csv
@@ -13519,8 +13074,6 @@ simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,-43.20000000000002,sweep_tuning_seed42_risk1.5_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,1.5,,,,-0.1392801818090837,0.0,,,-6.97120727236335,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
@@ -13991,7 +13544,6 @@ simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,-0.1392801818090837,0.0,,,-12.971207272363332,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,2.3999999999999906,sweep_tuning_seed42_risk1.5_simbiosis.csv
 simbiosis,42,,1.5,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk1.5_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,2.0,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
@@ -14022,8 +13574,6 @@ control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
-<<<<<<< HEAD
-=======
 control,42,,2.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
@@ -14494,7 +14044,6 @@ control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk2.0_control.csv
 control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
@@ -14525,8 +14074,6 @@ dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,165.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,2.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
@@ -14997,7 +14544,6 @@ dqn_control,42,,2.0,,,,-0.4178405454272512,0.0,,,-15.0,sweep_tuning_seed42_risk2
 dqn_control,42,,2.0,,,,-0.8356810908545025,0.0,,,-30.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
 dqn_control,42,,2.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk2.0_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.1392801818090837,0.0,,,-7.17120727236335,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,-0.1392801818090837,0.0,,,-15.571207272363324,sweep_tuning_seed42_risk2.0_simbiosis.csv
@@ -15028,8 +14574,6 @@ simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,-43.20000000000002,sweep_tuning_seed42_risk2.0_simbiosis.csv
-<<<<<<< HEAD
-=======
 simbiosis,42,,2.0,,,,-0.1392801818090837,0.0,,,-6.97120727236335,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
@@ -15500,7 +15044,6 @@ simbiosis,42,,2.0,,,,-0.557120727236335,0.0,,,-35.88482908945342,sweep_tuning_se
 simbiosis,42,,2.0,,,,-0.2785603636181675,0.0,,,-22.34241454472668,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
 simbiosis,42,,2.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk2.0_simbiosis.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 control,42,,3.0,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
@@ -15531,8 +15074,6 @@ control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk3.0_control.csv
-<<<<<<< HEAD
-=======
 control,42,,3.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.1522701638335727,0.0,,,-5.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
@@ -16003,7 +15544,6 @@ control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.6090806553342911,0.0,,,-20.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,-0.3045403276671455,0.0,,,-10.0,sweep_tuning_seed42_risk3.0_control.csv
 control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
@@ -16034,8 +15574,6 @@ dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,165.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
-<<<<<<< HEAD
-=======
 dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
@@ -16506,7 +16044,6 @@ dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk3.
 dqn_control,42,,3.0,,,,-0.2785603636181675,0.0,,,-10.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,0.0,0.0,,,30.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
 dqn_control,42,,3.0,,,,-0.1392801818090837,0.0,,,-5.0,sweep_tuning_seed42_risk3.0_dqn_control.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,-0.1392801818090837,0.0,,,-7.17120727236335,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,-0.1392801818090837,0.0,,,-15.571207272363324,sweep_tuning_seed42_risk3.0_simbiosis.csv
@@ -16537,23 +16074,6 @@ simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,-43.20000000000002,sweep_tuning_seed42_risk3.0_simbiosis.csv
-<<<<<<< HEAD
-tui,42,,,,,,-0.263150058311151,0.0666666666666666,,,-4.0,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2402963527024986,0.0333333333333333,,,-8.878520774766605,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2296479861648914,0.0,,,3.6666666666666665,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2818167249778177,0.0666666666666666,,,-4.666666666666667,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2424630193691652,0.0333333333333333,,,-9.131854108099937,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2301479861648915,0.0,,,3.1666666666666665,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.3004833916444844,0.0666666666666666,,,-5.333333333333333,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2446296860358319,0.0333333333333333,,,-9.38518744143327,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2306479861648914,0.0,,,2.6666666666666665,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.3613624724106872,0.1,,,-8.333333333333334,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2481296860358319,0.0333333333333333,,,-9.691854108099935,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2324813194982248,0.0,,,2.1666666666666665,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.3414413629854499,0.0666666666666666,,,-8.0,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2551296860358319,0.0333333333333333,,,-10.30518744143327,sweep_tuning_seed42_summary.csv
-tui,42,,,,,,-0.2361479861648915,0.0,,,1.1666666666666667,sweep_tuning_seed42_summary.csv
-=======
 simbiosis,42,,3.0,,,,-0.1392801818090837,0.0,,,-6.97120727236335,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_simbiosis.csv
 simbiosis,42,,3.0,,,,0.0,0.0,,,0.0,sweep_tuning_seed42_risk3.0_simbiosis.csv
@@ -23069,7 +22589,6 @@ tui,456,,,,,,-0.4422250042950466,0.075,,,3.225,sweep_tuning_seed456_summary.csv
 tui,456,,,,,,-0.2731276081568043,0.03,,,-5.8,sweep_tuning_seed456_summary.csv
 tui,456,,,,,,-0.4373300686657557,0.07,,,-14.999122882448994,sweep_tuning_seed456_summary.csv
 tui,456,,,,,,-0.4813766558139326,0.09,,,-7.175,sweep_tuning_seed456_summary.csv
->>>>>>> 6d3fcfa (Documentación completa y notebook corregido para análisis TUI+PGF vs SOTA. MultiIndex y outputs verificados.)
 ppo,,,0.5,,,,-0.2937855232044619,0.39,,,371.05,sota_ppo_risk0.5_summary.csv
 ppo,,,1.0,,,,-0.0536228699964972,0.0,,,-3.85,sota_ppo_risk1.0_summary.csv
 ppo,,,1.5,,,,-0.0417840545427251,0.0,,,-3.0,sota_ppo_risk1.5_summary.csv
