@@ -18,3 +18,12 @@ def test_dqn_agent_init():
     agent = DQNAgent(state_dim=5, action_dim=4)
     assert agent.model is not None
     assert agent.memory is not None
+
+def test_agent_load_policy_error(tmp_path):
+    """Test load_policy with invalid file to cover except block."""
+    agent = Agent()
+    invalid_file = tmp_path / "invalid.json"
+    invalid_file.write_text("invalid json")
+    agent.load_policy(str(invalid_file))
+    # Should not raise and policy should be empty
+    assert agent.policy == {}

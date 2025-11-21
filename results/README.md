@@ -1,19 +1,23 @@
+# Estructura de `results/`
 
-# Resultados / Results
+Organización profesional para análisis y reproducibilidad. Cada subcarpeta tiene un propósito claro y evita colisiones entre experimentos.
 
-Esta carpeta centraliza todos los resultados experimentales: archivos csv, json, png, etc.
+## Tabla resumen
 
-This folder centralizes all experimental results: csv, json, png files, etc.
+| Carpeta/Subcarpeta      | Script que la llena                | Descripción columnas principales |
+|-------------------------|------------------------------------|----------------------------------|
+| sweep/faseX/seedYY/     | prototipo_rl_simbiosis.py, runner.py | risk, reward, pgf, tripwires, ...|
+| runs/                   | prototipo_rl_simbiosis.py           | episodio, reward, pgf, ...       |
+| sota/algoritmo/         | sota_wrapper.py, runner.py          | episodio, reward, ...            |
+| global_summaries/       | merge_summaries.py                  | resumen global, medias, ...      |
+| old/                    | manual, legacy, limpieza            | variable, legacy, imágenes, scripts antiguos |
 
-## Organización y protocolo (actualizado 19/11/2025)
+## Detalles
 
-- Todos los resultados de Fase 2 se guardan en `results/fase2/` con nombres únicos por semilla y risk_scale.
-- El runner `run_fase2.py` automatiza la ejecución de las 60 corridas.
-- El script `merge_summaries.py` une los resúmenes por semilla en un solo archivo global.
-- Ejemplo de uso:
-	```powershell
-	python run_fase2.py
-	python merge_summaries.py
-	```
-- No mezclar código fuente ni notebooks aquí.
-- Do not mix source code or notebooks here.
+- **sweep/**: Barridos de parámetros. Subniveles por fase y semilla para evitar colisiones y facilitar análisis comparativo.
+- **runs/**: Resultados de corridas largas (ej. 2000 episodios, episodios completos).
+- **sota/**: Resultados de algoritmos SOTA, separados por tipo si hay muchos archivos (ejemplo: sota/ppo/, sota/a2c/...).
+- **global_summaries/**: Resúmenes globales, medias, comparativos entre experimentos y algoritmos.
+- **old/**: Legacy, experimentos previos, imágenes, scripts antiguos, carpetas como `corrida_100/`, `fase2/`, `pruebas_codigo/`, y archivos como `stats.py`, `1.png`, `2.png`, `3.png`.
+
+> Actualiza esta tabla si agregas scripts, carpetas o columnas nuevas. La estructura está lista para reproducibilidad y limpieza científica.

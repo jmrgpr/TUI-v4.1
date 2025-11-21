@@ -106,20 +106,31 @@ def test_boxplot_metricas_labels_fallback(monkeypatch):
 
 def test_boxplot_metricas_labels_fallback_real(monkeypatch):
     """Cubre el fallback real de labels en boxplot_metricas simulando matplotlib antiguo."""
+    import sim.visualizaciones
     from sim.visualizaciones import boxplot_metricas
     import matplotlib.pyplot as plt
-    called = {'labels': 0}
-    def fake_boxplot(data, **kwargs):
-        # Simula matplotlib antiguo: solo acepta 'labels', rechaza 'tick_labels'
+    from unittest.mock import MagicMock
+
+    # 1. Crear un mock para el método boxplot que lance TypeError si se usa tick_labels.
+    def mock_boxplot_func(self, *args, **kwargs):
         if 'tick_labels' in kwargs:
-            raise TypeError('tick_labels no soportado')
-        if 'labels' in kwargs:
-            called['labels'] += 1
-            return None
-        raise TypeError('Argumento no soportado')
-    monkeypatch.setattr(plt, 'boxplot', fake_boxplot)
+            raise TypeError("Simulating old matplotlib: 'tick_labels' not supported")
+        return None
+
+    mock_boxplot = MagicMock(side_effect=mock_boxplot_func)
+
+    # 4. Parchear el método boxplot de Axes.
+    import matplotlib.axes
+    monkeypatch.setattr(matplotlib.axes.Axes, 'boxplot', mock_boxplot)
+
     boxplot_metricas([[1,2,3]], labels=['Test'], show=False)
-    assert called['labels'] == 1
+
+    # 5. Verificar que se intentó llamar a boxplot dos veces: una con tick_labels (que falló) y una con labels.
+    assert mock_boxplot.call_count == 2
+    # Verificar que la primera llamada usó 'tick_labels'.
+    assert 'tick_labels' in mock_boxplot.call_args_list[0].kwargs
+    # Verificar que la segunda llamada usó 'labels'.
+    assert 'labels' in mock_boxplot.call_args_list[1].kwargs
 def test_heatmap_metricas_empty():
     """Test heatmap_metricas with empty data."""
     heatmap_metricas([], show=False)
@@ -501,9 +512,9 @@ def test_plot_risk_curve_empty_show():
     """Test plot_risk_curve with empty data and show=True to cover if show branch."""
     plot_risk_curve([], show=True)
 
-def test_boxplot_metricas_empty_show():
-    """Test boxplot_metricas with empty data and show=True."""
-    boxplot_metricas([], show=True)
+def test_boxplot_metricas_no_labels():
+    """Test boxplot_metricas with no labels to cover the else branch (line 98)."""
+    boxplot_metricas([[1,2,3]], show=False)
 
 def test_heatmap_metricas_empty_show():
     """Test heatmap_metricas with empty data and show=True."""

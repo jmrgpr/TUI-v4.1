@@ -29,7 +29,7 @@ PARAMS = {
     "agent_type": {"label": "Tipo de agente / Agent type", "options": ["Control (Q-table)", "Simbiosis (DQN)"], "help": "Selecciona el tipo de agente a simular. / Select agent type."}
 }
 
-def main():
+def main():  # pragma: no cover - interfaz Streamlit no ejercitada en tests de cobertura
     # ===================== Unir resúmenes Fase 2 =====================
     st.markdown("---")
     st.subheader("Unir resúmenes Fase 2 / Merge Fase 2 summaries")
@@ -209,5 +209,5 @@ def main():
     st.markdown("Toy model para validar la Teoría Unificada de la Inteligencia. Modifica parámetros, ejecuta simulaciones y analiza resultados. Para detalles teóricos, consulta la documentación TUI.")
 
 # ===================== Ejecución del script =====================
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover - interfaz interactiva
     main()

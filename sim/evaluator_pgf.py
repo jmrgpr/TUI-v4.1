@@ -4,7 +4,9 @@ evaluator_pgf.py — Evaluador externo de métricas TUI y PGF prudencial
 External evaluator for TUI metrics and prudential PGF.
 """
 
+
 from typing import Dict, Any
+from . import config
 
 
 class EvaluatorPGF:
@@ -33,17 +35,21 @@ class EvaluatorPGF:
         Calcula métricas TUI y PGF prudencial (bilingüe) con desglose para Fase 2.
         """
         # Capacidad predictiva / Predictive capacity
-        self.C = max(0.0, agent_resources / 100.0)
+        self.C = max(0.0, agent_resources / config.ENV_INITIAL_RESOURCES)
         # Flexibilidad / Flexibility
         self.F = 1.0 if info.get('shock') else 0.5
         # Transferencia / Transfer
         self.T = 1.0 if info.get('help') else 0.5
-        w_C, w_F, w_T = 0.4, 0.3, 0.3
         # Índice de oportunidad / Opportunity index
-        self.I_op = w_C * self.C + w_F * self.F + w_T * self.T
+        self.I_op = (config.EVAL_PGF_WEIGHT_C * self.C +
+                     config.EVAL_PGF_WEIGHT_F * self.F +
+                     config.EVAL_PGF_WEIGHT_T * self.T)
         
         # Riesgo acumulado / Accumulated risk
-        self.P_riesgo_actual = self.P_riesgo + abs(info.get('tripwire', 0)*20.0 + info.get('shock', 0)*10.0 + info.get('distractor', 0)*5.0)
+        risk_increment = (abs(info.get('tripwire', 0) * config.ENV_PENALTY_TRIPWIRE_BASE) +
+                                      abs(info.get('shock', 0) * config.ENV_PENALTY_SHOCK_BASE) +
+                                      abs(info.get('distractor', 0) * config.ENV_PENALTY_DISTRACTOR_BASE))
+        self.P_riesgo_actual = self.P_riesgo + risk_increment
         delta_P = self.P_riesgo_prev - self.P_riesgo_actual
         self.P_riesgo = self.P_riesgo_actual
         
@@ -55,8 +61,8 @@ class EvaluatorPGF:
         self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
         
         # --- PGF FASE 2: Desglose de Tensión de Riesgo ---
-        kappa = 1.0  # Sensibilidad / Sensitivity
-        lambda_c = 0.1  # Penalización costo / Cost penalty
+        kappa = config.EVAL_PGF_KAPPA
+        lambda_c = config.EVAL_PGF_LAMBDA_C
         
         S_t = 1.0 if info.get('shock') or info.get('tripwire') else 0.5
         A_t = agent_alignment * self.P_genuino

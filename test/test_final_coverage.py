@@ -264,6 +264,16 @@ def test_stringify_policy():
     assert isinstance(result, dict)
 
 
+def test_stringify_policy_custom_object():
+    """Test stringify_policy with custom object to cover else branch."""
+    class CustomObj:
+        pass
+    policy = {'custom': CustomObj()}
+    result = prs.stringify_policy(policy)
+    assert 'custom' in result
+    assert isinstance(result['custom'], str)
+
+
 def test_state_to_vector():
     state = (('a', 1), ('b', 2))
     vec = prs.state_to_vector(state)

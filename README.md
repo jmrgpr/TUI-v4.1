@@ -9,7 +9,7 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 - Refactor del simulador y runners (v4.2).
 - Cobertura de pruebas **100%** en `sim/`; integracion completa.
 - Exportacion robusta (JSON/CSV) y trazabilidad por semilla (`--output_prefix`).
-- Scripts de Fase 2 y comparacion SOTA (PPO) listos para reproducibilidad.
+- Scripts de Fase 2 y comparacion SOTA (PPO/A2C/DQN) listos para reproducibilidad.
 - Visualizaciones y estadistica (ANOVA, t-test) bilingues; notebooks de quickstart.
 
 ## Entorno recomendado / Reference environment
@@ -25,7 +25,7 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 3) Barrido de riesgo:  
    `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep_risk`
 4) Comparacion SOTA (opcional):  
-   `python run_sota_comparison.py`
+   `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
 
 ## Estructura / Layout
 - `sim/` : codigo del simulador, agentes, evaluador PGF, visualizaciones.
@@ -45,6 +45,7 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 - Cobertura `sim/`: **100%** (pytest con `--cov=sim`).  
 - Target network en DQN; sin `eval()` inseguro (se usa `ast.literal_eval`).  
 - Warnings graficos mitigados cerrando figuras; exportaciones en UTF-8.
+- Comparacion SOTA ampliada (PPO, A2C, DQN) con sumarios por riesgo y global.
 
 ## Como citar / How to cite
 - Teoria: https://doi.org/10.5281/zenodo.17552094  
