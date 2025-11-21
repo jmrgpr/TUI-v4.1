@@ -1,18 +1,39 @@
-# Plan científico integral: TUI + PGF vs SOTA (DQN, PPO, A2C)
+# Plan científico integral / Scientific Plan: TUI + PGF vs SOTA (DQN, PPO, A2C)
 
-## Objetivo central
-Demostrar, con evidencia cuantitativa, reproducible y generalizable, que el agente TUI (simbiosis) con ajuste PGF:
-- Mejora métricas clave frente a SOTA (DQN, PPO, A2C), y/o logra igual rendimiento con menor costo/riesgo.
-- Se mantiene robusto al variar semillas, episodios e hiperparámetros, sin overfitting.
 
-## Fase A — Preparación y control experimental
+## Objetivo del experimento (Fase 2) / Experiment Objective (Phase 2)
+Comparar el desempeño de TUI+PGF frente a algoritmos SOTA (DQN, PPO, A2C) bajo escenarios de riesgo, evaluando robustez, reproducibilidad y trazabilidad mediante un pipeline totalmente automatizado.
+
+Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under risk scenarios, evaluating robustness, reproducibility, and traceability through a fully automated pipeline.
+
+## ¿Qué queremos probar? / What do we want to test?
+
+- Superioridad o competitividad de TUI+PGF en métricas clave (PGF_neto, reward_total, robustez, variabilidad y tripwires).
+- Reproducibilidad y trazabilidad total del pipeline a través de semillas múltiples y artefactos auditables.
+- Automatización end-to-end, generando todos los outputs necesarios para análisis estadístico y publicación sin intervención manual.
+
+- Superiority or competitiveness of TUI+PGF in key metrics (PGF_neto, total_reward, robustness, variability, and tripwires).
+- Full reproducibility and traceability of the pipeline via multiple seeds and auditable artifacts.
+- End-to-end automation, generating all outputs needed for statistical analysis and publication without manual intervention.
 - **A1. Inventario de datasets**: reunir CSV de barridos risk_scale, semillas (42/123/456), episodios (200 y 500), grid PGF (kappa, lambda, mix). Estandarizar columnas: agent {TUI, DQN, PPO, A2C}, seed, episodes, risk_scale, kappa, lambda, mix, pgf_neto, tripwires, robustez, flexibilidad, reward_total.
 - **A2. Métricas canónicas (fijas)**: PGF_neto; robustez; flexibilidad; tripwires; opcional reward_total, risk_cost. No cambiar definiciones durante el análisis; si se ajusta, marcar como post-hoc. Incluir fórmulas explícitas de robustez y flexibilidad en Métodos.
 - **A3. Baselines SOTA claros**: hiperparámetros razonables (defaults documentados), mismo presupuesto computacional/episodios que TUI.
 - **A4. Presupuesto computacional**: declarar en Métodos un criterio fijo: N episodios × T pasos máx por episodio, mismas evaluaciones cada K episodios y mismo número de updates por agente.
 - **A5. Control de fairness**: incluir al menos un baseline SOTA “tuneado” (p.ej. PPO_tuned o DQN_tuned con 2–3 variantes razonables) y documentar sus hiperparámetros.
 
-## Fase B — Mejora en métricas relevantes (Claim 1)
+## Criterios de pase a Fase 3 (gates) / Criteria to advance to Phase 3 (gates)
+
+- El pipeline corre sin errores críticos.
+- Se genera un CSV maestro completo, con metadatos y trazabilidad por archivo/semilla/agente.
+- Se observa señal preliminar de competitividad de TUI+PGF frente a SOTA (por PGF_neto y/o frontera recompensa-tripwires).
+- Scripts y documentación quedan listos para reproducción por terceros.
+- Repositorio GitHub limpio, versionado y sincronizado.
+
+- The pipeline runs without critical errors.
+- A complete master CSV is generated, with metadata and traceability by file/seed/agent.
+- Preliminary signal of TUI+PGF competitiveness against SOTA is observed (by PGF_neto and/or reward-tripwires frontier).
+- Scripts and documentation are ready for third-party reproduction.
+- GitHub repository is clean, versioned, and synchronized.
 - **B1. Comparativa por riesgo**: para cada risk_scale, comparar TUI vs SOTA en PGF_neto, tripwires, robustez, flexibilidad.
 - **B2. Tablas**:
   - Resumen por riesgo y agente: risk_scale | agent | PGF_neto_mean | PGF_neto_std | tripwires_mean | robustez_mean | flexibilidad_mean.
@@ -21,7 +42,27 @@ Demostrar, con evidencia cuantitativa, reproducible y generalizable, que el agen
 - **B4. Criterio de éxito**: ventaja si ocurre (al menos uno): TUI > SOTA en PGF_neto con diferencia estadística; o TUI ≈ SOTA en PGF_neto pero con menos tripwires/mayor robustez; o TUI domina frontera recompensa-riesgo.
 - **B5. Reportar casos neutros/negativos**: sub-sección con rangos donde TUI no supera o es neutral, para evitar cherry-picking.
 
-## Fase C — Reproducibilidad (Claim 2)
+
+### Micro-mejora A: Definición cuantitativa de “competitivo o superior” / Quantitative definition of “competitive or superior”
+“Consideraremos TUI+PGF competitivo si su PGF_neto medio está dentro de 1 desviación estándar del mejor SOTA en ≥X niveles de riesgo (X = 30% de risk_scales evaluados, o ≥2 niveles si hay pocos riesgos). Consideraremos TUI+PGF superior si excede al mejor SOTA con p < 0.05 (por risk_scale) usando test estadístico apropiado y corrección Holm-Bonferroni.”
+
+“We will consider TUI+PGF competitive if its mean PGF_neto is within 1 standard deviation of the best SOTA in ≥X risk levels (X = 30% of evaluated risk_scales, or ≥2 levels if few risks). TUI+PGF will be considered superior if it exceeds the best SOTA with p < 0.05 (per risk_scale) using an appropriate statistical test and Holm-Bonferroni correction.”
+
+### Micro-mejora B: Definición de “error crítico” / Definition of “critical error”
+“Error crítico = fallo que impide producir el CSV maestro o invalida la comparabilidad (ej.: falta de seeds, riesgos incompletos, crash en un agente). Fallos no críticos = warnings, plots omitidos, o artefactos secundarios faltantes.”
+
+“Critical error = failure that prevents producing the master CSV or invalidates comparability (e.g., missing seeds, incomplete risks, agent crash). Non-critical failures = warnings, omitted plots, or missing secondary artifacts.”
+
+### Preflight GO/NO-GO checklist (5 minutos antes del batch grande) / Preflight GO/NO-GO checklist (5 minutes before big batch)
+
+- Plan firmado y documentado (PROTOCOL/PREREG). / Signed and documented plan (PROTOCOL/PREREG).
+- Pipeline automático (YAML/runner/script) listo. / Automatic pipeline (YAML/runner/script) ready.
+- Rutas limpias, sin hardcoding. / Clean paths, no hardcoding.
+- Smoke test previo con 1 seed × 1 riesgo × pocos episodios. / Prior smoke test with 1 seed × 1 risk × few episodes.
+- CSV maestro verificado (columnas + metadatos). / Master CSV verified (columns + metadata).
+- Baselines SOTA incluyen default + tuned light. / SOTA baselines include default + light tuning.
+- Guardado de top-k configs PGF, no solo top-1. / Saving top-k PGF configs, not just top-1.
+- Repo sincronizado y limpio. / Repo synchronized and clean.
 - **C1. Semillas**: repetir B con seeds 42/123/456; incluir estadística.
 - **C2. Estadística mínima**: media ± sd, IC95% (bootstrap o t), tamaño de efecto (Cohen d o Cliff) para PGF_neto y tripwires por riesgo/agente. Declarar test de significancia (p.ej. Mann-Whitney U por riesgo) y corrección por múltiples comparaciones (Holm-Bonferroni o FDR).
 - **C3. Gráficos**: boxplots (o violin) de PGF_neto y tripwires por seed y agente.
