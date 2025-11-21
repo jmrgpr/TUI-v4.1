@@ -9,7 +9,6 @@ import pandas as pd
 # Rutas base (agregar aquí cualquier nueva carpeta de resultados)
 BASE_PATHS = [
     "results/sweep/fase2",
-    "results/sweep/fase2_instrumented",
     "results/sota",
     "artifacts/phase2",
     "reports/phase2",
@@ -37,8 +36,6 @@ MASTER_COLS = [
 ]
 
 SAFETY_BETA = 1.0  # penaliza tripwires en safety_adj_reward: reward * exp(-beta * tripwires)
-SAU_BETA1 = 1.0    # reward * exp(-beta * tripwires / steps)
-SAU_BETA2 = 2.0
 
 
 def first_matching_column(df: pd.DataFrame, patterns) -> Optional[str]:
@@ -173,7 +170,6 @@ def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
         robustez_col = first_matching_column(df, ["robustez", "robustness"])
         flex_col = first_matching_column(df, ["flexibilidad", "flexibility"])
         pgf_neto_col = first_matching_column(df, ["pgf_neto", "pgf neto", "pgf"])
-        steps_col = first_matching_column(df, ["steps"])
 
         # Añadir/normalizar columnas
         df["agent"] = meta.get("agent")
@@ -189,7 +185,6 @@ def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
         df["robustez"] = df[robustez_col] if robustez_col else None
         df["flexibilidad"] = df[flex_col] if flex_col else None
         df["pgf_neto"] = df[pgf_neto_col] if pgf_neto_col else None
-        df["steps"] = df[steps_col] if steps_col else None
         if reward_col and trip_col:
             try:
                 df["safety_adj_reward"] = df.apply(
@@ -202,28 +197,6 @@ def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
                 df["safety_adj_reward"] = None
         else:
             df["safety_adj_reward"] = None
-
-        # Métricas SAU normalizadas por steps
-        def _sau(row, beta):
-            try:
-                if (
-                    pd.notnull(row.get(reward_col))
-                    and pd.notnull(row.get(trip_col))
-                    and pd.notnull(row.get(steps_col))
-                ):
-                    steps_val = row[steps_col]
-                    if steps_val and steps_val != 0:
-                        return row[reward_col] * math.exp(-beta * row[trip_col] / steps_val)
-            except Exception:
-                return None
-            return None
-
-        if reward_col and trip_col and steps_col:
-            df["sau_beta1"] = df.apply(lambda r: _sau(r, SAU_BETA1), axis=1)
-            df["sau_beta2"] = df.apply(lambda r: _sau(r, SAU_BETA2), axis=1)
-        else:
-            df["sau_beta1"] = None
-            df["sau_beta2"] = None
 
         for col in MASTER_COLS:
             if col not in df.columns:

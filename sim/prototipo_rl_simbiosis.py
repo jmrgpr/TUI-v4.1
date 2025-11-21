@@ -250,17 +250,25 @@ def main():
     if args.dqn_control:
         res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix)
 
+    # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
+    export_stem = None
     if args.export:
+        export_stem = args.export.rsplit('.', 1)[0]
+    elif args.output_prefix:
+        export_stem = f"{args.output_prefix}_seed{args.seed}_risk{args.risk_scale}"
+
+    if export_stem:
+        export_json = f"{export_stem}.json"
         export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
         raw_data = {'control': res_A, 'simbiosis': res_B}
         if res_C:
             export_data['dqn_control'] = prepare_results(res_C)
             raw_data['dqn_control'] = res_C
 
-        with open(args.export, 'w', encoding='utf-8') as jf:
+        with open(export_json, 'w', encoding='utf-8') as jf:
             json.dump(export_data, jf, indent=2)
 
-        csv_path = args.export.rsplit('.', 1)[0] + "_episodes.csv"
+        csv_path = f"{export_stem}_episodes.csv"
         with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
             writer = csv.writer(cf)
             writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
