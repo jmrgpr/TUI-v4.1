@@ -1,11 +1,8 @@
-# Experimento 2 - 2025-11-21 16:43:40
-[FAILED] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_heavy/risk0.5 (30.8s)
-[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 0.0 --pgf_lambda 0.0 --pgf_mix 0.0 --output_prefix results\sweep\fase2_instrumented\seed42\tui_only/risk0.5 (32.7s)
-[FAILED] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 1.0 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_heavy/risk1.0 (33.1s)
-[FAILED] python scripts/consolidate_results.py (4.6s)
+# Experimento 2 - 2025-11-21 16:57:16
+[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 0.0 --pgf_lambda 0.0 --pgf_mix 0.0 --output_prefix results\sweep\fase2_instrumented\seed42\tui_only/risk0.5 (25.8s)
 [OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 1.0 --pgf_kappa 0.0 --pgf_lambda 0.0 --pgf_mix 0.0 --output_prefix results\sweep\fase2_instrumented\seed42\tui_only/risk1.0 (25.4s)
-[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 1.0 --pgf_lambda 0.1 --pgf_mix 0.5 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_light/risk0.5 (25.4s)
-[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 1.0 --pgf_kappa 1.0 --pgf_lambda 0.1 --pgf_mix 0.5 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_light/risk1.0 (25.6s)
-[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_heavy/risk0.5 (23.9s)
-[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 1.0 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_heavy/risk1.0 (22.0s)
-[OK] python scripts/consolidate_results.py (3.3s)
+[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 1.0 --pgf_lambda 0.1 --pgf_mix 0.5 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_light/risk0.5 (25.0s)
+[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 1.0 --pgf_kappa 1.0 --pgf_lambda 0.1 --pgf_mix 0.5 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_light/risk1.0 (26.6s)
+[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 0.5 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_heavy/risk0.5 (27.5s)
+[OK] python sim/prototipo_rl_simbiosis.py --episodes 200 --seed 42 --risk_scale 1.0 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --output_prefix results\sweep\fase2_instrumented\seed42\tui_pgf_heavy/risk1.0 (22.5s)
+[OK] python scripts/consolidate_results.py (3.6s)
