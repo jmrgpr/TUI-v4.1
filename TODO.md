@@ -24,7 +24,7 @@ Este To Do refleja el avance hacia evidencia empirica preliminar de alineacion e
 
 ### Expansion y robustez experimental
 - Expandir experimentos a mas semillas y episodios (robustez estadistica y validacion cruzada).
-- Agregar comparacion con A2C y SAC (framework SOTA listo; falta ejecucion y analisis).
+- Agregar comparacion con A2C, DQN y (si se soporta) SAC; framework SOTA ya extendido, falta ejecucion/analisis.
 - Planificar experimentos en benchmarks mas complejos (MuJoCo, Procgen, etc.).
 - Documentar y automatizar la exportacion de resultados para auditoria y reproducibilidad.
 

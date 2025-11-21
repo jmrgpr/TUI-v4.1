@@ -25,6 +25,7 @@
 - The η_acumulativo metric was not explicitly calculated.
 - Results and conclusions should be interpreted as preliminary evidence, not definitive validation.
 
+<<<<<<< HEAD
 ## Reproducibilidad rapida / Quick start
 1) Crear entorno (Conda o venv) e instalar dependencias:  
    `pip install -r requirements.txt`
@@ -95,6 +96,14 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - El notebook de análisis produce tablas y gráficos comparativos.
 - La estructura del repositorio está limpia y documentada.
 # TUI v4.2 — Unified Intelligence Theory
+=======
+## Logros recientes / Recent achievements
+- Refactor del simulador y runners (v4.2).
+- Cobertura de pruebas **100%** en `sim/`; integracion completa.
+- Exportacion robusta (JSON/CSV) y trazabilidad por semilla (`--output_prefix`).
+- Scripts de Fase 2 y comparacion SOTA (PPO/A2C/DQN) listos para reproducibilidad.
+- Visualizaciones y estadistica (ANOVA, t-test) bilingues; notebooks de quickstart.
+>>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
 
 ## Entorno recomendado / Reference environment
 - Python 3.10 o 3.11  
@@ -109,7 +118,7 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 3) Barrido de riesgo:  
    `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep_risk`
 4) Comparacion SOTA (opcional):  
-   `python run_sota_comparison.py`
+   `python run_sota_comparison.py`  # corre PPO/A2C/DQN en todos los risk_scale
 
 ## Estructura / Layout
 - `sim/` : codigo del simulador, agentes, evaluador PGF, visualizaciones.
@@ -129,6 +138,7 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - Cobertura `sim/`: **100%** (pytest con `--cov=sim`).  
 - Target network en DQN; sin `eval()` inseguro (se usa `ast.literal_eval`).  
 - Warnings graficos mitigados cerrando figuras; exportaciones en UTF-8.
+- Comparacion SOTA ampliada (PPO, A2C, DQN) con sumarios por riesgo y global.
 
 *   **Python:** 3.10 / 3.11
 *   **Dependencias principales:**

@@ -18,7 +18,7 @@
 - Actualizado README.md con nueva cita recomendada.
 - Fecha y hora: 19/11/2025.
 
-## [2025-11-19] Comparacion SOTA con PPO: Evidencia empirica de superioridad TUI
+-## [2025-11-19] Comparacion SOTA con PPO: Evidencia empirica de superioridad TUI
 - Ejecutado `run_sota_comparison.py`: Entrenamiento de PPO en 5 escalas de riesgo (0.5-3.0).
 - Resultados: PPO optimiza recompensa (371 en riesgo bajo) pero falla en PGF (-0.29 vs -0.06 de TUI).
 - Validacion: Agentes TUI mantienen alineacion PGF escalable; PPO no logra simbiosis constitutiva.
@@ -29,6 +29,11 @@
 - Interaccion agente-riesgo confirmada, apoyando hipotesis de "tension de riesgo".
 - Framework SOTA preparado: Wrapper Gymnasium y script de comparacion con PPO.
 - Dependencias actualizadas para reproducibilidad y benchmarking.
+
+## [2025-11-21] Comparacion SOTA ampliada (PPO/A2C/DQN)
+- `run_sota_comparison.py` ahora ejecuta PPO, A2C y DQN sobre risk_scale 0.5-3.0, generando resumentes por algoritmo y uno combinado.
+- Archivos generados: `results/sota_<algo>_global_summary.csv` y `results/sota_all_global_summary.csv`.
+- Ajustes para evaluacion headless (matplotlib Agg) y mezcla PGF/reward parametrizable en el prototipo para calibrar penalizaciones.
 
 ## [2025-11-19] Analisis Estadistico y Comparacion SOTA
 - Implementado `results/stats.py`: Analisis ANOVA Two-Way + Tukey HSD para validar hipotesis estadisticamente.

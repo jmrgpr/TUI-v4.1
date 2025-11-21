@@ -60,7 +60,11 @@ class EvaluatorPGF:
         self.I_rep = 1.0 if info.get('help') else 0.7
         self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
         
+<<<<<<< HEAD
         # --- PGF v2: Bonificaciones + Penalización Selectiva ---
+=======
+        # --- PGF FASE 2: Desglose de Tensión de Riesgo ---
+>>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
         kappa = config.EVAL_PGF_KAPPA
         lambda_c = config.EVAL_PGF_LAMBDA_C
         
