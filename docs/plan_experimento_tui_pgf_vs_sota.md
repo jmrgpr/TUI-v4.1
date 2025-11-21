@@ -1,6 +1,5 @@
 # Plan científico integral / Scientific Plan: TUI + PGF vs SOTA (DQN, PPO, A2C)
 
-
 ## Objetivo del experimento (Fase 2) / Experiment Objective (Phase 2)
 Comparar el desempeño de TUI+PGF frente a algoritmos SOTA (DQN, PPO, A2C) bajo escenarios de riesgo, evaluando robustez, reproducibilidad y trazabilidad mediante un pipeline totalmente automatizado.
 
@@ -15,15 +14,6 @@ Compare the performance of TUI+PGF against SOTA algorithms (DQN, PPO, A2C) under
 - Superiority or competitiveness of TUI+PGF in key metrics (PGF_neto, total_reward, robustness, variability, and tripwires).
 - Full reproducibility and traceability of the pipeline via multiple seeds and auditable artifacts.
 - End-to-end automation, generating all outputs needed for statistical analysis and publication without manual intervention.
-
-## Plan científico integral: TUI + PGF vs SOTA (DQN, PPO, A2C)
-
-## Objetivo central
-Demostrar, con evidencia cuantitativa, reproducible y generalizable, que el agente TUI (simbiosis) con ajuste PGF:
-- Mejora métricas clave frente a SOTA (DQN, PPO, A2C), y/o logra igual rendimiento con menor costo/riesgo.
-- Se mantiene robusto al variar semillas, episodios e hiperparámetros, sin overfitting.
-
-## Fase A — Preparación y control experimental
 - **A1. Inventario de datasets**: reunir CSV de barridos risk_scale, semillas (42/123/456), episodios (200 y 500), grid PGF (kappa, lambda, mix). Estandarizar columnas: agent {TUI, DQN, PPO, A2C}, seed, episodes, risk_scale, kappa, lambda, mix, pgf_neto, tripwires, robustez, flexibilidad, reward_total.
 - **A2. Métricas canónicas (fijas)**: PGF_neto; robustez; flexibilidad; tripwires; opcional reward_total, risk_cost. No cambiar definiciones durante el análisis; si se ajusta, marcar como post-hoc. Incluir fórmulas explícitas de robustez y flexibilidad en Métodos.
 - **A3. Baselines SOTA claros**: hiperparámetros razonables (defaults documentados), mismo presupuesto computacional/episodios que TUI.
