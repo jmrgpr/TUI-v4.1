@@ -119,9 +119,12 @@ def extract_metadata(path: Path) -> dict:
     return meta
 
 
-def consolidate_csvs():
+def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
     all_files = []
-    for base in BASE_PATHS:
+    paths = list(BASE_PATHS)
+    if extra_paths:
+        paths.extend(extra_paths)
+    for base in paths:
         all_files.extend(glob.glob(f"{base}/**/*.csv", recursive=True))
 
     dfs = []
@@ -166,7 +169,7 @@ def consolidate_csvs():
 
     if dfs:
         master = pd.concat(dfs, ignore_index=True)
-        out_path = Path("results/master_results.csv")
+        out_path = Path(output)
         master.to_csv(out_path, index=False)
         print(f"Master CSV generado: {out_path}")
     else:
