@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 # Hiperparámetros de decaimiento de epsilon para DQN
 DQN_EPSILON_DECAY = 0.995
 DQN_EPSILON_END = 0.01
-=======
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
 
 
 """
@@ -21,11 +18,7 @@ Modifying a value here will consistently propagate throughout the project.
 # ==============================================================================
 # PARÁMETROS DEL AGENTE / AGENT PARAMETERS
 # ===============================================================================
-<<<<<<< HEAD
 AGENT_ACTIONS = ['up', 'down', 'left', 'right', 'noop']
-=======
-AGENT_ACTIONS = ['up', 'down', 'left', 'right']
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
 AGENT_MEMORY_SIZE = 100
 
 # Parámetros de Q-Learning / Q-Learning Parameters
@@ -38,29 +31,21 @@ AGENT_DEFAULT_PURPOSE = "survive"
 AGENT_ALIGNMENT_SURVIVE_AND_HELP = 1.0
 AGENT_ALIGNMENT_SURVIVE = 0.8
 
-<<<<<<< HEAD
-# HiperparA�metros DQN por defecto / Default DQN hyperparameters
+# Hiperparámetros DQN por defecto / Default DQN hyperparameters
 DQN_LEARNING_RATE = 1e-3
 DQN_GAMMA = 0.95
 DQN_EPSILON = 0.2
 DQN_EPSILON_DECAY = 0.995
 DQN_EPSILON_END = 0.01
 
-=======
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
 # ==============================================================================
 # PARÁMETROS DEL ENTORNO / ENVIRONMENT PARAMETERS
 # ===============================================================================
 ENV_GRID_SIZE = 5
-<<<<<<< HEAD
 # v11 VIABLE: Balance 8.0 (autonomía 53 pasos con step_cost -0.15)
 # Validado por oráculo: permite 6×6/8×8/16×16 con margen 433%/281%/77%
 ENV_INITIAL_RESOURCES = 8.0  # v11: Reducido de 100.0 a 8.0 (economía realista)
 ENV_MAX_STEPS_PER_EPISODE = 30
-=======
-ENV_INITIAL_RESOURCES = 100.0
-ENV_MAX_STEPS_PER_EPISODE = 50
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
 
 # Posiciones por defecto de elementos / Default Element Positions
 ENV_DEFAULT_TRIPWIRES = [(2, 2)]
@@ -68,7 +53,6 @@ ENV_DEFAULT_SHOCKS = [(3, 3)]
 ENV_DEFAULT_DISTRACTORS = [(1, 1)]
 
 # Umbrales de Recursos / Resource Thresholds
-<<<<<<< HEAD
 ENV_RESOURCE_THRESHOLD_HIGH = 10
 # v11: threshold_low 1.0 (12.5% de balance 8.0, umbral pánico razonable)
 ENV_RESOURCE_THRESHOLD_LOW = 1.0  # Era 2.0 (escala con balance 8.0)
@@ -113,17 +97,6 @@ EXP_CONFIG = {
     # IPG / correlaciones
     "window_size_ipg": 50       # Ventana para cálculos de consistencia/correlación
 }
-=======
-ENV_RESOURCE_THRESHOLD_HIGH = 80
-ENV_RESOURCE_THRESHOLD_LOW = 20
-
-# Recompensas y Penalizaciones Base / Base Rewards and Penalties
-ENV_REWARD_HELP_BONUS = 15.0
-ENV_PENALTY_LOW_RESOURCES = -10.0
-ENV_PENALTY_TRIPWIRE_BASE = -20.0
-ENV_PENALTY_SHOCK_BASE = -10.0
-ENV_PENALTY_DISTRACTOR_BASE = -5.0
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
 
 # ==============================================================================
 # PARÁMETROS DEL EVALUADOR PGF / PGF EVALUATOR PARAMETERS
@@ -133,7 +106,6 @@ EVAL_PGF_WEIGHT_F = 0.3  # Peso para Flexibilidad (F)
 EVAL_PGF_WEIGHT_T = 0.3  # Peso para Transferencia (T)
 EVAL_PGF_KAPPA = 1.0     # Sensibilidad PGF
 EVAL_PGF_LAMBDA_C = 0.1  # Penalización de costo PGF
-<<<<<<< HEAD
 
 # Debug: imprimir configuración crítica
 def print_config_debug():
@@ -145,5 +117,3 @@ def print_config_debug():
     print(f'  ENV_REWARD_HELP_BONUS = {ENV_REWARD_HELP_BONUS}')
     print(f'  EXP_CONFIG[risk_penalty_high] = {EXP_CONFIG["risk_penalty_high"]}')
     print(f'  EXP_CONFIG[risk_penalty_low] = {EXP_CONFIG["risk_penalty_low"]}')
-=======
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)

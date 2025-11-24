@@ -37,37 +37,6 @@ AGENT_CONFIGS = {
     "Control (Q-table)": {"agent_name": "Control", "use_dqn": False, "use_pgf": False, "pgf_mix": 0.0},
 }
 AGENT_OPTIONS = list(AGENT_CONFIGS.keys())
-def main():  # pragma: no cover - interfaz Streamlit no ejercitada en tests de cobertura
-    # ===================== Unir resúmenes Fase 2 =====================
-    st.markdown("---")
-    st.subheader("Unir resúmenes Fase 2 / Merge Fase 2 summaries")
-    if st.button("Unir y mostrar resumen global de Fase 2"):
-        import subprocess
-        import pandas as pd
-        # Ejecutar el script merge_summaries.py
-        result = subprocess.run([sys.executable, "merge_summaries.py"], capture_output=True, text=True)
-        st.info(result.stdout if result.stdout else "Resúmenes unidos. Archivo generado: results/fase2_global_summary.csv")
-        # Mostrar el resumen global en la interfaz
-        try:
-            df_global = pd.read_csv("results/fase2_global_summary.csv")
-            st.dataframe(df_global)
-        except Exception as e:
-            st.error(f"No se pudo cargar el resumen global: {e}")
-    # ===================== Sidebar: Parámetros =====================
-    st.sidebar.title("TUI v4.1 Simulador — Parámetros")
-    # Botón de reset a valores por defecto
-    if st.sidebar.button("Reset to default"):
-        st.session_state["episodes"] = PARAMS["episodes"]["value"]
-        st.session_state["seed"] = PARAMS["seed"]["value"]
-        st.session_state["risk_scale"] = PARAMS["risk_scale"]["value"]
-        st.session_state["grid_size"] = PARAMS["grid_size"]["value"]
-        st.session_state["initial_resources"] = PARAMS["initial_resources"]["value"]
-        st.session_state["tripwires"] = PARAMS["tripwires"]["value"]
-        st.session_state["shocks"] = PARAMS["shocks"]["value"]
-        st.session_state["distractors"] = PARAMS["distractors"]["value"]
-        st.session_state["max_steps"] = PARAMS["max_steps"]["value"]
-        st.session_state["agent_type"] = PARAMS["agent_type"]["options"][0]
-
 
 def main():  # pragma: no cover
     if "runs" not in st.session_state:

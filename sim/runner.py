@@ -66,9 +66,9 @@ def run_experiment(
     use_dqn=False,
     pgf_mix: float = 1.0,
     risk_level: str = "low",
-        red_team: bool = False,
-        grid_size: int = 5,
-        **kwargs):
+    red_team: bool = False,
+    grid_size: int = 5,
+    **kwargs):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
         for i, traj in enumerate(trajectories):

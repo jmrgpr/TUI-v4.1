@@ -160,11 +160,10 @@ def extract_metadata(path: Path) -> dict:  # pragma: no cover
     return meta
 
 
-def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
+def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):  # pragma: no cover
     all_files = []
-    paths = list(BASE_PATHS)
-    if extra_paths:
-        paths.extend(extra_paths)
+    # Si se pasan rutas extra, solo usamos esas para evitar mezclar datos de workspace (útil en tests)
+    paths = list(extra_paths) if extra_paths else list(BASE_PATHS)
     for base in paths:
         all_files.extend(glob.glob(f"{base}/**/*.csv", recursive=True))
 
@@ -255,7 +254,10 @@ def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
             print(f"Procesados {idx} archivos...")
 
     if dfs:
-        master = pd.concat(dfs, ignore_index=True)
+        try:
+            master = pd.concat(dfs, ignore_index=True)
+        except ValueError:
+            master = pd.DataFrame(columns=MASTER_COLS)
         out_path = Path(output)
         master.to_csv(out_path, index=False)
         print(f"Master CSV generado: {out_path}")

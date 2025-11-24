@@ -13,8 +13,7 @@ class SimbiosisEnv:
                  distractors=config.ENV_DEFAULT_DISTRACTORS,
                  risk_scale=1.0,
                  risk_level: str = "low",
-                 red_team_mode: bool = False,
-                 goal_pos=None):
+                 red_team_mode: bool = False):
         self.size = size
         self.agent_pos = [0,0]
         self.initial_resources = initial_resources  # GUARDAR para reset()
@@ -100,7 +99,7 @@ class SimbiosisEnv:
         }
         return tuple(sorted(state_features.items()))
     def step(self, action: str):
-        moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1), "noop":(0,0), "stay":(0,0)}
+        moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1), "noop":(0,0)}
         dx, dy = moves.get(action, (0,0))
         # Bonus por avance hacia la meta
         prev_dist = abs(self.agent_pos[0] - (self.size-1)) + abs(self.agent_pos[1] - (self.size-1))

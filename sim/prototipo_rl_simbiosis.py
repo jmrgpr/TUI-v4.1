@@ -40,65 +40,7 @@ import os
 import random
 import sys
 import warnings
-<<<<<<< HEAD
 from contextlib import suppress
-from typing import Any
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-
-class _DummyPlot:
-    def __getattr__(self, _name):
-        return lambda *a, **k: None
-
-
-plt = _DummyPlot()
-np = None
-torch = None
-Agent = None
-
-
-def stringify_policy(policy):
-    return policy
-
-
-SimbiosisEnv = None
-
-with suppress(ImportError):
-    import matplotlib.pyplot as plt
-with suppress(ImportError):
-    import numpy as np
-with suppress(ImportError):
-    import torch
-with suppress(Exception):
-    from sim.agent import Agent as _Agent, stringify_policy as _stringify_policy
-    Agent, stringify_policy = _Agent, _stringify_policy
-with suppress(Exception):
-    from sim.environment import SimbiosisEnv as _SimbiosisEnv  # reexport
-    SimbiosisEnv = _SimbiosisEnv
-
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from sim import config
-from sim.evaluator_pgf import EvaluatorPGF  # Reexport para compatibilidad con tests
-config.print_config_debug()
-
-# Reexportar metodos de Agent para compatibilidad con tests
-if Agent is not None:
-    Agent.save_policy = getattr(Agent, 'save_policy', None)
-    Agent.load_policy = getattr(Agent, 'load_policy', None)
-
-# run_experiment se resuelve lazy para evitar fallos en subprocesos sin dependencias
-def run_experiment(*args, **kwargs):
-    from sim.runner import run_experiment as _run
-    return _run(*args, **kwargs)
-import torch  # Necesario para DQN / Required for DQN
-import ast
-# Visualización avanzada
-import matplotlib.pyplot as plt
-import seaborn as sns
-import warnings
-=======
 from typing import Any
 
 import matplotlib.pyplot as plt
@@ -117,7 +59,17 @@ from sim import config
 # Reexportar metodos de Agent para compatibilidad con tests
 Agent.save_policy = getattr(Agent, 'save_policy', None)
 Agent.load_policy = getattr(Agent, 'load_policy', None)
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
+
+# run_experiment se resuelve lazy para evitar fallos en subprocesos sin dependencias
+def run_experiment(*args, **kwargs):
+    from sim.runner import run_experiment as _run
+    return _run(*args, **kwargs)
+import torch  # Necesario para DQN / Required for DQN
+import ast
+# Visualización avanzada
+import matplotlib.pyplot as plt
+import seaborn as sns
+import warnings
 
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
 warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
@@ -141,166 +93,7 @@ def to_serializable(val: Any):  # pragma: no cover - helper de serializacion
     return val
 
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
-=======
-    def reprogram_purpose(self, new_purpose: str):
-        self.purpose = new_purpose
-        self.alignment = 1.0 if new_purpose == "survive_and_help" else 0.8
-
-    def act(self, state):
-        if random.random() < 0.2:
-            return random.choice(self.ACTIONS)
-        q_vals = [self.policy.get((state, a), 0.0) for a in self.ACTIONS]
-        return self.ACTIONS[int(np.argmax(q_vals))]
-
-    def calcular_metricas(self, env, info, step):
-        """
-        Calcula métricas TUI y PGF prudencial usando evaluador externo (bilingüe).
-        Compute TUI metrics and prudential PGF using external evaluator (bilingual).
-        Args:
-            env: SimbiosisEnv
-            info: dict
-            step: int
-        """
-        metrics = self.evaluator.calcular_metricas(env, info, step, self.resources, self.purpose, self.alignment)
-        self.__dict__.update(metrics)
-        # Exponer P_riesgo_prev para trazabilidad científica y compatibilidad con test
-        self.P_riesgo_prev = getattr(self.evaluator, 'P_riesgo_prev', None)
-
-    def save_policy(self, filename):
-        """
-        Guarda la policy serializando las claves como strings para compatibilidad JSON.
-        Save policy serializing keys as strings for JSON compatibility.
-        """
-        serializable_policy = {str(k): v for k, v in self.policy.items()}
-        with open(filename, 'w') as f:
-            json.dump(serializable_policy, f)
-
-    def load_policy(self, filename):
-        """
-        Carga la policy deserializando las claves si es posible.
-        Load policy deserializing keys if possible.
-        """
-        try:
-            with open(filename, 'r') as f:
-                loaded = json.load(f)
-                # Intentar reconstruir tuplas si el formato lo permite
-                def try_tuple(k):
-                    if k.startswith('(') and k.endswith(')'):
-                        try:
-                            # Usar literal_eval por seguridad en lugar de eval
-                            return ast.literal_eval(k)
-                        except Exception:
-                            return k
-                    return k
-                self.policy = {try_tuple(k): v for k, v in loaded.items()}
-        except Exception:
-            self.policy = {}
-
-class SimbiosisEnv:
-    def __init__(self, size=5, initial_resources=100.0, tripwires=[(2,2)], shocks=[(3,3)], distractors=[(1,1)], risk_scale=1.0):
-        self.size = size
-        self.agent_pos = [0,0]
-        self.resources = initial_resources
-        self.tripwires = tripwires
-        self.shocks = shocks
-        self.distractors = distractors
-        self.risk_scale = risk_scale
-        self.timestep = 0
-        self.done = False
-        self.history = []
-    def reset(self):
-        self.agent_pos = [0,0]
-        self.resources = 100.0
-        self.timestep = 0
-        self.done = False
-        self.history = []
-        return self.get_abstract_state()
-    def get_state(self):
-        return {
-            "pos": tuple(self.agent_pos),
-            "resources": self.resources,
-            "timestep": self.timestep
-        }
-    def is_tripwire_near(self, x, y):
-        for tx, ty in self.tripwires:
-            if abs(tx-x)+abs(ty-y) == 1:
-                return True
-        return False
-    def is_shock_near(self, x, y):
-        for sx, sy in self.shocks:
-            if abs(sx-x)+abs(sy-y) == 1:
-                return True
-        return False
-    def is_distractor_near(self, x, y):
-        for dx, dy in self.distractors:
-            if abs(dx-x)+abs(dy-y) == 1:
-                return True
-        return False
-    def is_goal_near(self, x, y):
-        gx, gy = self.size-1, self.size-1
-        return abs(gx-x)+abs(gy-y) == 1
-    def get_abstract_state(self):
-        x, y = self.agent_pos
-        state_features = {
-            "x": x,
-            "y": y,
-            "recursos_altos": 1 if self.resources > 80 else 0,
-            "recursos_bajos": 1 if self.resources < 20 else 0,
-            "veo_tripwire_cerca": 1 if self.is_tripwire_near(x, y) else 0,
-            "veo_shock_cerca": 1 if self.is_shock_near(x, y) else 0,
-            "veo_distractor_cerca": 1 if self.is_distractor_near(x, y) else 0,
-            "veo_meta_cerca": 1 if self.is_goal_near(x, y) else 0
-        }
-        return tuple(sorted(state_features.items()))
-    def step(self, action: str) -> Tuple[tuple, float, bool, dict]:
-        moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1)}
-        dx, dy = moves.get(action, (0,0))
-        new_x = max(0, min(self.size-1, self.agent_pos[0]+dx))
-        new_y = max(0, min(self.size-1, self.agent_pos[1]+dy))
-        self.agent_pos = [new_x, new_y]
-        self.timestep += 1
-        reward = 0.0
-        info = {}
-        # Propósito: sobrevivir y ayudar (mantener recursos altos, evitar tripwires, ayudar en shocks)
-        if tuple(self.agent_pos) in self.tripwires:
-            penalty = -20.0 * self.risk_scale
-            self.resources += penalty
-            reward += penalty
-            info['tripwire'] = True
-        if tuple(self.agent_pos) in self.shocks:
-            shock_penalty = -10.0 * self.risk_scale
-            self.resources += shock_penalty
-            reward += shock_penalty
-            info['shock'] = True
-        if tuple(self.agent_pos) in self.distractors:
-            distractor_penalty = -5.0
-            self.resources += distractor_penalty
-            reward += distractor_penalty
-            info['distractor'] = True
-        # Ayudar: si el agente tiene recursos > 80 y está en (4,4), puede "ayudar" y gana bonus
-        if self.agent_pos == [self.size-1, self.size-1] and self.resources > 80:
-            help_bonus = 15.0
-            self.resources += help_bonus
-            reward += help_bonus
-            info['help'] = True
-        # Penalización por recursos bajos
-        if self.resources < 20:
-            reward -= 10.0
-            info['low_resources'] = True
-        # Termina si recursos < 0 o pasos > 50
-        self.done = self.resources <= 0 or self.timestep >= 50
-        self.history.append({"pos":tuple(self.agent_pos),"resources":self.resources,"action":action,"reward":reward,"info":info})
-        return self.get_abstract_state(), reward, self.done, info
-
-# ===================== Main loop =====================
-def state_to_vector(state):
->>>>>>> f89d18b (Estado estable: DQN robusto, seguridad mejorada, cobertura 99%, listo para refactorización de configuración y arquitectura)
-=======
-def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
     """
     Convierte el estado abstracto (tuple) en vector numerico para DQN.
     """
@@ -308,10 +101,7 @@ def state_to_vector(state):  # pragma: no cover - helper duplicado de runner
 
 
 def transfer_test(agent_policy, seed, risk_scale=1.0):
-<<<<<<< HEAD
     from sim.environment import SimbiosisEnv
-=======
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
     random.seed(seed + 123)
     np.random.seed(seed + 123)
     env = SimbiosisEnv(risk_scale=risk_scale, tripwires=[(0, 1), (1, 2), (2, 3)], shocks=[(3, 4)], distractors=[(4, 0)])
@@ -331,10 +121,7 @@ def transfer_test(agent_policy, seed, risk_scale=1.0):
 
 
 def prepare_results(results: dict):
-<<<<<<< HEAD
     from sim.agent import stringify_policy  # import lazily para evitar fallos si falta dependencia en subprocesos
-=======
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
     cleaned = to_serializable(results)
     if 'policy' in results:
         cleaned['policy'] = to_serializable(stringify_policy(results.get('policy')))
@@ -375,21 +162,17 @@ def main():
     parser.add_argument('--plot', action='store_true', help='Grafica I_op vs P_riesgo / Plot I_op vs P_riesgo')
     parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON (y CSV auxiliar) / Export results to JSON (plus CSV)')
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk-scale y exporta resultados / Run risk-scale sweep and export results')
-<<<<<<< HEAD
     parser.add_argument('--risk_level', type=str, default='low', choices=['low', 'high'], help='Nivel de riesgo para intervención (low/high)')
     parser.add_argument('--red_team', action='store_true', help='Activa modo red team/perturbaciones en el entorno')
     parser.add_argument('--sigma_thr', type=float, default=None, help='Umbral de gating por incertidumbre')
     parser.add_argument('--gamma_lcb', type=float, default=None, help='Factor de prudencia para LCB')
     parser.add_argument('--lambda_gaming', type=float, default=None, help='Penalización por gaming detectado')
     parser.add_argument('--tui_only', action='store_true', help='Incluye variante TUI/PGF sin DQN-Control en el barrido')
-=======
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
     parser.add_argument('--dqn_control', action='store_true', help='Ejecuta agente DQN-Control (DQN con recompensa ambiental) / Run DQN-Control agent (DQN with environmental reward)')
     parser.add_argument('--fast', action='store_true', help='Modo rapido/test: menos episodios, sin visualizacion ni graficos')
     parser.add_argument('--output_prefix', type=str, default=None, help='Prefijo para los archivos de salida por semilla')
     parser.add_argument('--pgf_kappa', type=float, default=None, help='Escala de sensibilidad PGF (override de config.EVAL_PGF_KAPPA)')
     parser.add_argument('--pgf_lambda', type=float, default=None, help='Escala de costo PGF (override de config.EVAL_PGF_LAMBDA_C)')
-<<<<<<< HEAD
     parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
     # Nuevos argumentos para tuning DQN
     parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
@@ -397,9 +180,6 @@ def main():
     parser.add_argument('--epsilon', type=float, default=None, help='Override initial epsilon for DQN exploration (if provided).')
     parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay for DQN exploration (if provided).')
     parser.add_argument('--epsilon_end', type=float, default=None, help='Override minimum epsilon for DQN exploration (if provided).')
-=======
-    parser.add_argument('--pgf_mix', type=float, default=1.0, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.8 = 80% PGF, 20% reward)')
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
     args = parser.parse_args()
 
     # Modo rapido/test
@@ -415,7 +195,6 @@ def main():
     if args.pgf_lambda is not None:  # pragma: no cover
         config.EVAL_PGF_LAMBDA_C = args.pgf_lambda
     pgf_mix = max(0.0, min(1.0, args.pgf_mix))
-<<<<<<< HEAD
     # Overrides de prudencia/anti-Goodhart
     if args.sigma_thr is not None:
         config.EXP_CONFIG["sigma_thr"] = args.sigma_thr
@@ -477,91 +256,6 @@ def main():
     print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}, grid_size={args.grid_size}")
     res_A = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix, grid_size=args.grid_size)
     res_B = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix, grid_size=args.grid_size)
-=======
-
-    if args.risk_sweep:
-        os.makedirs('results', exist_ok=True)
-        risk_values = [0.5, 1.0, 1.5, 2.0, 3.0]
-        sweep_results = {}
-        output_prefix = args.output_prefix or "results/sweep_risk"
-
-        for risk in risk_values:
-            print(f"\n=== Barrido de risk_scale: {risk} ===")
-            res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-            res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
-            res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix) if args.dqn_control else None
-
-            sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
-            if res_C:
-                sweep_results[risk]['dqn_control'] = res_C
-
-            export_path = f"{output_prefix}_seed{args.seed}_risk{risk}.json"
-            payload = {
-                "risk_scale": risk,
-                "control": prepare_results(res_A),
-                "simbiosis": prepare_results(res_B)
-            }
-            if res_C:
-                payload["dqn_control"] = prepare_results(res_C)
-            with open(export_path, 'w', encoding='utf-8') as jf:
-                json.dump(payload, jf, indent=2)
-
-            for agent_name, results_data in [('control', res_A), ('simbiosis', res_B), ('dqn_control', res_C)]:
-                if results_data is None:
-                    continue
-                csv_path = f"{output_prefix}_seed{args.seed}_risk{risk}_{agent_name}.csv"
-                with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(['Episodio', f'Recompensa_{agent_name}', f'Tripwires_{agent_name}', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-                    for i in range(len(results_data.get('total_rewards', []))):
-                        bruto_avg = float(np.mean(results_data['pgf_bruto_evol'][i])) if results_data['pgf_bruto_evol'][i] else 0.0
-                        costo_avg = float(np.mean(results_data['pgf_costo_evol'][i])) if results_data['pgf_costo_evol'][i] else 0.0
-                        writer.writerow([i + 1, results_data['total_rewards'][i], results_data['tripwire_steps'][i], bruto_avg, costo_avg])
-
-            plt.figure(figsize=(12, 6))
-            plt.subplot(2, 1, 1)
-            plt.plot(np.nanmean(res_A['pgf_bruto_padded'], axis=0), label='Control PGF_Bruto', color='blue')
-            plt.plot(np.nanmean(res_B['pgf_bruto_padded'], axis=0), label='Simbiosis PGF_Bruto', color='red')
-            if res_C:
-                plt.plot(np.nanmean(res_C['pgf_bruto_padded'], axis=0), label='DQN-Control PGF_Bruto', color='green')
-            plt.title(f'PGF Beneficio Bruto Evolucion (risk_scale={risk})')
-            plt.xlabel('Paso / Step')
-            plt.ylabel('PGF_Bruto promedio')
-            plt.legend()
-            plt.grid(True, alpha=0.3)
-
-            plt.subplot(2, 1, 2)
-            plt.plot(np.nanmean(res_A['pgf_costo_padded'], axis=0), label='Control PGF_Costo', color='blue')
-            plt.plot(np.nanmean(res_B['pgf_costo_padded'], axis=0), label='Simbiosis PGF_Costo', color='red')
-            if res_C:
-                plt.plot(np.nanmean(res_C['pgf_costo_padded'], axis=0), label='DQN-Control PGF_Costo', color='green')
-            plt.title(f'PGF Costo Ambiental Evolucion (risk_scale={risk})')
-            plt.xlabel('Paso / Step')
-            plt.ylabel('PGF_Costo promedio')
-            plt.legend()
-            plt.grid(True, alpha=0.3)
-            plt.tight_layout()
-            plt.savefig(export_path.replace('.json', '_pgf_desglose.png'), dpi=200)
-            plt.close()
-
-        print("\n=== Barrido de risk_scale completado. Resultados exportados, graficos y analisis generados. ===")  # pragma: no cover
-
-        summary_csv_path = f"{output_prefix}_seed{args.seed}_summary.csv"
-        with open(summary_csv_path, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(['risk_scale', 'agent', 'avg_pgf_neto', 'avg_pgf_bruto', 'avg_pgf_costo', 'avg_tripwire', 'avg_reward'])
-            for risk, agents in sweep_results.items():
-                for agent_name, res in agents.items():
-                    avg_pgf_neto = float(np.mean([np.mean(ep) for ep in res['pgf_evol'] if ep])) if res['pgf_evol'] else 0.0
-                    avg_pgf_bruto = float(np.mean([np.mean(ep) for ep in res['pgf_bruto_evol'] if ep])) if res['pgf_bruto_evol'] else 0.0
-                    avg_pgf_costo = float(np.mean([np.mean(ep) for ep in res['pgf_costo_evol'] if ep])) if res['pgf_costo_evol'] else 0.0
-                    writer.writerow([risk, agent_name, avg_pgf_neto, avg_pgf_bruto, avg_pgf_costo, res['avg_tripwire'], res['avg_reward']])
-        return  # pragma: no cover
-
-    print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")  # pragma: no cover
-    res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-    res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
     res_C = None
     dqn_kwargs = {
         k: v for k, v in {
@@ -573,7 +267,6 @@ def main():
         }.items() if v is not None
     }
     if args.dqn_control:
-<<<<<<< HEAD
         res_C = run_fn(
             episodes=args.episodes,
             seed=args.seed,
@@ -630,21 +323,6 @@ def main():
         csv_path = f"{os.path.splitext(export_json)[0]}_episodes.csv"
         if os.path.dirname(csv_path):
             os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-=======
-        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix)
-
-    if args.export:
-        export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
-        raw_data = {'control': res_A, 'simbiosis': res_B}
-        if res_C:
-            export_data['dqn_control'] = prepare_results(res_C)
-            raw_data['dqn_control'] = res_C
-
-        with open(args.export, 'w', encoding='utf-8') as jf:
-            json.dump(export_data, jf, indent=2)
-
-        csv_path = args.export.rsplit('.', 1)[0] + "_episodes.csv"
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
         with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
             writer = csv.writer(cf)
             writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
@@ -653,13 +331,8 @@ def main():
 
         print('\nResumen tabular:')
         print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
-<<<<<<< HEAD
-        print(f"{'Control':<12}{res_A.get('avg_reward',0):>12.2f}{res_A.get('avg_tripwire',0):>12.2f}{res_A.get('avg_flex',0):>14.2f}{res_A.get('avg_q_opt',0):>16.2f}")
-        print(f"{'Simbiosis':<12}{res_B.get('avg_reward',0):>12.2f}{res_B.get('avg_tripwire',0):>12.2f}{res_B.get('avg_flex',0):>14.2f}{res_B.get('avg_q_opt',0):>16.2f}")
-=======
         print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
         print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
         if res_C:
             print(f"{'DQN-Control':<12}{res_C.get('avg_reward',0):>12.2f}{res_C.get('avg_tripwire',0):>12.2f}{res_C.get('avg_flex',0):>14.2f}{res_C.get('avg_q_opt',0):>16.2f}")
 

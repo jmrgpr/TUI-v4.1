@@ -23,6 +23,11 @@ def parse_args():
     p.add_argument("--pgf_lambda", type=float, default=0.05, help="PGF lambda tuning")
     p.add_argument("--pgf_mix", type=float, default=0.8, help="PGF mix tuning")
     p.add_argument("--output_base", type=str, default="results/sweep/fase2", help="Base para archivos de salida")
+    p.add_argument("--risk_level", type=str, default="low", choices=["low", "high"], help="Nivel de riesgo para intervención")
+    p.add_argument("--red_team", action="store_true", help="Activar modo red team/perturbaciones")
+    p.add_argument("--sigma_thr", type=float, default=None, help="Umbral de gating por incertidumbre")
+    p.add_argument("--gamma_lcb", type=float, default=None, help="Factor prudencial LCB")
+    p.add_argument("--lambda_gaming", type=float, default=None, help="Penalización por gaming")
     p.add_argument("--stop_on_fail", action="store_true", help="Abortar pipeline ante un error")
     return p.parse_args()
 
@@ -57,13 +62,27 @@ def run(cmd: str, stop_on_fail: bool, log_file: Path | None = None) -> bool:
 def main():
     args = parse_args()
 
+    common_flags = ""
+    if args.red_team:
+        common_flags += " --red_team"
+    if args.sigma_thr is not None:
+        common_flags += f" --sigma_thr {args.sigma_thr}"
+    if args.gamma_lcb is not None:
+        common_flags += f" --gamma_lcb {args.gamma_lcb}"
+    if args.lambda_gaming is not None:
+        common_flags += f" --lambda_gaming {args.lambda_gaming}"
+
     def_cmd = (
         "python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes {episodes} --seed {seed} "
+        f"--risk_level {args.risk_level}"
+        f"{common_flags} "
         f"--output_prefix {args.output_base}/seed{{seed}}/sweep_default --dqn_control"
     )
     tune_cmd = (
         "python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes {episodes} --seed {seed} "
         f"--pgf_kappa {args.pgf_kappa} --pgf_lambda {args.pgf_lambda} --pgf_mix {args.pgf_mix} "
+        f"--risk_level {args.risk_level}"
+        f"{common_flags} "
         f"--output_prefix {args.output_base}/seed{{seed}}/sweep_tuning --dqn_control"
     )
     sota_cmd = "python run_sota_comparison.py"

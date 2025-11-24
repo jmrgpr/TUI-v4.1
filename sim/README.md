@@ -88,3 +88,4 @@ EXPERIMENT_SPEC = {
 ### Review protocol
 - In each scientific review, verify that scripts have the updated `EXPERIMENT_SPEC` block.
 - If new parameters are added, update the block and test the GUI to ensure inputs appear correctly.
+- Document any relevant changes in this README for traceability.
