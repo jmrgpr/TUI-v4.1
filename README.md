@@ -25,7 +25,6 @@
 - The η_acumulativo metric was not explicitly calculated.
 - Results and conclusions should be interpreted as preliminary evidence, not definitive validation.
 
-<<<<<<< HEAD
 ## Reproducibilidad rapida / Quick start
 1) Crear entorno (Conda o venv) e instalar dependencias:  
    `pip install -r requirements.txt`
@@ -599,6 +598,3 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 
 Notas bilingües:
 Todos los comentarios, docstrings y outputs están en español e inglés para facilitar colaboración internacional y reproducibilidad científica.
-
-## Dedicatoria / Dedication
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
