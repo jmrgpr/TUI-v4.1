@@ -1,9 +1,9 @@
 ﻿---
-title: "Teoría Unificada de la Inteligencia (v4.1)"
+title: "Teoría Unificada de la Inteligencia (v4.2)"
 author: "José M. Rivera García"
 email: "jmrgpr@gmail.com"
 date: "2025-11-06"
-version: "v4.1"
+version: "v4.2"
 license: "CC BY 4.0"
 keywords: ["inteligencia", "riesgo acumulado", "propósito genuino", "gradiente de fracaso", "comparación interespecies", "PED", "P_genuino", "alignment", "AI safety"]
 abstract: >
@@ -15,27 +15,37 @@ abstract: >
   y análisis de limitaciones críticas.
 ---
 
-> ⚠️ **Estado (v4.1, Nov 2025)**  
-> **Naturaleza:** Teoría especulativa con validación preliminar.  
-> **Datos:** n$\approx$ 6–7 casos ilustrativos; ejemplos A/B y valores GPT-4 son **estimaciones/simulaciones**, no mediciones primarias.  
+> ⚠️ **Estado (v4.2, Nov 2025)**  
+> **Naturaleza:** Teoría especulativa con validación preliminar (fase piloto).  
+> **Datos empíricos actuales:** n≈6 sistemas con mediciones primarias.  
+> **Datos ilustrativos:** GPT-4 y mini-ejemplos A/B son **estimaciones/simulaciones** y quedan segregados; NO se usan para inferencia estadística.  
 > **Falsabilidad:** 13+ predicciones testables y protocolos preregistrables.  
 > **Uso recomendado:** Investigación y discusión; NO producción.
+
+**Changelog v4.2 (Resumen de cambios)**  
+1. Separación estricta de datos empíricos vs ilustrativos; GPT-4 pasa a tabla ilustrativa y apéndice.  
+2. H1 refinada: el riesgo cataliza inteligencia solo si hay aprendizaje/plasticidad efectiva; secuoya queda como control negativo formal.  
+3. α≈1/3 se mantiene como conjetura; v4.2 estima α libre y compara α fijo vs libre (AIC/BIC).  
+4. PED blindado contra overfitting: parámetros preregistrados o validados por cohorte A/B.  
+5. IPG marcado como piloto; se incorpora plan de micro-dataset real para evitar circularidad.  
+6. Alcance explícito: TUI explica inteligencia operativa bajo riesgo irreversible, NO IQ psicométrico ni creatividad estética pura.  
+7. Se enfatiza que la evidencia actual es correlacional piloto; validación causal programada.
 
 > **Citas:** Este manuscrito usa citas estilo Pandoc con `references.bib`.  
 > Para exportar a PDF/DOCX: usar `pandoc --citeproc` (ver `EXPORT_INSTRUCTIONS.md` para comandos completos).
 
 ---
 
-# Teoría Unificada de la Inteligencia v4.1: Un Marco Impulsado por Riesgo y Propósito
+# Teoría Unificada de la Inteligencia v4.2: Un Marco Impulsado por Riesgo y Propósito
 
 ## alignment y Referencias Cruzadas
-**Nota de alignment:** Este documento es el marco central y formalizado para todas las aplicaciones y extensiones, incluyendo el paper 'Teoría de la Inteligencia Aplicada a IA'. Todos los axiomas, ecuaciones y proxies aquí definidos (\eta ,$A_{alignment}$,P_riesgo, $\beta$ , LFM/CR/GDC) son la base para los demás documentos v4.1.
+**Nota de alignment:** Este documento es el marco central y formalizado para todas las aplicaciones y extensiones, incluyendo el paper 'Teoría de la Inteligencia Aplicada a IA'. Todos los axiomas, ecuaciones y proxies aquí definidos (\eta ,$A_{alignment}$,P_riesgo, $\beta$ , LFM/CR/GDC) son la base para los demás documentos v4.2.
 
 ---
 
 ## Resumen
 
-La inteligencia es un fenómeno emergente de optimización multi-objetivo bajo restricciones, que maximiza información útil ($\Delta I_{\mathrm{useful}}$) frente a costos totales. La versión v4.1 integra explícitamente dos motores causales de la inteligencia genuina: el riesgo acumulado (P_riesgo) y la alignment con propósito (A). Esta formulación unifica la métrica operativa de eficiencia (\eta ), el rol del propósito y la presión selectiva inducida por “tener algo que perder”.
+La inteligencia es un fenómeno emergente de optimización multi-objetivo bajo restricciones, que maximiza información útil ($\Delta I_{\mathrm{useful}}$) frente a costos totales. La versión v4.2 integra explícitamente dos motores causales de la inteligencia genuina: el riesgo acumulado (P_riesgo) y la alignment con propósito (A). Esta formulación unifica la métrica operativa de eficiencia (\eta ), el rol del propósito y la presión selectiva inducida por “tener algo que perder”.
 
 Contribuciones:
 - Axiomas fundamentales que incorporan eficiencia, riesgo y propósito.
@@ -82,7 +92,8 @@ Donde:
 - **$C_{\text{genoma}}$**: Complejidad del código (pares de bases para bio, parámetros para IA)
 - **$Z_{\text{norm}}$** = $10^{15}$ (constante de normalización calibrada con humano = 1.0)
 
-**Cálculos de referencia:**
+**Tabla F.1 — Datos empíricos (mediciones primarias)**  
+*(Solo sistemas con aprendizaje/plasticidad efectiva; sin estimaciones de IA.)*
 
 | Sistema          | $t_{\text{vida}}$ | $R_{\text{metabólica}}$ | $C_{\text{genoma}}$ | $P_{\text{riesgo\_physical}}$ |
 | ---------------- | ----------------- | ----------------------- | ------------------- | ----------------------------- |
@@ -91,8 +102,14 @@ Donde:
 | Rata laboratorio | $6.3 \times 10^7$ s | 1.5 W               | $2.9 \times 10^9$ bp | **0.085**                    |
 | Delfín           | $1.3 \times 10^9$ s | 150 W               | $3.2 \times 10^9$ bp | **0.35**                     |
 | Humano           | $2.2 \times 10^9$ s | 80 W                | $6.4 \times 10^9$ bp | **1.00**                     |
-| GPT-4            | 0 s*              | variable                | $1.8 \times 10^{12}$ | **0.00001**                  |
 | Árbol Secuoya    | $1 \times 10^{11}$ s | 100 W              | $5 \times 10^9$ bp   | **0.95**                     |
+
+**Tabla F.1b — Datos ilustrativos (NO usados para inferencia)**  
+*(Estimaciones para plausibilidad; se excluyen de correlaciones/R².)*
+
+| Sistema | $t_{\text{vida}}$ | $R_{\text{metabólica}}$ | $C_{\text{genoma}}$ | $P_{\text{riesgo\_physical}}$ | tipo_dato |
+|--------|-------------------|-------------------------|---------------------|-------------------------------|-----------|
+| GPT-4 (2024) | 0 s* | variable | $1.8 \times 10^{12}$ | **0.00001** | illustrative |
 
 *$t_{\text{vida}} \approx 0$ porque se resetea cada sesión (no hay continuidad)
 
@@ -200,7 +217,8 @@ def normalizar(x, x_min=0, x_max=10):
     return (x - x_min) / (x_max - x_min) if x_max > x_min else 0
 ```
 
-**Casos de Referencia (Valores Empíricos Calculados):**
+**Tabla F.2 — Datos empíricos (mediciones primarias)**  
+*(Sistemas con aprendizaje/plasticidad efectiva. Estimaciones de IA excluidas.)*
 
 | Sistema               | C    | F    | T    |$I_{op}$|P_riesgo| $\beta$      | Notas                                       |
 | --------------------- | ---- | ---- | ---- | --------- | -------- | ----- | ------------------------------------------- |
@@ -208,13 +226,25 @@ def normalizar(x, x_min=0, x_max=10):
 | Hormiga (P. barbatus) | 0.70 | 0.35 | 0.20 | **0.445** | 0.618    | 15.87 | Navegación eficiente, aprendizaje limitado  |
 | Árbol (Secuoya)       | 0.40 | 0.10 | 0.05 | **0.205** | 0.688    | ---   | Predicción estacional, respuesta fija       |
 | Rata laboratorio      | 0.75 | 0.65 | 0.50 | **0.645** | 0.886    | 20.95 | Excelente aprendizaje espacial              |
-| GPT-4 (2024)          | 0.95 | 0.25 | 0.35 | **0.560** | 0.200    | 0     | Predicción estadística excelente, falla OOD |
 | Delfín (T. truncatus) | 0.85 | 0.80 | 0.75 | **0.805** | 0.934    | 22.57 | Resolución problemas, aprendizaje social    |
 | Humano adulto         | 0.80 | 0.90 | 0.95 | **0.875** | 0.903    | 23.48 | Máxima flexibilidad y transferencia         |
 
-**Correlación empírica:** r($I_{op}$, P_riesgo) = 0.87 ($p < 0.01$) sin outliers
+**Tabla F.2b — Datos ilustrativos (NO usados para inferencia)**
 
-**Validación de H1:** $I_{\text{operativa}} \propto P_{\text{riesgo}}$ confirmada en sistemas con aprendizaje
+| Sistema | C | F | T | $I_{op}$ | P_riesgo | $\beta$ | Notas | tipo_dato |
+|--------|---|---|---|----------|----------|--------|-------|-----------|
+| GPT-4 (2024) | 0.95 | 0.25 | 0.35 | **0.560** | 0.200 | 0 | Predicción estadística excelente, falla OOD | illustrative |
+
+**Correlación empírica (piloto):** r($I_{op}$, P_riesgo) = 0.87 ($p < 0.05$), **solo con datos empíricos** (n≈6).  
+*GPT-4 y otros sistemas ilustrativos se excluyen de r, R² y ajustes.*
+
+**Validación piloto de H1 (forma refinada):**  
+En sistemas con aprendizaje/plasticidad efectiva,
+$$
+I_{\text{operativa}} \propto (P_{\text{riesgo}})^\alpha \cdot \Phi(\text{plasticidad})
+$$
+donde $\Phi \approx 0$ si no hay aprendizaje efectivo.  
+La confirmación actual es **correlacional preliminar**; la causalidad se evaluará con intervención de $P_{\text{riesgo}}$ (Fase 2).
 
 **Validación de Independencia:**
 Esta métrica NO menciona P_riesgo, propósito evolutivo, ni inversión
@@ -541,25 +571,33 @@ Donde:
 
 **H1 (Riesgo-Inteligencia):** $I_{\text{operativa}} \propto (P_{\text{riesgo\_physical}})^\alpha$ en sistemas con aprendizaje.
 
-### Afirmación Formal
+### Afirmación Formal (v4.2)
 
-**En sistemas con capacidad de aprendizaje y substrato computacional:**
+**En sistemas con capacidad de aprendizaje/plasticidad efectiva y substrato computacional:**
 
 $$
-I_{\text{operativa}} = k \cdot (P_{\text{riesgo\_physical}})^\alpha + \varepsilon
+I_{\text{operativa}} = k \cdot (P_{\text{riesgo\_physical}})^\alpha \cdot \Phi(\text{plasticidad}) + \varepsilon
 $$
 
 Donde:
-- $I_{\text{operativa}}$: Medida independiente de inteligencia (sección 1.5)
-- $P_{\text{riesgo\_physical}}$: Inversión física medible (definición sin circularidad)
-- $k = 0.80 \pm 0.10$: Constante de proporcionalidad
-- $\alpha = 0.35 \pm 0.05$: Exponente empírico (predicción: $\alpha \in [0.20, 0.50]$)
-- $\varepsilon$: Error residual
+- $I_{\text{operativa}}$: Medida independiente de inteligencia (sección 1.5).  
+- $P_{\text{riesgo\_physical}}$: Inversión física medible (definición sin circularidad).  
+- $\Phi(\text{plasticidad}) \in [0,1]$: moderador de aprendizaje efectivo;  
+  - $\Phi \approx 0$ en sistemas sin aprendizaje decisional (control negativo: secuoya).  
+  - $\Phi > 0$ cuando hay ajuste conductual por experiencia.  
+- $k$: Constante de proporcionalidad (se estima empíricamente).  
+- $\alpha$: Exponente de riesgo (se estima empíricamente).  
+- $\varepsilon$: Error residual.
 
-**Validación preliminar (n=6):**
-- $\varepsilon \sim N(0, 0.08)$: Término de error
+**Validación piloto (n≈6):**
+- Evidencia actual es **correlacional preliminar**.
 
-**Nota especulativa sobre $\alpha \approx 1/3$:** El valor observado $\alpha \approx 0.35$ sugiere rendimientos **decrecientes marginales** en inteligencia por unidad adicional de riesgo acumulado. Posibles mecanismos physicals: (i) **límites termodinámicos de Landauer** (costo mínimo $kT \ln 2$ por bit borrado impone restricciones energéticas), (ii) **jerarquías arquitectónicas** en sistemas nerviosos/computacionales (complejidad de coordinación crece superlinealmente), (iii) régimen **eficiente pero sub-óptimo** donde el sistema opera lejos del equilibrio pero con presupuesto finito. La forma $I \propto P_{\text{riesgo}}^{1/3}$ es consistente con leyes de escalamiento metabólico (Kleiber, West) y principios de eficiencia energética. **Validación requerida:** estimar intervalo de confianza IC95% de $\alpha$ con $N \geq 20$ sistemas diversos y verificar estabilidad en rango $[0.30, 0.40]$.
+**Nota sobre $\alpha \approx 1/3$:**  
+El valor ~1/3 es **conjetura plausible** por límites energéticos y rendimientos decrecientes (Landauer, escalas metabólicas).  
+**Plan de validación v4.2:**  
+1) Estimar $\alpha$ libre en espacio logarítmico (MLE).  
+2) Comparar modelo $\alpha$ fijo=1/3 vs $\alpha$ libre con AIC/BIC.  
+3) Reportar distribución de $\hat\alpha$ con IC95% en cohorte n≥20 y verificar estabilidad.
 
 ### Criterios de Falsación
 
@@ -1716,7 +1754,7 @@ La taxonomía unificada de P_riesgo resuelve los problemas fundamentales:
 
 La correlación r = 0.85 entre P_riesgo e I_operativa valida la Hipótesis H1 
 del catalizador de riesgo y proporciona una base cuantitativa sólida para 
-la Teoría Unificada de la Inteligencia v4.1.
+la Teoría Unificada de la Inteligencia v4.2.
 
 ---
 
@@ -2133,7 +2171,7 @@ En sistemas multi-agente con $P^{\text{col}}_{\text{riesgo}}$ medible y cambios 
 
 ---
 
-## 9. Ruta mínima de publicación (v4.1)
+## 9. Ruta mínima de publicación (v4.2)
 
 1) **Preprint** (arXiv): TUI (marco) + Aplicada (ingeniería/safety) + Suplemento (tablas y scripts).  
 2) **Dataset n$\geq$ 20 (pre‐registrado)**: añadir pulpo, corvidos y $\geq$ 2 LLMs; IC95% bootstrap; sensibilidad de \(w\), \(($\alpha$,$\beta$)\).  

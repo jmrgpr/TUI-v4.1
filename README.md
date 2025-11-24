@@ -66,5 +66,24 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 
 ---
 
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
 ## Dedicatoria / Dedication
 Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
