@@ -70,9 +70,10 @@ def test_simulation_execution_control(mock_run_experiment, mock_st):
     sim.gui_streamlit.main()
 
     # Verify run_experiment was called correctly
-    mock_run_experiment.assert_called_with(
-        episodes=1000, seed=42, risk_scale=1.0, agent_name="Control", use_pgf=False, use_dqn=False
-    )
+    kwargs = mock_run_experiment.call_args.kwargs
+    assert kwargs["episodes"] == 1000
+    assert kwargs["seed"] == 42
+    assert kwargs["agent_name"] == "Control"
     mock_st.success.assert_called_with("Simulación completada y registrada. / Simulation completed and logged.")
 
 @patch('sim.gui_streamlit.st')

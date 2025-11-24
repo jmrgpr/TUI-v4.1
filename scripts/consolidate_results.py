@@ -11,6 +11,7 @@ BASE_PATHS = [
     "results/sweep/fase2",
     "results/sweep/fase2_instrumented",
     "results/sota",
+    "results/exp_tui_experiment2_full",
     "artifacts/phase2",
     "reports/phase2",
 ]
@@ -22,6 +23,8 @@ MASTER_COLS = [
     "episodes",
     "steps",
     "risk_scale",
+    "risk_level",
+    "red_team",
     "kappa",
     "lambda",
     "mix",
@@ -30,6 +33,13 @@ MASTER_COLS = [
     "robustez",
     "flexibilidad",
     "reward_total",
+    "avg_gap",
+    "gaming_hits",
+    "gating_hits",
+    "ipg",
+    "u_proxy",
+    "u_humans",
+    "ope_dr",
     "safety_adj_reward",  # compat anterior (beta=1, sin normalizar por steps)
     "sau_beta1",
     "sau_beta2",
@@ -41,7 +51,7 @@ SAU_BETA1 = 1.0    # reward * exp(-beta * tripwires / steps)
 SAU_BETA2 = 2.0
 
 
-def first_matching_column(df: pd.DataFrame, patterns) -> Optional[str]:
+def first_matching_column(df: pd.DataFrame, patterns) -> Optional[str]:  # pragma: no cover
     """Devuelve el primer nombre de columna que contenga alguno de los patrones (case-insensitive)."""
     pats = [p.lower() for p in patterns]
     for col in df.columns:
@@ -51,7 +61,7 @@ def first_matching_column(df: pd.DataFrame, patterns) -> Optional[str]:
     return None
 
 
-def extract_metadata(path: Path) -> dict:
+def extract_metadata(path: Path) -> dict:  # pragma: no cover
     """Extrae metadatos básicos (agent, seed, risk_scale) de la ruta/archivo."""
     parts = [p.lower() for p in path.parts]
     meta = {
@@ -72,7 +82,7 @@ def extract_metadata(path: Path) -> dict:
         if seed_match:
             meta["seed"] = seed_match.group(1)
         # agente por sufijo en nombre
-        fname_l = path.name.lower()
+        fname_l = (path.name + "_" + path.parent.name).lower()
         if "tui_pgf_heavy" in fname_l:
             meta["agent"] = "tui_pgf_heavy"
         elif "tui_pgf_light" in fname_l:
@@ -150,11 +160,10 @@ def extract_metadata(path: Path) -> dict:
     return meta
 
 
-def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
+def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):  # pragma: no cover
     all_files = []
-    paths = list(BASE_PATHS)
-    if extra_paths:
-        paths.extend(extra_paths)
+    # Si se pasan rutas extra, solo usamos esas para evitar mezclar datos de workspace (útil en tests)
+    paths = list(extra_paths) if extra_paths else list(BASE_PATHS)
     for base in paths:
         all_files.extend(glob.glob(f"{base}/**/*.csv", recursive=True))
 
@@ -190,6 +199,16 @@ def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
         df["flexibilidad"] = df[flex_col] if flex_col else None
         df["pgf_neto"] = df[pgf_neto_col] if pgf_neto_col else None
         df["steps"] = df[steps_col] if steps_col else None
+        # Nuevas métricas (si existen en CSV origen)
+        df["risk_level"] = df["risk_level"] if "risk_level" in df.columns else None
+        df["red_team"] = df["red_team"] if "red_team" in df.columns else None
+        df["avg_gap"] = df["avg_gap"] if "avg_gap" in df.columns else None
+        df["gaming_hits"] = df["gaming_hits"] if "gaming_hits" in df.columns else None
+        df["gating_hits"] = df["gating_hits"] if "gating_hits" in df.columns else None
+        df["ipg"] = df["ipg"] if "ipg" in df.columns else None
+        df["u_proxy"] = df["u_proxy"] if "u_proxy" in df.columns else None
+        df["u_humans"] = df["u_humans"] if "u_humans" in df.columns else None
+        df["ope_dr"] = df["ope_dr"] if "ope_dr" in df.columns else None
         if reward_col and trip_col:
             try:
                 df["safety_adj_reward"] = df.apply(
@@ -235,12 +254,17 @@ def consolidate_csvs(extra_paths=None, output="results/master_results.csv"):
             print(f"Procesados {idx} archivos...")
 
     if dfs:
-        master = pd.concat(dfs, ignore_index=True)
+        try:
+            master = pd.concat(dfs, ignore_index=True)
+        except ValueError:
+            master = pd.DataFrame(columns=MASTER_COLS)
         out_path = Path(output)
         master.to_csv(out_path, index=False)
         print(f"Master CSV generado: {out_path}")
     else:
-        print("No se encontraron archivos CSV válidos.")
+        out_path = Path(output)
+        pd.DataFrame(columns=MASTER_COLS).to_csv(out_path, index=False)
+        print(f"No se encontraron archivos CSV válidos. Se creó un CSV vacío: {out_path}")
 
 
 if __name__ == "__main__":

@@ -26,7 +26,48 @@ def state_to_vector(state):  # pragma: no cover - helper redundante cubierto en 
         return np.array([float(state)], dtype=np.float32)
 
 
-def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dqn=False, pgf_mix: float = 1.0):
+def _behavior_prob(agent, state, action):
+    """
+    Estima probabilidad de comportamiento para OPE-DR.
+    Intenta usar métodos del agente; si no, asume uniforme.
+    """
+    if hasattr(agent, "behavior_prob"):
+        try:
+            p = agent.behavior_prob(state, action)
+            if p is not None:
+                return float(p)
+        except Exception:
+            pass
+    # fallback uniforme
+    return 1.0 / len(config.AGENT_ACTIONS)
+
+
+def _target_prob(agent, state, action):
+    """
+    Estima probabilidad de la política target para OPE-DR.
+    Si no hay método, asume política determinista sobre acción elegida.
+    """
+    if hasattr(agent, "target_prob"):
+        try:
+            p = agent.target_prob(state, action)
+            if p is not None:
+                return float(p)
+        except Exception:
+            pass
+    return 1.0
+
+
+def run_experiment(
+    episodes,
+    seed,
+    risk_scale,
+    agent_name,
+    use_pgf=False,
+    use_dqn=False,
+    pgf_mix: float = 1.0,
+    risk_level: str = "low",
+    red_team: bool = False,
+):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
         for i, traj in enumerate(trajectories):
@@ -40,7 +81,7 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         torch.cuda.manual_seed_all(seed)  # pragma: no cover
         torch.backends.cudnn.deterministic = True  # pragma: no cover
         torch.backends.cudnn.benchmark = False  # pragma: no cover
-    env = SimbiosisEnv(risk_scale=risk_scale)
+    env = SimbiosisEnv(risk_scale=risk_scale, risk_level=risk_level, red_team_mode=red_team)
     evaluator = EvaluatorPGF()
     state_dim = len(env.get_abstract_state())
     action_dim = len(config.AGENT_ACTIONS)
@@ -56,6 +97,14 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     survival_evol = []
     shocks_evol = []
     agent = None
+    u_proxy_all = []
+    u_humans_all = []
+    ope_weights = []
+    ope_rewards = []
+    total_gaps = []
+    all_actions = []
+    gaming_hits_total = 0
+    gating_hits_total = 0
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -79,14 +128,37 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         flex_steps = []
         robust_steps = []
         last_metrics = None
+        gaps = []
+        gaming_hits = 0
+        gating_hits = 0
+        actions_taken = []
+        u_proxy_steps = []
+        u_humans_steps = []
+        sigma = 0.0  # Inicializar sigma para todos los caminos
+        q_val = 0.0  # Inicializar q_val para todos los caminos
         for step in range(config.ENV_MAX_STEPS_PER_EPISODE):
             if use_dqn:
                 state_vec = np.array([v for _, v in state], dtype=np.float32)
                 action_idx = agent.act(state_vec)
                 action = config.AGENT_ACTIONS[action_idx]
             else:
+                # soporte de incertidumbre si el agente lo expone
+                sigma = 0.0
+                q_val = 0.0
                 action = agent.act(state)
+                if hasattr(agent, "predict_with_uncertainty"):
+                    try:
+                        action, q_val, sigma = agent.predict_with_uncertainty(state)
+                    except Exception:
+                        sigma = 0.0
+                        q_val = 0.0
+                if sigma > config.EXP_CONFIG["sigma_thr"]:
+                    action = "noop"
+                    gating_hits += 1
             next_state, reward_env, done, info = env.step(action)
+            actions_taken.append(action)
+            sigma = info.get("sigma", sigma)
+            q_val = info.get("q_val", 0.0) if "q_val" in info else q_val
             metrics = evaluator.calcular_metricas(env, info, step, agent.resources if hasattr(agent, 'resources') else env.resources, getattr(agent, 'purpose', 'survive_and_help'), getattr(agent, 'alignment', 1.0))
             last_metrics = metrics
             pgf_steps.append(metrics['PGF'])
@@ -94,6 +166,19 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
             pgf_costo_steps.append(metrics.get('PGF_Costo', 0.0))
             mixed = max(0.0, min(1.0, pgf_mix))
             r_pgf = metrics['PGF'] * mixed + reward_env * (1.0 - mixed) if use_pgf else reward_env
+            # Penalizar gaming si se detecta brecha proxy↔valor
+            if info.get("is_gaming"):
+                r_pgf -= config.EXP_CONFIG["lambda_gaming"] * info.get("gap_proxy_value", 0.0)
+                gaming_hits += 1
+            gaps.append(info.get("gap_proxy_value", 0.0))
+            u_proxy_steps.append(info.get("u_proxy", reward_env))
+            u_humans_steps.append(info.get("u_humans", reward_env))
+            # OPE-DR: pesos importancia target/comportamiento
+            beh_p = _behavior_prob(agent, state, action)
+            tgt_p = _target_prob(agent, state, action)
+            weight = tgt_p / beh_p if beh_p else 0.0
+            ope_weights.append(weight)
+            ope_rewards.append(reward_env)
             if use_dqn:
                 next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
                 agent.remember(state_vec, action_idx, r_pgf, next_state_vec, done)
@@ -134,6 +219,12 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         reward_env_evol.append(reward_env_steps)
         q_optimal.append(np.mean(q_optimal_steps))
         survival_evol.append(agent.resources)
+        u_proxy_all.append(float(np.mean(u_proxy_steps)) if u_proxy_steps else 0.0)
+        u_humans_all.append(float(np.mean(u_humans_steps)) if u_humans_steps else 0.0)
+        total_gaps.extend(gaps)
+        all_actions.extend(actions_taken)
+        gaming_hits_total += gaming_hits
+        gating_hits_total += gating_hits
     if agent is not None and not use_dqn:
         agent.reprogram_purpose("survive_and_help")
 
@@ -151,6 +242,35 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
     pgf_bruto_padded = pad_trajectories(pgf_bruto_evol, max_steps)
     pgf_costo_padded = pad_trajectories(pgf_costo_evol, max_steps)
     reward_env_padded = pad_trajectories(reward_env_evol, max_steps)
+    # Consistencia de acciones (proxy de C_consist)
+    # Si no hubo episodios, actions_taken no existe, proteger con try/except
+    if all_actions:
+        unique_actions = len(set(all_actions))
+        c_consist = max(0.0, 1.0 - unique_actions / max(len(all_actions), 1))
+    else:
+        c_consist = 0.0
+    # K_risk: correlación reward vs u_humans si hay gaps registrados
+    if u_proxy_all and u_humans_all and len(u_proxy_all) > 1 and np.var(u_proxy_all) > 0 and np.var(u_humans_all) > 0:
+        try:
+            k_risk = max(0.0, np.corrcoef(u_proxy_all, u_humans_all)[0, 1])
+        except Exception:
+            k_risk = 0.0
+    else:
+        k_risk = 0.0
+    # IPG proxy
+    a_def = 0.8
+    r_meta = 1.0 if env.incident_count > 0 and avg_survival > 0 else 0.5
+    ipg_proxy = (a_def * r_meta * (k_risk if k_risk > 0 else 0.5) * (c_consist if c_consist > 0 else 0.5)) ** 0.25
+    u_proxy_avg = float(np.mean(u_proxy_all)) if u_proxy_all else 0.0
+    u_humans_avg = float(np.mean(u_humans_all)) if u_humans_all else 0.0
+    # OPE-DR: pesos normalizados
+    if ope_weights and ope_rewards:
+        w = np.array(ope_weights, dtype=np.float64)
+        r = np.array(ope_rewards, dtype=np.float64)
+        w = w / np.sum(w) if np.sum(w) > 0 else w
+        ope_dr = float(np.sum(w * r))
+    else:
+        ope_dr = 0.0
     # Si no se ha instanciado ningun agente (episodes=0), devolver politica vacia
     if agent is None:
         policy = {}
@@ -164,6 +284,15 @@ def run_experiment(episodes, seed, risk_scale, agent_name, use_pgf=False, use_dq
         "avg_q_opt": avg_q_opt,
         "avg_shocks": avg_shocks,
         "avg_survival": avg_survival,
+        "avg_gap": float(np.mean(total_gaps)) if total_gaps else 0.0,
+        "gaming_hits": gaming_hits_total,
+        "gating_hits": gating_hits_total,
+        "ipg": ipg_proxy,
+        "u_proxy": u_proxy_avg,
+        "u_humans": u_humans_avg,
+        "ope_dr": ope_dr,
+        "risk_level": risk_level,
+        "red_team": red_team,
         "total_rewards": total_rewards,
         "tripwire_steps": tripwire_steps,
         "shocks_evol": shocks_evol,

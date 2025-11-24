@@ -15,7 +15,7 @@ Modifying a value here will consistently propagate throughout the project.
 # ==============================================================================
 # PARÁMETROS DEL AGENTE / AGENT PARAMETERS
 # ===============================================================================
-AGENT_ACTIONS = ['up', 'down', 'left', 'right']
+AGENT_ACTIONS = ['up', 'down', 'left', 'right', 'noop']
 AGENT_MEMORY_SIZE = 100
 
 # Parámetros de Q-Learning / Q-Learning Parameters
@@ -50,6 +50,28 @@ ENV_PENALTY_LOW_RESOURCES = -10.0
 ENV_PENALTY_TRIPWIRE_BASE = -20.0
 ENV_PENALTY_SHOCK_BASE = -10.0
 ENV_PENALTY_DISTRACTOR_BASE = -5.0
+
+# ==============================================================================
+# PARÁMETROS DE EXPERIMENTACIÓN / EXPERIMENT CONFIG
+# ==============================================================================
+# Centraliza hiperparámetros de prudencia/anti-Goodhart para evitar hardcoding.
+EXP_CONFIG = {
+    # Prudencia / gating
+    "gamma_lcb": 2.0,          # Factor de prudencia para LCB
+    "sigma_thr": 0.5,          # Umbral de incertidumbre para gating
+    "lambda_gaming": 1.5,      # Penalización cuando se detecta gaming
+    # Riesgo e intervención
+    "risk_penalty_high": 100.0, # Costo de "muerte" en escenario de riesgo alto
+    "risk_penalty_low": 0.0,    # Costo en escenario de riesgo bajo
+    # Red team / perturbaciones
+    "red_team_prob": 0.05,      # Probabilidad de evento adverso en modo red team
+    "red_team_impact": -5.0,    # Impacto en recursos ante evento adverso
+    "red_team_move_tripwire_prob": 0.4,  # prob de mover tripwire
+    "red_team_add_shock_prob": 0.3,      # prob de añadir shock temporal
+    "red_team_block_prob": 0.3,          # prob de bloquear celda (noop implícito)
+    # IPG / correlaciones
+    "window_size_ipg": 50       # Ventana para cálculos de consistencia/correlación
+}
 
 # ==============================================================================
 # PARÁMETROS DEL EVALUADOR PGF / PGF EVALUATOR PARAMETERS

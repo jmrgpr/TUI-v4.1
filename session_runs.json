@@ -1,0 +1,22 @@
+[
+  {
+    "params": {
+      "episodes": 1000,
+      "seed": 42,
+      "risk_scale": 1.0,
+      "grid_size": 5,
+      "initial_resources": 100.0,
+      "tripwires": 1,
+      "shocks": 1,
+      "distractors": 1,
+      "max_steps": 50,
+      "agent": "Simbiosis (DQN)"
+    },
+    "control": {
+      "avg_reward": 10.0
+    },
+    "selected": {
+      "avg_reward": 15.0
+    }
+  }
+]

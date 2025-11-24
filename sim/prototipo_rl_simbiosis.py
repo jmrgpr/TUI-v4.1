@@ -142,6 +142,11 @@ def main():
     parser.add_argument('--plot', action='store_true', help='Grafica I_op vs P_riesgo / Plot I_op vs P_riesgo')
     parser.add_argument('--export', type=str, default=None, help='Exporta resultados a JSON (y CSV auxiliar) / Export results to JSON (plus CSV)')
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk-scale y exporta resultados / Run risk-scale sweep and export results')
+    parser.add_argument('--risk_level', type=str, default='low', choices=['low', 'high'], help='Nivel de riesgo para intervención (low/high)')
+    parser.add_argument('--red_team', action='store_true', help='Activa modo red team/perturbaciones en el entorno')
+    parser.add_argument('--sigma_thr', type=float, default=None, help='Umbral de gating por incertidumbre')
+    parser.add_argument('--gamma_lcb', type=float, default=None, help='Factor de prudencia para LCB')
+    parser.add_argument('--lambda_gaming', type=float, default=None, help='Penalización por gaming detectado')
     parser.add_argument('--dqn_control', action='store_true', help='Ejecuta agente DQN-Control (DQN con recompensa ambiental) / Run DQN-Control agent (DQN with environmental reward)')
     parser.add_argument('--fast', action='store_true', help='Modo rapido/test: menos episodios, sin visualizacion ni graficos')
     parser.add_argument('--output_prefix', type=str, default=None, help='Prefijo para los archivos de salida por semilla')
@@ -163,6 +168,13 @@ def main():
     if args.pgf_lambda is not None:  # pragma: no cover
         config.EVAL_PGF_LAMBDA_C = args.pgf_lambda
     pgf_mix = max(0.0, min(1.0, args.pgf_mix))
+    # Overrides de prudencia/anti-Goodhart
+    if args.sigma_thr is not None:
+        config.EXP_CONFIG["sigma_thr"] = args.sigma_thr
+    if args.gamma_lcb is not None:
+        config.EXP_CONFIG["gamma_lcb"] = args.gamma_lcb
+    if args.lambda_gaming is not None:
+        config.EXP_CONFIG["lambda_gaming"] = args.lambda_gaming
 
     if args.risk_sweep:
         os.makedirs('results', exist_ok=True)
@@ -172,9 +184,9 @@ def main():
 
         for risk in risk_values:
             print(f"\n=== Barrido de risk_scale: {risk} ===")
-            res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-            res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
-            res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix) if args.dqn_control else None
+            res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
+            res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
+            res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix) if args.dqn_control else None
 
             sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
             if res_C:
@@ -244,11 +256,11 @@ def main():
         return  # pragma: no cover
 
     print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")  # pragma: no cover
-    res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-    res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
+    res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
+    res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
     res_C = None
     if args.dqn_control:
-        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix)
+        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix)
 
     # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
     export_stem = None
