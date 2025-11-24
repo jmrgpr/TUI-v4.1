@@ -1,39 +1,32 @@
-# Experimento 2: Causalidad, Prudencia y Propósito en TUI v4.2
+# Experimento 2: Causalidad, Prudencia y Proposito (TUI v4.2)
 
-## Objetivos
-- Evaluar la causalidad de P_riesgo sobre el desempeño operativo (I_op), prudencia/anti-Goodhart, IPG (propósito) y robustez fuera de muestra.
-- Comparar variantes TUI/PGF contra baselines SOTA (PPO, A2C, DQN) en entornos de riesgo variable.
+## Objetivo previsto
+- Medir impacto de PGF/TUI sobre I_op, prudencia/anti-Goodhart, IPG y robustez out-of-sample.
+- Comparar TUI/PGF (tui_only, pgf_light, pgf_heavy) contra baselines SOTA (PPO, A2C, DQN) en riesgos variables y con red team.
 
-## Diseño Experimental
-- **Cohorts:** control (riesgo bajo/fijo) vs intervención (riesgo alto/dinámico).
-- **Variantes:** tui_only, pgf_light, pgf_heavy, PPO, A2C, DQN.
-- **Parámetros sugeridos:** multiseed (42, 123, 456), ≥1000 episodios por entorno/configuración.
-- **Entornos:** base y red team adaptativo.
+## Estado actual (24-11-2025)
+- Este README es solo el plan: **no hay CSV, plots ni `master_results.csv` en este folder**.
+- `scripts/run_full_experiment.py` hoy solo lanza variantes con `--dqn_control` (control/dqn_control/simbiosis); no ejecuta TUI/PGF puro.
+- `scripts/run_ablation_quick.py` define TUI/PGF (tui_only, tui_pgf_light, tui_pgf_heavy con risk_scale), pero **no se ha ejecutado** (`results/sweep/fase2_instrumented` no existe).
+- No hay evidencia de validacion causal (A/B/C) ni red team real; el entorno solo incluye red team sintetico.
 
-## Proceso de Ejecución
-1. Preparar entorno limpio y dependencias.
-2. Ejecutar el batch con el comando:
-   ```
-   python scripts/run_full_experiment.py --seeds 42 123 456 --episodes 1000 --risk_scales 0.5 1.0 --variants tui_only pgf_light pgf_heavy --sota ppo a2c dqn --sigma_thr ... --gamma ... --lambda_G ... --red_team on/off --output_prefix results/exp_tui_experiment2_full/...
-   ```
-3. Consolidar resultados con `scripts/consolidate_results.py`.
-4. Analizar y visualizar con el notebook de análisis.
+## Que falta para completar el experimento
+1) **Correr TUI/PGF sin DQN**: ejecutar `sim/prototipo_rl_simbiosis.py` con `--pgf_kappa/--pgf_lambda/--pgf_mix --risk_scale ...` y sin `--dqn_control`.
+2) **Barridos multiseed/risk**: seeds [42,123,456], riesgos [0.5,1.0,1.5,2.0,3.0], episodios >=200 (y >=500/1000 para robustez).
+3) **Baselines SOTA**: correr PPO/A2C/DQN (ej. `run_sota_comparison.py`) con la misma malla de seeds/risks.
+4) **Red team**: repetir corridas con `--red_team` para medir robustez adversarial (actualmente solo generativo, sin humanos/bots).
+5) **Consolidar**: `python scripts/consolidate_results.py` apuntando a las carpetas generadas para producir `results/master_results.csv`.
+6) **Visualizar/reportar**: generar curvas de riesgo, boxplots e IPG, y guardar en este folder.
 
-## Estructura de Resultados
-- `master_results.csv`: datos consolidados de todos los runs (se generará al correr el batch).
-- `experiment_log.txt`: log de ejecución y parámetros (se generará al correr el batch).
-- `plots/`: gráficos y tablas generados (pendiente).
-- CSVs individuales por variante, seed y entorno.
+## Comandos rapidos sugeridos
+- Ablacion TUI (smoke, 1 seed/2 riesgos):  
+  `python scripts/run_ablation_quick.py --test`
+- Ablacion completa TUI:  
+  `python scripts/run_ablation_quick.py`
+- Consolidar despues de cualquier batch:  
+  `python scripts/consolidate_results.py`
 
-## Métricas y Columnas Clave
-- PGF_neto, tripwires, reward_total, robustez, flexibilidad, IPG.
-- Gap proxy↔valor, MTTD, MTTR, rollback%.
-- Flags de intervención de riesgo y propósito, parámetros de prudencia (sigma_thr, gamma, lambda_G), indicadores de gating/gaming.
-
-## Reproducibilidad
-- Versiones de scripts y dependencias documentadas en `requirements.txt` y `environment.yml`.
-- Parámetros y configuración exportados en los logs.
-
-## Notas
-- Este README describe el diseño y ejecución esperada del experimento 2. Los batch completos aún no se han corrido; al ejecutarlos se crearán los archivos mencionados.
-- Para dudas o reproducibilidad, contactar al autor principal.
+## Logistica
+- Guardar salidas en `results/exp_tui_experiment2_full/<subcarpeta>` o `results/sweep/fase2_instrumented`.
+- Adjuntar `experiment_log.txt` y `master_results.csv` tras las corridas.
+- Documentar hiperparametros usados (kappa/lambda/mix, sigma_thr, gamma_lcb, lambda_gaming) y modos (con/sin red_team).
