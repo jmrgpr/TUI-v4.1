@@ -11,7 +11,7 @@ abstract: >
   con métricas operacionales independientes (C: capacidad predictiva, F: flexibilidad, T: transferencia). La teoría integra: (i) Principio de Gradiente de Fracaso
   (PGF) que formaliza la dinámica local de aprendizaje bajo riesgo efectivo y propósito genuino (P_genuino = (C_costo · S_auto · R_robust · I_rep)^(1/4)),
   (ii) Principio de Equidad por Dominio (PED) para comparaciones justas entre especies (I_justo = Tiss^α · Meta^β · avg(I_op^(k)) en dominio temporal común),
-  (iii) extensión a inteligencia colectiva (Apéndice G) con riesgo de red y alignment de red (A_net). Incluye 13+ predicciones falsables, protocolos operacionales
+   (iii) extensión a inteligencia colectiva (Apéndice G) con riesgo de red y alignment de red (A_net). Incluye 13 predicciones falsables, protocolos operacionales
   y análisis de limitaciones críticas.
 ---
 
@@ -81,6 +81,8 @@ Contribuciones:
 **Interpretación:** sin propósito no hay "información útil" relevante; sin riesgo acumulado no hay presión por inteligencia genuina.
 
 ### Definición Operacional de $P_{\text{riesgo\_physical}}$ (sin circularidad)
+
+**Nota de notación:** salvo mención explícita, $P_{riesgo} \equiv P_{\text{riesgo\_physical}}$ en sistemas naturales; en IA se usa la versión factorizada de $P_{riesgo}$ (riesgo computacional/operativo) definida en Aplicada.
 
 Para medir el riesgo acumulado sin referencia a inteligencia, definimos:
 
@@ -1325,7 +1327,7 @@ Nuestra contribución: (i) formalizar $P_{\text{riesgo}}$ physical, (ii) derivar
 **Respuesta:** NO, por dos razones:
 
 1. El árbol NO tiene P (propósito flexible)
-   - Según el Axioma 3, \Delta I_{\mathrm{useful}} requiere A_alignment.
+   - Según el Axioma 3, $\Delta I_{\mathrm{useful}}$ requiere $A_{\text{alignment}}$.
    - El árbol tiene "programa genético fijo" pero no propósito adaptativo.
    - No puede reconfigurar su estrategia ante nuevos desafíos.
 
@@ -1335,7 +1337,7 @@ Nuestra contribución: (i) formalizar $P_{\text{riesgo}}$ physical, (ii) derivar
    - Humano: P_riesgo_bio alto, masa moderada, tasa alta, 86B neuronas → P_riesgo_norm ≈ alto
 
 **Predicción Refinada:**
-I $\propto$ P_riesgo_normalizado × A_alignment × Capacidad(E,O)
+I $\propto$ P_riesgo_normalizado × $A_{\text{alignment}}$ × Capacidad(E,O)
 
 #### B.4.2 Otros Casos Límite
 
@@ -1348,8 +1350,8 @@ I $\propto$ P_riesgo_normalizado × A_alignment × Capacidad(E,O)
 
 - Escenarios con H/H_max ∈ {0.2, 0.4, 0.6, 0.8}.  
 - Toggle de “costo de muerte” por agente.  
-- Métricas: \eta , A_alignment, \Delta I_{\mathrm{useful}}, C_total, estabilidad del índice (FAISS/LMDB).  
-- Ablaciones: sin A, sin P_riesgo; observar estabilidad de \eta .
+- Métricas: $\eta$, $A_{\text{alignment}}$, $\Delta I_{\mathrm{useful}}$, $C_{\text{total}}$, estabilidad del índice (FAISS/LMDB).  
+- Ablaciones: sin A, sin P_riesgo; observar estabilidad de $\eta$.
 
 ---
 

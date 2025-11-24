@@ -1,0 +1,196 @@
+<h1
+id="resumen-ejecutivo-executive-summary-teoría-aplicada-a-ia-v4.2">Resumen
+Ejecutivo / Executive Summary — Teoría Aplicada a IA v4.2</h1>
+<h2 id="es">ES</h2>
+<ul>
+<li><strong>Tesis central:</strong> La IA genuina necesita “algo que
+perder”. El “Camino C” usa IPG y un anti‑oráculo pragmático (LCB + OPE
+DR + gating) para alinear riesgo con utilidad humana y evitar
+Goodhart.</li>
+<li><strong>Arquitectura núcleo (anti‑Goodhart):</strong>
+<ul>
+<li>LCB: <span
+class="math inline"><em>Ũ</em> = <em>Û</em> − <em>γ</em><em>σ</em>(<em>Û</em>)</span>
+(prudencia).<br />
+</li>
+<li>OPE doubly‑robust: utilidad causal off‑policy.<br />
+</li>
+<li>Gating: si (&gt;_{}), solo acciones conservadoras/NO‑OP.<br />
+</li>
+<li>Tripwires/gaming penalty: (_G) penaliza señales de gaming.</li>
+</ul></li>
+<li><strong>IPG:</strong> Métrica operativa/auditable del Camino C; mide
+propósito operativo, no propósito filosófico completo; se audita con
+logs + OPE‑DR.</li>
+<li><strong>Evidencia actual:</strong> Demo A/B de 10h marcada como
+ilustrativa; valida la arquitectura anti‑Goodhart, NO prueba H1/PGF.
+Falta staging ≥1000 episodios con red team adaptativo para evidencia
+robusta.</li>
+<li><strong>Limitaciones:</strong> Piloto; necesita calibrar γ, σ_thr,
+λ_G y validar IPG en entornos reales controlados.</li>
+<li><strong>Próximos pasos:</strong> (1) A/B largo con red team y OPE‑DR
+para gap proxy↔︎valor. (2) Preregistro de umbrales (γ, σ_thr, λ_G) y
+métricas SRE. (3) Conectar IPG con P_genuino vía dataset real y
+auditoría continua.</li>
+</ul>
+<blockquote>
+<p><strong>Estado piloto:</strong> Demo A/B 10h (ilustrativa). Evidencia
+robusta requiere ≥1000 episodios con red team adaptativo y OPE‑DR.</p>
+</blockquote>
+<figure>
+<img src="image/anti_goodhart_v4.2.png" alt="Anti-Goodhart v4.2" />
+<figcaption aria-hidden="true">Anti-Goodhart v4.2</figcaption>
+</figure>
+<p><strong>Mini-diagrama (anti-Goodhart, texto)</strong></p>
+<pre><code>policy π → Q_hat → Û, σ̂ ──┐
+                           ├─ LCB: U_lcb = Û - γσ̂
+logs D ── OPE-DR → U_ope ──┘
+if σ̂ &gt; σ_thr → NO-OP
+if gaming → U_lcb -= λ_G * score
+acción segura ↔ NO-OP ↔ rollback</code></pre>
+<p><strong>Impacto potencial (ES):</strong> - Reduce gaming/Goodhart en
+sistemas críticos (SRE, salud, finanzas) con control de riesgo. - IPG
+auditable facilita cumplimiento y auditorías externas.</p>
+<p><strong>Comparativa TUI vs Aplicada IA (resumen rápido)</strong></p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspecto</th>
+<th>TUI v4.2</th>
+<th>Aplicada IA v4.2</th>
+<th>Sinergia</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Objeto</td>
+<td>Marco teórico de inteligencia operativa bajo riesgo</td>
+<td>Ingeniería de IA segura (Camino C, anti-Goodhart)</td>
+<td>Aplicada usa definiciones/axiomas de TUI</td>
+</tr>
+<tr>
+<td>Núcleo</td>
+<td>H1 refinada: (I_{op} (P_{})^)</td>
+<td>Anti-oráculo: LCB + OPE DR + gating + tripwires</td>
+<td>H1 informa el diseño de riesgo e IPG</td>
+</tr>
+<tr>
+<td>Datos actuales</td>
+<td>n≈6 empíricos, correlacional piloto</td>
+<td>Demo A/B ilustrativa (10h), sin causal robusta</td>
+<td>Métricas I_op/IPG se pueden alinear en futuros ensayos</td>
+</tr>
+<tr>
+<td>Próximos pasos</td>
+<td>Cohorte n≥20, manipular P_riesgo, validar α/PED</td>
+<td>A/B largo con red team, calibrar γ/σ_thr/λ_G, validar IPG</td>
+<td>Datos de IA futuros pueden alimentar tablas ilustrativas</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Referencias rápidas:</strong> ver
+<code>TUI/Teoria_Unificada_Inteligencia_v4.2.md</code> (H1, Tablas F) y
+<code>TUI/Teoria_Inteligencia_Aplicada_IA_v4.2.md</code> (anti-oráculo,
+demo A/B) para detalles completos.</p>
+<h2 id="en">EN</h2>
+<ul>
+<li><strong>Central thesis:</strong> Genuine AI needs “something to
+lose.” The “Path C” uses IPG plus a pragmatic anti‑oracle (LCB + OPE DR
++ gating) to align risk with human utility and avoid Goodhart.</li>
+<li><strong>Core architecture (anti‑Goodhart):</strong>
+<ul>
+<li>LCB: <span
+class="math inline"><em>Ũ</em> = <em>Û</em> − <em>γ</em><em>σ</em>(<em>Û</em>)</span>
+(prudence).<br />
+</li>
+<li>OPE doubly‑robust: off‑policy causal utility.<br />
+</li>
+<li>Gating: if (&gt;_{}), allow only conservative/NO‑OP actions.<br />
+</li>
+<li>Tripwires/gaming penalty: (_G) penalizes gaming signals.</li>
+</ul></li>
+<li><strong>IPG:</strong> Operational, auditable metric for Path C;
+measures operational purpose, not full philosophical purpose; audited
+via logs + OPE‑DR.</li>
+<li><strong>Current evidence:</strong> 10h A/B demo, flagged as
+illustrative; validates the anti‑Goodhart architecture, NOT H1/PGF.
+Needs ≥1000‑episode staging with adaptive red team for strong
+evidence.</li>
+<li><strong>Limitations:</strong> Pilot; requires tuning γ, σ_thr, λ_G
+and validating IPG in controlled real settings.</li>
+<li><strong>Next steps:</strong> (1) Long A/B with red team and OPE‑DR
+to measure proxy↔︎value gap. (2) Preregister thresholds (γ, σ_thr, λ_G)
+and SRE metrics. (3) Link IPG to P_genuino with real dataset and
+continuous audit.</li>
+</ul>
+<blockquote>
+<p><strong>Pilot status:</strong> 10h A/B demo (illustrative). Strong
+evidence requires ≥1000 episodes with adaptive red team and OPE‑DR.</p>
+</blockquote>
+<figure>
+<img src="image/anti_goodhart_v4.2.png" alt="Anti-Goodhart v4.2" />
+<figcaption aria-hidden="true">Anti-Goodhart v4.2</figcaption>
+</figure>
+<p><strong>Mini diagram (anti-Goodhart, text)</strong></p>
+<pre><code>policy π → Q_hat → Û, σ̂ ──┐
+                           ├─ LCB: U_lcb = Û - γσ̂
+logs D ── OPE-DR → U_ope ──┘
+if σ̂ &gt; σ_thr → NO-OP
+if gaming → U_lcb -= λ_G * score
+safe action ↔ NO-OP ↔ rollback</code></pre>
+<p><strong>Potential impact (EN):</strong> - Mitigates gaming/Goodhart
+in critical domains (SRE, healthcare, finance) with risk-aware gating. -
+Auditable IPG supports compliance and external oversight.</p>
+<p><strong>TUI vs Applied AI (quick view)</strong></p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 29%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>TUI v4.2</th>
+<th>Applied AI v4.2</th>
+<th>Synergy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Scope</td>
+<td>Theoretical framework: operative intelligence under risk</td>
+<td>Engineering: safe AI (Path C, anti-Goodhart)</td>
+<td>Applied reuses TUI definitions/axioms</td>
+</tr>
+<tr>
+<td>Core</td>
+<td>H1 refined: (I_{op} (P_{})^)</td>
+<td>Anti-oracle: LCB + OPE DR + gating + tripwires</td>
+<td>H1 guides risk/IPG design</td>
+</tr>
+<tr>
+<td>Current data</td>
+<td>n≈6 empirical, pilot correlation</td>
+<td>10h A/B demo, illustrative, not causal</td>
+<td>Shared metrics (I_op/IPG) for future cross-checks</td>
+</tr>
+<tr>
+<td>Next steps</td>
+<td>n≥20 cohort, manipulate P_risk, validate α/PED</td>
+<td>Long A/B with red team, tune γ/σ_thr/λ_G, validate IPG</td>
+<td>Future AI data can enrich illustrative tables</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Quick refs:</strong> see
+<code>TUI/Teoria_Unificada_Inteligencia_v4.2.md</code> (H1, Tables F)
+and <code>TUI/Teoria_Inteligencia_Aplicada_IA_v4.2.md</code>
+(anti-oracle, A/B demo) for full details.</p>

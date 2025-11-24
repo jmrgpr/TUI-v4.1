@@ -39,6 +39,7 @@ abstract: >
 
 ## Alineación y Referencias Cruzadas
 **Nota de alineación:** Este documento aplica y extiende la Teoría Unificada de la Inteligencia v4.2. Todas las definiciones, axiomas y ecuaciones (η, A_alineación, P_riesgo, β) derivan directamente del marco formalizado en v4.2. Para fundamentos teóricos y justificación matemática, ver la sección correspondiente en v4.2.
+**Nota de notación:** salvo mención explícita, $P_{riesgo}$ en este documento sigue la definición $P_{riesgo\_physical}$ de TUI para sistemas naturales; para IA se usa la versión factorizada (riesgo computacional/operativo) cuando aplique.
 
 **Autor:** José M. Rivera García  
 **Email:** jmrgpr@gmail.com  
@@ -991,6 +992,8 @@ Por tanto: sistema con Capa 4 tiene **mayor $P_{\text{genuino}}$ y mayor $\Delta
 Atacante maximiza $U_{\text{proxy}}$ sin mejorar $U_{\text{humans}}^{\text{causal}}$. Reportar: tasa de intentos detectados, **MTTD**, **MTTR**, falsos positivos de tripwires y cierre de brecha proxy↔causal.
 
 #### 5.3.2.3 Anti-Oráculo pragmático: LCB + OPE DR + Gating
+
+![Anti-Goodhart v4.2](image/anti_goodhart_v4.2.png)
 
 Definimos $\tilde U=\hat U-\gamma\,\sigma(\hat U)$ con $\gamma\in[1,3]$.  
 Evaluamos fuera de política con estimador **doubly-robust (OPE-DR)** y **bloqueamos** acciones cuando $\sigma(\hat U)>\sigma_{\text{thr}}$.
@@ -2732,10 +2735,10 @@ G3 es **requisito crítico** del Camino C: permite autonomía auditada sin "cast
 
 #### **Anexo de Sensibilidad (pesos y normalizaciones)**
 
-**I_operativa:** barremos \(w_C\in[0.2,0.6]\) (re‐escalando \(w_F,w_T\)) y mostramos que la correlación con \(P_{riesgo}\) permanece significativa (IC95% vía bootstrap).  
-**Formas alternativas:** media geométrica \(I_{geom}=C^{w_C}F^{w_F}T^{w_T}\) y \(I_{min}=\min\{C,F,T\}\).
+**I_operativa:** barremos $w_C\in[0.2,0.6]$ (re‐escalando $w_F,w_T$) y mostramos que la correlación con $P_{riesgo}$ permanece significativa (IC95% vía bootstrap).  
+**Formas alternativas:** media geométrica $I_{geom}=C^{w_C}F^{w_F}T^{w_T}$ y $I_{min}=\min\{C,F,T\}$.
 
-**PED (comparación justa):** reportamos \(I_{\text{justo}}=\mathrm{Tiss}^{\alpha}\mathrm{Meta}^{\beta}\cdot \overline{I_{op}}\) con \((\alpha,\beta)\in\{(0.25,0.75),(0.5,0.5),(0.75,0.25)\}\) y ventana temporal preregistrada (días–años).
+**PED (comparación justa):** reportamos $I_{\text{justo}}=\mathrm{Tiss}^{\alpha}\mathrm{Meta}^{\beta}\cdot \overline{I_{op}}$ con $(\alpha,\beta)\in\{(0.25,0.75),(0.5,0.5),(0.75,0.25)\}$ y ventana temporal preregistrada (días–años).
 
 ---
 
