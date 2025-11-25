@@ -28,3 +28,36 @@ El Experimento 2 busca comparar TUI/PGF puro y variantes actuales (control, dqn_
 - Corre el Experimento 2 con los agentes actuales.
 - Añade una sección en la documentación y reporte indicando las ausencias y el plan de integración futura.
 - Prioriza la estabilidad, reproducibilidad y cierre del experimento antes de ampliar el benchmark.
+
+---
+
+# Roadmap and decision report on SOTA algorithm integration before Experiment 2
+
+1. **Objective and context**
+
+Experiment 2 aims to compare pure TUI/PGF and current variants (control, dqn_control, simbiosis, PPO/A2C/DQN) in the gridworld environment. The pipeline and infrastructure are ready for these agents, with high reproducibility and coverage.
+
+2. **Assessment of integrating new algorithms (SAC, TD3, DDPG, Rainbow, etc.)**
+
+**Advantages:**
+- Enables a more complete SOTA comparison aligned with modern RL literature.
+- Strengthens publication and peer review.
+
+**Disadvantages:**
+- Requires integrating new libraries, adapting the environment (possibly to continuous), creating wrappers and runners, and validating outputs.
+- May introduce instability, delays, and extra work in reproducibility and testing.
+- The current environment is not optimized for continuous/distributed algorithms.
+
+3. **Combined recommendation**
+
+- If the goal is to close Experiment 2 soon and validate TUI/PGF against current baselines, it is not advisable to implement the missing algorithms now.
+- Run Exp2 with the agents already prepared (control, dqn_control, simbiosis, PPO/A2C/DQN).
+- Explicitly document in the README and report which SOTA algorithms are missing and why, as future work.
+- If you have time and want a broader benchmark, you may add 1–2 algorithms (SAC, TD3) as an extension, but plan the impact on reproducibility and validation.
+- The integration of new algorithms can be left for Experiment 3 or as a future work line, ensuring the current comparison is clear and reproducible.
+
+4. **Recommended action**
+
+- Run Experiment 2 with the current agents.
+- Add a section in the documentation and report indicating the absences and the plan for future integration.
+- Prioritize stability, reproducibility, and experiment closure before expanding the benchmark.
