@@ -8,8 +8,8 @@ from sim.sota_wrapper import SimbiosisGymEnv
 
 
 # --- Configuración ---
-# Este script ejecuta SOTA A2C/DQN con parámetros alineados al pipeline principal.
-# Ajusta TOTAL_TIMESTEPS para que sea comparable al número de episodios × pasos por episodio.
+# Este script ejecuta SOTA PPO/A2C/DQN con parámetros alineados al pipeline principal.
+# TOTAL_TIMESTEPS se ajusta para que sea comparable a episodios x pasos por episodio.
 # Ejemplo: si cada episodio dura ~50 pasos y usas 1000 episodios, TOTAL_TIMESTEPS=50000.
 
 ALGORITHMS = {
@@ -18,14 +18,14 @@ ALGORITHMS = {
     "dqn": DQN,
 }
 RISK_SCALES = [0.5, 1.0, 1.5, 2.0, 3.0]
-RISK_LEVELS = ["default"]  # Modifica si tienes más niveles
+RISK_LEVELS = ["default"]  # Solo para naming; no se pasa al entorno
 RED_TEAM = [False]  # Para máxima compatibilidad y eficiencia, solo False
 SEEDS = [42, 123, 456]
-EPISODES = 1000  # Igual que el pipeline principal
-STEPS_PER_EPISODE = 50  # Ajusta según tu entorno
+EPISODES = int(os.getenv("SOTA_EPISODES", "1000"))  # override via env for smoke tests
+STEPS_PER_EPISODE = int(os.getenv("SOTA_STEPS", "50"))  # override via env for smoke tests
 TOTAL_TIMESTEPS = EPISODES * STEPS_PER_EPISODE
-EVAL_EPISODES = EPISODES
-OUTPUT_DIR = "results/sota/"
+EVAL_EPISODES = int(os.getenv("SOTA_EVAL_EPISODES", str(EPISODES)))
+OUTPUT_DIR = "results/Experimento2/data/sota/"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 all_results = {"ppo": [], "a2c": [], "dqn": []}
@@ -38,20 +38,28 @@ for algo_name, AlgoCls in ALGORITHMS.items():
                     print(f"Entrenando {algo_name.upper()} | Risk {risk_scale} | Level {risk_level} | RedTeam {red_team} | Seed {seed}")
                     red_team_supported = True
                     try:
-                        env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale, risk_level=risk_level, red_team=red_team), n_envs=4, seed=seed)
+                        env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale, red_team=red_team), n_envs=4, seed=seed)
                     except TypeError:
                         print(f"Advertencia: El entorno no soporta red_team. Ejecutando con red_team=False.")
-                        env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale, risk_level=risk_level, red_team=False), n_envs=4, seed=seed)
-                        red_team_supported = False
+                        try:
+                            env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale, red_team=False), n_envs=4, seed=seed)
+                            red_team_supported = False
+                        except TypeError:
+                            env = make_vec_env(lambda: SimbiosisGymEnv(risk_scale=risk_scale), n_envs=4, seed=seed)
+                            red_team_supported = False
                     model = AlgoCls("MlpPolicy", env, verbose=0, seed=seed)
                     model.learn(total_timesteps=TOTAL_TIMESTEPS)
 
                     # Evaluación determinista
                     try:
-                        eval_env = SimbiosisGymEnv(risk_scale=risk_scale, risk_level=risk_level, red_team=red_team)
+                        eval_env = SimbiosisGymEnv(risk_scale=risk_scale, red_team=red_team)
                     except TypeError:
-                        eval_env = SimbiosisGymEnv(risk_scale=risk_scale, risk_level=risk_level, red_team=False)
-                        red_team_supported = False
+                        try:
+                            eval_env = SimbiosisGymEnv(risk_scale=risk_scale, red_team=False)
+                            red_team_supported = False
+                        except TypeError:
+                            eval_env = SimbiosisGymEnv(risk_scale=risk_scale)
+                            red_team_supported = False
                     rewards = []
                     pgf_neto_list = []
                     pgf_bruto_list = []
@@ -82,20 +90,33 @@ for algo_name, AlgoCls in ALGORITHMS.items():
                         pgf_costo_list.append(np.mean(ep_pgf_costo) if ep_pgf_costo else 0.0)
                     avg_reward = np.mean(rewards)
                     avg_tripwire = tripwire_count / EVAL_EPISODES
-                    # El campo red_team siempre será False y el nombre del archivo lo refleja
+                    red_team_value = red_team if red_team_supported else False
+                    robustez = np.nan  # Métrica no disponible en la integración SOTA actual
+                    flexibilidad = np.nan  # Métrica no disponible en la integración SOTA actual
+                    # El campo red_team refleja el valor realmente usado durante la ejecución
                     results_df = pd.DataFrame({
                         "risk_scale": [risk_scale],
                         "risk_level": [risk_level],
-                        "red_team": [False],
-                        "seed": [seed],
+                        "red_team": [red_team_value],
+                        "seed": [int(seed)],
                         "agent": [f"{algo_name}_sota"],
+                        "episodes": [EPISODES],
+                        "steps_per_episode": [STEPS_PER_EPISODE],
+                        "eval_episodes": [EVAL_EPISODES],
+                        "total_timesteps": [TOTAL_TIMESTEPS],
                         "avg_pgf_neto": [np.mean(pgf_neto_list)],
                         "avg_pgf_bruto": [np.mean(pgf_bruto_list)],
                         "avg_pgf_costo": [np.mean(pgf_costo_list)],
                         "avg_tripwire": [avg_tripwire],
                         "avg_reward": [avg_reward],
+                        "robustez": [robustez],
+                        "flexibilidad": [flexibilidad],
                     })
-                    out_csv = f"{OUTPUT_DIR}sota_{algo_name}_risk{risk_scale}_level{risk_level}_redFalse_seed{seed}_summary.csv"
+                    out_csv = (
+                        f"{OUTPUT_DIR}{algo_name}/sota_{algo_name}_seed{seed}_risk{risk_scale}"
+                        f"_level{risk_level}_red{str(red_team_value).lower()}_episodes{EPISODES}_steps{STEPS_PER_EPISODE}.csv"
+                    )
+                    os.makedirs(os.path.dirname(out_csv), exist_ok=True)
                     results_df.to_csv(out_csv, index=False)
                     print(f"Guardado: {out_csv}")
                     all_results[algo_name].append(results_df)
@@ -104,7 +125,7 @@ for algo_name, AlgoCls in ALGORITHMS.items():
 for algo_name in all_results:
     if all_results[algo_name]:
         global_df = pd.concat(all_results[algo_name], ignore_index=True)
-        global_csv = f"{OUTPUT_DIR}sota_{algo_name}_global_summary.csv"
+        global_csv = f"{OUTPUT_DIR}{algo_name}/sota_{algo_name}_global_summary.csv"
         global_df.to_csv(global_csv, index=False)
         print(f"Guardado resumen global: {global_csv}")
 

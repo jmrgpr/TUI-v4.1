@@ -19,7 +19,9 @@ def run_sota_comparison(  # pragma: no cover - se ejecuta fuera de las pruebas u
     risk_scale: float = 1.0,
     total_timesteps: int = 100000,
     seed: int = 42,
-    output_prefix: str = "results/sota",
+    steps_per_episode: int = 50,
+    eval_episodes: int = 100,
+    output_prefix: str = "results/Experimento2/data/sota",
     algo: str = "ppo",
 ):
     """
@@ -41,7 +43,7 @@ def run_sota_comparison(  # pragma: no cover - se ejecuta fuera de las pruebas u
 
     print(f"   > Evaluando modelo (Risk {risk_scale})...")
     eval_env = SimbiosisGymEnv(risk_scale=risk_scale)
-    eval_episodes = 100
+    total_episodes = total_timesteps // steps_per_episode
 
     rewards = []
     pgf_neto_list = []
@@ -83,17 +85,31 @@ def run_sota_comparison(  # pragma: no cover - se ejecuta fuera de las pruebas u
     results_df = pd.DataFrame(
         {
             "risk_scale": [risk_scale],
+            "risk_level": ["default"],
+            "red_team": [False],
+            "seed": [int(seed)],
             "agent": [agent_label],
+            "episodes": [total_episodes],
+            "steps_per_episode": [steps_per_episode],
+            "eval_episodes": [eval_episodes],
+            "total_timesteps": [total_timesteps],
             "avg_pgf_neto": [np.mean(pgf_neto_list)],
             "avg_pgf_bruto": [np.mean(pgf_bruto_list)],
             "avg_pgf_costo": [np.mean(pgf_costo_list)],
             "avg_tripwire": [avg_tripwire],
             "avg_reward": [avg_reward],
+            "robustez": [np.nan],
+            "flexibilidad": [np.nan],
         }
     )
 
-    os.makedirs("results", exist_ok=True)
-    results_df.to_csv(f"{output_prefix}_{algo}_risk{risk_scale}_summary.csv", index=False)
+    os.makedirs(output_prefix, exist_ok=True)
+    out_csv = (
+        f"{output_prefix}/{algo}/sota_{algo}_seed{seed}_risk{risk_scale}"
+        f"_leveldefault_redfalse_episodes{total_episodes}_steps{steps_per_episode}.csv"
+    )
+    os.makedirs(os.path.dirname(out_csv), exist_ok=True)
+    results_df.to_csv(out_csv, index=False)
     print(
         f"   > Resultado {agent_label} Risk {risk_scale}: Reward={avg_reward:.2f} | PGF Bruto={np.mean(pgf_bruto_list):.4f}"
     )
@@ -112,10 +128,13 @@ if __name__ == "__main__":  # pragma: no cover - bloque CLI
             result = run_sota_comparison(risk_scale=risk, total_timesteps=50000, algo=algo)
             all_results.append(result)
         algo_df = pd.concat(all_results, ignore_index=True)
-        algo_df.to_csv(f"results/sota_{algo}_global_summary.csv", index=False)
+        out_dir = "results/Experimento2/data/sota"
+        os.makedirs(f"{out_dir}/{algo}", exist_ok=True)
+        algo_df.to_csv(f"{out_dir}/{algo}/sota_{algo}_global_summary.csv", index=False)
         combined_all.append(algo_df)
 
-    pd.concat(combined_all, ignore_index=True).to_csv("results/sota_all_global_summary.csv", index=False)
+    out_dir = "results/Experimento2/data/sota"
+    pd.concat(combined_all, ignore_index=True).to_csv(f"{out_dir}/sota_all_global_summary.csv", index=False)
     print(
-        "\nComparacion SOTA completada. Archivos guardados en results/sota_<algo>_global_summary.csv y results/sota_all_global_summary.csv"
+        "\nComparacion SOTA completada. Archivos guardados en results/Experimento2/data/sota/<algo>/sota_<algo>_global_summary.csv y results/Experimento2/data/sota/sota_all_global_summary.csv"
     )
