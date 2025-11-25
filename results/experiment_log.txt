@@ -1,4 +1,72 @@
-# Log de ejecucion experimental
-[ERROR] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1 --seed 1 --risk_level low --output_prefix C:\Users\jrivera\AppData\Local\Temp\pytest-of-jrivera\pytest-482\test_run_full_experiment_stop_0\out/seed1/sweep_default --dqn_control
-[OK] python run_sota_comparison.py (977.5s)
-[ERROR] python scripts/consolidate_results.py
+# Log de Experimento Exp2 y Comparativa SOTA (en curso)
+
+Fecha: 2025-11-25
+Autor: jmrgpr
+
+---
+
+## Parámetros generales
+- Seeds: 42, 123, 456
+- Episodios de evaluación: 1000
+- Pasos de entrenamiento por agente: 50,000 (ajustados a 1000 ep × 50 pasos)
+- Riesgos evaluados: 0.5, 1.0, 1.5, 2.0, 3.0
+- Variantes: risk_level (default), red_team (False en SOTA)
+- Algoritmos SOTA: PPO, A2C, DQN
+- Output base: results/sweep/fase2_full y results/sota/
+
+---
+
+## Pipeline principal Exp2 (en ejecución)
+- Script: scripts/run_full_experiment.py
+- Comando:
+  python scripts/run_full_experiment.py --seeds 42 123 456 --episodes_default 1000 --episodes_robust 1000 --output_base results/sweep/fase2_full --stop_on_fail
+- Estado: en curso.
+
+---
+
+## Comparativa SOTA (en ejecución)
+- Script: scripts/run_sota_a2c_dqn.py
+- Algoritmos: PPO, A2C, DQN (red_team=False)
+- Comando:
+  python scripts/run_sota_a2c_dqn.py
+- Resultados esperados al finalizar:
+  - Individuales: sota_<algo>_risk<risk_scale>_level<risk_level>_redFalse_seed<seed>_summary.csv
+  - Globales: sota_ppo_global_summary.csv, sota_a2c_global_summary.csv, sota_dqn_global_summary.csv, sota_all_global_summary.csv
+
+---
+
+## Consolidación (pendiente tras las corridas)
+- Script: scripts/consolidate_results.py
+- Comando:
+  python scripts/consolidate_results.py
+- Salidas esperadas: master_results.csv y sweep_*_summary.csv; el consolidado recogerá los CSV SOTA usando columnas y nombre de archivo para risk_scale.
+
+---
+
+## Notas y limitaciones
+- Entorno: Gridworld discreto; sin benchmarks continuos (MuJoCo, Procgen, etc.).
+- Coste computacional elevado por episodios/variantes.
+- Documentar cualquier incidencia durante la ejecución en este log.
+
+---
+
+## Siguientes pasos
+- Al finalizar corridas, consolidar y verificar artefactos (master_results, summaries SOTA/sweep).
+- Analizar resultados (notebook analysis_phase2.ipynb u otra herramienta).
+- Guardar gráficos/tablas y actualizar README y este log tras cada corrida relevante.
+
+---
+
+# Fin (provisional; actualizar al concluir corridas)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --risk_level low --output_prefix results/sweep/fase2_full/seed42/sweep_default --dqn_control (982.9s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 123 --risk_level low --output_prefix results/sweep/fase2_full/seed123/sweep_default --dqn_control (845.2s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 456 --risk_level low --output_prefix results/sweep/fase2_full/seed456/sweep_default --dqn_control (1016.8s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed42/sweep_tuning --dqn_control (907.2s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 123 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed123/sweep_tuning --dqn_control (732.1s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 456 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed456/sweep_tuning --dqn_control (609.3s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed42/sweep_tui --tui_only --dqn_control (812.6s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 123 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed123/sweep_tui --tui_only --dqn_control (1346.4s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 456 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed456/sweep_tui --tui_only --dqn_control (784.1s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix results/sweep/fase2_full/seed42/sweep_tuning --dqn_control (615.1s)
+[OK] python run_sota_comparison.py (525.4s)
+[OK] python scripts/consolidate_results.py (1.9s)

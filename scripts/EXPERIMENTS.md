@@ -9,6 +9,7 @@ Estado y flujo para los experimentos principales. Actualizado: 2025-11-25.
 - Todos los cambios han sido comiteados y sincronizados con el repositorio remoto.
 
 
+=======
 ## Exp1 – Baseline (control/dqn_control/simbiosis)
 - Objetivo: barrido de `risk_scale` en Gridworld para control, DQN-Control y Simbiosis.
 - Script: `sim/prototipo_rl_simbiosis.py --risk_sweep ...` (también invocado por el bloque “default” de `scripts/run_full_experiment.py`).
@@ -22,6 +23,7 @@ Estado y flujo para los experimentos principales. Actualizado: 2025-11-25.
   - Rápido: `scripts/run_ablation_quick.py` (tui_only/light/heavy con seeds/risks predefinidos).
   - Completo: `scripts/run_full_experiment.py` (bloques default, tuning y `sweep_tui`; opcional SOTA).
   - SOTA: ejecutar y reconsolidar para obtener comparativas robustas (recompensa, robustez, flexibilidad).
+=======
 - Ejemplo de ejecución completa:
   - `python scripts/run_full_experiment.py --seeds 42 123 456 --episodes_default <episodios> --episodes_robust <episodios> --output_base results/sweep/fase2_full --stop_on_fail`
 - Consolidado (después de cualquier batch):
@@ -37,3 +39,7 @@ Estado y flujo para los experimentos principales. Actualizado: 2025-11-25.
 
 Tras cada corrida, ejecutar `scripts/consolidate_results.py` y verificar `results/master_results.csv` y los `sweep_*_summary.csv`.
 Documentar seeds, episodios, riesgos y limitaciones (Gridworld, SOTA opcional) en el log del experimento correspondiente.
+=======
+## Notas generales
+- Tras cada corrida, ejecutar `scripts/consolidate_results.py` y verificar `results/master_results.csv` y los `sweep_*_summary.csv`.
+- Documentar seeds, episodios, riesgos y limitaciones (Gridworld, SOTA opcional) en el log del experimento correspondiente.
