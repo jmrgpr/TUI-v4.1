@@ -44,3 +44,47 @@ EXPERIMENT_SPEC = {
 ---
 
 ¿Dudas o sugerencias? Añade aquí tus comentarios para futuras revisiones.
+
+---
+
+# README — sim module [ENGLISH]
+
+## Description
+This module contains the main components of the TUI v4.1 simulator, including the runner, agent logic, and graphical interfaces (GUI).
+
+## Available GUIs
+- `gui_streamlit.py`: Minimal GUI for testing and coverage.
+- `gui_streamlit_cli.py`: Advanced experimental control center, allows running real scripts and toy model.
+
+## Area for improvements and scientific review (GUI CLI)
+
+### Context
+The new experimental control center (`gui_streamlit_cli.py`) allows running any scientific script from the GUI, passing editable and reproducible parameters. However, to achieve full synchronization and avoid hardcoding defaults, the following is recommended:
+
+### Recommended improvement: Automatic parameter synchronization
+- **Add an `EXPERIMENT_SPEC` block** at the beginning of each experimental script (e.g., `run_ablation_quick.py`, `run_search_pgf.py`).
+- This block should define the parameters, types, and default values that the GUI should display and allow editing.
+- Example:
+
+```python
+EXPERIMENT_SPEC = {
+    "params": {
+        "test_mode": {"type": "bool", "default": False, "label": "Quick test mode", "flag": "--test"},
+        "episodes": {"type": "int", "default": 200, "label": "Episodes", "flag": "--episodes"},
+        # Add more parameters as needed
+    }
+}
+```
+
+- If the script does not have `EXPERIMENT_SPEC`, the GUI will try to extract parameters from `argparse`.
+- This ensures that default values and parameters are always synchronized between the GUI and scripts, avoiding duplication and errors.
+
+### Scientific justification
+- **Reproducibility:** Experiments can be configured and run transparently and traceably.
+- **Extensibility:** Adding new parameters or scripts only requires modifying the `EXPERIMENT_SPEC` block.
+- **Avoids hardcoding:** Default values live in one place (the script), not in the GUI.
+- **Full control:** The user can modify any relevant parameter from the interface, without losing robustness or compatibility.
+
+### Review protocol
+- In each scientific review, verify that scripts have the updated `EXPERIMENT_SPEC` block.
+- If new parameters are added, update the block and test the GUI to ensure inputs appear correctly.

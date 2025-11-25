@@ -7,3 +7,12 @@ This folder contains only Jupyter Notebooks related to experiments, analysis, an
 ## Uso / Usage
 - No mezclar código fuente ni resultados aquí.
 - Do not mix source code or results here.
+
+---
+
+# Notebooks / Experiment Notebooks [ENGLISH]
+
+This folder contains only Jupyter Notebooks related to experiments, analysis, and visualizations for the project.
+
+## Usage
+- Do not mix source code or results here.

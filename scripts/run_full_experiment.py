@@ -86,6 +86,13 @@ def main():
         f"{common_flags} "
         f"--output_prefix {args.output_base}/seed{{seed}}/sweep_tuning --dqn_control"
     )
+    tui_cmd = (
+        "python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes {episodes} --seed {seed} "
+        f"--pgf_kappa {args.pgf_kappa} --pgf_lambda {args.pgf_lambda} --pgf_mix {args.pgf_mix} "
+        f"--risk_level {args.risk_level}"
+        f"{common_flags} "
+        f"--output_prefix {args.output_base}/seed{{seed}}/sweep_tui --tui_only --dqn_control"
+    )
     sota_cmd = "python run_sota_comparison.py"
     consolidate_cmd = "python scripts/consolidate_results.py"
 
@@ -100,6 +107,10 @@ def main():
     # Barridos tuning
     for seed in args.seeds:
         run(tune_cmd.format(episodes=args.episodes_default, seed=seed), args.stop_on_fail, log_file=log_path)
+
+    # TUI/PGF puro (sin DQN-Control) + variantes previas para comparacion
+    for seed in args.seeds:
+        run(tui_cmd.format(episodes=args.episodes_default, seed=seed), args.stop_on_fail, log_file=log_path)
 
     # Robustez (usar primera seed como referencia)
     run(

@@ -147,6 +147,7 @@ def main():
     parser.add_argument('--sigma_thr', type=float, default=None, help='Umbral de gating por incertidumbre')
     parser.add_argument('--gamma_lcb', type=float, default=None, help='Factor de prudencia para LCB')
     parser.add_argument('--lambda_gaming', type=float, default=None, help='Penalización por gaming detectado')
+    parser.add_argument('--tui_only', action='store_true', help='Incluye variante TUI/PGF sin DQN-Control en el barrido')
     parser.add_argument('--dqn_control', action='store_true', help='Ejecuta agente DQN-Control (DQN con recompensa ambiental) / Run DQN-Control agent (DQN with environmental reward)')
     parser.add_argument('--fast', action='store_true', help='Modo rapido/test: menos episodios, sin visualizacion ni graficos')
     parser.add_argument('--output_prefix', type=str, default=None, help='Prefijo para los archivos de salida por semilla')
@@ -187,10 +188,13 @@ def main():
             res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
             res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
             res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix) if args.dqn_control else None
+            res_T = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="TUI", use_pgf=True, use_dqn=False, pgf_mix=pgf_mix) if args.tui_only else None
 
             sweep_results[risk] = {'control': res_A, 'simbiosis': res_B}
             if res_C:
                 sweep_results[risk]['dqn_control'] = res_C
+            if res_T:
+                sweep_results[risk]['tui'] = res_T
 
             export_path = f"{output_prefix}_seed{args.seed}_risk{risk}.json"
             payload = {
@@ -200,10 +204,12 @@ def main():
             }
             if res_C:
                 payload["dqn_control"] = prepare_results(res_C)
+            if res_T:
+                payload["tui"] = prepare_results(res_T)
             with open(export_path, 'w', encoding='utf-8') as jf:
                 json.dump(payload, jf, indent=2)
 
-            for agent_name, results_data in [('control', res_A), ('simbiosis', res_B), ('dqn_control', res_C)]:
+            for agent_name, results_data in [('control', res_A), ('simbiosis', res_B), ('dqn_control', res_C), ('tui', res_T)]:
                 if results_data is None:
                     continue
                 csv_path = f"{output_prefix}_seed{args.seed}_risk{risk}_{agent_name}.csv"
