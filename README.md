@@ -74,10 +74,10 @@ EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). 
 - Warnings graficos mitigados cerrando figuras; exportaciones en UTF-8.
 - Comparacion SOTA ampliada (PPO, A2C, DQN) con sumarios por riesgo y global.
 
-## Como citar / How to cite
-- Teoria: https://doi.org/10.5281/zenodo.17552094  
+## Cómo citar / How to cite
+- Teoría: https://doi.org/10.5281/zenodo.17552094  
 - Dataset: https://doi.org/10.5281/zenodo.17654593  
-Ver `CITATION.cff` para BibTeX.
+La versión oficial del software es TUI v4.1. Consulta y usa el archivo `CITATION.cff` para BibTeX y detalles de la cita, incluyendo el identificador del software y commit hash.
 
 ## Contacto / Contact
 jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
@@ -128,8 +128,12 @@ Simbiosis, 1.0, 92.7, 2.8
 - Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
 - No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
 
+
+## Nota sobre herramientas utilizadas
+Este proyecto fue desarrollado y documentado con apoyo de herramientas de inteligencia artificial (IA) para acelerar tareas de refactorización, documentación y validación técnica. Todas las decisiones científicas, experimentales y de diseño fueron tomadas por el autor humano, garantizando la trazabilidad y reproducibilidad del trabajo.
+
 ## Dedicatoria / Dedication
-Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazón.
 
 ---
 
