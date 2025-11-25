@@ -215,28 +215,28 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 
 ---
 
-## Current status & next steps
+## Estado actual y próximos pasos / Current status & next steps
 
-**Current status:**
-- The experiment pipeline is automated and validated (Exp1, Exp2 smoke test).
-- Scripts generate and consolidate results traceable by agent, seed, and risk.
-- The analysis notebook produces comparative tables and graphs.
-- The repository structure is clean and documented.
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
 
-**Next steps:**
-- Run full Exp2 (3 seeds × 5 risks), reconsolidate and update notebook/report.
-- Validate step export in CSVs for advanced metrics.
-- Integrate new findings and figures in the preliminary report.
-- Launch Exp3 (PGF search) when grids are defined.
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
 
-**Recommendations:**
-- Keep README and reports updated after each experiment.
-- Document relevant findings and changes in scripts/notebooks.
-- Ensure reproducibility and traceability at every stage.
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
 
-## Example of result interpretation
+## Ejemplo de interpretación de resultados
 
-Suppose you run an experiment and get the following metric in the CSV:
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
 
 ```
 agent, risk_scale, avg_reward, std_reward
@@ -244,15 +244,957 @@ Control, 1.0, 85.2, 4.1
 Simbiosis, 1.0, 92.7, 2.8
 ```
 
-**How to interpret these values?**
+**¿Cómo interpretar estos valores?**
 
-- `avg_reward` (average reward): A higher value means the agent achieves better results in the simulated environment. In this example, the Symbiosis agent outperforms Control.
-- `std_reward` (standard deviation): A lower value means performance is consistent across episodes. Symbiosis not only achieves higher reward, but does so more stably.
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
 
-**Recommendations:**
-- Always compare both values (average and deviation) to assess both performance and stability.
-- If the difference between agents is small, review parameters and repeat the experiment with more seeds to confirm the trend.
-- Do not extrapolate these results directly to real environments without further validation; the environment is a simplified model.
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
 
-## Dedication
-I dedicate this work to Aurelio and Amarianis, whom I love with all my heart.
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large clusters or HPC without adaptation.
+
+- **Limitations in interpretation and generalization:**
+  Metrics and visualizations reflect behavior in the toy environment; do not extrapolate directly to real systems without further validation. Results are useful for comparing agent variants and strategies, but do not constitute definitive proof of superiority in other domains.
+
+## Coverage & quality
+- Coverage `sim/`: **100%** (pytest with `--cov=sim`).
+- Target network in DQN; no unsafe `eval()` (uses `ast.literal_eval`).
+- Graphics warnings mitigated by closing figures; exports in UTF-8.
+- SOTA comparison expanded (PPO, A2C, DQN) with risk and global summaries.
+
+## How to cite
+- Theory: https://doi.org/10.5281/zenodo.17552094
+- Dataset: https://doi.org/10.5281/zenodo.17654593
+See `CITATION.cff` for BibTeX.
+
+## Contact
+jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-3013-725X
+
+## Quick FAQ
+- CI/CD and graphics backend? Backend `Agg` is forced in visualization modules to run in headless environments.
+- How to reproduce coverage? `python -m pytest --cov=sim --cov-report=term-missing`.
+- Recommended environment? Python 3.10/3.11 + dependencies fixed in `requirements.txt` / `environment.yml`.
+
+---
+
+## Estado actual y próximos pasos / Current status & next steps
+
+**Estado actual:**
+- El pipeline de experimentos está automatizado y validado (Exp1, Exp2 smoke test).
+- Los scripts generan y consolidan resultados trazables por agente, semilla y riesgo.
+- El notebook de análisis produce tablas y gráficos comparativos.
+- La estructura del repositorio está limpia y documentada.
+
+**Próximos pasos:**
+- Ejecutar Exp2 completo (3 seeds × 5 riesgos), reconsolidar y actualizar notebook/reporte.
+- Validar exportación de steps en los CSV para métricas avanzadas.
+- Integrar nuevos hallazgos y figuras en el reporte preliminar.
+- Lanzar Exp3 (búsqueda PGF) cuando se definan los grids.
+
+**Recomendaciones:**
+- Mantener README y reportes actualizados tras cada experimento.
+- Documentar hallazgos relevantes y cambios en scripts/notebooks.
+- Garantizar reproducibilidad y trazabilidad en cada etapa.
+
+## Ejemplo de interpretación de resultados
+
+Supón que ejecutas un experimento y obtienes la siguiente métrica en el CSV:
+
+```
+agent, risk_scale, avg_reward, std_reward
+Control, 1.0, 85.2, 4.1
+Simbiosis, 1.0, 92.7, 2.8
+```
+
+**¿Cómo interpretar estos valores?**
+
+- `avg_reward` (recompensa promedio): Un valor más alto indica que el agente logra mejores resultados en el entorno simulado. En este ejemplo, el agente Simbiosis supera al Control.
+- `std_reward` (desviación estándar): Un valor bajo indica que el desempeño es consistente entre episodios. Simbiosis no solo obtiene mayor recompensa, sino que lo hace de forma más estable.
+
+**Recomendaciones:**
+- Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
+- Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
+- No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Dedicatoria / Dedication
+Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
+
+---
+
+# TUI v4.2 - Unified Intelligence Theory (toy simulator) [ENGLISH]
+
+EN: Gridworld simulator to exercise the Unified Intelligence Theory (TUI v4.2). Includes Control (Q-table) and Symbiosis (DQN+PGF) agents, DOI-ready export, statistical analysis, and visualizations.
+
+## Recent achievements
+- Refactor of simulator and runners (v4.2).
+- **100%** test coverage in `sim/`; full integration.
+- Robust export (JSON/CSV) and seed traceability (`--output_prefix`).
+- Phase 2 scripts and SOTA comparison (PPO/A2C/DQN) ready for reproducibility.
+- Bilingual visualizations and statistics (ANOVA, t-test); quickstart notebooks.
+
+## Reference environment
+- Python 3.10 or 3.11
+- Key dependencies (see `requirements.txt` / `environment.yml`):
+  torch==2.1.0, stable-baselines3>=2.0.0, gymnasium>=0.28.1, pandas==2.0.3, numpy==1.24.3, matplotlib==3.7.2, seaborn==0.12.2, scipy==1.11.x
+
+## Quick start
+1) Create environment (Conda or venv) and install dependencies:
+   `pip install -r requirements.txt`
+2) Base experiment:
+   `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 1.0 --export results/run1.json`
+3) Risk sweep:
+   `python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 100 --seed 42 --output_prefix results/sweep/fase2/seed42/sweep_default --dqn_control`
+4) SOTA comparison (optional):
+   `python run_sota_comparison.py`  # runs PPO/A2C/DQN for all risk_scale
+
+## Layout
+- `sim/`: simulator code, agents, PGF evaluator, visualizations.
+- `test/`: unit and integration tests (pytest).
+- `results/`: experiment outputs (JSON/CSV/PNG).
+  - `sweep/`: risk_scale sweeps (e.g. `fase2/seed42/...`).
+  - `runs/`: individual runs.
+  - `sota/`: PPO/A2C/DQN models and summaries.
+  - `global_summaries/`: consolidated results (e.g. `fase2_global_summary.csv`).
+- `docs/`: analysis and result notes.
+- `TUI/`: theory documents (TUI v4.x, LaTeX/Markdown).
+- `notebooks/`: analysis and graphics notebooks.
+- `scripts/`: utilities (phase2, summary merge, SOTA comparison).
+
+## Current limitations
+- "Toy" Gridworld environment; no complex benchmarks (MuJoCo/Procgen).
+- SOTA comparison focused on PPO; other algorithms not evaluated.
+- Some historical docs retain accents/LaTeX legacy to preserve theory.
+
+### Extended limitations
+
+- **Model and experiment assumptions:**
+  The simulated environment is a simplified Gridworld, designed to illustrate concepts from the Unified Intelligence Theory. Agents operate in a discrete space, with rewards and penalties defined by the user. No complex physical dynamics or advanced multi-agent interactions are modeled.
+
+- **Scenarios where the methodology may not apply:**
+  The TUI/PGF approach is optimized for discrete environments and sequential decision problems. Not recommended for continuous control tasks, realistic physical simulations, or high-dimensional benchmarks (MuJoCo, Procgen, etc.).
+
+- **Sources of bias or experimental uncertainty:**
+  Results may be affected by seed selection, episodes, and risk parameters. Metric interpretation depends on correct experimental setup. Robustness is not guaranteed against drastic changes in environment or agent structure.
+
+- **Technical restrictions:**
+  The simulator depends on specific libraries (torch, stable-baselines3, gymnasium, etc.) and is optimized for Python 3.10/3.11. Performance may be limited on hardware without acceleration (GPU/CPU). Scalability is intended for medium experiments; not recommended for large
