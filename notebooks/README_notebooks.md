@@ -20,3 +20,28 @@ Ejemplo: TUI-v4.1_analysis.ipynb
 
 - Mantener notebooks enfocados en análisis y visualización, no en código de simulación.
 - Exportar gráficos generados a `../results/` para consistencia.
+
+---
+
+# Analysis and Visualization Notebooks [ENGLISH]
+
+(Optional) Folder for analysis, visualization, and interactive experiment notebooks.
+
+Example: TUI-v4.1_analysis.ipynb
+
+## Quickstart Graphics
+
+- **File:** `quickstart_graficos.ipynb`
+- **Purpose:** Bilingual notebook (Spanish/English) to automatically generate main graphics from experimental results CSV files.
+- **Features:**
+  - Automatic data loading from `../results/`
+  - Line charts (average reward by risk scale)
+  - Bar charts (agent frequency)
+  - Interactive charts with Plotly
+- **Instructions:** Run the cells in order. Requires libraries installed in `requirements.txt`.
+- **Usage:** Ideal for quick onboarding and exploration of results without extra code.
+
+## Notes
+
+- Keep notebooks focused on analysis and visualization, not simulation code.
+- Export generated graphics to `../results/` for consistency.

@@ -1,2 +1,4 @@
 # Log de ejecucion experimental
 [ERROR] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1 --seed 1 --risk_level low --output_prefix C:\Users\jrivera\AppData\Local\Temp\pytest-of-jrivera\pytest-482\test_run_full_experiment_stop_0\out/seed1/sweep_default --dqn_control
+[OK] python run_sota_comparison.py (977.5s)
+[ERROR] python scripts/consolidate_results.py
