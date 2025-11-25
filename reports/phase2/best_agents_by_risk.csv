@@ -1,0 +1,6 @@
+risk_scale,best_pgf_agent,best_pgf_mean,best_trip_agent,best_trip_mean
+0.5,a2c,0.0,a2c,0.0
+1.0,a2c,-0.0013928018180908,a2c,0.0
+1.5,a2c,0.0,a2c,0.0
+2.0,a2c,0.0,a2c,0.0
+3.0,a2c,0.0,a2c,0.0
