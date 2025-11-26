@@ -91,28 +91,15 @@ Fases propuestas (“Super-Smoke Test”):
   * Imprimir state y pos en 5 pasos. Si pos cambia y state no, el agente es ciego.
   * Usar coordenadas (x,y) como estado, entrenar 10k episodios en 3x3. Si no aprende, el loop RL/hiperparámetros está mal.
 
-## Plan Final para Desbloquear el Aprendizaje RL/TUI
-
-### 1. Baseline tabular en entorno “easy”
-Ejecuta el script `scripts/run_tabular_easy.py` para confirmar que el RL tabular aprende y obtiene reward positiva en el entorno benigno (3x3, penalizaciones suaves, bonus meta 100).
-Si la reward es positiva, el entorno y la función de recompensa están correctos y tienes un baseline “que gana”.
-
 ### 2. Parche de visibilidad en get_abstract_state
 Modifica temporalmente `get_abstract_state` en `sim/environment.py` para incluir las coordenadas del agente:
 ```python
-def get_abstract_state(self):
   x, y = self.agent_pos
-  state_features = {
     # ... lo actual ...
-    "coord_x": x,
     "coord_y": y,
   }
   return tuple(sorted(state_features.items()))
 ```
-Verifica en `sim/config.py` que las penalizaciones y risk_penalty sigan bajas.
-Ejecuta el smoke test original (`results/smoke_test/patched`).
-Si la recompensa se vuelve positiva, confirmas que el problema era la observabilidad.
-
 ### 3. Si aún no mejora
 Ajusta hiperparámetros y arquitectura del agente complejo.
 Mantén el entorno simple (2x2 o 3x3) hasta obtener reward positiva.
@@ -130,25 +117,14 @@ Mantén el entorno simple (2x2 o 3x3) hasta obtener reward positiva.
 El fallo actual no falsifica la teoría TUI: muestra que el motor RL no aprende en un entorno trivial. Resolver primero el problema de aprendizaje básico antes de volver a TUI/SOTA.
 
 ---
-## Resultado Fase A: LineWorld 1x3
----
-## Resultado Fase B: Observabilidad en LineWorld 1x3
----
-## Resultado Fase D: Trazabilidad de reward en step()
 
 Se imprimieron los términos que suman al reward en cada paso de LineWorld 1x3:
 
-- Paso 1: +0.2 avance meta
 - Paso 2: +0.2 avance meta, +100.0 bonus meta
 - Pasos 3-29: +100.0 bonus meta cada paso
 - Paso 30: +100.0 bonus meta, +1.0 bonus episodio limpio
 
 No se observan penalizaciones ocultas ni sumas inesperadas. El reward es dominado por el bonus meta tras alcanzar la meta, y la señal es clara y positiva.
-
-Se imprimió el estado (get_abstract_state) y la posición del agente en cada paso:
-
-| Paso | Posición | Estado |
-|------|----------|--------|
 | 0    | [0, 0]   | x=0, y=0 |
 | 1    | [0, 1]   | x=0, y=1 |
 | 2    | [0, 2]   | x=0, y=2 |
@@ -206,4 +182,27 @@ Se entrenó un agente Q-learning tabular en grid 3x3 usando (x,y) como estado du
 
 **Conclusión:**
 El agente aprende a alcanzar la meta y maximizar el reward en todos los episodios. El entorno y la señal de recompensa permiten el aprendizaje RL trivial por tabular Q-learning. El problema de aprendizaje básico está resuelto en este escenario.
+<<<<<<< HEAD
 >>>>>>> 1ba1f57 (Add smoke_test README for simplified RL debug)
+=======
+
+---
+## Resultado tuning EXP00: DQN-Control con penalización gaming desactivada
+
+Se ejecutó el experimento EXP00 (lambda_gaming=0.0, state_mode=coords_only, seed=42) para el agente de control en entorno easy.
+
+**Resultados:**
+- Reward media últimos 100 episodios: 319.02
+- Reward máxima: 2501.9
+- Reward mínima: 1.1
+- % episodios con reward > 0: 98%
+- El agente aprende y obtiene recompensas positivas, igualando el baseline tabular.
+
+**Conclusión:**
+Desactivar la penalización por gaming permite el aprendizaje efectivo del agente de control en el entorno easy. El entorno y la función de recompensa están validados y el motor de control responde correctamente al tuning.
+
+---
+## Siguiente paso
+- Proceder con tuning de hiperparámetros (learning rate, gamma, epsilon) y documentar cada experimento en la tabla de tuning.
+- Mantener lambda_gaming=0.0 hasta completar el barrido y validar robustez del aprendizaje.
+>>>>>>> 627b6f1 (Documentación y resultados actualizados: tuning EXP00, conclusiones y trazabilidad completa en README.md y RESULTADOS_DESBLOQUEO.md.)
