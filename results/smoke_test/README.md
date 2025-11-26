@@ -15,6 +15,32 @@ $env:PYTHONPATH='.'
 python sim/prototipo_rl_simbiosis.py --episodes 50 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/easy
 ```
 
+### Ejemplo de tuning DQN (EXP02–EXP06)
+Puedes ajustar los hiperparámetros del agente DQN directamente desde la línea de comandos:
+
+#### EXP02 – Learning Rate bajo
+```
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_lr5e4 --dqn_control --lambda_gaming 0.0 --learning_rate 0.0005
+```
+#### EXP03 – Learning Rate aún más bajo
+```
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_lr1e4 --dqn_control --lambda_gaming 0.0 --learning_rate 0.0001
+```
+#### EXP04 – Gamma reducido
+```
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_gamma095 --dqn_control --lambda_gaming 0.0 --gamma 0.95
+```
+#### EXP05 – Epsilon inicial alto
+```
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_eps1 --dqn_control --lambda_gaming 0.0 --epsilon 1.0
+```
+#### EXP06 – Epsilon inicial bajo
+```
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_eps01 --dqn_control --lambda_gaming 0.0 --epsilon 0.1
+```
+
+Todos los hiperparámetros pueden combinarse según el experimento que desees realizar.
+
 ## Análisis rápido del CSV
 ```python
 import pandas as pd, numpy as np
