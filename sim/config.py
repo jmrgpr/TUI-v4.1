@@ -59,7 +59,7 @@ EXP_CONFIG = {
     # Prudencia / gating
     "gamma_lcb": 2.0,          # Factor de prudencia para LCB
     "sigma_thr": 0.5,          # Umbral de incertidumbre para gating
-    "lambda_gaming": 1.5,      # Penalización cuando se detecta gaming
+    "lambda_gaming": 0.0,      # Penalización cuando se detecta gaming (desactivada para tuning)
     # Riesgo e intervención
     "risk_penalty_high": -0.2, # Costo de "muerte" en escenario de riesgo alto
     "risk_penalty_low": -0.1,    # Costo en escenario de riesgo bajo
