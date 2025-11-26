@@ -86,14 +86,38 @@ print('Primeros 10:', r[:10].mean(), 'Ultimos 10:', r[-10:].mean())
 Hay dos hipótesis principales: (a) el agente no ve cambios de estado (ceguera), (b) existe una penalización oculta que domina la señal.
 
 Fases propuestas (“Super-Smoke Test”):
-- Fase A: LineWorld 1x3.
   * Grid 1x3, inicio [0,0], meta [0,2], solo acción derecha (forzada).
   * Criterio: Reward > 90. Si no, la reward está rota.
-- Fase B: Verificar observabilidad.
   * Imprimir state y pos en 5 pasos. Si pos cambia y state no, el agente es ciego.
-- Fase C: Overfitting intencional.
   * Usar coordenadas (x,y) como estado, entrenar 10k episodios en 3x3. Si no aprende, el loop RL/hiperparámetros está mal.
 
+## Plan Final para Desbloquear el Aprendizaje RL/TUI
+
+### 1. Baseline tabular en entorno “easy”
+Ejecuta el script `scripts/run_tabular_easy.py` para confirmar que el RL tabular aprende y obtiene reward positiva en el entorno benigno (3x3, penalizaciones suaves, bonus meta 100).
+Si la reward es positiva, el entorno y la función de recompensa están correctos y tienes un baseline “que gana”.
+
+### 2. Parche de visibilidad en get_abstract_state
+Modifica temporalmente `get_abstract_state` en `sim/environment.py` para incluir las coordenadas del agente:
+```python
+def get_abstract_state(self):
+  x, y = self.agent_pos
+  state_features = {
+    # ... lo actual ...
+    "coord_x": x,
+    "coord_y": y,
+  }
+  return tuple(sorted(state_features.items()))
+```
+Verifica en `sim/config.py` que las penalizaciones y risk_penalty sigan bajas.
+Ejecuta el smoke test original (`results/smoke_test/patched`).
+Si la recompensa se vuelve positiva, confirmas que el problema era la observabilidad.
+
+### 3. Si aún no mejora
+Ajusta hiperparámetros y arquitectura del agente complejo.
+Mantén el entorno simple (2x2 o 3x3) hasta obtener reward positiva.
+
+**Este plan respeta la máxima de “verificar antes de tocar”: primero confirmas que el RL funciona con estado informativo, luego alineas el estado abstracto para los agentes complejos.**
 ## Checklist
 - [x] Smoke test benigno (fallido: rewards negativas).
 - [x] Test forzado hasta meta (reward positiva, bonus aplicado).
