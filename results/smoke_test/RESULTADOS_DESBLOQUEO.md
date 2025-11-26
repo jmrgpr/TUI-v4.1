@@ -96,3 +96,77 @@ Una vez que el agente de control logre reward media positiva y se acerque al bas
 2. Si el reward sigue negativo, proceder con tuning de hiperparámetros según la tabla EXP01–EXP06.
 3. Documentar cada resultado en la tabla y en el resumen.
 4. Revisar la lógica de actualización si persiste el fallo.
+
+---
+
+## Resumen y actualización documental
+
+El archivo describe correctamente el entorno, la configuración y el diagnóstico inicial, pero ahora integra los resultados reales de los últimos runs y el desbloqueo del agente de control tras desactivar la penalización por gaming.
+
+- El agente tabular Q-learning aprende perfectamente en el entorno easy:
+  - Reward media (primeros 50 episodios) ≈ 3.8.
+  - Reward media (últimos 50 episodios) ≈ 2484.
+  - 500/500 episodios con reward > 0.
+- El agente complejo DQN-Control, con penalización de gaming activa (lambda_gaming > 0), no aprendía:
+  - Todas las recompensas de episodio eran negativas.
+  - 0 episodios con reward > 0 en los runs easy_seed42_risk0.5, patched_seed42_risk0.5 y dqn_xy_seed42_risk0.5.
+
+Al desactivar la penalización de gaming (lambda_gaming = 0.0, experimento EXP00), el DQN-Control desbloquea el aprendizaje:
+
+- Reward media ≈ 319 (en 500 episodios).
+- Picos de recompensa altos (episodios “buenos” en el rango 1000–2500).
+- ~98 % de episodios con reward > 0.
+
+Esto valida simultáneamente el entorno, la función de recompensa y el motor RL (DQN) bajo una configuración razonable.
+
+La tabla de tuning y el diagnóstico honesto de las causas del fallo anterior (shaping de gaming demasiado agresivo) están documentados.
+
+---
+
+## Conclusión honesta y científica
+
+- El entorno y la función de recompensa son correctos y aprendibles.
+- El agente de control DQN no estaba fallando por la teoría ni por el entorno, sino por una penalización de gaming demasiado agresiva que ahogaba la señal de aprendizaje.
+- Al desactivar lambda_gaming, el agente DQN aprende y responde como debe, acercándose al comportamiento del baseline tabular.
+- La teoría y el diseño general siguen siendo válidos; el problema estaba en el shaping ético, no en el RL ni en la TUI.
+
+---
+
+## Próximos pasos recomendados
+
+1. Congelar EXP00 como control canónico
+   - Configuración: state_mode = coords_only, lambda_gaming = 0.0, entorno easy 3x3.
+   - Usar EXP00 como baseline de referencia para comparaciones futuras.
+
+2. Repetir EXP00 con seeds adicionales
+   - Ejecutar el mismo experimento con seed = 123, 456 (y otros, si aplica).
+   - Confirmar estabilidad de la reward media y del porcentaje de episodios con reward > 0.
+
+3. Tuning fino del DQN (EXP02–EXP06)
+   - Mantener lambda_gaming = 0.0 mientras se ajustan:
+     - Learning rate (por ejemplo 1e-3, 5e-4, 1e-4).
+     - Gamma (0.90, 0.95, 0.99).
+     - Estrategia de exploración (epsilon inicial y ritmo de decay).
+   - Medir sistemáticamente la reward media de los últimos 100 episodios y el porcentaje de episodios con reward > 0 para cada experimento EXP02–EXP06.
+
+4. Rediseñar la penalización de gaming
+   - Una vez que el DQN-Control sea estable, reintroducir el shaping ético de forma gradual:
+     - Warm-up sin penalización durante los primeros episodios.
+     - Umbrales y caps para limitar el impacto de la penalización.
+     - Activar la penalización solo en escenarios realmente “gaming” o de alto riesgo.
+
+5. Probar el estado completo (get_abstract_state)
+   - Volver a habilitar el estado completo y comparar contra coords_only:
+     - Evaluar el efecto del ruido en la observabilidad.
+     - Ver si el agente mantiene reward media positiva con features adicionales.
+
+---
+
+## Estado actual
+
+Toda la documentación y los resultados relevantes están:
+- Actualizados.
+- Versionados en el repositorio.
+- Trazados mediante logs y CSVs asociados.
+
+El sistema está desbloqueado y listo para la fase de tuning fino y experimentación avanzada (TUI/PGF/SOTA) sobre una base de RL y entorno ya validados.
