@@ -155,6 +155,10 @@ def main():
     parser.add_argument('--pgf_kappa', type=float, default=None, help='Escala de sensibilidad PGF (override de config.EVAL_PGF_KAPPA)')
     parser.add_argument('--pgf_lambda', type=float, default=None, help='Escala de costo PGF (override de config.EVAL_PGF_LAMBDA_C)')
     parser.add_argument('--pgf_mix', type=float, default=1.0, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.8 = 80% PGF, 20% reward)')
+    # Nuevos argumentos para tuning DQN
+    parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
+    parser.add_argument('--gamma', type=float, default=None, help='Override discount factor gamma for DQN control agent (if provided).')
+    parser.add_argument('--epsilon', type=float, default=None, help='Override initial epsilon for DQN exploration (if provided).')
     args = parser.parse_args()
 
     # Modo rapido/test
@@ -266,8 +270,27 @@ def main():
     res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
     res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
     res_C = None
+    dqn_kwargs = {}
+    if args.learning_rate is not None:
+        dqn_kwargs['learning_rate'] = args.learning_rate
+    if args.gamma is not None:
+        dqn_kwargs['gamma'] = args.gamma
+    if args.epsilon is not None:
+        dqn_kwargs['epsilon'] = args.epsilon
     if args.dqn_control:
-        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix, state_mode="coords_only")
+        res_C = run_experiment(
+            episodes=args.episodes,
+            seed=args.seed,
+            risk_scale=args.risk_scale,
+            risk_level=args.risk_level,
+            red_team=args.red_team,
+            agent_name="DQN-Control",
+            use_pgf=False,
+            use_dqn=True,
+            pgf_mix=pgf_mix,
+            state_mode="coords_only",
+            **dqn_kwargs
+        )
 
     # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
     export_stem = None

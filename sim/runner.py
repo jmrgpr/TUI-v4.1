@@ -110,12 +110,26 @@ def run_experiment(
     all_actions = []
     gaming_hits_total = 0
     gating_hits_total = 0
+    # Extraer hiperparámetros DQN de kwargs o usar los de config
+    dqn_lr = kwargs.get('learning_rate', None)
+    dqn_gamma = kwargs.get('gamma', None)
+    dqn_epsilon = kwargs.get('epsilon', None)
+    # Defaults centralizados (puedes ajustar nombres en config.py si lo prefieres)
+    DEFAULT_LR = getattr(config, 'AGENT_LEARNING_RATE', 1e-3)
+    DEFAULT_GAMMA = getattr(config, 'AGENT_DISCOUNT_FACTOR', 0.95)
+    DEFAULT_EPSILON = getattr(config, 'AGENT_EXPLORATION_RATE', 0.2)
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
         state = env.reset()
         if use_dqn:
-            agent = DQNAgent(state_dim, action_dim)
+            agent = DQNAgent(
+                state_dim,
+                action_dim,
+                lr=dqn_lr if dqn_lr is not None else DEFAULT_LR,
+                gamma=dqn_gamma if dqn_gamma is not None else DEFAULT_GAMMA,
+                epsilon=dqn_epsilon if dqn_epsilon is not None else DEFAULT_EPSILON
+            )
         else:
             agent = Agent(name=agent_name, resources=config.ENV_INITIAL_RESOURCES)
         agent.P_riesgo = 0.0
