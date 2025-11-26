@@ -153,3 +153,23 @@ Se entrenó un agente Q-learning tabular en grid 3x3 usando (x,y) como estado du
 
 **Conclusión:**
 El agente aprende a alcanzar la meta y maximizar el reward en todos los episodios. El entorno y la señal de recompensa permiten el aprendizaje RL trivial por tabular Q-learning. El problema de aprendizaje básico está resuelto en este escenario.
+
+---
+## Resultado tuning EXP00: DQN-Control con penalización gaming desactivada
+
+Se ejecutó el experimento EXP00 (lambda_gaming=0.0, state_mode=coords_only, seed=42) para el agente de control en entorno easy.
+
+**Resultados:**
+- Reward media últimos 100 episodios: 319.02
+- Reward máxima: 2501.9
+- Reward mínima: 1.1
+- % episodios con reward > 0: 98%
+- El agente aprende y obtiene recompensas positivas, igualando el baseline tabular.
+
+**Conclusión:**
+Desactivar la penalización por gaming permite el aprendizaje efectivo del agente de control en el entorno easy. El entorno y la función de recompensa están validados y el motor de control responde correctamente al tuning.
+
+---
+## Siguiente paso
+- Proceder con tuning de hiperparámetros (learning rate, gamma, epsilon) y documentar cada experimento en la tabla de tuning.
+- Mantener lambda_gaming=0.0 hasta completar el barrido y validar robustez del aprendizaje.

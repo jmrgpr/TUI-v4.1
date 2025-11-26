@@ -78,6 +78,7 @@ Una vez que el agente de control logre reward media positiva y se acerque al bas
 | Experimento | Descripción breve                  | LR     | Gamma | Eps (init/decay)     | Episodios | Reward media (últimos 100) | % episodios > 0 | Comentarios |
 |------------|-------------------------------------|--------|-------|----------------------|-----------|----------------------------|-----------------|------------|
 | EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | lambda_gaming=0.0 |
+| EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | 319.02                     | 98%             | lambda_gaming=0.0 |
 | EXP01      | Baseline coords_only (seed 42)      | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | -58.36                     | 0               | Penalización gaming activa |
 | EXP02      | LR más bajo                         | 5e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
 | EXP03      | LR aún más bajo                     | 1e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
