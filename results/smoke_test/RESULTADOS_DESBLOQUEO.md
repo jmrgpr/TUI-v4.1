@@ -8,83 +8,90 @@ Las siguientes cifras se obtuvieron directamente de los archivos generados en la
 
 ### Baseline Tabular
 Fuente: `tabular_easy_log.txt`, episodios 1–500
-Reward media últimos 50: 2484.23
-Reward máxima: 2701.9
-Reward mínima: 1.3
-500/500 episodios con reward > 0
+- Reward media primeros 50: 3.8
+- Reward media últimos 50: 2484.23
+- Reward máxima: 2701.9
+- Reward mínima: 1.3
+- 500/500 episodios con reward > 0
 
-### Agente Complejo Patched
-Fuente: `patched_seed42_risk0.5_episodes.csv`
-Reward media: -59.32
-Oscilación entre -35.4 y -106.8 por episodio, sin acercarse a valores positivos.
+### Control patched/easy/dqn_xy
+Fuente: `patched_seed42_risk0.5_episodes.csv`, `easy_seed42_risk0.5_episodes.csv`, `dqn_xy_seed42_risk0.5_episodes.csv`
+- Reward media: -59.32
+- Reward mínima: -124.65
+- Reward máxima: -17.55
+- 0/500 episodios con reward > 0
+- Supervivencia promedio: 200.0
+- Penalización por gaming activa: lambda_gaming=1.5
+- gaming_hits: 167–1635 por experimento
 
 ### Métrica de Recompensa
-La columna "Recompensa" en los CSV corresponde a la sumatoria de penalización_por_paso, bonus_meta, bonus_avance, término_riesgo y otros factores por episodio.
+La columna "Recompensa" en los CSV corresponde a la sumatoria de penalización_por_paso, bonus_meta, bonus_avance, término_riesgo, penalización por gaming y otros factores por episodio.
 Si se detecta algún término inesperado, se documenta aquí.
 
 **Actualizado el 26/11/2025 tras auditoría de logs.**
 
+---
+
+## Resumen y diagnóstico actualizado
+
+Los resultados de los artefactos recientes confirman que:
+
+- El agente de control, incluso con estado reducido únicamente a coordenadas (x, y) y en un entorno “easy” benigno, sigue sin aprender: todas las recompensas de episodio son negativas y ningún episodio alcanza reward > 0.
+- El agente tabular sí aprende y obtiene recompensas positivas y altas en el mismo entorno, lo que valida el entorno y la función de recompensa.
+
+La hipótesis de que el problema era únicamente la representación del estado queda descartada. El fallo está localizado en el motor de control: combinación de hiperparámetros, arquitectura de la red o implementación del update (target, optimizador, estrategia de exploración), y no en la Teoría del Riesgo Inteligente ni en el diseño básico del entorno.
 
 ---
 
-# Plan de tuning del agente complejo
+## Recomendaciones concretas (fase actual)
 
-## Objetivo
-Lograr que el agente complejo alcance reward media > 0 (ideal > 100) en el entorno easy (3x3, penalizaciones bajas, bonus meta 100), con criterios claros y reproducibles.
+1. **Documentación y alineación de resultados**
+	- Documentar explícitamente el resultado del experimento dqn_xy (coords_only, seed 42) con sus valores reales (media, mínimo, máximo, número de episodios con reward > 0).
+	- Corregir el valor de "Reward media primeros 50" para que coincida exactamente con el log real.
+	- Dejar claro en la documentación cómo se calcula la métrica "Recompensa" en los CSV (suma de penalización por paso, bonus de meta, bonus de avance, término de riesgo, penalización por gaming, etc.).
 
-## Estrategia
+2. **Fase de tuning de hiperparámetros del agente de control**
+	- Mantener state_mode = coords_only hasta observar reward media > 0 en el entorno easy.
+	- Barrer hiperparámetros de forma ordenada:
+	  1. Learning rate: probar valores más bajos (por ejemplo 1e-3, 5e-4, 1e-4), manteniendo el resto fijo.
+	  2. Gamma (factor de descuento): ajustar para favorecer recompensas futuras (0.90, 0.95, 0.99).
+	  3. Estrategia de exploración (epsilon): aumentar la exploración inicial y/o ralentizar el decay.
+	- En cada experimento, medir la reward media de los últimos 100 episodios y el porcentaje de episodios con reward > 0.
 
-### 1. Simplificación radical del input
-- Implementar un modo debug o parámetro `state_mode` en el agente:
-	- "coords_only": solo pasa [x, y] como estado.
-	- "abstract": pasa el vector completo.
-- Comparar ambos modos:
-	- Si con (x, y) el DQN aprende y se acerca al tabular → el problema es el vector abstracto.
-	- Si ni con (x, y) aprende → el problema es hiperparámetros/arquitectura.
+3. **Paso 0 crítico: desactivar penalización por gaming**
+	- Antes de ajustar hiperparámetros, configurar lambda_gaming = 0.0 en config.py y repetir el experimento dqn_xy. Si la penalización por gaming es la causa principal, el agente debería empezar a aprender inmediatamente.
+	- Si el reward sigue negativo, proceder con tuning de hiperparámetros.
 
-### 2. Tuning de hiperparámetros (uno a la vez)
-- Learning Rate: barrer valores {1e-3, 5e-4, 1e-4}.
-- Gamma: probar {0.90, 0.95, 0.99}.
-- Epsilon/exploración: aumentar exploración inicial y ralentizar el decay.
-- Tamaño de red: probar 1–2 capas de 16–64 neuronas (en grid pequeño, menos es más).
-- Normalización/clipping: probar reward/100 o tanh(reward) antes de acumular en el target; documentar la transformación usada.
+4. **(Opcional pero recomendado) Revisión de la lógica de actualización**
+	- Revisar sobre papel (y en código) la implementación del update:
+	  - Cálculo del target (r + gamma * max(Q_next)).
+	  - Actualización de la Q para la acción elegida.
+	  - Llamada al optimizador y manejo de gradientes.
+	  - Esquema de epsilon-decay y frecuencia de actualización de la red objetivo (si aplica).
 
-### 3. Diagnóstico de penalizaciones
-- Usar modo debug_reward_trace para imprimir términos del reward en 1–2 episodios.
-- Añadir columnas al CSV: reward_total, penalizacion_paso, bonus_meta, bonus_avance, term_riesgo, etc.
-- Documentar cualquier penalización inesperada en este archivo.
+Una vez que el agente de control logre reward media positiva y se acerque al baseline tabular en el entorno easy, se podrá usar como control justo frente a variantes TUI/PGF/SOTA en escenarios más complejos.
 
-### 4. Documentar cada experimento
-- Naming scheme para los experimentos: DQN_easy_xy_lr1e-3_gamma0.95_epsSlow_seed42.csv.
-- Añadir tabla resumen en este archivo:
+---
 
-| Experimento | State | LR | Gamma | Eps | Reward media | % episodios > 0 | Comentarios |
-|-------------|-------|----|-------|-----|--------------|-----------------|-------------|
-| EXP01       | (x,y) |1e-3| 0.95  |eps-decay rápido| ...          | ...            | ...         |
+## Tabla de tuning del agente de control (entorno easy, state_mode = coords_only)
 
-- Medir reward media sobre los últimos N episodios (ej. 100) y confirmar con varias seeds (42, 123, 456).
+| Experimento | Descripción breve                  | LR     | Gamma | Eps (init/decay)     | Episodios | Reward media (últimos 100) | % episodios > 0 | Comentarios |
+|------------|-------------------------------------|--------|-------|----------------------|-----------|----------------------------|-----------------|------------|
+| EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | lambda_gaming=0.0 |
+| EXP01      | Baseline coords_only (seed 42)      | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | -58.36                     | 0               | Penalización gaming activa |
+| EXP02      | LR más bajo                         | 5e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
+| EXP03      | LR aún más bajo                     | 1e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
+| EXP04      | Gamma reducido                      | 1e-3   | 0.95  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
+| EXP05      | Eps-decay más lento                 | 1e-3   | 0.99  | 1.0 → 0.01 (lento)   | 500       | …                          | …               |            |
+| EXP06      | Red pequeña (capas/neur. reducidas) | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
 
-## Criterio de éxito
-- Umbral 1: reward media > 0 consistente.
-- Umbral 2: reward media > 100 y tendencia clara de mejora hacia el baseline tabular.
-- Validar con al menos 2–3 seeds distintas.
-- Reward media primeros 50: 1663.2
-- Reward máxima: 2701.9
-- Reward mínima: 1.3
-- Episodios con reward > 0: 500/500
+> Nota: completar cada fila con los valores medidos una vez corrido el experimento (reward media de los últimos 100 episodios, porcentaje de episodios con reward > 0, observaciones).
 
-**Conclusión:** El RL tabular aprende y maximiza el reward en el entorno easy. El entorno y la función de recompensa están correctos.
+---
 
-## Smoke test patched (get_abstract_state con coords)
-- Script: `sim/prototipo_rl_simbiosis.py --episodes 50 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/patched`
-- Penalizaciones bajas, coords añadidas al estado abstracto.
-- Reward media (control): -59.32
-- Recompensa sigue negativa, aunque el agente ahora "ve" su posición.
+## Siguiente paso a seguir
 
-**Conclusión:** El parche de visibilidad no es suficiente para que el agente complejo aprenda en el entorno easy. El siguiente paso es revisar hiperparámetros y arquitectura del agente complejo.
-
-**Estado científico:**
-- El entorno y la reward están validados.
-- El RL tabular funciona con estado informativo.
-- El agente complejo requiere ajuste adicional para aprender en el entorno easy.
-- Todos los datos y configuraciones han sido auditados y son consistentes.
+1. Desactivar penalización por gaming (lambda_gaming = 0.0) y repetir el experimento baseline coords_only.
+2. Si el reward sigue negativo, proceder con tuning de hiperparámetros según la tabla EXP01–EXP06.
+3. Documentar cada resultado en la tabla y en el resumen.
+4. Revisar la lógica de actualización si persiste el fallo.
