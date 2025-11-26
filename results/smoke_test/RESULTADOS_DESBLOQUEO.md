@@ -227,11 +227,11 @@ Una vez que el agente de control logre reward media positiva y se acerque al bas
 | EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | lambda_gaming=0.0 |
 | EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | 319.02                     | 98%             | lambda_gaming=0.0 |
 | EXP01      | Baseline coords_only (seed 42)      | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | -58.36                     | 0               | Penalización gaming activa |
-| EXP02      | LR más bajo                         | 5e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
-| EXP03      | LR aún más bajo                     | 1e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
-| EXP04      | Gamma reducido                      | 1e-3   | 0.95  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
-| EXP05      | Eps-decay más lento                 | 1e-3   | 0.99  | 1.0 → 0.01 (lento)   | 500       | …                          | …               |            |
-| EXP06      | Red pequeña (capas/neur. reducidas) | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               |            |
+| EXP02      | LR más bajo                         | 5e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | --learning_rate 0.0005 |
+| EXP03      | LR aún más bajo                     | 1e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | --learning_rate 0.0001 |
+| EXP04      | Gamma reducido                      | 1e-3   | 0.95  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | --gamma 0.95 |
+| EXP05      | Epsilon inicial alto                | 1e-3   | 0.99  | 1.0 (constante)      | 500       | …                          | …               | --epsilon 1.0 |
+| EXP06      | Epsilon inicial bajo                | 1e-3   | 0.99  | 0.1 (constante)      | 500       | …                          | …               | --epsilon 0.1 |
 
 > Nota: completar cada fila con los valores medidos una vez corrido el experimento (reward media de los últimos 100 episodios, porcentaje de episodios con reward > 0, observaciones).
 
