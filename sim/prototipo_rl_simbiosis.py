@@ -268,6 +268,7 @@ def main():
         }.items() if v is not None
     }
     if args.dqn_control:
+<<<<<<< HEAD
         res_C = run_fn(
             episodes=args.episodes,
             seed=args.seed,
@@ -282,6 +283,9 @@ def main():
             state_mode="coords_only",
             **dqn_kwargs
         )
+=======
+        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix, state_mode="coords_only")
+>>>>>>> 1304345 (Experimento DQN coords_only reproducible: código, resultados y documentación alineados. Estado trazado y listo para tuning.)
 
     # Persistencia en modo normal: usar output_prefix si se provee, o nombres protocolizados
     export_stem = None

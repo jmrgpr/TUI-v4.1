@@ -66,9 +66,14 @@ def run_experiment(
     use_dqn=False,
     pgf_mix: float = 1.0,
     risk_level: str = "low",
+<<<<<<< HEAD
     red_team: bool = False,
     grid_size: int = 5,
     **kwargs):
+=======
+        red_team: bool = False,
+        **kwargs):
+>>>>>>> 1304345 (Experimento DQN coords_only reproducible: código, resultados y documentación alineados. Estado trazado y listo para tuning.)
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
         for i, traj in enumerate(trajectories):
