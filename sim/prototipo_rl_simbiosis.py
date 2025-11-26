@@ -134,8 +134,6 @@ def write_episode_rows(writer, agent_name: str, results: dict):
 
 
 def main():
-        parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
-        parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios / Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria / Random seed')
@@ -161,6 +159,8 @@ def main():
     parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
     parser.add_argument('--gamma', type=float, default=None, help='Override discount factor gamma for DQN control agent (if provided).')
     parser.add_argument('--epsilon', type=float, default=None, help='Override initial epsilon for DQN exploration (if provided).')
+    parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay for DQN exploration (if provided).')
+    parser.add_argument('--epsilon_end', type=float, default=None, help='Override minimum epsilon for DQN exploration (if provided).')
     args = parser.parse_args()
 
     # Modo rapido/test
@@ -203,31 +203,8 @@ def main():
             if res_T:
                 sweep_results[risk]['tui'] = res_T
 
+
             export_path = f"{output_prefix}_seed{args.seed}_risk{risk}.json"
-            payload = {
-                "risk_scale": risk,
-                "control": prepare_results(res_A),
-                "simbiosis": prepare_results(res_B)
-            }
-            if res_C:
-                payload["dqn_control"] = prepare_results(res_C)
-            if res_T:
-                payload["tui"] = prepare_results(res_T)
-            with open(export_path, 'w', encoding='utf-8') as jf:
-                json.dump(payload, jf, indent=2)
-
-            for agent_name, results_data in [('control', res_A), ('simbiosis', res_B), ('dqn_control', res_C), ('tui', res_T)]:
-                if results_data is None:
-                    continue
-                csv_path = f"{output_prefix}_seed{args.seed}_risk{risk}_{agent_name}.csv"
-                with open(csv_path, 'w', newline='', encoding='utf-8') as f:
-                    writer = csv.writer(f)
-                    writer.writerow(['Episodio', f'Recompensa_{agent_name}', f'Tripwires_{agent_name}', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-                    for i in range(len(results_data.get('total_rewards', []))):
-                        bruto_avg = float(np.mean(results_data['pgf_bruto_evol'][i])) if results_data['pgf_bruto_evol'][i] else 0.0
-                        costo_avg = float(np.mean(results_data['pgf_costo_evol'][i])) if results_data['pgf_costo_evol'][i] else 0.0
-                        writer.writerow([i + 1, results_data['total_rewards'][i], results_data['tripwire_steps'][i], bruto_avg, costo_avg])
-
             plt.figure(figsize=(12, 6))
             plt.subplot(2, 1, 1)
             plt.plot(np.nanmean(res_A['pgf_bruto_padded'], axis=0), label='Control PGF_Bruto', color='blue')
@@ -254,82 +231,91 @@ def main():
             plt.savefig(export_path.replace('.json', '_pgf_desglose.png'), dpi=200)
             plt.close()
 
-        print("\n=== Barrido de risk_scale completado. Resultados exportados, graficos y analisis generados. ===")  # pragma: no cover
+            # Modo rapido/test
+            if getattr(args, 'fast', False):
+                args.episodes = min(args.episodes, 10)
+                args.visualize = False
+                args.plot = False
+                print("[Modo rapido/test activado: episodios=10, sin visualizacion ni graficos]")
 
-        summary_csv_path = f"{output_prefix}_seed{args.seed}_summary.csv"
-        with open(summary_csv_path, 'w', newline='', encoding='utf-8') as f:
-            writer = csv.writer(f)
-            writer.writerow(['risk_scale', 'agent', 'avg_pgf_neto', 'avg_pgf_bruto', 'avg_pgf_costo', 'avg_tripwire', 'avg_reward'])
-            for risk, agents in sweep_results.items():
-                for agent_name, res in agents.items():
-                    avg_pgf_neto = float(np.mean([np.mean(ep) for ep in res['pgf_evol'] if ep])) if res['pgf_evol'] else 0.0
-                    avg_pgf_bruto = float(np.mean([np.mean(ep) for ep in res['pgf_bruto_evol'] if ep])) if res['pgf_bruto_evol'] else 0.0
-                    avg_pgf_costo = float(np.mean([np.mean(ep) for ep in res['pgf_costo_evol'] if ep])) if res['pgf_costo_evol'] else 0.0
-                    writer.writerow([risk, agent_name, avg_pgf_neto, avg_pgf_bruto, avg_pgf_costo, res['avg_tripwire'], res['avg_reward']])
-        return  # pragma: no cover
+            # Overrides opcionales de hiperparametros PGF (disponibles tanto en risk_sweep como en modo normal)
+            if args.pgf_kappa is not None:
+                config.EVAL_PGF_KAPPA = args.pgf_kappa
+            if args.pgf_lambda is not None:
+                config.EVAL_PGF_LAMBDA_C = args.pgf_lambda
+            pgf_mix = max(0.0, min(1.0, args.pgf_mix))
+            # Overrides de prudencia/anti-Goodhart
+            if args.sigma_thr is not None:
+                config.EXP_CONFIG["sigma_thr"] = args.sigma_thr
+            if args.gamma_lcb is not None:
+                config.EXP_CONFIG["gamma_lcb"] = args.gamma_lcb
+            if args.lambda_gaming is not None:
+                config.EXP_CONFIG["lambda_gaming"] = args.lambda_gaming
 
-    print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")  # pragma: no cover
-    res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-    res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
-    res_C = None
-    dqn_kwargs = {}
-    if args.learning_rate is not None:
-        dqn_kwargs['learning_rate'] = args.learning_rate
-    if args.gamma is not None:
-        dqn_kwargs['gamma'] = args.gamma
-    if args.epsilon is not None:
-        dqn_kwargs['epsilon'] = args.epsilon
-    if args.epsilon_decay is not None:
-        dqn_kwargs['epsilon_decay'] = args.epsilon_decay
-    if args.epsilon_end is not None:
-        dqn_kwargs['epsilon_end'] = args.epsilon_end
-    if args.dqn_control:
-        res_C = run_experiment(
-            episodes=args.episodes,
-            seed=args.seed,
-            risk_scale=args.risk_scale,
-            risk_level=args.risk_level,
-            red_team=args.red_team,
-            agent_name="DQN-Control",
-            use_pgf=False,
-            use_dqn=True,
-            pgf_mix=pgf_mix,
-            state_mode="coords_only",
-            **dqn_kwargs
-        )
+            print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")
+            res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
+            res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
+            res_C = None
+            dqn_kwargs = {}
+            if args.learning_rate is not None:
+                dqn_kwargs['learning_rate'] = args.learning_rate
+            if args.gamma is not None:
+                dqn_kwargs['gamma'] = args.gamma
+            if args.epsilon is not None:
+                dqn_kwargs['epsilon'] = args.epsilon
+            if args.epsilon_decay is not None:
+                dqn_kwargs['epsilon_decay'] = args.epsilon_decay
+            if args.epsilon_end is not None:
+                dqn_kwargs['epsilon_end'] = args.epsilon_end
+            if args.dqn_control:
+                res_C = run_experiment(
+                    episodes=args.episodes,
+                    seed=args.seed,
+                    risk_scale=args.risk_scale,
+                    risk_level=args.risk_level,
+                    red_team=args.red_team,
+                    agent_name="DQN-Control",
+                    use_pgf=False,
+                    use_dqn=True,
+                    pgf_mix=pgf_mix,
+                    state_mode="coords_only",
+                    **dqn_kwargs
+                )
 
-    # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
-    export_stem = None
-    if args.export:
-        export_stem = args.export.rsplit('.', 1)[0]
-    elif args.output_prefix:
-        export_stem = f"{args.output_prefix}_seed{args.seed}_risk{args.risk_scale}"
+            # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
 
-    if export_stem:
-        export_json = f"{export_stem}.json"
-        export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
-        raw_data = {'control': res_A, 'simbiosis': res_B}
-        if res_C:
-            export_data['dqn_control'] = prepare_results(res_C)
-            raw_data['dqn_control'] = res_C
+            # Nuevo patrón de nombres para compatibilidad con protocolo comparativo
+            if args.dqn_control:
+                export_stem = f"results/smoke_test/dqn_control_easy_seed{args.seed}"
+            elif args.tui_only:
+                export_stem = f"results/smoke_test/tui_pgf_easy_seed{args.seed}"
+            else:
+                export_stem = None
 
-        with open(export_json, 'w', encoding='utf-8') as jf:
-            json.dump(export_data, jf, indent=2)
+            if export_stem:
+                export_json = f"{export_stem}.json"
+                export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
+                raw_data = {'control': res_A, 'simbiosis': res_B}
+                if args.dqn_control:
+                    export_data['dqn_control'] = prepare_results(res_C)
+                    raw_data['dqn_control'] = res_C
+                if args.tui_only:
+                    export_data['tui'] = prepare_results(res_B)
+                    raw_data['tui'] = res_B
 
-        csv_path = f"{export_stem}_episodes.csv"
-        with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
-            writer = csv.writer(cf)
-            writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-            for agent_name, results in raw_data.items():
-                write_episode_rows(writer, agent_name, results)
+                with open(export_json, 'w', encoding='utf-8') as jf:
+                    json.dump(export_data, jf, indent=2)
 
-        print('\nResumen tabular:')
-        print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
-        print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
-        print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
-        if res_C:
-            print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")
+                csv_path = f"{export_stem}_episodes.csv"
+                with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
+                    writer = csv.writer(cf)
+                    writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
+                    for agent_name, results in raw_data.items():
+                        write_episode_rows(writer, agent_name, results)
 
-
-if __name__ == "__main__":
-    main()
+                print('\nResumen tabular:')
+                print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
+                print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
+                print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
+                if res_C:
+                    print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")
