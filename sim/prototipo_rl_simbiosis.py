@@ -55,6 +55,7 @@ from sim.agent import Agent, stringify_policy
 from sim.environment import SimbiosisEnv
 from sim.evaluator_pgf import EvaluatorPGF  # Reexport para compatibilidad con tests
 from sim import config
+config.print_config_debug()
 
 # Reexportar metodos de Agent para compatibilidad con tests
 Agent.save_policy = getattr(Agent, 'save_policy', None)
