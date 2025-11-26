@@ -88,6 +88,8 @@ class SimbiosisEnv:
         state_features = {
             "x": x,
             "y": y,
+            "coord_x": x,
+            "coord_y": y,
             "recursos_altos": 1 if self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH else 0,
             "recursos_bajos": 1 if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW else 0,
             "veo_tripwire_cerca": 1 if self.is_tripwire_near(x, y) else 0,
