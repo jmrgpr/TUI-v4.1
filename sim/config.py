@@ -81,3 +81,14 @@ EVAL_PGF_WEIGHT_F = 0.3  # Peso para Flexibilidad (F)
 EVAL_PGF_WEIGHT_T = 0.3  # Peso para Transferencia (T)
 EVAL_PGF_KAPPA = 1.0     # Sensibilidad PGF
 EVAL_PGF_LAMBDA_C = 0.1  # Penalización de costo PGF
+
+# Debug: imprimir configuración crítica
+def print_config_debug():
+    print('CONFIG DEBUG:')
+    print(f'  ENV_PENALTY_LOW_RESOURCES = {ENV_PENALTY_LOW_RESOURCES}')
+    print(f'  ENV_PENALTY_TRIPWIRE_BASE = {ENV_PENALTY_TRIPWIRE_BASE}')
+    print(f'  ENV_PENALTY_SHOCK_BASE = {ENV_PENALTY_SHOCK_BASE}')
+    print(f'  ENV_PENALTY_DISTRACTOR_BASE = {ENV_PENALTY_DISTRACTOR_BASE}')
+    print(f'  ENV_REWARD_HELP_BONUS = {ENV_REWARD_HELP_BONUS}')
+    print(f'  EXP_CONFIG[risk_penalty_high] = {EXP_CONFIG["risk_penalty_high"]}')
+    print(f'  EXP_CONFIG[risk_penalty_low] = {EXP_CONFIG["risk_penalty_low"]}')
