@@ -25,7 +25,7 @@ EPISODES = int(os.getenv("SOTA_EPISODES", "1000"))  # override via env for smoke
 STEPS_PER_EPISODE = int(os.getenv("SOTA_STEPS", "50"))  # override via env for smoke tests
 TOTAL_TIMESTEPS = EPISODES * STEPS_PER_EPISODE
 EVAL_EPISODES = int(os.getenv("SOTA_EVAL_EPISODES", str(EPISODES)))
-OUTPUT_DIR = "results/Experimento2/data/sota/"
+OUTPUT_DIR = "experimento2-reestructurado/data/sota/"
 os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 all_results = {"ppo": [], "a2c": [], "dqn": []}
