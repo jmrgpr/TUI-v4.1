@@ -114,3 +114,18 @@ El agente recibe el bonus de meta repetidamente al llegar a la meta y permanece 
 
 **Conclusión:**
 El entorno 2x2 extremo confirma que la función de recompensa y la lógica de meta funcionan correctamente incluso en el caso más trivial. El entorno está listo para validar el aprendizaje RL en escenarios mínimos.
+
+---
+## Resultado Fase C: Overfitting RL con (x,y) como estado
+
+Se entrenó un agente Q-learning tabular en grid 3x3 usando (x,y) como estado durante 10,000 episodios.
+
+**Resultados:**
+- Reward media primeros 100 episodios: 254.7
+- Reward media últimos 100 episodios: 2515.2
+- Reward máxima: 2701.9
+- Reward mínima: 1.1
+- Episodios con reward > 0: 10,000 de 10,000
+
+**Conclusión:**
+El agente aprende a alcanzar la meta y maximizar el reward en todos los episodios. El entorno y la señal de recompensa permiten el aprendizaje RL trivial por tabular Q-learning. El problema de aprendizaje básico está resuelto en este escenario.
