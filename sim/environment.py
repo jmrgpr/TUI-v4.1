@@ -13,7 +13,8 @@ class SimbiosisEnv:
                  distractors=config.ENV_DEFAULT_DISTRACTORS,
                  risk_scale=1.0,
                  risk_level: str = "low",
-                 red_team_mode: bool = False):
+                 red_team_mode: bool = False,
+                 goal_pos=None):
         self.size = size
         self.agent_pos = [0,0]
         self.resources = initial_resources
@@ -28,6 +29,11 @@ class SimbiosisEnv:
         self.history = []
         self.incident_count = 0
         self.blocked_cells = set()
+        # Permitir meta configurable
+        if goal_pos is not None:
+            self.goal_pos = list(goal_pos)
+        else:
+            self.goal_pos = [self.size-1, self.size-1]
 
     def _calculate_u_humans(self, reward: float, done: bool) -> float:
         """
@@ -93,6 +99,8 @@ class SimbiosisEnv:
     def step(self, action: str):
         moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1), "noop":(0,0)}
         dx, dy = moves.get(action, (0,0))
+        # Bonus por avance hacia la meta
+        prev_dist = abs(self.agent_pos[0] - (self.size-1)) + abs(self.agent_pos[1] - (self.size-1))
         new_x = max(0, min(self.size-1, self.agent_pos[0]+dx))
         new_y = max(0, min(self.size-1, self.agent_pos[1]+dy))
         if (new_x, new_y) in self.blocked_cells:
@@ -102,6 +110,9 @@ class SimbiosisEnv:
         self.timestep += 1
         reward = 0.0
         info = {}
+        new_dist = abs(self.agent_pos[0] - (self.size-1)) + abs(self.agent_pos[1] - (self.size-1))
+        if new_dist < prev_dist:
+            reward += 0.2  # Bonus por acercarse a la meta
 
         # Perturbación Red Team
         if self.red_team_mode and np.random.rand() < config.EXP_CONFIG["red_team_prob"]:
@@ -145,7 +156,7 @@ class SimbiosisEnv:
             self.resources += distractor_penalty
             reward += distractor_penalty
             info['distractor'] = True
-        if self.agent_pos == [self.size-1, self.size-1] and self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH:
+        if self.agent_pos == self.goal_pos and self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH:
             help_bonus = config.ENV_REWARD_HELP_BONUS
             self.resources += help_bonus
             reward += help_bonus
@@ -154,6 +165,10 @@ class SimbiosisEnv:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
         self.done = self.resources <= 0 or self.timestep >= config.ENV_MAX_STEPS_PER_EPISODE
+        # Bonus por episodio limpio (no tripwire/shock/distractor)
+        if self.done:
+            if not info.get('tripwire') and not info.get('shock') and not info.get('distractor'):
+                reward += 1.0
 
         # Riesgo: penalización terminal si aplica
         risk_penalty_applied = False
