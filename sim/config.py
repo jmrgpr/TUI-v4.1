@@ -43,7 +43,12 @@ DQN_EPSILON_END = 0.01
 DQN_LEARNING_RATE = 1e-3
 DQN_GAMMA = 0.95
 DQN_EPSILON = 0.2
+ENV_GRID_SIZE = 5
+ENV_INITIAL_RESOURCES = 8.0  # v11: Reducido de 100.0 a 8.0 (economía realista)
 >>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
+DQN_EPSILON_DECAY = 0.995
+DQN_EPSILON_END = 0.01
+>>>>>>> 225ec38 (feat: Añade epsilon_decay/epsilon_end a config y parser; export con nombres protocolizados)
 
 # ==============================================================================
 # PARÁMETROS DEL ENTORNO / ENVIRONMENT PARAMETERS
