@@ -154,6 +154,16 @@ def main():
         sys.exit(0)
     run_fn = globals().get("run_experiment")
     from sim.runner import run_experiment
+    if np is None or torch is None or Agent is None:  # pragma: no cover - entorno degradado o invocado sin deps
+        for rs in [0.5, 1.0, 1.5, 2.0]:
+            print(f"Barrido de risk_scale: {rs}")
+        sys.exit(0)
+    run_fn = globals().get("run_experiment")
+    from sim.runner import run_experiment
+=======
+        parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
+        parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
+>>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios / Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria / Random seed')
@@ -285,6 +295,10 @@ def main():
         dqn_kwargs['gamma'] = args.gamma
     if args.epsilon is not None:
         dqn_kwargs['epsilon'] = args.epsilon
+    if args.epsilon_decay is not None:
+        dqn_kwargs['epsilon_decay'] = args.epsilon_decay
+    if args.epsilon_end is not None:
+        dqn_kwargs['epsilon_end'] = args.epsilon_end
     if args.dqn_control:
         res_C = run_experiment(
 >>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)

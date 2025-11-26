@@ -50,7 +50,7 @@ class DQNAgent:
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.
     """
-    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64):
+    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, epsilon_decay=0.995, epsilon_end=0.01, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma

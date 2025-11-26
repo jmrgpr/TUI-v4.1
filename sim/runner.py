@@ -123,7 +123,6 @@ def run_experiment(
     dqn_lr = kwargs.get('learning_rate', None)
     dqn_gamma = kwargs.get('gamma', None)
     dqn_epsilon = kwargs.get('epsilon', None)
-<<<<<<< HEAD
     dqn_epsilon_decay = kwargs.get('epsilon_decay', None)
     dqn_epsilon_end = kwargs.get('epsilon_end', None)
     # Defaults centralizados (usar hiperparámetros DQN del config)
@@ -132,12 +131,25 @@ def run_experiment(
     DEFAULT_EPSILON = getattr(config, 'DQN_EPSILON', getattr(config, 'AGENT_EXPLORATION_RATE', 0.2))
     DEFAULT_EPSILON_DECAY = getattr(config, 'DQN_EPSILON_DECAY', 0.995)
     DEFAULT_EPSILON_END = getattr(config, 'DQN_EPSILON_END', 0.01)
+<<<<<<< HEAD
+>>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
+    dqn_epsilon_decay = kwargs.get('epsilon_decay', None)
+    dqn_epsilon_end = kwargs.get('epsilon_end', None)
+    # Defaults centralizados (usar hiperparámetros DQN del config)
+    DEFAULT_LR = getattr(config, 'DQN_LEARNING_RATE', getattr(config, 'AGENT_LEARNING_RATE', 1e-3))
+    DEFAULT_GAMMA = getattr(config, 'DQN_GAMMA', getattr(config, 'AGENT_DISCOUNT_FACTOR', 0.95))
+    DEFAULT_EPSILON = getattr(config, 'DQN_EPSILON', getattr(config, 'AGENT_EXPLORATION_RATE', 0.2))
+    DEFAULT_EPSILON_DECAY = getattr(config, 'DQN_EPSILON_DECAY', 0.995)
+    DEFAULT_EPSILON_END = getattr(config, 'DQN_EPSILON_END', 0.01)
+<<<<<<< HEAD
 =======
     # Defaults centralizados (puedes ajustar nombres en config.py si lo prefieres)
     DEFAULT_LR = getattr(config, 'AGENT_LEARNING_RATE', 1e-3)
     DEFAULT_GAMMA = getattr(config, 'AGENT_DISCOUNT_FACTOR', 0.95)
     DEFAULT_EPSILON = getattr(config, 'AGENT_EXPLORATION_RATE', 0.2)
 >>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
+=======
+>>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -149,12 +161,18 @@ def run_experiment(
                 lr=dqn_lr if dqn_lr is not None else DEFAULT_LR,
                 gamma=dqn_gamma if dqn_gamma is not None else DEFAULT_GAMMA,
 <<<<<<< HEAD
+<<<<<<< HEAD
                 epsilon=dqn_epsilon if dqn_epsilon is not None else DEFAULT_EPSILON,
                 epsilon_decay=dqn_epsilon_decay if dqn_epsilon_decay is not None else DEFAULT_EPSILON_DECAY,
                 epsilon_end=dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
 =======
                 epsilon=dqn_epsilon if dqn_epsilon is not None else DEFAULT_EPSILON
 >>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
+=======
+                epsilon=dqn_epsilon if dqn_epsilon is not None else DEFAULT_EPSILON,
+                epsilon_decay=dqn_epsilon_decay if dqn_epsilon_decay is not None else DEFAULT_EPSILON_DECAY,
+                epsilon_end=dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
+>>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
             )
         else:
             agent = Agent(name=agent_name, resources=config.ENV_INITIAL_RESOURCES)
@@ -345,6 +363,7 @@ def run_experiment(
             "epsilon_end": dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
         }
     return {
+<<<<<<< HEAD
         "config": {
             "grid_size": env.size,
             "risk_scale": risk_scale,
@@ -357,6 +376,9 @@ def run_experiment(
             "use_dqn": use_dqn
         },
         "dqn_params": dqn_params,
+=======
+            "dqn_params": dqn_params,
+>>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
         "avg_robust": avg_robust,
