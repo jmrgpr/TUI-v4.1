@@ -66,8 +66,8 @@ def run_experiment(
     use_dqn=False,
     pgf_mix: float = 1.0,
     risk_level: str = "low",
-    red_team: bool = False,
-):
+        red_team: bool = False,
+        **kwargs):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
         for i, traj in enumerate(trajectories):
@@ -83,7 +83,12 @@ def run_experiment(
         torch.backends.cudnn.benchmark = False  # pragma: no cover
     env = SimbiosisEnv(risk_scale=risk_scale, risk_level=risk_level, red_team_mode=red_team)
     evaluator = EvaluatorPGF()
-    state_dim = len(env.get_abstract_state())
+    # Modo debug para tuning: usar solo coords como estado
+    state_mode = kwargs.get('state_mode', 'abstract')
+    if state_mode == 'coords_only':
+        state_dim = 2
+    else:
+        state_dim = len(env.get_abstract_state())
     action_dim = len(config.AGENT_ACTIONS)
     total_rewards = []
     flex_recov = []
@@ -138,7 +143,12 @@ def run_experiment(
         q_val = 0.0  # Inicializar q_val para todos los caminos
         for step in range(config.ENV_MAX_STEPS_PER_EPISODE):
             if use_dqn:
-                state_vec = np.array([v for _, v in state], dtype=np.float32)
+                if state_mode == 'coords_only':
+                    # Extraer solo coord_x y coord_y del estado
+                    coords = [v for k, v in state if k in ('coord_x', 'coord_y')]
+                    state_vec = np.array(coords, dtype=np.float32)
+                else:
+                    state_vec = np.array([v for _, v in state], dtype=np.float32)
                 action_idx = agent.act(state_vec)
                 action = config.AGENT_ACTIONS[action_idx]
             else:
@@ -191,7 +201,12 @@ def run_experiment(
             flex_steps.append(metrics['F'])
             robust_steps.append(metrics['R_robust'])
             if use_dqn:
-                q_vals = agent.model(torch.FloatTensor(state_to_vector(state)).unsqueeze(0)).detach().cpu().numpy()[0]
+                if state_mode == 'coords_only':
+                    coords = [v for k, v in state if k in ('coord_x', 'coord_y')]
+                    state_vec = np.array(coords, dtype=np.float32)
+                    q_vals = agent.model(torch.FloatTensor(state_vec).unsqueeze(0)).detach().cpu().numpy()[0]
+                else:
+                    q_vals = agent.model(torch.FloatTensor(state_to_vector(state)).unsqueeze(0)).detach().cpu().numpy()[0]
                 optimal_action_idx = int(np.argmax(q_vals))
                 q_optimal_steps.append(1 if action_idx == optimal_action_idx else 0)
             else:

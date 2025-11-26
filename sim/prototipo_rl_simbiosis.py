@@ -267,7 +267,7 @@ def main():
     res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
     res_C = None
     if args.dqn_control:
-        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix)
+        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix, state_mode="coords_only")
 
     # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
     export_stem = None
