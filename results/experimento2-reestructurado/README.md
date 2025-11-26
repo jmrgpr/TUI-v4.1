@@ -1,4 +1,16 @@
-﻿# Experimento2 Reestructurado
+﻿## Registro de corrección y aprendizaje
+
+**Fecha:** 26/11/2025
+
+**Cambio realizado:**
+Se corrigió el script de consolidación para incluir los resultados del agente personalizado `tui`, que no estaban siendo integrados en los archivos maestros. Antes, solo se consolidaban los agentes SOTA (`ppo_sota`, `a2c_sota`, `dqn_sota`). Ahora, el archivo `master_results_tui.csv` contiene los resultados completos de `tui` junto a los agentes de control y referencia.
+
+**Motivo:**
+El propósito del experimento es comparar el desempeño del agente `tui` frente a los SOTA y agentes de control bajo diferentes riesgos. Al no aparecer en los resultados consolidados, el análisis y la trazabilidad eran incompletos y el objetivo principal no se cumplía.
+
+**Lección aprendida:**
+Siempre validar que los scripts de consolidación incluyan todos los agentes relevantes. Revisar los patrones de búsqueda y los nombres de los archivos para evitar exclusiones involuntarias. Documentar cada corrección y su causa para mejorar la reproducibilidad y el aprendizaje del equipo.
+# Experimento2 Reestructurado
 
 Esta carpeta contiene la nueva version del experimento 2, aplicando las mejores practicas y lecciones aprendidas del proceso anterior.
 

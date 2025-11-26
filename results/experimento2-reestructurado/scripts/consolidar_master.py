@@ -37,5 +37,6 @@ def consolidar(input_pattern, output_file, recursive=False):
 
 
 if __name__ == "__main__":
-    consolidar("../data/sota/**/*.csv", "../data/master_results_combined.csv", recursive=True)
-    consolidar("../data/sweep/fase2_full/**/*.*csv", "../data/master_results_clean.csv", recursive=True)
+    consolidar("experimento2-reestructurado/data/sota/**/*.csv", "experimento2-reestructurado/data/master_results_combined.csv", recursive=True)
+    consolidar("experimento2-reestructurado/data/sweep/fase2_full/**/*.*csv", "experimento2-reestructurado/data/master_results_clean.csv", recursive=True)
+    consolidar("experimento2-reestructurado/data/sweep/fase2_full/*/sweep_tui_*_summary.csv", "experimento2-reestructurado/data/master_results_tui.csv", recursive=False)

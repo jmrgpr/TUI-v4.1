@@ -1,0 +1,13 @@
+# Log de ejecucion experimental
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed42/sweep_default --dqn_control (1640.1s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 123 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed123/sweep_default --dqn_control (1613.2s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 456 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed456/sweep_default --dqn_control (788.3s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed42/sweep_tuning --dqn_control (630.7s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 123 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed123/sweep_tuning --dqn_control (892.4s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 456 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed456/sweep_tuning --dqn_control (1155.5s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed42/sweep_tui --tui_only --dqn_control (1172.7s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 123 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed123/sweep_tui --tui_only --dqn_control (1121.3s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 456 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed456/sweep_tui --tui_only --dqn_control (1322.7s)
+[OK] python sim/prototipo_rl_simbiosis.py --risk_sweep --episodes 1000 --seed 42 --pgf_kappa 2.0 --pgf_lambda 0.05 --pgf_mix 0.8 --risk_level low --output_prefix experimento2-reestructurado/data/sweep/fase2_full/seed42/sweep_tuning --dqn_control (1155.4s)
+[OK] python run_sota_comparison.py (608.6s)
+[OK] python scripts/consolidate_results.py (2.2s)
