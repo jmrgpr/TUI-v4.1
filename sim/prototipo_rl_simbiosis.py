@@ -134,6 +134,8 @@ def write_episode_rows(writer, agent_name: str, results: dict):
 
 
 def main():
+        parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
+        parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios / Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria / Random seed')
@@ -277,6 +279,10 @@ def main():
         dqn_kwargs['gamma'] = args.gamma
     if args.epsilon is not None:
         dqn_kwargs['epsilon'] = args.epsilon
+    if args.epsilon_decay is not None:
+        dqn_kwargs['epsilon_decay'] = args.epsilon_decay
+    if args.epsilon_end is not None:
+        dqn_kwargs['epsilon_end'] = args.epsilon_end
     if args.dqn_control:
         res_C = run_experiment(
             episodes=args.episodes,

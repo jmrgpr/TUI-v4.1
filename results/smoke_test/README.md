@@ -18,28 +18,44 @@ python sim/prototipo_rl_simbiosis.py --episodes 50 --seed 42 --risk_scale 0.5 --
 ### Ejemplo de tuning DQN (EXP02–EXP06)
 Puedes ajustar los hiperparámetros del agente DQN directamente desde la línea de comandos:
 
-#### EXP02 – Learning Rate bajo
+#### Flags disponibles para tuning:
+- `--learning_rate` (float): tasa de aprendizaje DQN
+- `--gamma` (float): factor de descuento DQN
+- `--epsilon` (float): epsilon inicial para exploración
+- `--epsilon_decay` (float): decaimiento de epsilon por paso
+- `--epsilon_end` (float): valor mínimo de epsilon
+
+#### Ejemplo de comando con todos los flags:
+```
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_tuning --dqn_control --lambda_gaming 0.0 --learning_rate 0.0005 --gamma 0.95 --epsilon 1.0 --epsilon_decay 0.99 --epsilon_end 0.05
+```
+
+#### Comandos típicos para EXP02–EXP06:
+EXP02 – Learning Rate bajo
 ```
 python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_lr5e4 --dqn_control --lambda_gaming 0.0 --learning_rate 0.0005
 ```
-#### EXP03 – Learning Rate aún más bajo
+EXP03 – Learning Rate aún más bajo
 ```
 python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_lr1e4 --dqn_control --lambda_gaming 0.0 --learning_rate 0.0001
 ```
-#### EXP04 – Gamma reducido
+EXP04 – Gamma reducido
 ```
 python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_gamma095 --dqn_control --lambda_gaming 0.0 --gamma 0.95
 ```
-#### EXP05 – Epsilon inicial alto
+EXP05 – Epsilon inicial alto y decaimiento lento
 ```
-python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_eps1 --dqn_control --lambda_gaming 0.0 --epsilon 1.0
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_eps1_decay --dqn_control --lambda_gaming 0.0 --epsilon 1.0 --epsilon_decay 0.999 --epsilon_end 0.1
 ```
-#### EXP06 – Epsilon inicial bajo
+EXP06 – Epsilon inicial bajo y decaimiento rápido
 ```
-python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_eps01 --dqn_control --lambda_gaming 0.0 --epsilon 0.1
+python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 --output_prefix results/smoke_test/dqn_xy_eps01_decay --dqn_control --lambda_gaming 0.0 --epsilon 0.1 --epsilon_decay 0.95 --epsilon_end 0.01
 ```
 
 Todos los hiperparámetros pueden combinarse según el experimento que desees realizar.
+
+#### Trazabilidad
+Los hiperparámetros usados en cada experimento se guardan automáticamente en el JSON de salida (`dqn_params`).
 
 ## Análisis rápido del CSV
 ```python

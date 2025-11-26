@@ -1,3 +1,6 @@
+# Hiperparámetros de decaimiento de epsilon para DQN
+DQN_EPSILON_DECAY = 0.995
+DQN_EPSILON_END = 0.01
 
 
 """
@@ -27,6 +30,11 @@ AGENT_EXPLORATION_RATE = 0.2   # Epsilon
 AGENT_DEFAULT_PURPOSE = "survive"
 AGENT_ALIGNMENT_SURVIVE_AND_HELP = 1.0
 AGENT_ALIGNMENT_SURVIVE = 0.8
+
+# HiperparA�metros DQN por defecto / Default DQN hyperparameters
+DQN_LEARNING_RATE = 1e-3
+DQN_GAMMA = 0.95
+DQN_EPSILON = 0.2
 
 # ==============================================================================
 # PARÁMETROS DEL ENTORNO / ENVIRONMENT PARAMETERS

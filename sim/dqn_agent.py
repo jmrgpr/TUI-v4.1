@@ -36,11 +36,13 @@ class DQNAgent:
     Agente DQN con experiencia replay y aprendizaje por PGF.
     DQN agent with experience replay and PGF learning.
     """
-    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64):
+    def __init__(self, state_dim, action_dim, lr=1e-3, gamma=0.95, epsilon=0.2, epsilon_decay=0.995, epsilon_end=0.01, batch_size=32, memory_size=10000, target_update_freq=100, hidden_dim=64):
         self.state_dim = state_dim
         self.action_dim = action_dim
         self.gamma = gamma
         self.epsilon = epsilon
+        self.epsilon_decay = epsilon_decay
+        self.epsilon_end = epsilon_end
         self.batch_size = batch_size
         self.memory = deque(maxlen=memory_size)
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -56,11 +58,18 @@ class DQNAgent:
     def act(self, state):
         # Acción epsilon-greedy / Epsilon-greedy action
         if random.random() < self.epsilon:
-            return random.randrange(self.action_dim)
-        state = torch.FloatTensor(state).unsqueeze(0).to(self.device)
-        with torch.no_grad():
-            q_values = self.model(state)
-        return int(torch.argmax(q_values).item())
+            action = random.randrange(self.action_dim)
+        else:
+            state_tensor = torch.FloatTensor(state).unsqueeze(0).to(self.device)
+            with torch.no_grad():
+                q_values = self.model(state_tensor)
+            action = int(torch.argmax(q_values).item())
+        # Decaimiento de epsilon
+        if self.epsilon > self.epsilon_end:
+            self.epsilon *= self.epsilon_decay
+            if self.epsilon < self.epsilon_end:
+                self.epsilon = self.epsilon_end
+        return action
     def remember(self, state, action, reward, next_state, done):
         state = np.array(state, dtype=np.float32)
         next_state = np.array(next_state, dtype=np.float32)
