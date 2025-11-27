@@ -273,3 +273,7 @@ def main():
         print(f"{'Simbiosis':<12}{res_B.get('avg_reward',0):>12.2f}{res_B.get('avg_tripwire',0):>12.2f}{res_B.get('avg_flex',0):>14.2f}{res_B.get('avg_q_opt',0):>16.2f}")
         if res_C:
             print(f"{'DQN-Control':<12}{res_C.get('avg_reward',0):>12.2f}{res_C.get('avg_tripwire',0):>12.2f}{res_C.get('avg_flex',0):>14.2f}{res_C.get('avg_q_opt',0):>16.2f}")
+
+
+if __name__ == "__main__":
+    main()

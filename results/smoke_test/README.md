@@ -1,4 +1,31 @@
-﻿# Smoke Test y Diagnóstico (Entorno simplificado)
+﻿# Estado y Fix de Exportación (27/11/2025)
+
+## Resumen
+
+El problema de exportación de archivos protocolizados en `sim/prototipo_rl_simbiosis.py` se resolvió restaurando el guard `if __name__ == "__main__": main()`. Ahora el script entra correctamente en la función principal y genera los archivos con los nombres esperados:
+
+- `results/smoke_test/dqn_control_easy_seed{seed}.json`
+- `results/smoke_test/dqn_control_easy_seed{seed}_episodes.csv`
+- `results/smoke_test/tui_pgf_easy_seed{seed}.json`
+- `results/smoke_test/tui_pgf_easy_seed{seed}_episodes.csv`
+
+El bloque de export utiliza `output_prefix` si se pasa, o los nombres protocolizados por defecto, y crea las carpetas necesarias. También incluye los hiperparámetros DQN (`dqn_params`) en el JSON para trazabilidad.
+
+Se eliminaron los archivos generados por ejecuciones automáticas no solicitadas para mantener el entorno limpio.
+
+## Pasos para reproducir y verificar
+
+1. Ejecutar el script con `--dqn_control` o `--tui_only` y sin `--output_prefix`.
+2. Verificar que los archivos protocolizados aparecen en `results/smoke_test/`.
+3. Los archivos legacy ya no se generan salvo en runs antiguos.
+
+## Estado actual
+
+- Exportación robusta y trazable.
+- Entorno limpio y protegido en el repo.
+
+---
+# Smoke Test y Diagnóstico (Entorno simplificado)
 
 Estado: depuración crítica. El baseline no logra rewards > 0 ni en el entorno más benigno.
 
