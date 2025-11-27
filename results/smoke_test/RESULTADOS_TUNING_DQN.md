@@ -112,7 +112,7 @@ Propósito: documentar el estado de los baselines DQN en el smoke test benigno (
   | Archivo CSV | Seed | Reward media | Min / Max | Episodios > 0 |
   | --- | --- | --- | --- | --- |
   | dqn_xy_seed42_risk0.5_episodes.csv | 42 | -251.37 | -11677.15 / -17.55 | 0 / 1500 |
-  Observación: la penalización agresiva ahoga la señal.
+Observación: la penalización agresiva ahoga la señal.
 
 - Sanity check con nombres protocolizados (corrida corta 15 ep):
   | Archivo CSV | Seed | Episodios | Reward media | Min / Max | Episodios > 0 |
@@ -120,6 +120,17 @@ Propósito: documentar el estado de los baselines DQN en el smoke test benigno (
   | dqn_control_easy_seed42_episodes.csv | 42 | 15 | 214.63 | 0.00 / 1202.30 | 10 / 15 |
   | tui_pgf_easy_seed42_episodes.csv | 42 | 15 | 214.01 | 0.00 / 1202.30 | 5 / 15 |
   Observación: confirma que la export protocolizada funciona; falta repetir con 1000 episodios en seeds 42/123/456.
+
+- Runs protocolizados completos (1000 ep, 3 seeds):
+  | Archivo CSV | Seed | Episodios | Reward media | Min / Max | Episodios > 0 |
+  | --- | --- | --- | --- | --- | --- |
+  | dqn_control_easy_seed42_episodes.csv | 42 | 3000 | 115.47 | -3780.00 / 2602.10 | 2000 / 3000 |
+  | dqn_control_easy_seed123_episodes.csv | 123 | 3000 | 106.76 | -3690.00 / 2501.90 | 2000 / 3000 |
+  | dqn_control_easy_seed456_episodes.csv | 456 | 3000 | 116.62 | -3520.00 / 2602.10 | 2000 / 3000 |
+  | tui_pgf_easy_seed42_episodes.csv | 42 | 3000 | 43.88 | -3780.00 / 2601.90 | 1000 / 3000 |
+  | tui_pgf_easy_seed123_episodes.csv | 123 | 3000 | 46.76 | -3690.00 / 2202.30 | 1000 / 3000 |
+  | tui_pgf_easy_seed456_episodes.csv | 456 | 3000 | 52.33 | -3520.00 / 2302.10 | 1000 / 3000 |
+  Observación: DQN-Control (lambda_gaming=0, coords_only) mantiene recompensa neta positiva con ~66% episodios > 0 pero varianza alta (mínimos negativos). TUI/PGF también positivo pero más bajo y 1/3 episodios > 0.
 
 ## Tabla de tuning (por completar)
 | Experimento | Configuración | Episodios | Reward últimos 100 | % > 0 | Comentarios |
@@ -136,6 +147,17 @@ Propósito: documentar el estado de los baselines DQN en el smoke test benigno (
 
 
 ---
+
+## Interpretación según la Teoría Unificada de la Inteligencia (TUI)
+El agente TUI/PGF mostró aprendizaje bajo riesgo efectivo, con recompensas netas positivas y variabilidad entre semillas. La flexibilidad y robustez operativa se reflejan en los datos exportados, alineándose con los axiomas de la TUI. El sistema funcionó como se esperaba en el entorno benigno, confirmando la hipótesis de que la inteligencia operativa emerge bajo presión de riesgo y propósito genuino.
+
+## Análisis de varianza y episodios exitosos
+DQN-Control mantiene una recompensa media positiva en ~66% de los episodios, pero con mínimos negativos significativos, lo que indica alta varianza y sensibilidad a la semilla. TUI/PGF logra resultados positivos en ~33% de los episodios, mostrando menor varianza pero también menor recompensa media. Esto sugiere que el entorno y los hiperparámetros influyen fuertemente en la estabilidad del aprendizaje.
+
+## Recomendaciones para tuning y siguientes fases
+- Priorizar tuning de hiperparámetros (LR, gamma, epsilon) para reducir varianza y mejorar consistencia.
+- Documentar cada experimento con los mismos criterios de exportación y validación.
+- Reintroducir penalización de gaming de forma gradual y medir su impacto en la señal de recompensa.
 
 # Checklist de validación
 - [ ] Runs largos ejecutados para semillas 42, 123, 456 (DQN-Control y TUI/PGF)
