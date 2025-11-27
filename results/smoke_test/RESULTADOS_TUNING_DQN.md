@@ -45,3 +45,31 @@ Propósito: documentar el estado de los baselines DQN en el smoke test benigno (
 3) Luego, reintroducir una penalización de gaming suave (warm-up/umbrales/caps) y medir impacto.
 
 Nota: la teoría/entorno son válidos; el bloqueo estaba en la penalización de gaming y en los hiperparámetros. Este documento se enfoca en dejar claro qué configuraciones DQN funcionan en el smoke test y cuáles no.
+
+---
+
+# Plan de ejecución y validación de runs largos (smoke_test)
+
+## Objetivo
+Ejecutar los experimentos largos (1000 episodios) para las semillas 42, 123 y 456 usando los agentes DQN-Control y TUI/PGF, exportando los resultados con nombres protocolizados. Validar que los archivos exportados contienen las métricas esperadas y actualizar la documentación con los nuevos baselines.
+
+## Pasos a seguir
+1. Ejecutar los runs largos para cada semilla y agente:
+   - DQN-Control: `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed {seed} --grid_size 5 --risk_scale 1.0 --dqn_control --output_prefix results/smoke_test/dqn_control_easy_seed{seed}`
+   - TUI/PGF: `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed {seed} --grid_size 5 --risk_scale 1.0 --tui_only --pgf_mix 1.0 --output_prefix results/smoke_test/tui_pgf_easy_seed{seed}`
+   - Semillas: 42, 123, 456
+
+2. Verificar que los archivos `.json` y `.csv` se generen correctamente para cada run y que las métricas sean coherentes con lo esperado.
+
+3. Actualizar este documento y el checklist con los resultados y las cifras principales de los nuevos runs.
+
+4. Reportar el resultado final y la alineación con el propósito del smoke test.
+
+---
+
+# Checklist de validación
+- [ ] Runs largos ejecutados para semillas 42, 123, 456 (DQN-Control y TUI/PGF)
+- [ ] Archivos exportados con nombres protocolizados
+- [ ] Métricas principales revisadas y documentadas
+- [ ] Documentación actualizada
+- [ ] Reporte final generado
