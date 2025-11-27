@@ -89,11 +89,6 @@ DQN-Control mantiene una recompensa media positiva en ~66% de los episodios, per
 - [ ] Métricas principales revisadas y documentadas
 - [ ] Documentación actualizada
 - [ ] Reporte final generado
-=======
-# Comparativo tuning DQN: baseline vs región mala
-=======
-# RESULTADOS_TUNING_DQN (entorno 3x3 benigno)
->>>>>>> e2ea08f (Fix exportación y documentación del protocolo de resultados RL (smoke_test))
 
 Propósito: documentar el estado de los baselines DQN en el smoke test benigno (grid 3x3, penalizaciones -0.01, bonus 100, sin red team) y guiar el tuning.
 
@@ -139,21 +134,13 @@ Propósito: documentar el estado de los baselines DQN en el smoke test benigno (
 2) Ejecutar EXP02–EXP04 con lambda_gaming=0.0 (barrer LR, gamma, epsilon/decay) y completar la tabla.
 3) Luego, reintroducir una penalización de gaming suave (warm-up/umbrales/caps) y medir impacto.
 
-<<<<<<< HEAD
-## DQN con penalización de gaming (lambda_gaming por defecto anterior)
-| Archivo CSV | Seed | Episodios | Reward media | Reward min / max | Episodios > 0 |
-| --- | --- | --- | --- | --- | --- |
-| dqn_xy_seed42_risk0.5_episodes.csv | 42 | 1500 | -251.37 | -11677.15 / -17.55 | 0 / 1500 |
 
-Observaciones:
-- La penalización de gaming agresiva ahogó la señal: todas las recompensas son negativas.
+---
 
-## Próximos pasos propuestos
-1) Repetir runs con los defaults DQN actualizados (DQN_LEARNING_RATE=1e-3, DQN_GAMMA=0.95, DQN_EPSILON=0.2) para aislar el efecto del lr alto heredado del tabular en estos runs.
-2) Lanzar EXP02–EXP06 variando learning_rate, gamma y epsilon (manteniendo lambda_gaming=0) y registrar reward media de los últimos 100 episodios y % de episodios > 0.
-3) Una vez estable, reintroducir la penalización de gaming con un esquema más suave (warm-up/umbrales) y medir impacto.
-4) Probar con estado completo (`get_abstract_state`) para evaluar el efecto del ruido en observabilidad.
->>>>>>> 711d421 (FASE 4: Documentación comparativa TUI vs DQN, síntesis y baseline protegidos. Tag: v4.2-rl-unlock-anti_goodhart_fixed)
-=======
-Nota: la teoría/entorno son válidos; el bloqueo estaba en la penalización de gaming y en los hiperparámetros. Este documento se enfoca en dejar claro qué configuraciones DQN funcionan en el smoke test y cuáles no.
->>>>>>> e2ea08f (Fix exportación y documentación del protocolo de resultados RL (smoke_test))
+# Checklist de validación
+- [ ] Runs largos ejecutados para semillas 42, 123, 456 (DQN-Control y TUI/PGF)
+- [ ] Archivos exportados con nombres protocolizados
+- [ ] Métricas principales revisadas y documentadas
+- [ ] Documentación actualizada
+- [ ] Reporte final generado
+>>>>>>> e6f5274 (Fix exportación, actualiza protocolo y README, prepara runs largos para smoke test)
