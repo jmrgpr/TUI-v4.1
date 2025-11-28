@@ -24,3 +24,10 @@ Este To Do refleja el avance hacia evidencia empirica preliminar de alineacion e
 - Consolidar documentacion bilingue y preparar version en ingles para publicacion internacional.
 - Preparar materiales de onboarding cientifico y colaborativo.
 - Redactar manuscrito con evidencia TUI vs SOTA para envio a revista/conferencia.
+
+### Revisión pendiente (documentos sistémicos, 2025-11-28)
+- Completar censo exhaustivo (detallar reports/, results/ completos, htmlcov/, session_runs.json, None.json, temp.tex).
+- Añadir en `resumen sistemico y recomendaciones.md` los datos de correlación: n, método (Pearson/Spearman), IC/SE, control de múltiples comparaciones y versión de dataset/experimento.
+- Citar módulos/tests que respaldan la alineación teoría↔código (p.ej., sim/environment.py con PED, tests de penalizaciones/riesgo).
+- Hacer recomendaciones accionables con parámetros/fechas/responsables (p.ej., preregistro en OSF con ID, grid de β_riesgo, bootstrap B, AIC/BIC).
+- Notar que el conteo de tests (254) es al 2025-11-28; actualizar si crece.

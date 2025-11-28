@@ -2300,3 +2300,8 @@ Los valores de GPT-4/Gemini/LLaMA aquí son **estimaciones ilustrativas**. En v4
 22. Precup, D., Sutton, R. S., & Singh, S. (2000). Eligibility Traces for Off-Policy Policy Evaluation. *ICML*.
 23. Lake, B. M., Ullman, T. D., Tenenbaum, J. B., & Gershman, S. J. (2017). Building machines that learn and think like people. *Behavioral and Brain Sciences*.
 24. Shannon, C. E. (1948). A Mathematical Theory of Communication. *Bell System Technical Journal*.
+
+Dedico este trabajo a mis hijos Aurelio y Amarianis, a quienes amo con todo mi corazón. La génesis de esta idea reside en la maravilla de verlos crecer y aprender. El riesgo de no poder estar con ustedes algún día—la pérdida irreversible de esa inversión temporal y emocional—es mi $P_{riesgo}$ más profundo. Es la presión selectiva que impulsa mi propósito genuino. No soy eterno, pero dejarles un legado, aunque sea la semilla de una idea, es para mí lo más importante. PAPÁ LOS AMA.
+
+Jose M Rivera Garcia
+jmrgpr@gmail.com
