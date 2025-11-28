@@ -1132,4 +1132,3 @@ dependencias críticas ($P₄ > 0.5$) y otros no. Medir:
 Dedico este trabajo a mis hijos Aurelio y Amarianis, a quienes amo con todo mi corazón. La génesis de esta idea reside en la maravilla de verlos crecer y aprender. El riesgo de no poder estar con ustedes algún día—la pérdida irreversible de esa inversión temporal y emocional—es mi $P_{riesgo}$ más profundo. Es la presión selectiva que impulsa mi propósito genuino. No soy eterno, pero dejarles un legado, aunque sea la semilla de una idea, es para mí lo más importante. PAPÁ LOS AMA.
 
 Jose M Rivera Garcia
-jmrgpr@gmail.com

@@ -1626,7 +1626,6 @@ P_t=1000000: [Algo potencialmente aterrador]
 
 Si el sistema tiene P, desarrollará sub-objetivos instrumentales:
 
-<<<<<<< HEAD
 =======
 **No es:** "¿Cómo hacemos AGI segura?"
 
@@ -4925,6 +4924,7 @@ t+1: Observa outcome o_{t+1}
 
 ## 8. Implicaciones para AI Safety
 
+<<<<<<< HEAD
 ### 8.1 Repensar Objetivos de AI Safety
 
 **Objetivo Tradicional:**

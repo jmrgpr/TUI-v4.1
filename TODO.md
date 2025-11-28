@@ -43,6 +43,3 @@ Este To Do refleja el avance hacia evidencia empirica preliminar de alineacion e
 - Preparar materiales de onboarding cientifico y colaborativo.
 - Redactar manuscrito con evidencia TUI vs SOTA para envio a revista/conferencia.
 
----
-
-Estas tareas reflejan las mejores prácticas para la siguiente fase del proyecto, asegurando robustez, reproducibilidad y apertura internacional.
