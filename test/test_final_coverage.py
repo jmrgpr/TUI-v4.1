@@ -6,7 +6,7 @@ sys.path.insert(0, str(ROOT))
 import json
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # Use non-GUI backend
+matplotlib.use("Agg")
 import matplotlib.pyplot as mpl_plt
 import torch
 import sim.prototipo_rl_simbiosis as prs

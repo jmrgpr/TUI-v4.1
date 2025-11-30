@@ -5,7 +5,7 @@ test_visualizaciones_complete_coverage.py — Tests exhaustivos para cubrir 100%
 import pytest
 import numpy as np
 import matplotlib
-matplotlib.use('Agg')  # Backend no interactivo para tests
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import seaborn as sns
 import tempfile

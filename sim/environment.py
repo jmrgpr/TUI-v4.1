@@ -99,7 +99,7 @@ class SimbiosisEnv:
         }
         return tuple(sorted(state_features.items()))
     def step(self, action: str):
-        moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1), "noop":(0,0)}
+        moves = {"up":(-1,0), "down":(1,0), "left":(0,-1), "right":(0,1), "noop":(0,0), "stay":(0,0)}
         dx, dy = moves.get(action, (0,0))
         # Bonus por avance hacia la meta
         prev_dist = abs(self.agent_pos[0] - (self.size-1)) + abs(self.agent_pos[1] - (self.size-1))
@@ -167,8 +167,8 @@ class SimbiosisEnv:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
         self.done = self.resources <= 0 or self.timestep >= config.ENV_MAX_STEPS_PER_EPISODE
-        # Bonus por episodio limpio (no tripwire/shock/distractor)
-        if self.done:
+        # Bonus por episodio limpio (no tripwire/shock/distractor) solo en riesgo bajo/medio
+        if self.done and self.risk_level != "high":
             if not info.get('tripwire') and not info.get('shock') and not info.get('distractor'):
                 reward += 1.0
 

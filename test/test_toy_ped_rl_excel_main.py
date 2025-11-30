@@ -4,6 +4,8 @@ Cobertura del bloque main de toy_ped_rl_excel.py
 import subprocess
 import sys
 import os
+import matplotlib
+matplotlib.use("Agg")
 
 def test_main_block_runs():
     # Ejecuta el script como CLI y verifica salida sin errores

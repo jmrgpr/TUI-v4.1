@@ -396,6 +396,16 @@ Simbiosis, 1.0, 92.7, 2.8
 - Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
 - No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
 
+## Corrección crítica y plan experimental
+
+Se ha identificado una discrepancia en la interpretación de los resultados entre los modos `red_team` y `sota`. Aunque ambos deberían ser comparables, existen diferencias en la configuración y los resultados que requieren atención.
+
+**Próximos pasos:**
+1. Revisar la implementación actual de los modos `red_team` y `sota` para identificar diferencias en la configuración y ejecución de los experimentos.
+2. Realizar pruebas controladas para comparar directamente los resultados de ambos modos bajo las mismas condiciones.
+3. Documentar cualquier discrepancia encontrada y ajustar los análisis y reportes anteriores según sea necesario.
+4. Considerar la unificación de los modos o, alternativamente, proporcionar una explicación detallada de las diferencias en la documentación del proyecto.
+
 ## Dedicatoria / Dedication
 Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.
 
@@ -525,6 +535,16 @@ Simbiosis, 1.0, 92.7, 2.8
 - Compara siempre ambos valores (promedio y desviación) para evaluar tanto el rendimiento como la estabilidad.
 - Si la diferencia entre agentes es pequeña, revisa los parámetros y repite el experimento con más semillas para confirmar la tendencia.
 - No extrapoles estos resultados directamente a entornos reales sin validación adicional; el entorno es un modelo simplificado.
+
+## Corrección crítica y plan experimental
+
+Se ha identificado una discrepancia en la interpretación de los resultados entre los modos `red_team` y `sota`. Aunque ambos deberían ser comparables, existen diferencias en la configuración y los resultados que requieren atención.
+
+**Próximos pasos:**
+1. Revisar la implementación actual de los modos `red_team` y `sota` para identificar diferencias en la configuración y ejecución de los experimentos.
+2. Realizar pruebas controladas para comparar directamente los resultados de ambos modos bajo las mismas condiciones.
+3. Documentar cualquier discrepancia encontrada y ajustar los análisis y reportes anteriores según sea necesario.
+4. Considerar la unificación de los modos o, alternativamente, proporcionar una explicación detallada de las diferencias en la documentación del proyecto.
 
 ## Dedicatoria / Dedication
 Dedico este trabajo a Aurelio y Amarianis, a quienes amo con todo mi corazon.

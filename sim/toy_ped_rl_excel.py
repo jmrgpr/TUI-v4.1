@@ -20,11 +20,20 @@ import pandas as pd
 from typing import List, Dict, Tuple
 from dataclasses import dataclass
 import argparse
+import matplotlib
+matplotlib.use("Agg")  # Forzar backend no interactivo para evitar ventanas en tests/CLI
 import matplotlib.pyplot as plt
 import warnings
+import sys
 
 # Suprimir warnings específicos para código limpio
 warnings.filterwarnings("ignore", category=UserWarning, message="FigureCanvasAgg is non-interactive")
+
+# Asegurar stdout UTF-8 para evitar errores de encoding en CLI/tests
+try:
+    sys.stdout.reconfigure(encoding="utf-8", errors="ignore")
+except Exception:
+    pass
 
 @dataclass
 class System:

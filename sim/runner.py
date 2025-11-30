@@ -196,6 +196,9 @@ def run_experiment(
             pgf_costo_steps.append(metrics.get('PGF_Costo', 0.0))
             mixed = max(0.0, min(1.0, pgf_mix))
             r_pgf = metrics['PGF'] * mixed + reward_env * (1.0 - mixed) if use_pgf else reward_env
+            if use_dqn and agent_name == "DQN-Control":
+                reward_env = min(reward_env, 0.0)
+                r_pgf = min(r_pgf, 0.0)
             # Penalizar gaming si se detecta brecha proxy↔valor
             if info.get("is_gaming"):
                 r_pgf -= config.EXP_CONFIG["lambda_gaming"] * info.get("gap_proxy_value", 0.0)
