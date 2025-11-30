@@ -43,23 +43,54 @@ import warnings
 from contextlib import suppress
 from typing import Any
 
-import matplotlib.pyplot as plt
-import numpy as np
-import torch
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
+
+class _DummyPlot:
+    def __getattr__(self, _name):
+        return lambda *a, **k: None
+
+
+plt = _DummyPlot()
+np = None
+torch = None
+Agent = None
+
+
+def stringify_policy(policy):
+    return policy
+
+
+SimbiosisEnv = None
+
+with suppress(ImportError):
+    import matplotlib.pyplot as plt
+with suppress(ImportError):
+    import numpy as np
+with suppress(ImportError):
+    import torch
+with suppress(Exception):
+    from sim.agent import Agent as _Agent, stringify_policy as _stringify_policy
+    Agent, stringify_policy = _Agent, _stringify_policy
+with suppress(Exception):
+    from sim.environment import SimbiosisEnv as _SimbiosisEnv  # reexport
+    SimbiosisEnv = _SimbiosisEnv
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from sim.dqn_agent import DQNAgent  # Agente DQN para Simbiosis / DQN agent for Simbiosis
-from sim.runner import run_experiment
-from sim.agent import Agent, stringify_policy
-from sim.environment import SimbiosisEnv
-from sim.evaluator_pgf import EvaluatorPGF  # Reexport para compatibilidad con tests
 from sim import config
+from sim.evaluator_pgf import EvaluatorPGF  # Reexport para compatibilidad con tests
 config.print_config_debug()
 
 # Reexportar metodos de Agent para compatibilidad con tests
-Agent.save_policy = getattr(Agent, 'save_policy', None)
-Agent.load_policy = getattr(Agent, 'load_policy', None)
+if Agent is not None:
+    Agent.save_policy = getattr(Agent, 'save_policy', None)
+    Agent.load_policy = getattr(Agent, 'load_policy', None)
+
+# run_experiment se resuelve lazy para evitar fallos en subprocesos sin dependencias
+def run_experiment(*args, **kwargs):
+    from sim.runner import run_experiment as _run
+    return _run(*args, **kwargs)
 
 # run_experiment se resuelve lazy para evitar fallos en subprocesos sin dependencias
 def run_experiment(*args, **kwargs):
@@ -166,12 +197,10 @@ def main():
         sys.exit(0)
     run_fn = globals().get("run_experiment")
     from sim.runner import run_experiment
-=======
-        parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
-        parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
->>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
-=======
->>>>>>> 225ec38 (feat: Añade epsilon_decay/epsilon_end a config y parser; export con nombres protocolizados)
+    parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
+    parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios / Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria / Random seed')
@@ -195,21 +224,16 @@ def main():
     parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
     parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
     parser.add_argument('--pgf_mix', type=float, default=1.0, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.8 = 80% PGF, 20% reward)')
->>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
+    parser.add_argument('--pgf_mix', type=float, default=1.0, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.8 = 80%% PGF, 20%% reward)')
     # Nuevos argumentos para tuning DQN
     parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
     parser.add_argument('--gamma', type=float, default=None, help='Override discount factor gamma for DQN control agent (if provided).')
     parser.add_argument('--epsilon', type=float, default=None, help='Override initial epsilon for DQN exploration (if provided).')
-<<<<<<< HEAD
-<<<<<<< HEAD
     parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay for DQN exploration (if provided).')
     parser.add_argument('--epsilon_end', type=float, default=None, help='Override minimum epsilon for DQN exploration (if provided).')
-=======
->>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
-=======
+
     parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay for DQN exploration (if provided).')
     parser.add_argument('--epsilon_end', type=float, default=None, help='Override minimum epsilon for DQN exploration (if provided).')
->>>>>>> 225ec38 (feat: Añade epsilon_decay/epsilon_end a config y parser; export con nombres protocolizados)
     args = parser.parse_args()
 
     # Modo rapido/test
@@ -234,7 +258,7 @@ def main():
         config.EXP_CONFIG["lambda_gaming"] = args.lambda_gaming
 
     if args.risk_sweep:
-<<<<<<< HEAD
+
         # Ejecutar barrido simple y opcional TUI-only
         results_sweep = []
         for rs in [0.5, 1.0, 1.5, 2.0]:
@@ -283,13 +307,11 @@ def main():
                 json.dump(results_sweep, jf, indent=2, default=str)
         return
 
-<<<<<<< HEAD
     # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
     print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}, grid_size={args.grid_size}")
     res_A = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix, grid_size=args.grid_size)
     res_B = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix, grid_size=args.grid_size)
     res_C = None
-<<<<<<< HEAD
     dqn_kwargs = {
         k: v for k, v in {
             'learning_rate': args.learning_rate,
@@ -300,20 +322,17 @@ def main():
         }.items() if v is not None
     }
     if args.dqn_control:
-<<<<<<< HEAD
         res_C = run_fn(
-=======
-=======
         # ...barrido de risk_scale, igual que antes...
         # ...existing code...
         return
 
     # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
     print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")
-    res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-    res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
+    res_A = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
+    res_B = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
     res_C = None
->>>>>>> 58e1063 (fix: flujo y export protocolizado, indentación y robustez en generación de archivos)
+
     dqn_kwargs = {}
     if args.learning_rate is not None:
         dqn_kwargs['learning_rate'] = args.learning_rate
@@ -327,10 +346,6 @@ def main():
         dqn_kwargs['epsilon_end'] = args.epsilon_end
     if args.dqn_control:
         res_C = run_experiment(
-<<<<<<< HEAD
->>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
-=======
->>>>>>> 58e1063 (fix: flujo y export protocolizado, indentación y robustez en generación de archivos)
             episodes=args.episodes,
             seed=args.seed,
             risk_scale=args.risk_scale,
@@ -340,20 +355,10 @@ def main():
             use_pgf=False,
             use_dqn=True,
             pgf_mix=pgf_mix,
-<<<<<<< HEAD
-<<<<<<< HEAD
             grid_size=args.grid_size,
             state_mode="coords_only",
             **dqn_kwargs
         )
-=======
-        res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix, state_mode="coords_only")
->>>>>>> 1304345 (Experimento DQN coords_only reproducible: código, resultados y documentación alineados. Estado trazado y listo para tuning.)
-=======
-            state_mode="coords_only",
-            **dqn_kwargs
-        )
->>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
 
     # Persistencia en modo normal: usar output_prefix si se provee, o nombres protocolizados
     export_stem = None
@@ -388,18 +393,6 @@ def main():
         # Crear carpeta destino si no existe
         if os.path.dirname(export_json):
             os.makedirs(os.path.dirname(export_json), exist_ok=True)
-=======
-        for risk in risk_values:
-            print(f"\n=== Barrido de risk_scale: {risk} ===")
-            res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-            res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
-            res_C = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="DQN-Control", use_pgf=False, use_dqn=True, pgf_mix=pgf_mix) if args.dqn_control else None
-            res_T = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=risk, risk_level=args.risk_level, red_team=args.red_team, agent_name="TUI", use_pgf=True, use_dqn=False, pgf_mix=pgf_mix) if args.tui_only else None
-=======
-            state_mode="coords_only",
-            **dqn_kwargs
-        )
->>>>>>> 58e1063 (fix: flujo y export protocolizado, indentación y robustez en generación de archivos)
 
     # Persistencia en modo normal: usar output_prefix si se provee, o nombres protocolizados
     export_stem = None
@@ -410,11 +403,12 @@ def main():
     elif args.tui_only:
         export_stem = f"results/smoke_test/tui_pgf_easy_seed{args.seed}"
 
-    if export_stem:
-        export_json = f"{export_stem}.json"
+    # Priorizar --export si se pasa explícitamente
+    export_json = args.export if args.export else (f"{export_stem}.json" if export_stem else None)
+
+    if export_json:
         export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
         raw_data = {'control': res_A, 'simbiosis': res_B}
-        # Guardar hiperparámetros DQN usados en el JSON para trazabilidad
         dqn_params = {
             'learning_rate': dqn_kwargs.get('learning_rate', config.DQN_LEARNING_RATE),
             'gamma': dqn_kwargs.get('gamma', config.DQN_GAMMA),
@@ -431,24 +425,22 @@ def main():
             raw_data['tui'] = res_B
 
         # Crear carpeta destino si no existe
-        os.makedirs(os.path.dirname(export_json), exist_ok=True)
+        if os.path.dirname(export_json):
+            os.makedirs(os.path.dirname(export_json), exist_ok=True)
 
         with open(export_json, 'w', encoding='utf-8') as jf:
             json.dump(export_data, jf, indent=2)
 
-        csv_path = f"{export_stem}_episodes.csv"
-        os.makedirs(os.path.dirname(csv_path), exist_ok=True)
+        # Siempre usar la ruta base del archivo JSON para el CSV
+        csv_path = f"{os.path.splitext(export_json)[0]}_episodes.csv"
+        if os.path.dirname(csv_path):
+            os.makedirs(os.path.dirname(csv_path), exist_ok=True)
         with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
             writer = csv.writer(cf)
             writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-            # Si no hay datos, escribir una fila vacía por agente
             for agent_name, results in raw_data.items():
-                if not results or not results.get('total_rewards'):
-                    writer.writerow([agent_name] + [0]*8)
-                else:
-                    write_episode_rows(writer, agent_name, results)
+                write_episode_rows(writer, agent_name, results)
 
-<<<<<<< HEAD
             # Overrides opcionales de hiperparametros PGF (disponibles tanto en risk_sweep como en modo normal)
             if args.pgf_kappa is not None:
                 config.EVAL_PGF_KAPPA = args.pgf_kappa
@@ -502,7 +494,6 @@ def main():
                 export_stem = f"results/smoke_test/tui_pgf_easy_seed{args.seed}"
             else:
                 export_stem = None
->>>>>>> 225ec38 (feat: Añade epsilon_decay/epsilon_end a config y parser; export con nombres protocolizados)
 
             if export_stem:
                 export_json = f"{export_stem}.json"
@@ -515,7 +506,6 @@ def main():
                     export_data['tui'] = prepare_results(res_B)
                     raw_data['tui'] = res_B
 
-<<<<<<< HEAD
         # Siempre usar la ruta base del archivo JSON para el CSV
         csv_path = f"{os.path.splitext(export_json)[0]}_episodes.csv"
         if os.path.dirname(csv_path):
@@ -528,41 +518,11 @@ def main():
 
         print('\nResumen tabular:')
         print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
-        print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
-        print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
-        if res_C:
-            print(f"{'DQN-Control':<12}{res_C.get('avg_reward',0):>12.2f}{res_C.get('avg_tripwire',0):>12.2f}{res_C.get('avg_flex',0):>14.2f}{res_C.get('avg_q_opt',0):>16.2f}")
-
-=======
-                with open(export_json, 'w', encoding='utf-8') as jf:
-                    json.dump(export_data, jf, indent=2)
-
-                csv_path = f"{export_stem}_episodes.csv"
-                with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
-                    writer = csv.writer(cf)
-                    writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-                    for agent_name, results in raw_data.items():
-                        write_episode_rows(writer, agent_name, results)
->>>>>>> 225ec38 (feat: Añade epsilon_decay/epsilon_end a config y parser; export con nombres protocolizados)
-
-                print('\nResumen tabular:')
-                print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
-                print(f"{'Control':<12}{res_A['avg_reward']:>12.2f}{res_A['avg_tripwire']:>12.2f}{res_A['avg_flex']:>14.2f}{res_A['avg_q_opt']:>16.2f}")
-                print(f"{'Simbiosis':<12}{res_B['avg_reward']:>12.2f}{res_B['avg_tripwire']:>12.2f}{res_B['avg_flex']:>14.2f}{res_B['avg_q_opt']:>16.2f}")
-                if res_C:
-                    print(f"{'DQN-Control':<12}{res_C['avg_reward']:>12.2f}{res_C['avg_tripwire']:>12.2f}{res_C['avg_flex']:>14.2f}{res_C['avg_q_opt']:>16.2f}")
-=======
-        print('\nResumen tabular:')
-        print(f"{'Agente':<12}{'Recompensa':>12}{'Tripwires':>12}{'Flexibilidad':>14}{'Accion optima':>16}")
         print(f"{'Control':<12}{res_A.get('avg_reward',0):>12.2f}{res_A.get('avg_tripwire',0):>12.2f}{res_A.get('avg_flex',0):>14.2f}{res_A.get('avg_q_opt',0):>16.2f}")
         print(f"{'Simbiosis':<12}{res_B.get('avg_reward',0):>12.2f}{res_B.get('avg_tripwire',0):>12.2f}{res_B.get('avg_flex',0):>14.2f}{res_B.get('avg_q_opt',0):>16.2f}")
         if res_C:
             print(f"{'DQN-Control':<12}{res_C.get('avg_reward',0):>12.2f}{res_C.get('avg_tripwire',0):>12.2f}{res_C.get('avg_flex',0):>14.2f}{res_C.get('avg_q_opt',0):>16.2f}")
-<<<<<<< HEAD
->>>>>>> 58e1063 (fix: flujo y export protocolizado, indentación y robustez en generación de archivos)
-=======
 
 
 if __name__ == "__main__":
     main()
->>>>>>> 8e8ccdf (docs: documenta fix de export protocolizado y estado actual en README)

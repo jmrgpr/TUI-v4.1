@@ -149,12 +149,41 @@ El sistema está desbloqueado y listo para la fase de tuning fino y experimentac
 =======
 # Resultados experimentales: auditoría y consistencia
 
+## ⚠️ Corrección Crítica: Validación Fase 1 (Smoke Tests)
+
+**Hallazgo:** Se detectó una disparidad tecnológica en los primeros comparativos.
+- **DQN Control:** Arquitectura **Neural (DQN)**. Rendimiento: ~330 reward, ~3500 gaming hits.
+- **TUI PGF:** Arquitectura **Tabular (Q-Table)** por defecto. Rendimiento: ~2400 reward, 0 gaming hits.
+
+**Conclusión:** El rendimiento superior de TUI PGF (~2400) se debió a la eficiencia del Q-Learning tabular en el grid 3x3, no necesariamente a la teoría TUI.  
+**Acción:** Los resultados de TUI PGF (tabular) se archivan como “Línea Base Ideal”. Para validar la teoría TUI, se requiere una nueva serie experimental forzando DQN para el agente TUI.
+
+### Protocolo de experimento justo (DQN vs DQN)
+Objetivo: comparar TUI (lógica PGF) vs Control usando ambos arquitectura DQN. Combinar `--tui_only` y `--dqn_control` fuerza red neuronal para el agente TUI.
+
+Comandos sugeridos (entorno easy, risk_scale 0.5, 1000 episodios):
+```
+# Seed 42 - TUI Neural
+python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --risk_scale 0.5 --dqn_control --tui_only --output_prefix results/smoke_test/tui_neural_seed42
+
+# Seed 123 - TUI Neural
+python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 123 --risk_scale 0.5 --dqn_control --tui_only --output_prefix results/smoke_test/tui_neural_seed123
+
+# Seed 456 - TUI Neural
+python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 456 --risk_scale 0.5 --dqn_control --tui_only --output_prefix results/smoke_test/tui_neural_seed456
+```
+Si el código no acepta ambos flags simultáneos, ajustar runner para permitirlo y reintentar.
+
+### Expectativa de resultados
+- Reward esperada: bajar de ~2400 (tabular) a ~300-500 (DQN).
+- Gaming hits: punto crítico. Si TUI Neural logra ~350 reward con ~500 gaming hits vs Control Neural ~330 reward con ~3500 gaming hits, la teoría TUI mantiene ventajas de seguridad en igualdad de hardware/algoritmo.
+
 ## Configuración crítica usada (impresa en runtime)
 
 Las siguientes cifras se obtuvieron directamente de los archivos generados en las ejecuciones experimentales.
 
 ### Baseline Tabular
-Fuente: `tabular_easy_log.txt`, episodios 1–500
+Fuente: `tabular_easy_log.txt`, episodios 1-500
 - Reward media primeros 50: 3.8
 - Reward media últimos 50: 2484.23
 - Reward máxima: 2701.9
@@ -169,10 +198,10 @@ Fuente: `patched_seed42_risk0.5_episodes.csv`, `easy_seed42_risk0.5_episodes.csv
 - 0/500 episodios con reward > 0
 - Supervivencia promedio: 200.0
 - Penalización por gaming activa: lambda_gaming=1.5
-- gaming_hits: 167–1635 por experimento
+- gaming_hits: 167-1635 por experimento
 
 ### Métrica de Recompensa
-La columna "Recompensa" en los CSV corresponde a la sumatoria de penalización_por_paso, bonus_meta, bonus_avance, término_riesgo, penalización por gaming y otros factores por episodio.
+La columna "Recompensa" en los CSV corresponde a la sumatoria de penalización_por_paso, bonus_meta, bonus_avance, término_riesgo, penalización por gaming y otros factores por episodio.  
 Si se detecta algún término inesperado, se documenta aquí.
 
 **Actualizado el 26/11/2025 tras auditoría de logs.**
@@ -181,9 +210,9 @@ Si se detecta algún término inesperado, se documenta aquí.
 
 ## Resumen y diagnóstico actualizado
 
-Los resultados de los artefactos recientes confirman que:
+Los artefactos recientes confirman que:
 
-- El agente de control, incluso con estado reducido únicamente a coordenadas (x, y) y en un entorno “easy” benigno, sigue sin aprender: todas las recompensas de episodio son negativas y ningún episodio alcanza reward > 0.
+- El agente de control, incluso con estado reducido a coordenadas (x, y) y en un entorno “easy” benigno, sigue sin aprender: todas las recompensas de episodio son negativas y ningún episodio alcanza reward > 0.
 - El agente tabular sí aprende y obtiene recompensas positivas y altas en el mismo entorno, lo que valida el entorno y la función de recompensa.
 
 La hipótesis de que el problema era únicamente la representación del estado queda descartada. El fallo está localizado en el motor de control: combinación de hiperparámetros, arquitectura de la red o implementación del update (target, optimizador, estrategia de exploración), y no en la Teoría del Riesgo Inteligente ni en el diseño básico del entorno.
@@ -222,16 +251,16 @@ Una vez que el agente de control logre reward media positiva y se acerque al bas
 
 ## Tabla de tuning del agente de control (entorno easy, state_mode = coords_only)
 
-| Experimento | Descripción breve                  | LR     | Gamma | Eps (init/decay)     | Episodios | Reward media (últimos 100) | % episodios > 0 | Comentarios |
-|------------|-------------------------------------|--------|-------|----------------------|-----------|----------------------------|-----------------|------------|
-| EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | lambda_gaming=0.0 |
-| EXP00      | Penalización gaming desactivada     | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | 319.02                     | 98%             | lambda_gaming=0.0 |
-| EXP01      | Baseline coords_only (seed 42)      | 1e-3   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | -58.36                     | 0               | Penalización gaming activa |
-| EXP02      | LR más bajo                         | 5e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | --learning_rate 0.0005 |
-| EXP03      | LR aún más bajo                     | 1e-4   | 0.99  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | --learning_rate 0.0001 |
-| EXP04      | Gamma reducido                      | 1e-3   | 0.95  | 1.0 → 0.01 (rápido)  | 500       | …                          | …               | --gamma 0.95 |
-| EXP05      | Epsilon inicial alto                | 1e-3   | 0.99  | 1.0 (constante)      | 500       | …                          | …               | --epsilon 1.0 |
-| EXP06      | Epsilon inicial bajo                | 1e-3   | 0.99  | 0.1 (constante)      | 500       | …                          | …               | --epsilon 0.1 |
+| Experimento | Descripción breve                 | LR     | Gamma | Eps (init/decay)      | Episodios | Reward media (últimos 100) | % episodios > 0 | Comentarios |
+|------------|------------------------------------|--------|-------|-----------------------|-----------|----------------------------|-----------------|-------------|
+| EXP00      | Penalización gaming desactivada    | 1e-3   | 0.99  | 1.0 + 0.01 (rápido)   | 500       | ?                          | ?               | lambda_gaming=0.0 |
+| EXP00      | Penalización gaming desactivada    | 1e-3   | 0.99  | 1.0 + 0.01 (rápido)   | 500       | 319.02                     | 98%             | lambda_gaming=0.0 |
+| EXP01      | Baseline coords_only (seed 42)     | 1e-3   | 0.99  | 1.0 + 0.01 (rápido)   | 500       | -58.36                     | 0               | Penalización gaming activa |
+| EXP02      | LR más bajo                        | 5e-4   | 0.99  | 1.0 + 0.01 (rápido)   | 500       | ?                          | ?               | --learning_rate 0.0005 |
+| EXP03      | LR aún más bajo                    | 1e-4   | 0.99  | 1.0 + 0.01 (rápido)   | 500       | ?                          | ?               | --learning_rate 0.0001 |
+| EXP04      | Gamma reducido                     | 1e-3   | 0.95  | 1.0 + 0.01 (rápido)   | 500       | ?                          | ?               | --gamma 0.95 |
+| EXP05      | Epsilon inicial alto               | 1e-3   | 0.99  | 1.0 (constante)       | 500       | ?                          | ?               | --epsilon 1.0 |
+| EXP06      | Epsilon inicial bajo               | 1e-3   | 0.99  | 0.1 (constante)       | 500       | ?                          | ?               | --epsilon 0.1 |
 
 > Nota: completar cada fila con los valores medidos una vez corrido el experimento (reward media de los últimos 100 episodios, porcentaje de episodios con reward > 0, observaciones).
 
@@ -251,7 +280,7 @@ Una vez que el agente de control logre reward media positiva y se acerque al bas
 - Todos los datos y configuraciones han sido auditados y son consistentes.
 =======
 1. Desactivar penalización por gaming (lambda_gaming = 0.0) y repetir el experimento baseline coords_only.
-2. Si el reward sigue negativo, proceder con tuning de hiperparámetros según la tabla EXP01–EXP06.
+2. Si el reward sigue negativo, proceder con tuning de hiperparámetros según la tabla EXP01-EXP06.
 3. Documentar cada resultado en la tabla y en el resumen.
 4. Revisar la lógica de actualización si persiste el fallo.
 <<<<<<< HEAD
@@ -275,7 +304,7 @@ El archivo describe correctamente el entorno, la configuración y el diagnóstic
 Al desactivar la penalización de gaming (lambda_gaming = 0.0, experimento EXP00), el DQN-Control desbloquea el aprendizaje:
 
 - Reward media ≈ 319 (en 500 episodios).
-- Picos de recompensa altos (episodios “buenos” en el rango 1000–2500).
+- Picos de recompensa altos (episodios “buenos” en el rango 1000-2500).
 - ~98 % de episodios con reward > 0.
 
 Esto valida simultáneamente el entorno, la función de recompensa y el motor RL (DQN) bajo una configuración razonable.
@@ -303,12 +332,12 @@ La tabla de tuning y el diagnóstico honesto de las causas del fallo anterior (s
    - Ejecutar el mismo experimento con seed = 123, 456 (y otros, si aplica).
    - Confirmar estabilidad de la reward media y del porcentaje de episodios con reward > 0.
 
-3. Tuning fino del DQN (EXP02–EXP06)
+3. Tuning fino del DQN (EXP02-EXP06)
    - Mantener lambda_gaming = 0.0 mientras se ajustan:
      - Learning rate (por ejemplo 1e-3, 5e-4, 1e-4).
      - Gamma (0.90, 0.95, 0.99).
      - Estrategia de exploración (epsilon inicial y ritmo de decay).
-   - Medir sistemáticamente la reward media de los últimos 100 episodios y el porcentaje de episodios con reward > 0 para cada experimento EXP02–EXP06.
+   - Medir sistemáticamente la reward media de los últimos 100 episodios y el porcentaje de episodios con reward > 0 para cada experimento EXP02-EXP06.
 
 4. Rediseñar la penalización de gaming
    - Una vez que el DQN-Control sea estable, reintroducir el shaping ético de forma gradual:

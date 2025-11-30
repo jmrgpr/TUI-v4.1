@@ -59,7 +59,8 @@ class DQNAgent:
         self.epsilon_end = epsilon_end
         self.batch_size = batch_size
         self.memory = deque(maxlen=memory_size)
-        self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        # Siempre usar CPU para evitar errores CUDA en entornos sin GPU compatible
+        self.device = torch.device("cpu")
         self.model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim).to(self.device)
         # Target network para estabilidad (DQN clásico)
         self.target_model = DQNNet(state_dim, action_dim, hidden_dim=hidden_dim).to(self.device)

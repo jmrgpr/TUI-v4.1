@@ -2,6 +2,9 @@ import warnings
 import matplotlib
 matplotlib.use('Agg')  # Backend no interactivo para tests
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> e960eb9 (Cobertura 99%, smoke test validado, artefactos exportados y simulador robusto listo para publicación.)
 import streamlit as st
 import os
 from pathlib import Path
@@ -26,8 +29,11 @@ try:
             os.environ["PATH"] = str(venv_scripts) + os.pathsep + os.environ.get("PATH", "")
 except Exception:
     pass
+<<<<<<< HEAD
 =======
 >>>>>>> 1c1f237 (Actualización científica y operativa: protocolo bilingüe, criterios cuantitativos, checklist y scripts alineados. Listo para experimento Fase 2.)
+=======
+>>>>>>> e960eb9 (Cobertura 99%, smoke test validado, artefactos exportados y simulador robusto listo para publicación.)
 
 # Suprimir warnings específicos
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="numpy")
@@ -37,7 +43,11 @@ warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="runpy")
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 <<<<<<< HEAD
+<<<<<<< HEAD
 warnings.filterwarnings("ignore", category=FutureWarning)
 =======
 warnings.filterwarnings("ignore", category=FutureWarning)
 >>>>>>> 1c1f237 (Actualización científica y operativa: protocolo bilingüe, criterios cuantitativos, checklist y scripts alineados. Listo para experimento Fase 2.)
+=======
+warnings.filterwarnings("ignore", category=FutureWarning)
+>>>>>>> e960eb9 (Cobertura 99%, smoke test validado, artefactos exportados y simulador robusto listo para publicación.)

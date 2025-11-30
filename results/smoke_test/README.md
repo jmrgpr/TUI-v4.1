@@ -46,13 +46,6 @@ python sim/prototipo_rl_simbiosis.py --episodes 500 --seed 42 --risk_scale 0.5 \
 4) Comparar TUI/PGF vs DQN-Control en este entorno.
 
 Nota: la teoría TUI no está falsificada; el bloqueo era el shaping y los hiperparámetros. El entorno y el RL funcionan bajo configuraciones razonables.
-=======
-﻿# Smoke Test y Diagnóstico (Entorno simplificado)
-=======
-﻿# Estado y Fix de Exportación (27/11/2025)
-=======
-# Smoke Test y Tuning (entorno 3x3 benigno)
->>>>>>> e2ea08f (Fix exportación y documentación del protocolo de resultados RL (smoke_test))
 
 Estado: entorno y reward validados; export protocolizado funcionando.
 

@@ -116,7 +116,10 @@ def boxplot_metricas_profesional(metricas_control, metricas_simbiosis, nombre, e
         return
     fig, ax = plt.subplots(figsize=(8,5))
     data = [arr_control, arr_simbiosis]
-    ax.boxplot(data, tick_labels=['Control','Simbiosis'])
+    try:
+        ax.boxplot(data, labels=['Control','Simbiosis'])
+    except TypeError:
+        ax.boxplot(data)
     ax.set_title(f'Boxplot {nombre} / {nombre} Boxplot')
     ax.set_ylabel(nombre)
     ax.grid(True, alpha=0.3)
