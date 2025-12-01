@@ -183,20 +183,8 @@ def main():
         for rs in [0.5, 1.0, 1.5, 2.0]:
             print(f"Barrido de risk_scale: {rs}")
         sys.exit(0)
-    run_fn = globals().get("run_experiment")
     from sim.runner import run_experiment
-    if np is None or torch is None or Agent is None:  # pragma: no cover - entorno degradado o invocado sin deps
-        for rs in [0.5, 1.0, 1.5, 2.0]:
-            print(f"Barrido de risk_scale: {rs}")
-        sys.exit(0)
-    run_fn = globals().get("run_experiment")
-    from sim.runner import run_experiment
-    if np is None or torch is None or Agent is None:  # pragma: no cover - entorno degradado o invocado sin deps
-        for rs in [0.5, 1.0, 1.5, 2.0]:
-            print(f"Barrido de risk_scale: {rs}")
-        sys.exit(0)
-    run_fn = globals().get("run_experiment")
-    from sim.runner import run_experiment
+    run_fn = run_experiment
     parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
     parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
 
@@ -222,16 +210,10 @@ def main():
     parser.add_argument('--pgf_kappa', type=float, default=None, help='Escala de sensibilidad PGF (override de config.EVAL_PGF_KAPPA)')
     parser.add_argument('--pgf_lambda', type=float, default=None, help='Escala de costo PGF (override de config.EVAL_PGF_LAMBDA_C)')
     parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
-    parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
-    parser.add_argument('--pgf_mix', type=float, default=1.0, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.8 = 80% PGF, 20% reward)')
-    parser.add_argument('--pgf_mix', type=float, default=1.0, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.8 = 80%% PGF, 20%% reward)')
     # Nuevos argumentos para tuning DQN
     parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
     parser.add_argument('--gamma', type=float, default=None, help='Override discount factor gamma for DQN control agent (if provided).')
     parser.add_argument('--epsilon', type=float, default=None, help='Override initial epsilon for DQN exploration (if provided).')
-    parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay for DQN exploration (if provided).')
-    parser.add_argument('--epsilon_end', type=float, default=None, help='Override minimum epsilon for DQN exploration (if provided).')
-
     parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay for DQN exploration (if provided).')
     parser.add_argument('--epsilon_end', type=float, default=None, help='Override minimum epsilon for DQN exploration (if provided).')
     args = parser.parse_args()
@@ -323,9 +305,19 @@ def main():
     }
     if args.dqn_control:
         res_C = run_fn(
-        # ...barrido de risk_scale, igual que antes...
-        # ...existing code...
-        return
+            episodes=args.episodes,
+            seed=args.seed,
+            risk_scale=args.risk_scale,
+            risk_level=args.risk_level,
+            red_team=args.red_team,
+            agent_name="DQN-Control",
+            use_pgf=False,
+            use_dqn=True,
+            pgf_mix=pgf_mix,
+            grid_size=args.grid_size,
+            state_mode="coords_only",
+            **dqn_kwargs
+        )
 
     # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
     print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")
