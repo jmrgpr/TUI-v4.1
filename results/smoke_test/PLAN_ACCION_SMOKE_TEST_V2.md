@@ -232,17 +232,19 @@ done
 
 ## 5. ROADMAP DE EJECUCIÓN
 
-### Fase 1: Validación Rápida (URGENTE - 4 horas)
+### Fase 1: Validación Rápida ✅ COMPLETADA (1 dic 2025)
 1. ✅ Diagnóstico completo (COMPLETADO)
-2. ⏳ Ejecutar EXP_FIX_01, 02, 03 (pgf_mix sweep)
-3. ⏳ Analizar resultados y confirmar desbloqueo
-4. ⏳ Documentar en RESULTADOS_TUNING_DQN.md
+2. ✅ Ejecutar EXP_FIX_01, 02, 03 (pgf_mix sweep) - **100% éxito**
+3. ✅ Analizar resultados y confirmar desbloqueo - **Validado**
+4. ✅ Documentar en RESULTADOS_FIX_PGF_MIX.md y RESULTADOS_TUNING_DQN.md
 
-### Fase 2: Implementación Robusta (1-2 días)
-1. ⏳ Decidir entre Solución A, B o C basado en Fase 1
-2. ⏳ Implementar solución elegida
-3. ⏳ Ejecutar runs completos (1000 ep, seeds 42/123/456)
-4. ⏳ Validar métricas cumplen criterios de éxito
+**Resultado:** Solución A validada, pgf_mix=0.2 óptimo (commit f9b8972)
+
+### Fase 2: Implementación Robusta 🔄 EN PROGRESO (1 dic 2025)
+1. ✅ Decidir entre Solución A, B o C → **Solución A seleccionada**
+2. ✅ Implementar solución → **Default pgf_mix=0.2 (commit 2ca8159)**
+3. ⏳ Ejecutar runs completos (1000 ep, seeds 42/123/456) - **Scripts creados**
+4. ⏳ Validar métricas cumplen criterios de éxito - **Pendiente ejecución**
 
 ### Fase 3: Tuning y Optimización (2-3 días)
 1. ⏳ Ejecutar EXP02-05 (sweeps hiperparámetros)

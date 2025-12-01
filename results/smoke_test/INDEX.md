@@ -23,7 +23,23 @@
 
 ---
 
-### 2. RESULTADOS Y ANÁLISIS
+### 2. SCRIPTS DE AUTOMATIZACIÓN ⚙️ NUEVO
+
+#### 🔧 **scripts/run_validation_long.ps1** ⭐
+- **Propósito:** Ejecución automatizada validación robusta
+- **Contenido:** 1000 ep × 3 seeds (42, 123, 456), pgf_mix=0.2
+- **Audiencia:** Automatización de experimentos Phase 2
+- **Estado:** ✅ Listo para ejecutar (commit 2ca8159)
+
+#### 📊 **scripts/analyze_validation_long.py** ⭐
+- **Propósito:** Análisis estadístico automático de validación
+- **Contenido:** Convergencia, intervalos confianza, t-tests, gráficos
+- **Audiencia:** Análisis post-ejecución Phase 2
+- **Estado:** ✅ Listo para usar (commit 2ca8159)
+
+---
+
+### 3. RESULTADOS Y ANÁLISIS
 
 #### 📊 **RESULTADOS_TUNING_DQN.md** ⭐
 - **Propósito:** Documento central de resultados y tuning

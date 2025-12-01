@@ -20,6 +20,26 @@
 
 Este To Do refleja el avance hacia evidencia empirica preliminar de alineacion escalable via Simbiosis Constitutiva y los siguientes pasos para robustez, reproducibilidad y publicacion.
 
+## ✅ COMPLETADO (1 dic 2025)
+
+### Smoke Test Fix (Fase 1)
+- ✅ Diagnóstico problema pgf_mix: agentes simbiosis/TUI bloqueados (0/2000 ep >0)
+- ✅ Causa raíz identificada: PGF_Neto negativo con pgf_mix=1.0 en entorno benigno
+- ✅ Solución validada: 3 experimentos (pgf_mix 0.0/0.2/0.5) → 100% éxito
+- ✅ Documentación exhaustiva: INDEX.md, DIAGNOSTICO, RESULTADOS_FIX_PGF_MIX, PLAN_ACCION
+- ✅ Commit f9b8972: 9 MD files + 3 CSV fix + análisis completo
+- ✅ Default pgf_mix actualizado: 1.0 → 0.2 en prototipo_rl_simbiosis.py
+- ✅ Scripts automatización: run_validation_long.ps1 + analyze_validation_long.py
+- ✅ Commit 2ca8159: Fase 2 iniciada, scripts listos
+
+## 🔄 EN PROGRESO
+
+### Validación Estadística Robusta (Fase 2)
+- ⏳ Ejecutar runs largos: 1000 ep × 3 seeds (scripts creados, pendiente ejecución)
+- ⏳ Análisis estadístico: convergencia, intervalos confianza, t-tests
+- ⏳ Reporte VALIDATION_REPORT.md automático
+- ⏳ Gráficos convergencia DOI-ready
+
 ## Proximos pasos ampliados
 
 ### Expansion y robustez experimental
