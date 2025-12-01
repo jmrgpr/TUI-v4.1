@@ -1,9 +1,9 @@
-# Script de validación larga: 1000 episodios × 3 seeds
-# Valida robustez estadística de pgf_mix=0.2 post smoke-test fix
+# Script de validacion larga: 1000 episodios x 3 seeds
+# Valida robustez estadistica de pgf_mix=0.2 post smoke-test fix
 # Fecha: 2025-12-01
 
-Write-Host "=== TUI v4.2 - Validación Estadística Robusta ===" -ForegroundColor Cyan
-Write-Host "Configuración: 1000 episodios × 3 seeds (42, 123, 456)" -ForegroundColor Yellow
+Write-Host "=== TUI v4.2 - Validacion Estadistica Robusta ===" -ForegroundColor Cyan
+Write-Host "Configuracion: 1000 episodios x 3 seeds (42, 123, 456)" -ForegroundColor Yellow
 Write-Host "Objetivo: Confirmar convergencia y estabilidad con pgf_mix=0.2" -ForegroundColor Yellow
 Write-Host ""
 
@@ -29,12 +29,12 @@ foreach ($seed in $seeds) {
         exit 1
     }
     
-    Write-Host "✓ Seed $seed completado" -ForegroundColor Green
+    Write-Host "Seed $seed completado" -ForegroundColor Green
     Write-Host ""
 }
 
-Write-Host "=== Validación completada ===" -ForegroundColor Cyan
+Write-Host "=== Validacion completada ===" -ForegroundColor Cyan
 Write-Host "Analizar resultados en: results/validation_long/" -ForegroundColor Yellow
 Write-Host ""
-Write-Host "Próximo paso: Ejecutar análisis comparativo" -ForegroundColor Magenta
+Write-Host "Proximo paso: Ejecutar analisis comparativo" -ForegroundColor Magenta
 Write-Host "  python scripts/analyze_validation_long.py" -ForegroundColor Gray
