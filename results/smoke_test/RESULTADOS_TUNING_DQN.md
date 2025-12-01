@@ -88,13 +88,8 @@ DQN-Control mantiene una recompensa media positiva en ~66% de los episodios, per
 - [ ] Archivos exportados con nombres protocolizados
 - [ ] Métricas principales revisadas y documentadas
 - [ ] Documentación actualizada
-- [ ] Reporte final generado
-
 Propósito: documentar el estado de los baselines DQN en el smoke test benigno (grid 3x3, penalizaciones -0.01, bonus 100, sin red team) y guiar el tuning.
 
-## Baselines disponibles
-- Tabular (control): `tabular_easy_log.txt`
-  - Episodios: 500
   - Reward media primeros 50: 3.8
   - Reward media últimos 50: 2484.23
   - Reward máx/min: 2701.9 / 1.3
@@ -104,9 +99,6 @@ Propósito: documentar el estado de los baselines DQN en el smoke test benigno (
   | Archivo CSV | Seed | Reward media | Min / Max | Episodios > 0 |
   | --- | --- | --- | --- | --- |
   | dqn_xy_gamingoff_seed42_risk0.5_episodes.csv | 42 | 110.22 | -3750.00 / 2701.90 | 1000 / 1500 |
-  | dqn_xy_gamingoff_seed123_seed123_risk0.5_episodes.csv | 123 | 105.80 | -3450.00 / 2701.90 | 1000 / 1500 |
-  | dqn_xy_gamingoff_seed456_seed456_risk0.5_episodes.csv | 456 | 93.11 | -3330.00 / 2602.10 | 1000 / 1500 |
-  Observación: recompensa neta positiva pero con varianza alta.
 
 - DQN con penalización de gaming activa (legacy):
   | Archivo CSV | Seed | Reward media | Min / Max | Episodios > 0 |
@@ -132,7 +124,6 @@ Observación: la penalización agresiva ahoga la señal.
   | tui_pgf_easy_seed456_episodes.csv | 456 | 3000 | 52.33 | -3520.00 / 2302.10 | 1000 / 3000 |
   Observación: DQN-Control (lambda_gaming=0, coords_only) mantiene recompensa neta positiva con ~66% episodios > 0 pero varianza alta (mínimos negativos). TUI/PGF también positivo pero más bajo y 1/3 episodios > 0.
 
-## Tabla de tuning (por completar)
 | Experimento | Configuración | Episodios | Reward últimos 100 | % > 0 | Comentarios |
 | --- | --- | --- | --- | --- | --- |
 | EXP00 | coords_only, lambda_gaming=0.0 (baseline) | 1500 | ver arriba | ~66% | Variancia alta, pero positiva |
@@ -140,11 +131,62 @@ Observación: la penalización agresiva ahoga la señal.
 | EXP03 | Gamma sweep | pendiente | | | |
 | EXP04 | Epsilon/decay sweep | pendiente | | | |
 
-## Próximos pasos
-1) Repetir runs protocolizados largos (1000 ep) para `dqn_control_easy_seed{42,123,456}` y `tui_pgf_easy_seed{42,123,456}`, registrar medias y % > 0 aquí.
-2) Ejecutar EXP02–EXP04 con lambda_gaming=0.0 (barrer LR, gamma, epsilon/decay) y completar la tabla.
-3) Luego, reintroducir una penalización de gaming suave (warm-up/umbrales/caps) y medir impacto.
+## ⚠️ PROBLEMA CRÍTICO IDENTIFICADO Y RESUELTO (1 dic 2025)
 
+<<<<<<< HEAD
+=======
+### Diagnóstico
+Los runs protocolizados completos (seeds 123/456) revelaron que **agentes simbiosis/tui estaban completamente bloqueados**:
+- **0/2000 episodios con reward >0**
+- Medias: -88.31 y -83.91
+- Agentes control (tabular) y dqn_control funcionaban perfectamente
+
+**Causa raíz:** 
+PGF_Neto = PGF_Bruto - PGF_Costo
+         = 0.0 - X  (donde X > 0)
+         = NEGATIVO
+```
+
+En entorno 3×3 benigno sin tripwires activos:
+- `PGF_Bruto ≈ 0` (sin delta_P por reducción de riesgo)
+- `PGF_Costo > 0` (consumo normal de recursos)
+Se ejecutaron 3 experimentos de validación (100 ep, seed 42):
+
+
+**Resultado:** ✅ **DESBLOQUEO CONFIRMADO** con pgf_mix < 1.0
+
+**Configuración recomendada:** `pgf_mix=0.2` (80% reward_env + 20% PGF)
+
+Ver detalles completos en: `RESULTADOS_FIX_PGF_MIX.md`
+
+## Próximos pasos (ACTUALIZADOS)
+1) ✅ Problema identificado y resuelto (pgf_mix ajustado)
+2) ⏳ Ejecutar runs largos (1000 ep) con pgf_mix=0.2 para seeds 42/123/456
+3) ⏳ Comparar TUI/PGF (pgf_mix=0.2) vs DQN-Control de forma justa
+4) ⏳ Ejecutar EXP02–EXP04 (barrer LR, gamma, epsilon/decay) post-desbloqueo
+5) ⏳ Implementar Solución B (rediseño PGF con survival_bonus) para validar pgf_mix=1.0
+
+Nota: la teoría/entorno son válidos; el bloqueo estaba en pgf_mix=1.0 para entorno benigno. Este documento se enfoca en dejar claro qué configuraciones funcionan y cuáles no.
+
+---
+
+# Plan de ejecución y validación de runs largos (smoke_test)
+
+## Objetivo
+Ejecutar los experimentos largos (1000 episodios) para las semillas 42, 123 y 456 usando los agentes DQN-Control y TUI/PGF, exportando los resultados con nombres protocolizados. Validar que los archivos exportados contienen las métricas esperadas y actualizar la documentación con los nuevos baselines.
+
+## Pasos a seguir
+1. Ejecutar los runs largos para cada semilla y agente:
+   - DQN-Control: `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed {seed} --grid_size 5 --risk_scale 1.0 --dqn_control --output_prefix results/smoke_test/dqn_control_easy_seed{seed}`
+   - TUI/PGF: `python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed {seed} --grid_size 5 --risk_scale 1.0 --tui_only --pgf_mix 1.0 --output_prefix results/smoke_test/tui_pgf_easy_seed{seed}`
+   - Semillas: 42, 123, 456
+
+2. Verificar que los archivos `.json` y `.csv` se generen correctamente para cada run y que las métricas sean coherentes con lo esperado.
+
+3. Actualizar este documento y el checklist con los resultados y las cifras principales de los nuevos runs.
+
+4. Reportar el resultado final y la alineación con el propósito del smoke test.
+>>>>>>> f9b8972 (fix: Resolver bloqueo agentes simbiosis/TUI ajustando pgf_mix)
 
 ---
 

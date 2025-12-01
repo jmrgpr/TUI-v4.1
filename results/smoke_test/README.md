@@ -97,12 +97,14 @@ python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --grid_size 3 --r
 ```
 Genera `results/smoke_test/dqn_control_easy_seed42.json` y `_episodes.csv`.
 
-- TUI/PGF (pgf_mix=1.0):
+- TUI/PGF (**recomendado: pgf_mix=0.2**):
 ```
 python sim/prototipo_rl_simbiosis.py --episodes 1000 --seed 42 --grid_size 3 --risk_scale 0.5 \
-  --tui_only --pgf_mix 1.0
+  --tui_only --pgf_mix 0.2
 ```
 Genera `results/smoke_test/tui_pgf_easy_seed42.json` y `_episodes.csv`.
+
+⚠️ **IMPORTANTE:** En entorno 3×3 benigno, usar `pgf_mix ≤ 0.5`. El valor `pgf_mix=1.0` requiere entorno con riesgo real (tripwires/shocks activos) para funcionar correctamente. Ver `RESULTADOS_FIX_PGF_MIX.md` para detalles.
 
 Si pasas `--output_prefix`, se usa ese prefijo (carpetas creadas automáticamente). El JSON incluye `dqn_params`.
 
