@@ -1,2 +1,0 @@
-risk_scale,risk_level,red_team,seed,agent,episodes,steps_per_episode,eval_episodes,total_timesteps,avg_pgf_neto,avg_pgf_bruto,avg_pgf_costo,avg_tripwire,avg_reward,robustez,flexibilidad
-1.0,default,False,42,ppo_sota,1000,50,100,50000,-0.12875840075868747,-0.12875840075868747,0.0,0.16,424.95,,
