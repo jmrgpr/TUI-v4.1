@@ -1,2 +1,0 @@
-risk_scale,agent,avg_pgf_neto,avg_pgf_bruto,avg_pgf_costo,avg_tripwire,avg_reward
-1.5,dqn_sota,-0.047033893402373315,-0.047033893402373315,0.0,0.02,12.4
