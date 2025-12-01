@@ -6,14 +6,10 @@ __pycache__/
 .env
 .DS_Store
 *.sqlite3
-*.log
 
-# Excluir archivos JSON/CSV grandes de results (mantener solo archivos pequeños y documentación)
+# Excluir solo archivos JSON grandes de results (mantener CSV y logs)
 results/**/*.json
-results/**/*_episodes.csv
 !results/**/README*.md
-!results/**/*summary*.csv
-!results/**/phase2_summary.md
 # Puedes añadir más patrones según tus necesidades
 None
 None_episodes.csv
