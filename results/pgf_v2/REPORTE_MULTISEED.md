@@ -253,6 +253,6 @@ Proceed with **PGF v3 (3-4× bonuses)** as natural iteration before considering 
 
 ---
 
-**Autor / Author:** GitHub Copilot (Claude Sonnet 4.5)  
+**Autor / Author:** Jose M Rivera Garcia  
 **Revisión / Review:** Completada (3 seeds ejecutados) / Completed (3 seeds executed)  
 **Estado / Status:** ✅ **VALIDACIÓN COMPLETA** - Listo para decisión PGF v3 / **VALIDATION COMPLETE** - Ready for PGF v3 decision

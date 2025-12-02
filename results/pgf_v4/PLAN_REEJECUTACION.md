@@ -5,9 +5,9 @@
 
 ---
 
-## Problema Identificado por Codex
+## Problema Identificado por IA
 
-✅ **CODEX TIENE RAZÓN**
+✅ **IA TIENE RAZÓN**
 
 ### Evidencia del problema:
 

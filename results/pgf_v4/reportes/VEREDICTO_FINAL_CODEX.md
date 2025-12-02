@@ -1,13 +1,13 @@
-# Validación de Crítica de Codex: VEREDICTO FINAL
+# Validación de Crítica de IA: VEREDICTO FINAL
 
 **Fecha:** 2 de diciembre de 2025, 16:10  
 **Evaluador:** Sistema de auditoría automatizado
 
 ---
 
-## Veredicto: ✅ CODEX TIENE RAZÓN
+## Veredicto: ✅ IA TIENE RAZÓN
 
-### Crítica de Codex:
+### Crítica:
 > "Los JSON no guardan config (grid_size, risk_scale, pgf_mix quedan en None), así que no hay trazabilidad. Con esto, aunque el CSV arroja ratio 32.41%, no puedo afirmar que sea un experimento 4x4."
 
 ### Validación:
@@ -45,7 +45,7 @@ config: [null/vacío]
 - El mecanismo siempre funcionó
 
 ### 2. "No hay metadata en JSON"
-**Respuesta:** ✅ **CODEX TIENE RAZÓN**
+**Respuesta:** ✅ **IA TIENE RAZÓN**
 - Mejoras implementadas: runner.py incluye `config`
 - **Pero:** JSON existentes generados antes de la mejora
 - **Solución:** Re-ejecutar experimentos
@@ -150,7 +150,7 @@ El "valle de dificultad" (4x4 < 5x5) es real porque:
 
 ---
 
-## Resumen para Codex
+## Resumen
 
 **Tu crítica era correcta en el punto esencial:**
 

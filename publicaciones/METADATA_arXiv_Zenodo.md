@@ -130,7 +130,7 @@ The author declares no competing financial interests or personal relationships t
 
 **Para incluir en el Technical Report**:
 
-> This work builds on the Unified Intelligence Theory framework. I thank the open-source reinforcement learning community for tools (PyTorch, Gymnasium, NumPy, Matplotlib) that made this research possible. Special thanks to the r/UnifiedIntelligence community for early feedback on conceptual design. AI assistants (Claude, GitHub Copilot) provided coding and documentation support—a reminder that human-AI collaboration is itself a form of "symbiosis."
+> This work builds on the Unified Intelligence Theory framework. I thank the open-source reinforcement learning community for tools (PyTorch, Gymnasium, NumPy, Matplotlib) that made this research possible. Special thanks to the r/UnifiedIntelligence community for early feedback on conceptual design. AI assistants provided coding and documentation support—a reminder that human-AI collaboration is itself a form of "symbiosis."
 
 ---
 

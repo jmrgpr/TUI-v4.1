@@ -7,7 +7,7 @@ Este documento fusiona el protocolo general y el específico de Experimento 2, a
 ## Protocolo General
 
 Fecha: 25/11/2025
-Autor: GitHub Copilot (GPT-4.1)
+Autor: Jose M Rivera Garcia
 
 ## Objetivo
 Garantizar que los datos experimentales de TUI-v4.1 y SOTA sean comparables, completos y aptos para análisis y revisión por pares.

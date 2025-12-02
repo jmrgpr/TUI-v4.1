@@ -4,7 +4,7 @@
 
 ### 1. Documentación
 - Todos los README.md principales (raíz, sim/, scripts/, results/exp_tui_experiment2_full/) están actualizados y reflejan el estado real del código, experimentos y gaps científicos.
-- Los TODO y logs están alineados con los hallazgos de Claude y la validación directa.
+- 
 
 ### 2. Simulador y Scripts
 - Modularidad y reproducibilidad validadas.

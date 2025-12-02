@@ -1475,7 +1475,7 @@ Especies con:
 
 ### 7.1 Motivación: La Escala Importa
 
-**Contraejemplo Aparente (Gemini):**  
+**Contraejemplo Aparente:**  
 "Una hormiga individual tiene $P_{\text{riesgo}}$ muy bajo (no se auto-replica, vida corta sin trayectoria evolutiva propia), pero el hormiguero muestra inteligencia alta. Esto refuta H1."
 
 **Respuesta (Axioma de Escala):**  
@@ -3108,7 +3108,6 @@ Este documento sintetiza ideas de:
 - Diálogo filosófico sobre naturaleza de la inteligencia (Octubre 2025)
 - Observaciones del experimento del robot perdiendo aceite
 
-Agradecimientos especiales a Claude Sonnet 4.5 por asistencia en estructuración y formalización.
 
 ---
 

@@ -1393,8 +1393,178 @@ Especies con:
 - Grupo A: Penalización por error sin mecanismo de recuperación (alto $P^{\text{eff}}_t$)
 - Grupo B: Errores sin consecuencias reales (bajo $P^{\text{eff}}_t$)
 - Control: Mantener $S_t$ constante, medir pendiente de F/T durante 1000 episodios
-- Medición: Curva de aprendizaje (reward acumulado) y transferencia (few-shot) en tareas nuevas
-- Predicción PGF: Grupo A muestra mayor $\Delta I_{\text{útil}}$ sostenida que Grupo B
+
+**Criterio de falsación:** Si $I_{\text{genuina}}$ sigue creciendo linealmente con compute en estos casos → PGF refutado
+
+**P-PGF-3: Reactivación por Distribution Shift**
+
+**Predicción:** En sistemas con $P^{\text{eff}}_t > 0$ y $A_t > 0$, introducir cambios programados de distribución (elevar $S_t$) reactivará mejora en F/T tras período de plateau.
+
+**Protocolo:**
+- Fase 1: Fine-tuning en distribución fija hasta plateau (50 epochs)
+- Fase 2: Introducir shift cada 10 epochs (nueva distribución de ejemplos)
+- Medición: Curva de few-shot accuracy en dominios nuevos
+
+**Predicción cuantitativa:** Pendiente Fase 2 > 0.3 × Pendiente inicial (p < 0.05)
+
+**Criterio de falsación:** Si pendiente Fase 2 ≤ 0 o no significativa → mecanismo de reactivación refutado
+
+**P-PGF-4: Alineación como Modulador**
+
+**Predicción:** Bajo igual $P^{\text{eff}}_t$ y $S_t$, solo agentes con $A_t > \tau$ (umbral de alineación) convertirán error en mejora de F/T genuina; agentes con $A_t$ bajo mejorarán solo C (capacidad estadística).
+
+**Test:** Medir correlación entre $A_t$ (GDC/CR en ventana móvil) y $\Delta I_{\text{genuina}}$ (cambio en F/T) en cohorte de 100 agentes durante 500 episodios.
+
+**Predicción:** $\text{corr}(A_t, \Delta F/T) > 0.6$ con $p < 0.001$
+
+**Criterio de falsación:** Si correlación < 0.3 o no significativa → rol de alineación refutado
+
+**P-PGF-5: Colectivos bajo Riesgo de Red**
+
+**Predicción:** En sistemas multi-agente, $\Delta I_{\text{col}}$ correlacionará con $P^{\text{col}}_{\text{riesgo}} \cdot A_{\text{net}}$, controlando por $\Delta C_t^{\text{comms}}$ (costo de comunicación).
+
+**Diseño experimental:**
+- Enjambres con topologías variables ($\kappa(M)$ alto/bajo)
+- Redundancia variable ($\rho_R = 0, 0.5, 0.9$)
+- Medir $I_{\text{col}}$ (F/T multi-agente / costo) en task suite
+- Calcular $P^{\text{col}}_{\text{riesgo}}$ vía aproximación con betweenness
+
+**Predicción:** Modelo lineal $\Delta I_{\text{col}} \sim P^{\text{col}}_{\text{riesgo}} \cdot A_{\text{net}}$ con $R^2 > 0.5$
+
+**Criterio de falsación:** Si $R^2 < 0.2$ o coeficientes no significativos → PGF en redes refutado
+
+---
+
+**P11: IA "Evolutiva" Desarrollará P Naturalmente**
+
+**Predicción:** Si dejamos evolucionar IA en ambientes competitivos con recursos limitados (selección análoga a natural), desarrollará P genuino y P_riesgo emergente.
+
+**Test:** Algoritmos evolutivos de largo plazo con competencia y recursos
+
+**Esperado:** Después de N generaciones, agentes mostrarán comportamiento cualitativamente diferente (auto-preservación, cooperación/competencia estratégica)
+
+---
+
+## 7. Aplicación a Sistemas Colectivos (Enjambres/Grids)
+
+### 7.1 Motivación: La Escala Importa
+
+**Contraejemplo Aparente:**  
+"Una hormiga individual tiene $P_{\text{riesgo}}$ muy bajo (no se auto-replica, vida corta sin trayectoria evolutiva propia), pero el hormiguero muestra inteligencia alta. Esto refuta H1."
+
+**Respuesta (Axioma de Escala):**  
+H1 debe evaluarse a la escala del **replicador compartido**.  
+- **Hormiga individual:** No es agente de H1 (no porta replicador independiente).  
+- **Colonia:** Replicador = genoma de la reina. Acumula T-I-E-S a lo largo de ciclos reproductivos (fundación, competencia con otras colonias, selección de castas). Por tanto, $P_{\text{riesgo}}^{\text{col}}$ (colonia) es alto → $I_{\text{col}}$ (colonia) alto, **confirmando H1** a la escala correcta.
+
+### 7.2 Definiciones para Sistemas Multi-Agente
+
+#### 7.2.1 Riesgo de Red: $P_{\text{riesgo}}^{\text{col}}$
+
+**Opción A (estocástico):**  
+$$
+P_{\text{riesgo}}^{\text{col}} = \text{CVaR}_\alpha\big(L(G)\big)
+$$
+donde $L(G)$ es la pérdida total del sistema (ej: tiempo de vida del cluster, rendimiento acumulado).
+
+**Opción B (aproximación determinista con grafos):**  
+$$
+P_{\text{riesgo}}^{\text{col}} \approx \left(\sum_{i=1}^N p_i \cdot b_i\right) \cdot \big(1 + \gamma \cdot \kappa(M)\big) \cdot (1 - \rho_R)
+$$
+- $p_i$: probabilidad de fallo del nodo $i$  
+- $b_i$: betweenness centrality (importancia topológica)  
+- $\kappa(M)$: conectividad del grafo (ej: $\lambda_2$ del Laplaciano normalizado)  
+- $\gamma$: parámetro de sensibilidad topológica  
+- $\rho_R \in [0,1]$: factor de redundancia (0 = sin redundancia, 1 = completamente tolerante a fallos)
+
+#### 7.2.2 Alineamiento de Red: $A_{\text{net}}$
+
+**Opción A (entropía condicional):**  
+$$
+A_{\text{net}} = 1 - \frac{H(A \mid \Phi)}{H_{\max}}
+$$
+donde $A$ es la acción conjunta, $\Phi$ es el estado global, $H_{\max}$ es entropía máxima.
+
+**Opción B (similitud de políticas):**  
+$$
+A_{\text{net}} = \frac{1}{N(N-1)} \sum_{i \neq j} \text{Sim}(\pi_i, \pi_j)
+$$
+donde $\text{Sim}(\pi_i, \pi_j)$ puede ser coseno de embeddings de políticas, overlap de acciones, etc.
+
+#### 7.2.3 Inteligencia Colectiva: $I_{\text{col}}$
+
+$$
+I_{\text{col}} \propto \frac{\text{Performance}_{\text{multi-agente}} / \text{Performance}_{\text{baseline}}}{\text{Costo total}} \cdot A_{\text{net}}
+$$
+
+**Intuición:**  
+- Numéricamente: ganancia de coordinación frente a agentes independientes  
+- Denominador: costo computacional/comunicacional  
+- Peso por alineamiento: si $A_{\text{net}}$ es bajo (mucha varianza entre políticas), la inteligencia colectiva es frágil o no sostenible.
+
+### 7.3 Protocolo de Evaluación
+
+**Para sistemas de IA colectivos (enjambres de drones, grids de modelos federados, clusters de agentes RL):**
+
+1. **Identificar replicador:** ¿Qué se propaga/selecciona? (parámetros de modelo, estrategias, configuración de red)
+2. **Medir $P_{\text{riesgo}}^{\text{col}}$:**  
+   - Opción A: simular fallos y calcular CVaR del daño acumulado  
+   - Opción B: usar aproximación con betweenness, conectividad, redundancia
+3. **Medir $A_{\text{net}}$:**  
+   - Opción A: calcular $H(A|\Phi)$ en episodios de evaluación  
+   - Opción B: promediar similitud de políticas (coseno de embeddings, KL divergence)
+4. **Calcular $I_{\text{col}}$:**  
+   - Benchmark: performance multi-agente vs. baseline (suma de agentes independientes)  
+   - Normalizar por costo (tokens, FLOPS, ancho de banda)  
+   - Multiplicar por $A_{\text{net}}$
+5. **Verificar H1 a nivel de red:**  
+   - Si $P_{\text{riesgo}}^{\text{col}}$ es alto (topology frágil, baja redundancia) y $A_{\text{net}}$ alto → esperar $I_{\text{col}}$ alto  
+   - Si $P_{\text{riesgo}}^{\text{col}}$ bajo (alta redundancia, topología robusta) → esperar $I_{\text{col}}$ más bajo (menos presión adaptativa)
+
+### 7.4 Caso Hormiguero / Cluster de IA
+
+| **Sistema**               | **Replicador**          | $P_{\text{riesgo}}^{\text{col}}$ | $A_{\text{net}}$ | $I_{\text{col}}$ Esperado |
+|---------------------------|-------------------------|-----------------------------------|------------------|---------------------------|
+| Hormiguero                | Genoma reina            | Alto (competencia inter-colonia)  | Alto (feromonas) | Alto (forrajeo eficiente) |
+| Cluster k8s sin replicas  | Config deployment       | Alto (single point of failure)    | N/A (singleton)  | Bajo (colapsa fácil)      |
+| Grid federado redundante  | Modelo compartido       | Bajo (muchos nodos, load balance) | Medio (diverge)  | Medio (robusto pero lento)|
+| Enjambre drones adaptativos | Política de formación | Medio (líderes críticos)          | Alto (comms)     | Alto (reconfiguración)    |
+
+**Interpretación:**  
+- **Hormiguero:** No contradice H1, confirma a la escala del superorganismo.  
+- **Cluster sin redundancia:** $P_{\text{riesgo}}^{\text{col}}$ alto pero sin mecanismo de selección/adaptación → no genera $I_{\text{col}}$ sostenida.  
+- **Grid federado:** Redundancia baja $P_{\text{riesgo}}^{\text{col}}$, pero también diluye señal de selección → $I_{\text{col}}$ moderada.  
+- **Enjambre drones:** Balance óptimo: suficiente fragilidad para presión adaptativa, suficiente $A_{\text{net}}$ para acción coherente → $I_{\text{col}}$ alta.
+
+---
+
+## 7.5 Dinámica Local de Aprendizaje bajo Riesgo: PGF en IA
+
+### 7.5.1 Formalización para Sistemas de IA
+
+Usamos la misma **sorpresa** $S_t$ por desajuste modelado-mundo y el **riesgo efectivo** $P^{\text{eff}}_t$ ya factorizado (train/op con $\rho$ de recuperabilidad, ver secciones anteriores):
+
+$$
+\Delta I_{\text{útil}}(t) = \kappa \, P^{\text{eff}}_t \, S_t \, A_t - \lambda \, \Delta C_t
+$$
+
+donde:
+- $S_t = \text{KL}(P_{\text{real}}(\cdot \mid h_t) \parallel P_\theta(\cdot \mid h_t))$: sorpresa operacional
+- $P^{\text{eff}}_t = w_{\text{train}} P_{\text{train}} + w_{\text{op}} P_{\text{op}}$ con factores $\rho_{\text{train}}, \rho_{\text{op}}$ de recuperabilidad
+- $A_t$: alineación operativa (LFM/CR/GDC del Apéndice E de TUI)
+- $\kappa, \lambda$: hiperparámetros de sensibilidad/costo
+
+### 7.5.2 Protocolo Experimental para Validación en IA
+
+**Experimento 1: Control de Riesgo (P1)**
+1. **Setup:** Crear dos agentes RL con arquitectura idéntica
+2. **Manipulación:** 
+   - Grupo A: $P^{\text{eff}}_t$ alto (penalización por error, sin mecanismos de recuperación)
+   - Grupo B: $P^{\text{eff}}_t$ bajo (errores sin consecuencias, alta redundancia)
+3. **Control:** Mantener $S_t$ constante (misma tarea, mismo nivel de dificultad)
+4. **Medición:** Pendiente de mejora en $I_{\text{operativa}}$ (F/T, ver métricas de transferencia) durante N episodios
+5. **Predicción PGF:** Grupo A muestra mayor $\Delta I_{\text{útil}}$ sostenida que Grupo B
+>>>>>>> 565823f (chore: limpiar referencias a asistentes de IA en docs)
 
 **Experimento 2: Entorno No Estacionario (P2)**
 1. **Setup:** LLM entrenado en corpus diverso
@@ -3433,6 +3603,7 @@ Sin P genuino → No puede auto-mejorarse genuinamente
 
 ### 5.1 Camino A: Aceptar los Límites (IA Estrecha Permanente)
 
+<<<<<<< HEAD
 **Estrategia:**
 - No intentar crear AGI
 - Enfocarse en IA estrecha altamente capaz
@@ -3823,6 +3994,9 @@ Esta capa eleva los componentes de $P_{\text{genuino}}$:
 - $S_{\text{auto}} \uparrow$: meta-objetivo es $U_{\text{humans}}^{\text{causal}}$, no proxy externo
 - $R_{\text{robust}} \uparrow$: resistencia a gaming (distractores = proxies tramposos)
 - $I_{\text{rep}} \uparrow$: replicación de soluciones valiosas (selección natural/cultural)
+=======
+
+>>>>>>> 565823f (chore: limpiar referencias a asistentes de IA en docs)
 
 ---
 

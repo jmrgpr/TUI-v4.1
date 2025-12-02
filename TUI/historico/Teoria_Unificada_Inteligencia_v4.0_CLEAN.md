@@ -2163,7 +2163,7 @@ En sistemas multi-agente con $P^{\text{col}}_{\text{riesgo}}$ medible y cambios 
 
 **Lista mínima (nueva).**
 - **Biológico:** cuervo de Nueva Caledonia, pulpo común, bonobo, delfín mular, clon Pando (álamo), red micorrízica.
-- **IA:** Claude-3, Llama-3-405B, Gemini-Ultra (C/F/T verificables), AlphaZero/MuZero (agentes RL).
+- **IA:** modelos LLM de referencia y agentes RL de tablero (C/F/T verificables).
 - **Colectivos:** colmena de abejas, hormiguero (otra especie), red blockchain (seguridad/consenso).
 
 **Protocolo.** Prerregistrar tareas, seeds y exclusiones en OSF; estimar IC95% por bootstrap para C, F, T, IPG; reportar R² out-of-sample.
@@ -2212,7 +2212,7 @@ Reportamos R² para:
 Interpretación: H1 es robusta si $\Delta$ R² $\leq$  0.05 entre configuraciones.
 
 ### F.4 Nota sobre LLMs (valores ilustrativos)
-Los valores de GPT-4/Gemini/LLaMA aquí son **estimaciones ilustrativas**. En v4.2 se sustituirán por mediciones documentadas (benchmarks públicos para C; baterías de generalización fuera de dominio para F/T). Se marcarán con bandera `is_estimate` en `tasks.csv`.
+Los valores de modelos LLM aquí son **estimaciones ilustrativas**. En v4.2 se sustituirán por mediciones documentadas (benchmarks públicos para C; baterías de generalización fuera de dominio para F/T). Se marcarán con bandera `is_estimate` en `tasks.csv`.
 
 ---
 

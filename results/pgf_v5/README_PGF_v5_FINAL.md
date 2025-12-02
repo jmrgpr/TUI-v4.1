@@ -253,8 +253,8 @@ results/pgf_v6/
 ## Créditos
 
 **Equipo**:
-- Investigador principal: [Usuario]
-- Revisores: Gemini (diagnóstico inflación), Codex (bug mezcla + metadata)
+- Investigador principal: JMRG
+- 
 
 **Herramientas**:
 - Simulador: TUI v4.1 (environment_v2.py)

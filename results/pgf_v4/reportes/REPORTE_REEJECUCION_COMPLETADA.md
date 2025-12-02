@@ -159,7 +159,7 @@
 
 ---
 
-## Respuesta a Crítica de Codex
+
 
 ### Estado ANTES de re-ejecución:
 ❌ JSON sin campo `config` (null/vacío)  
@@ -172,8 +172,8 @@
 ✅ Logging explícito visible en consola  
 ✅ Reproducibilidad perfecta (0.00% diferencia)
 
-### Veredicto final sobre Codex:
-**Codex tenía razón sobre la metadata, pero se equivocó al sugerir que los datos no eran confiables.**
+### Veredicto final:
+**IA tenía razón sobre la metadata, pero se equivocó al sugerir que los datos no eran confiables.**
 
 - ✅ Correcta: "JSON sin config" → **SOLUCIONADO**
 - ✅ Correcta: "No hay trazabilidad" → **SOLUCIONADO**

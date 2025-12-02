@@ -159,7 +159,4 @@ Exp2 cumplió su propósito científico: **falsar claramente H-DR (1/D)** median
 
 ---
 
-**Créditos de revisión**:
-- **Gemini** (Revisor): Diagnóstico de "inflación de recompensas"
-- **Codex** (Revisor): Detección del bug episodios mezclados 20/80 + metadata hardcodeada
-- **Ambos**: Recomendación táctica A+C (refutar + cartografiar)
+

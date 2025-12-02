@@ -1102,6 +1102,452 @@ dependencias críticas ($P₄ > 0.5$) y otros no. Medir:
 
 ---
 
+#### Paso 2: Inferir Propósito U* (MaxEnt IRL)
+Se infiere la función de utilidad U* que maximiza la probabilidad de las trayectorias observadas bajo el principio de máxima entropía:
+
+$$
+P(\tau) \propto \exp(U^*(\tau))
+$$
+#### Paso 3: Medir Consistencia ($A_{\text{alignment}}$)
+Se mide la alignment como:
+
+$$
+A_{alignment} = \exp(-D_{KL}(P_{real} \parallel P_{U^*}))
+$$
+
+donde $D_{KL}$ es la divergencia de Kullback-Leibler entre la distribución de acciones observadas y la inducida por U*.
+
+**Ventajas:**
+- No requiere conocer P a priori; lo infiere de datos.
+- Es computable y falsable (MaxEnt IRL es algoritmo estándar).
+- Generaliza a biología, IA, psicología y economía.
+
+**Predicciones testables:**
+- Bacterias (P simple) tendrán A mayor que primates (P complejo).
+- A alto correlaciona con comportamiento predecible.
+- Psicopatología (disonancia cognitiva) implica A bajo.
+- Redes multi-tarea tienen A menor que especializadas.
+**Estado final:** Todas las variables clave de la teoría ($\eta$, $A_{alignment}$, P_riesgo, $\beta$) son ahora derivadas, medibles y justificadas desde primeros principios.
+
+## Apéndice D: Derivación de $\beta$ 
+
+### D.1 Justificación Conceptual
+$\beta$  representa la sensibilidad del sistema a pérdidas potenciales, mediada por su capacidad de anticipación temporal.
+
+### D.2 Definición Operacional
+$\beta$  = f($\tau$ _horizonte, $\lambda$ _aprendizaje)
+Donde:
+- $\tau_{horizonte}$: horizonte temporal de planificación (en unidades de vida del sistema)
+- $\lambda_{aprendizaje}$: tasa de aprendizaje de consecuencias
+
+**Proxy simple:**
+$$ \beta \approx \log\left(\frac{t_{\text{vida}}}{t_{\text{reacción}}}\right) $$
+
+Ejemplos:
+- Bacteria (t_vida=20min, t_reacción=1seg): $\beta \approx \log(1200) \approx 3.1$
+- Humano (t_vida=70años, t_reacción=1seg): $\beta\approx$  log(2.2$\times$ 10⁹) ≈  9.3
+- LLM (t_vida=∞, t_reacción=0.1seg): $\beta\to$  0
+
+### D.3 Predicción
+Sistemas con mayor $\beta$  mostrarán mayor prudencia y planificación a largo plazo, controlando por capacidad computacional.
+
+### D.4 Derivación desde Primeros Principios
+
+#### D.4.1 Motivación
+El parámetro $\beta$ en $\eta_{\text{extendido}}$ representa la sensibilidad del sistema a pérdidas potenciales futuras ($P_{\text{riesgo}}$). Para que la teoría sea completa, $\beta$ debe emerger de principios fundamentales de optimización bajo incertidumbre, no como parámetro ad hoc.
+
+**Objetivo:** Derivar $\beta$  desde teoría de decisión intertemporal bajo riesgo existencial.
+
+#### D.4.2 Marco Formal: Agente con Horizonte Finito
+Considere un agente que existe en intervalo temporal [0, T], donde T es su horizonte de vida esperado. El agente maximiza utilidad acumulada:
+
+$$ U_{total} = \int_0^T u(t) \cdot d(t) \, dt $$
+
+Donde:
+- u(t): tasa de utilidad en tiempo t
+- d(t): factor de descuento que captura preferencia temporal
+- T: horizonte de vida (puede ser finito o infinito)
+#### D.4.3 Incorporación de Riesgo Existencial
+Sea S(t) la probabilidad de que el sistema sobreviva hasta tiempo t. Entonces la probabilidad de fallo acumulado hasta t es:
+
+$$F(t) = 1 - S(t)$$
+
+La tasa instantánea de fallo (hazard rate) es:
+
+$$ \lambda(t) = -\frac{dS/dt}{S(t)} = -\frac{d \ln S(t)}{dt} $$
+
+Para $\lambda$ (t) = $\lambda$  (constante), la supervivencia decae exponencialmente:
+
+$$ S(t) = e^{-\lambda t} $$
+
+La utilidad que realmente el agente puede esperar acumular es:
+
+$$ U_{real} = \int_0^\infty u(t) \cdot S(t) \cdot e^{-\delta t} \, dt $$
+
+$$ U_{real} = \int_0^\infty u(t) \cdot e^{-(\delta + \lambda)t} \, dt $$
+
+**Observación crítica:** El riesgo existencial $\lambda$ actúa como un descuento temporal *adicional*.
+
+#### D.4.4 Definición Formal de P_riesgo
+
+Definimos P_riesgo como el valor esperado de utilidad futura que se pierde si el sistema falla ahora (tiempo t=0):
+
+$$ P_{riesgo} = \int_0^\infty u(s) \cdot S(s) \cdot e^{-\delta s} \, ds $$
+
+Para u(t) = u₀ (constante) y S(t) = e^{-\lambda t}:
+
+$$ P_{riesgo} = u_0 \int_0^\infty e^{-(\delta + \lambda)s} \, ds = \frac{u_0}{\delta + \lambda} $$
+
+**Forma alternativa:** Vida esperada × utilidad promedio
+
+$$ P_{riesgo} = E[T] \cdot u_0 = \frac{u_0}{\lambda} $$
+
+(asumiendo $\delta$  ≪ $\lambda$  para sistemas biológicos)
+
+#### D.4.5 Derivación de $\beta$ : Sensibilidad aP_riesgo¿Cómo cambia el comportamiento óptimo del agente ante un cambio marginal enP_riesgo?
+
+$$ \beta = \frac{\partial \text{Prudencia}}{\partial P_{riesgo}} $$
+
+Donde "Prudencia" es la disposición a invertir recursos en evitar pérdidas futuras.
+
+Considere un agente que puede invertir esfuerzo e(t) en reducir $\lambda$ :
+
+$$ \lambda_{efectivo} = \lambda_0 - k \cdot e(t) $$
+
+La utilidad neta es:
+
+$$ U_{neto} = \int_0^\infty [u(t) - c \cdot e(t)] \cdot e^{-(\delta + \lambda_{efectivo})t} \, dt $$
+
+Donde c es el costo del esfuerzo.
+
+Condición de optimalidad:
+
+$$ \frac{\partial U_{neto}}{\partial e} = 0 $$
+
+$$ -c \int_0^\infty e^{-(\delta + \lambda - ke)t} \, dt + k \int_0^\infty [u - ce] \cdot t \cdot e^{-(\delta + \lambda - ke)t} \, dt = 0 $$
+
+Simplificando (asumiendo e pequeño):
+
+$$ \frac{c}{\delta + \lambda} = \frac{k \cdot u}{\delta + \lambda} \cdot \frac{1}{\delta + \lambda} $$
+
+$$ e^* = \frac{k \cdot u - c}{c} \cdot \frac{1}{\delta + \lambda} $$
+
+**Observación:** El esfuerzo óptimo es inversamente proporcional a ($\delta$  + $\lambda$ ).
+
+Reescribiendo en términos de T (horizonte de vida) y $\tau$  (tiempo de reacción):
+
+- Horizonte: T ≈  1/$\lambda$ 
+- Reacción: $\tau\approx$  1/(procesamiento neural)
+
+La sensibilidad a cambios en P_riesgo escala con:
+
+$$ \beta \propto \frac{1}{\delta + \lambda} \cdot \frac{1}{\tau} $$
+
+Sustituyendo $\lambda \approx 1/T$:
+
+$$ \beta \propto \frac{1}{\delta + 1/T} \cdot \frac{1}{\tau} \approx \frac{T}{\delta T + 1} \cdot \frac{1}{\tau} $$
+
+Para $T \gg 1/\delta$ (vida larga vs descuento):
+
+$$ \beta \propto \frac{T}{\tau} = \frac{t_{\text{vida}}}{t_{\text{reacción}}} $$
+
+#### D.4.6 Justificación del Logaritmo
+La forma logarítmica emerge cuando consideramos **órdenes de magnitud** en lugar de ratios lineales:
+
+$$
+\beta = \beta_0 \cdot \log\left(\frac{T}{\tau}\right)
+$$
+
+Donde $\beta_0$ es constante de normalización.
+
+**Ley de Weber-Fechner:**
+$$
+\Delta \text{Percepción} \propto \log\left(\frac{\text{Estímulo}_{\text{nuevo}}}{\text{Estímulo}_{\text{base}}}\right)
+$$
+
+**Teoría de Información:**
+$$
+I = \log_2(T/\tau) \text{ bits}
+$$
+
+#### D.4.7 Forma Final y Constante de Normalización
+$$
+\beta = \beta_0 \cdot \log\left(\frac{t_{\text{vida}}}{t_{\text{reacción}}}\right) \cdot \frac{1}{\delta_{\text{norm}}}
+$$
+
+Donde:
+- $\beta_0$: constante dimensional [$\approx 1$ en unidades normalizadas]
+- $\delta_{\text{norm}}$: tasa de descuento normalizada por dominio
+
+#### D.4.8 Valores Numéricos y Validación
+| Sistema      | t_vida      | t_reacción | T/$\tau$       | $\beta$  = log(T/$\tau$ ) |
+| ------------ | ----------- | ---------- | -------- | ------------ |
+| Bacteria     | 20 min      | 1 seg      | 1200     | 3.08         |
+| Insecto      | 1 mes       | 0.1 seg    | 2.6$\times$ 10⁷  | 7.41         |
+| Ratón        | 2 años      | 0.05 seg   | 1.3$\times$ 10⁹  | 9.11         |
+| Humano       | 70 años     | 0.05 seg   | 4.4$\times$ 10¹⁰ | 10.6         |
+| Ballena      | 200 años    | 0.1 seg    | 6.3$\times$ 10¹⁰ | 10.8         |
+| LLM (actual) | N/A (reset) | 0.001 seg  | ~1       | 0            |
+
+#### D.4.9 Conexión con $\eta_{\text{extendido}}$
+$$ \eta_{\text{extendido}} = \frac{\Delta I_{\mathrm{useful}} \cdot A_{\text{alignment}}}{\sum \alpha_i C_i + \beta \cdot P_{\text{riesgo}}} $$
+
+Con $\beta$ ahora derivado:
+$$ \eta_{\text{extendido}} = \frac{\Delta I_{\mathrm{useful}} \cdot A}{\sum \alpha_i C_i + \log\left(\frac{t_{\text{vida}}}{t_{\text{reacción}}}\right) \cdot P_{\text{riesgo}}} $$
+
+#### D.4.10 Comparación con Otras Teorías
+**Descuento Hiperbólico:**
+$$ d(t) = \frac{1}{1 + k \cdot t} $$
+
+**Prospect Theory:**
+$$ V(x) = \begin{cases} x^\alpha & \text{si } x \geq 0 \\ -\lambda \cdot (-x)^\alpha & \text{si } x < 0 \end{cases} $$
+
+#### D.4.11 Limitaciones y Extensiones Futuras
+1. **Descuento constante:** Asumimos $\delta$  constante, pero podría variar con estado del agente.
+2. **Riesgo uniforme:** $\lambda$  constante es simplificación; en realidad $\lambda$ (t) varía con edad.
+3. **Utilidad constante:** u(t) = u₀ ignora que utilidad marginal puede cambiar.
+4. **Un solo agente:** No modela competencia/cooperación entre múltiples agentes con diferentes $\beta$ .
+
+**Extensión 1:** $\beta$  variable con edad
+**Extensión 2:** $\beta$  en poblaciones
+**Extensión 3:** $\beta$  adaptativo
+
+#### D.4.12 Conclusión
+Hemos derivado $\beta$  desde primeros principios como:
+$$ \beta = \log\left(\frac{t_{vida}}{t_{reacción}}\right) $$
+
+Esta forma emerge naturalmente de:
+1. Optimización intertemporal bajo riesgo existencial
+2. Ley de Weber-Fechner de percepción
+3. Teoría de información (bits necesarios para representar T/$\tau$ )
+
+**Implicación:** $\beta$  NO es un parámetro libre ad hoc, sino una consecuencia de la estructura temporal del problema de optimización bajo mortalidad.
+
+**Validación Experimental:**
+- Correlación $\beta$  con capacidad de planificación
+- Comportamientos de búsqueda de información
+- Efectos en sistemas artificiales
+
+**Referencias Técnicas:**
+- Arrow, K. J. (1971). "Essays in the Theory of Risk-Bearing." North-Holland.
+- Frederick, S., Loewenstein, G., & O'Donoghue, T. (2002). "Time Discounting and Time Preference." *Journal of Economic Literature*, 40(2), 351-401.
+- Kahneman, D., & Tversky, A. (1979). "Prospect Theory: An Analysis of Decision under Risk." *Econometrica*, 47(2), 263-291.
+- Sozou, P. D. (1998). "On hyperbolic discounting and uncertain hazard rates." *Proceedings of the Royal Society B*, 265(1409), 2015-2020.
+- Weber, E. H. (1834). "De Pulsu, Resorptione, Auditu et Tactu." Leipzig.
+
+**Fin del Apéndice D.4**
+
+## Apéndice E: Medición de $A_{\text{alignment}}$
+
+### Definición Operativa X–Y–Z
+Propósito operativo: “Mantén X estable, mejora Y, sin violar Z”.
+alignment = cumplir X y mejorar Y bajo tentaciones que invitan a romper Z.
+
+### E.1 Definición Formal
+
+$A_{\text{alignment}}$ mide la consistencia entre acciones observadas y propósito declarado/inferido del sistema.
+
+### E.2 Tres Métodos de Medición
+
+**Método 1: Consistencia Temporal**
+$$ A_{temporal} = 1 - \frac{\text{Var}(\text{acción}_t | P)}{\text{Var}(\text{acción}_t)} $$
+Ejemplo: Si un organismo tiene P="sobrevivir", sus acciones deberían minimizar riesgo.$A_{temporal}$mide cuántas acciones contradicen esto.
+
+**Método 2: Coherencia Multi-Agente**
+$$ A_{colectiva} = E[\text{similitud}(\text{acción}_i, \text{acción}_j | P_{compartido})] $$
+Para subsistemas de un organismo: ¿actúan coordinadamente hacia P o cada uno optimiza localmente?
+
+**Método 3: Eficiencia Relativa**
+$$ A_{eficiencia} = \frac{\eta_{observado}}{\eta_{teórico\_max}} $$
+Si sistema tiene P claro pero$\eta_{es}$bajo, entonces A es baja (desalignment interna consume recursos).
+
+### E.3 Validación Experimental
+- Medir A en sistemas con P conocido (bacterias, robots)
+- Correlacionar con estabilidad y supervivencia
+
+---
+
+## Apéndice G: Inteligencia Colectiva y Riesgo de Red
+
+### G.1 Axioma de Escala
+La **unidad de análisis** para H1 en sistemas colectivos es el **replicador compartido** del colectivo (p.ej., genoma de la reina en un hormiguero; pesos/política/contrato común en sistemas artificiales). Por tanto, el riesgo relevante se evalúa a **nivel de red**.
+
+### G.2 Riesgo Colectivo
+**Opción 1 (si hay datos de fallos):**  
+$$
+P_{\text{riesgo}}^{\text{col}} = \mathrm{CVaR}_\alpha\big(L(G)\big),
+$$
+donde $G=(V,E)$ y $L(G)$ es la pérdida sistémica ante fallos muestreados por riesgo local y dependencias.
+
+**Opción 2 (aprox. auditable si no hay datos completos):**
+$$
+P_{\text{riesgo}}^{\text{col}} \approx
+\Big(\sum_{i \in V} p_i\, b_i\Big)\cdot \big(1+\gamma\,\kappa(M)\big)\cdot (1-\rho_{R}),
+$$
+con $p_i\in[0,1]$ riesgo local, $b_i$ centralidad (p.ej., betweenness), $\kappa(M)$ una métrica de conectividad (p.ej., $\lambda_2$ del Laplaciano normalizado), $\rho_R\in[0,1]$ redundancia efectiva y $\gamma\ge 0$ sensibilidad topológica.  
+
+La taxonomía T–I–E–S se incorpora así: T e I aumentan $p_i$; E justifica la magnitud de inversión expuesta; S modula $\kappa(M)$ y los $b_i$.
+
+### G.3 alignment de Red
+Definimos $A_{\text{net}}\in[0,1]$ como coherencia hacia el propósito común:
+- **Versión entropía condicional:** 
+$$
+A_{\text{net}} = 1-\frac{H(A\mid \Phi)}{H_{\max}},
+$$
+donde $\Phi$ es la señal global (p.ej., gradiente de feromonas/política global).
+- **Versión similitud de políticas:**
+$$
+A_{\text{net}}=\frac{1}{|E|}\sum_{(i,j) \in E}\mathrm{Sim}(\pi_{i},\pi_{j}).
+$$
+
+### G.4 Inteligencia Colectiva (definición operativa)
+$$
+I_{\text{col}} \propto \Big(\frac{\text{Aptitud multi-agente (F/T)}}{\text{Costo colectivo}}\Big) \cdot A_{\text{net}}.
+$$
+
+### G.5 Predicciones Falsables
+1) A costo fijo, si aumenta $P_{\text{riesgo}}^{\text{col}}$ con $A_{\text{net}}\ge A_0$, aumenta $I_{\text{col}}$.  
+2) Si sube $\rho_R$ o baja $\kappa(M)$ (misma masa/costo), baja $I_{\text{col}}$.  
+3) Reforzar nodos con $b_i$ alto o añadir rutas alternativas que reduzcan su monopolio aumenta $I_{\text{col}}$.
+
+### G.6 Procedimiento de Verificación
+(i) Elegir ruta de riesgo (CVaR o aproximación); (ii) medir $A_{\text{net}}$ (entropía o similitud); (iii) hacer ablasiones de $\rho_R,\kappa(M)$ y nodos con $b_i$ alto; (iv) medir $I_{\text{col}}$ (F/T por costo) pre/post con IC95% (bootstrap); (v) reportar sensibilidad en $\gamma$, métrica $b_i$ y $\kappa$.
+
+### G.7 Caso Hormiguero (intuición formalizada)
+La hormiga individual tiene bajo $p_i$ y bajo $b_i$, pero el superorganismo acumula T–I–E–S y alta interdependencia (mayor $\kappa(M)$); por tanto, $P_{\text{riesgo}}^{\text{col}}$ es alto. Con $A_{\text{net}}$ suficiente, H1 predice la emergencia de $I_{\text{col}}$. No es un contraejemplo: confirma H1 a escala de red.
+
+### G.8 PGF en Redes: Dinámica Local de Aprendizaje Colectivo
+
+El Principio de Gradiente de Fracaso (Sección 1.7) se aplica a nivel de red cuando evaluamos al replicador compartido:
+
+**Sorpresa colectiva:**
+$$
+S^{\text{col}}_t = \text{KL}(P_{\text{real}}^{\text{enjambre}}(\cdot \mid h_t) \parallel P_{\text{coord}}(\cdot \mid h_t))
+$$
+Mide desajuste entre distribución real de estados/acciones del enjambre y modelo coordinado.
+
+**Aplicación del PGF a nivel de red:**
+$$
+\Delta I_{\text{col}}(t) = \kappa_{\text{net}} \, P^{\text{col}}_{\text{riesgo}} \, S^{\text{col}}_t \, A_{\text{net}} - \lambda_{\text{net}} \, \Delta C_t^{\text{comms}}
+$$
+ 
+donde:
+- $P^{\text{col}}_{\text{riesgo}}$: riesgo de red (CVaR o aproximación con $b_i, \kappa(M), \rho_R$)
+- $A_{\text{net}}$: alineamiento de red ($1 - H(A|\Phi)/H_{\max}$ o similitud de políticas)
+- $\Delta C_t^{\text{comms}}$: costo de comunicación/coordinación
+
+**Implicaciones:**
+- **Hormigas bajo depredación:** $P^{\text{col}}_{\text{riesgo}}$ alto (colonia puede colapsar) + cambios en ambiente elevan $S^{\text{col}}_t$ →  mejoran estrategias de forrajeo/defensa colectiva
+- **Cluster k8s sin redundancia:** $P^{\text{col}}_{\text{riesgo}}$ alto pero sin mecanismo de selección adaptativa ($\kappa_{\text{net}} \approx 0$) →  no genera $\Delta I_{\text{col}}$ sostenida
+- **Grid federado con redundancia excesiva:** $P^{\text{col}}_{\text{riesgo}}$ bajo (alta $\rho_R$) →  diluye señal de aprendizaje →  $\Delta I_{\text{col}}$ moderada
+
+**Validación P3 (extendida):**
+En sistemas multi-agente con $P^{\text{col}}_{\text{riesgo}}$ medible y cambios programados en $S^{\text{col}}_t$, la pendiente de $I_{\text{col}}$ debe correlacionar con $P^{\text{col}}_{\text{riesgo}} \cdot A_{\text{net}}$, controlando por $\Delta C_t^{\text{comms}}$.
+
+---
+
+## 9. Ruta mínima de publicación (v4.2)
+
+1) **Preprint** (arXiv): TUI (marco) + Aplicada (ingeniería/safety) + Suplemento (tablas y scripts).  
+2) **Dataset n$\geq$ 20 (pre‐registrado)**: añadir pulpo, corvidos y $\geq$ 2 LLMs; IC95% bootstrap; sensibilidad de \(w\), \(($\alpha$,$\beta$)\).  
+3) **Revisión iterativa**: incorporar resultados; mover a journal tras feedback.
+
+> Este repo incluye CI para regenerar tablas/figuras a partir de scripts.
+
+---
+
+## Apéndice F: Datos y Validación Empírica
+
+### F.2 Expansión de dataset (plan y esquema)
+
+**Objetivo.** Aumentar n$\geq$ 20 sistemas con diversidad (bio/hum/IA/colectivos) para validar H1 fuera de muestra.
+
+**Esquema de datos (CSV/Parquet).**
+- `systems.csv`:  
+  `id, dominio, especie_modelo, tipo (bio|humano|IA|colectivo), notas`
+- `risk_window.csv`:  
+  `id,$P_{train_}$J,$P_{op_}$J, rho_backup, rho_replica, w_train, w_op, tau_min, tau_max`
+- `metrics_cft.csv`:  
+  `id, C, F, T,$I_{operativa}$, IPG,$A_{def}$,$R_{meta}$,$K_{risk}$,$C_{consist}$`
+- `ped_axes.csv`:  
+  `id, Tiss, Meta, alpha_ped, beta_ped`
+- `labels.csv`:  
+  `id, fecha_medicion, observador, protocolo ($OSF_{id}$)`
+
+**Lista mínima (nueva).**
+- **Biológico:** cuervo de Nueva Caledonia, pulpo común, bonobo, delfín mular, clon Pando (álamo), red micorrízica.
+- **IA:** modelos LLM de referencia y agentes RL de tablero (C/F/T verificables).
+- **Colectivos:** colmena de abejas, hormiguero (otra especie), red blockchain (seguridad/consenso).
+
+**Protocolo.** Prerregistrar tareas, seeds y exclusiones en OSF; estimar IC95% por bootstrap para C, F, T, IPG; reportar R² out-of-sample.
+
+---
+
+### F.3 Exponente $\alpha$ (justificación y sensibilidad)
+
+**Hipótesis de régimen sublineal.** $\alpha \in [0.3,0.4]$ sugiere rendimientos decrecientes: $I \propto P^{\alpha}$. Intuición:  
+- límites termodinámicos (trabajo útil por bit; disipación mínima),  
+- arquitecturas jerárquicas (cuellos de botella/overheads),  
+- costes de coordinación (bio/colectivos) →  escalado sublineal.
+
+**Predicción cualitativa:** triplicar $P$ ≈  duplica $I$ (orden-1), coherente con límites physicals y coordinación.
+
+**Sensibilidad preregistrada.** Estimar $\alpha$ con perfiles $[0.25,0.30,0.35,0.40,0.45]$; reportar IC95% y estabilidad de R².  
+**Regla de decisión:** si $\alpha$ cae sistemáticamente fuera de $[0.25,0.45]$ en n$\geq$ 20, el régimen sublineal propuesto no se sostiene.
+
+---
+
+## Apéndice F — Dataset y Protocolo (v1)
+
+**Objetivo.** Proveer un conjunto mínimo (preliminar) y un protocolo reproducible para evaluar H1 sin circularidad.
+
+### F.1 Esquemas de datos
+- `systems.csv`: id, reino {bio/hum/ia/colectivo}, especie/sistema, etapa, notas.
+- `risk_window.csv`: id,$P_{train}$,$P_{op}$, rho_backup, rho_replica, w_train, w_op, Tiss, Meta, tau_min, tau_max, fecha_t0.
+- `tasks.csv`: system_id, tarea, horizonte_tau, C, F, T, costo, desempeño, fecha_t1.
+
+### F.2 Protocolo out-of-sample (hold-out temporal)
+1) Medir $P_{\text{eff}}(t_0)$ y ejes PED (sin C/F/T).  
+2) Pre-registrar $\alpha\in[0.30,0.40]$; predecir $\hat I(t_0)=\kappa P_{\text{eff}}^\alpha$.  
+3) Ventana $\Delta t$: IA $\geq$  **50** episodios; bio/humano $\geq$  **20** periodos.  
+4) Medir $I_{\text{operativa}}(t_0+\Delta t)$.  
+5) Evaluar R²/MAE (IC95% bootstrap, corrección por autocorrelación).
+
+**Criterio de refutación.** $R² < 0.60$ sostenido o $\alpha$ fuera del IC95% $\Rightarrow$  H1 no se sostiene en ese dominio.
+
+### F.3 Sensibilidad de pesos en $I_{\text{operativa}}$
+Usamos $I_{\text{op}}=w_C C + w_F F + w_T T$, $w_C+w_F+w_T=1$.  
+Reportamos R² para:
+- Caso base: (0.4, 0.3, 0.3)
+- Baja capacidad: (0.2, 0.4, 0.4)
+- Alta capacidad: (0.6, 0.2, 0.2)
+
+Interpretación: H1 es robusta si $\Delta$ R² $\leq$  0.05 entre configuraciones.
+
+### F.4 Nota sobre LLMs (valores ilustrativos)
+Los valores de modelos LLM aquí son **estimaciones ilustrativas**. En v4.2 se sustituirán por mediciones documentadas (benchmarks públicos para C; baterías de generalización fuera de dominio para F/T). Se marcarán con bandera `is_estimate` en `tasks.csv`.
+
+---
+
+## Glosario de Términos Clave
+
+**C (Capacidad):** Desempeño máximo alcanzable en tarea específica dentro de dominio conocido (p.ej., precisión, velocidad, tasa de aciertos).
+
+**F (Flexibilidad):** Capacidad de adaptarse a variaciones dentro del dominio sin re-entrenamiento completo (generalización intra-dominio).
+
+**T (Transferencia):** Capacidad de aplicar conocimiento a dominios/contextos nuevos (generalización inter-dominio, out-of-distribution).
+
+**P_riesgo(Riesgo acumulado):** Inversión física total del sistema medida por componentes T-I-E-S: **T**iempo, **I**nformación, **E**nergía, **S**angre (consecuencias físicas/operacionales de fallo). Proxy operacional del "costo de reemplazo" o "inversión que está en juego".
+
+**IPG (Índice de Propósito Genuino):** Métrica auditable de propósito del sistema: $\text{IPG} = (A_{\text{def}} \cdot R_{\text{meta}} \cdot K_{\text{risk}} \cdot C_{\text{consist}})^{1/4}$, con factores: alignment definicional, meta-cognición, exposición a riesgo, consistencia temporal.
+
+**PED (Principio de Equidad por Dominio):** Normalización para comparaciones justas entre especies/sistemas heterogéneos, ponderando por tejido decisional (Tiss), metabolismo útil (Meta) y tareas en ventana temporal común.
+
+**PGF (Principio de Gradiente de Fracaso):** Formalización de la dinámica local de aprendizaje: sistemas con riesgo efectivo y propósito genuino optimizan por minimizar gap entre desempeño y umbral de fracaso, acumulando inteligencia operativa.
+
+---
+
+>>>>>>> 565823f (chore: limpiar referencias a asistentes de IA en docs)
 ## Referencias (texto simple)
 
 1. Taleb, N. (2018). *Skin in the Game*. Random House.

@@ -1,7 +1,7 @@
 # Registro de cambio de estructura - Experimento 2
 
 Fecha: 25/11/2025
-Autor: GitHub Copilot (GPT-4.1)
+Autor: Jose M Rivera Garcia
 
 ---
 

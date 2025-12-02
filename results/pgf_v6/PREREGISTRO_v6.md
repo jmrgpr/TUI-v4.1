@@ -330,8 +330,8 @@ results/pgf_v6/
 ## 10. Firma Científica
 
 **Preregistro creado**: 2025-12-02  
-**Investigador**: [Nombre del equipo]  
-**Revisores consultados**: Gemini, Codex  
+**Investigador**: Jose M Rivera Garcia 
+ 
 **Commit para timestamp**: (siguiente commit tras guardar este archivo)
 
 **Declaración**: Este preregistro establece hipótesis, predicciones y análisis ANTES de ejecutar Experimento 3. Cualquier desviación será documentada con justificación. Los datos serán publicados independientemente del resultado.

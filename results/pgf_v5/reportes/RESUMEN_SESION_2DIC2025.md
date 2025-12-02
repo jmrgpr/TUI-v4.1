@@ -172,7 +172,7 @@ python scripts/analyze_density.py
 
 ## 🎓 LECCIONES APRENDIDAS
 
-### **De PGF v4 (Codex audit):**
+### **De PGF v4 :**
 - ✅ **Metadata obligatoria** desde el primer JSON
 - ✅ **Timestamp** en cada archivo
 - ✅ **Config completo** (todos los parámetros)
