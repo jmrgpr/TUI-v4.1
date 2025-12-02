@@ -1,0 +1,15 @@
+EXPERIMENTO 3A - RESUMEN EJECUTIVO
+======================================================================
+
+Fecha: 2 diciembre 2025
+Configuración: grid 5×5, risk_scale=1.5, pgf_mix=0.2, 500 episodios
+
+RESULTADOS:
+  TUI media:       24.43 ± 44.68
+  Control media:   145.04 ± 285.90
+  Ratio TUI/Ctrl:  16.84%
+  p-value:         0.000000
+  Cohen's d:       -0.5895
+
+VEREDICTO: ❌ FALLO
+ACCIÓN:    OBLIGATORIO: Rediseñar PGF (Solución B) antes de continuar
