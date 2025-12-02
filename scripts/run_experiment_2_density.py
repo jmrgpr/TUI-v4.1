@@ -66,11 +66,18 @@ def run_experiment_with_density(
     
     print(f"✓ Entorno v2 creado: grid {env.size}x{env.size}, spawn_rate={spawn_rate}")
     
-    # Crear agentes
-    agent_pgf = DQNAgent(env, use_pgf=True, name="PGF")
-    agent_control = DQNAgent(env, use_pgf=False, name="Control")
+    # Crear agentes (DQNAgent solo necesita dimensiones)
+    state = env.reset()
+    state_dim = len([v for _, v in state])
+    action_dim = 4  # up, down, left, right
     
-    print(f"✓ Agentes creados: PGF + Control\n")
+    agent_pgf = DQNAgent(state_dim, action_dim)
+    agent_control = DQNAgent(state_dim, action_dim)
+    
+    print(f"✓ Agentes creados: state_dim={state_dim}, action_dim={action_dim}\n")
+    
+    # Mapeo de acciones
+    actions_map = ['up', 'down', 'left', 'right']
     
     # Listas para almacenar resultados
     results_pgf = []
@@ -93,11 +100,17 @@ def run_experiment_with_density(
         
         # Episode loop
         while not done:
-            action = agent.act(state, explore=True)
+            # Convertir estado a vector
+            state_vec = np.array([v for _, v in state], dtype=np.float32)
+            action_idx = agent.act(state_vec)
+            action = actions_map[action_idx]
+            
             next_state, reward, done, info = env.step(action)
             
-            agent.remember(state, action, reward, next_state, done)
-            agent.replay()
+            # Remember transition
+            next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
+            agent.remember(state_vec, action_idx, reward, next_state_vec, done)
+            agent.learn()  # Usar learn() en lugar de replay()
             
             state = next_state
             total_reward += reward
