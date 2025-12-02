@@ -1,0 +1,4 @@
+Grid_Size,Complexity,Ratio_%,Control_CV,Simbiosis_CV
+3x3,9,105.0,,
+4x4,16,32.41053573210152,,
+5x5,25,38.93,192.0,71.0
