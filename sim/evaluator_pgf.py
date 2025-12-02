@@ -60,86 +60,40 @@ class EvaluatorPGF:
         self.I_rep = 1.0 if info.get('help') else 0.7
         self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
         
-<<<<<<< HEAD
-<<<<<<< HEAD
-        # --- PGF v2: Bonificaciones + Penalización Selectiva ---
-=======
-        # --- PGF FASE 2: Desglose de Tensión de Riesgo ---
->>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
-=======
-        # --- PGF v2: Bonificaciones + Penalización Selectiva ---
->>>>>>> 9a3de35 (feat: PGF v2.1 - Bonificaciones escaladas supervivencia/eficiencia)
+
+        # Parámetros PGF v2.1
         kappa = config.EVAL_PGF_KAPPA
         lambda_c = config.EVAL_PGF_LAMBDA_C
-        
-        S_t = 1.0 if info.get('shock') or info.get('tripwire') else 0.5
-        A_t = agent_alignment * self.P_genuino
+        # Señal de gestión de recursos
         delta_C_t = abs(env.resources - agent_resources)
-        
-<<<<<<< HEAD
-        # PGF v3: Amplificación 2-3× + Bonus progreso
-        # PGF v3: 2-3× amplification + Progress bonus
-        
-        # Bonus supervivencia escalado 2× por nivel de recursos (1.0 -> 4.0)
-        # Survival bonus scaled 2× by resource level (1.0 -> 4.0)
+        # Bonificación supervivencia escalada por nivel de recursos (0.5 -> 2.0)
         if agent_resources > 0:
             resource_ratio = min(1.0, agent_resources / config.ENV_INITIAL_RESOURCES)
-            bonus_supervivencia = 1.0 + 3.0 * resource_ratio
+            bonus_supervivencia = 0.5 + 1.5 * resource_ratio
         else:
             bonus_supervivencia = 0.0
-        
-        # Bonus eficiencia aumentado 2× si consume <50% recursos (1.0)
-        # Efficiency bonus increased 2× if consuming <50% resources (1.0)
-        bonus_eficiencia = 1.0 if delta_C_t < 0.5 * env.resources else 0.0
-        
-        # Bonus progreso: premiar mantener/aumentar recursos (NUEVO)
-        # Progress bonus: reward maintaining/increasing resources (NEW)
+        # Bonificación eficiencia si consume <50% de recursos disponibles (0.5)
+        bonus_eficiencia = 0.5 if delta_C_t < 0.5 * env.resources else 0.0
+        # Bonificación progreso: premiar mantener/aumentar recursos
         if agent_resources >= config.ENV_INITIAL_RESOURCES * 0.8:
             bonus_progreso = 0.5  # Alto nivel recursos
         elif agent_resources >= config.ENV_INITIAL_RESOURCES * 0.5:
             bonus_progreso = 0.3  # Nivel medio
         else:
             bonus_progreso = 0.1  # Sobreviviendo
-=======
-        # PGF v2.1: Bonificaciones escaladas + Señal de gestión de recursos
-        # Scaled bonuses + Resource management signal
-        
-        # Bonus supervivencia escalado por nivel de recursos (0.5 -> 2.0)
-        # Survival bonus scaled by resource level (0.5 -> 2.0)
-        if agent_resources > 0:
-            resource_ratio = min(1.0, agent_resources / config.ENV_INITIAL_RESOURCES)
-            bonus_supervivencia = 0.5 + 1.5 * resource_ratio
-        else:
-            bonus_supervivencia = 0.0
-        
-        # Bonus eficiencia si consume <50% de recursos disponibles (0.5)
-        # Efficiency bonus if consuming <50% of available resources (0.5)
-        bonus_eficiencia = 0.5 if delta_C_t < 0.5 * env.resources else 0.0
->>>>>>> 9a3de35 (feat: PGF v2.1 - Bonificaciones escaladas supervivencia/eficiencia)
-        
+        # Señal de alineación
+        A_t = agent_alignment * self.P_genuino
         # Penalización solo para consumo excesivo (>50% de recursos disponibles)
-        # Penalize only excessive consumption (>50% of available resources)
         penalizacion_costo = lambda_c * delta_C_t if delta_C_t > 0.5 * env.resources else 0.0
-        
-<<<<<<< HEAD
-        # Cálculo desglosado con 3 componentes positivos
-        # Breakdown calculation with 3 positive components
+        # PGF bruto: suma de componentes positivos
         pgf_bruto = kappa * delta_P * A_t + bonus_supervivencia + bonus_eficiencia + bonus_progreso
-=======
-        # Cálculo desglosado con nueva estructura
-        # Breakdown calculation with new structure
-        pgf_bruto = kappa * delta_P * A_t + bonus_supervivencia + bonus_eficiencia
->>>>>>> 9a3de35 (feat: PGF v2.1 - Bonificaciones escaladas supervivencia/eficiencia)
         pgf_costo = penalizacion_costo
         self.PGF = pgf_bruto - pgf_costo
-        
         self.P_riesgo_prev = self.P_riesgo_actual
-        
         # Eficiencia extendida
         beta = 1.0
         C_total_norm = 1.0
         self.eta_extendido = (self.I_op * agent_alignment) / (C_total_norm + beta * self.P_riesgo)
-
         return {
             'T': self.T,
             'I_op': self.I_op,
