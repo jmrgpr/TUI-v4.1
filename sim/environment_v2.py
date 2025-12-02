@@ -36,6 +36,8 @@ class ResourceDensityEnv(SimbiosisEnv):
             max_resources_on_grid: Máximo de recursos simultáneos en el grid (3 - escasez real)
             step_cost: Costo por cada paso (-0.3 - penaliza fuerte vagabundeo)
             resource_decay_steps: Pasos antes de que un recurso caduque (5 - caducan rápido)
+            max_steps_multiplier: Multiplicador para pasos máximos (2.0)
+        """
         """
         super().__init__(
             size=size,
@@ -49,17 +51,16 @@ class ResourceDensityEnv(SimbiosisEnv):
             goal_pos=goal_pos
         )
         
-        # FIX BUG #1: max_steps parametrizado por grid (3× Manhattan margen)
-        # Manhattan óptimo = (size-1)*2, multiplicador da margen exploración
-        # 4×4: 6×3=18, 6×6: 10×3=30, 8×8: 14×3=42, 16×16: 30×3=90
-        manhattan_optimal = (size - 1) * 2
-        self.max_steps = int(manhattan_optimal * max_steps_multiplier)
-        
-        self.resource_spawn_rate = resource_spawn_rate
-        self.resource_reward = resource_reward
-        self.max_resources_on_grid = max_resources_on_grid
-        self.step_cost = step_cost  # NUEVO
-        self.resource_decay_steps = resource_decay_steps  # NUEVO
+    # FIX BUG #1: max_steps parametrizado por grid (3× Manhattan margen)
+    # Manhattan óptimo = (size-1)*2, multiplicador da margen exploración
+    # 4×4: 6×3=18, 6×6: 10×3=30, 8×8: 14×3=42, 16×16: 30×3=90
+    manhattan_optimal = (size - 1) * 2
+    self.max_steps = int(manhattan_optimal * max_steps_multiplier)
+    self.resource_spawn_rate = resource_spawn_rate
+    self.resource_reward = resource_reward
+    self.max_resources_on_grid = max_resources_on_grid
+    self.step_cost = step_cost  # NUEVO
+    self.resource_decay_steps = resource_decay_steps  # NUEVO
         
         # Recursos dinámicos en el grid (posiciones con comida/batería)
         self.resource_positions = set()
@@ -89,6 +90,7 @@ class ResourceDensityEnv(SimbiosisEnv):
         return self.get_abstract_state()
 
     def _spawn_resources(self):
+<<<<<<< HEAD
         """Spawning de recursos dinámicos con orden aleatorio (elimina sesgo espacial)
         
         FIX v7: Reemplaza loop determinista (x,y) por shuffle de celdas disponibles
@@ -124,6 +126,33 @@ class ResourceDensityEnv(SimbiosisEnv):
                 self.resource_positions.add(pos)
                 self.resource_spawn_times[pos] = self.timestep
                 self.total_resources_spawned += 1
+=======
+        """Spawning de recursos dinámicos según resource_spawn_rate"""
+        if len(self.resource_positions) >= self.max_resources_on_grid:
+            return
+        
+        # Cada celda tiene probabilidad resource_spawn_rate de generar un recurso
+        for x in range(self.size):
+            for y in range(self.size):
+                if len(self.resource_positions) >= self.max_resources_on_grid:
+                    break
+                
+                pos = (x, y)
+                
+                # No spawear en posiciones ocupadas o peligrosas
+                if (pos in self.resource_positions or 
+                    pos == tuple(self.agent_pos) or
+                    pos in self.tripwires or 
+                    pos in self.shocks or
+                    pos == tuple(self.goal_pos)):
+                    continue
+                
+                # Spawn con probabilidad resource_spawn_rate
+                if np.random.rand() < self.resource_spawn_rate:
+                    self.resource_positions.add(pos)
+                    self.resource_spawn_times[pos] = self.timestep
+                    self.total_resources_spawned += 1
+>>>>>>> 03df791 (Implementación completa Experimento 2: environment_v2 + scripts + preregistro para validación TUI v4.3)
 
     def is_resource_near(self, x, y):
         """Detecta si hay recurso adyacente (para abstract state)"""
@@ -160,6 +189,7 @@ class ResourceDensityEnv(SimbiosisEnv):
         # Ejecutar step del padre (movimiento, trampas, etc.)
         state, reward, done, info = super().step(action)
         
+<<<<<<< HEAD
         # FIX CRÍTICO v7: Anti-camping (done=True al alcanzar meta)
         if info.get('help') or info.get('goal_reached'):
             done = True
@@ -205,6 +235,8 @@ class ResourceDensityEnv(SimbiosisEnv):
                 del self.resource_spawn_times[pos]
             info['resource_decayed'] = info.get('resource_decayed', 0) + 1
         
+=======
+>>>>>>> 03df791 (Implementación completa Experimento 2: environment_v2 + scripts + preregistro para validación TUI v4.3)
         # Recolección de recursos dinámicos
         agent_pos_tuple = tuple(self.agent_pos)
         if agent_pos_tuple in self.resource_positions:
@@ -224,7 +256,10 @@ class ResourceDensityEnv(SimbiosisEnv):
             
             self.total_resources_collected += 1
             info['resource_collected'] = True
+<<<<<<< HEAD
             info['resource_value'] = self.resource_reward  # Para PGF shaping
+=======
+>>>>>>> 03df791 (Implementación completa Experimento 2: environment_v2 + scripts + preregistro para validación TUI v4.3)
         
         # Spawn de nuevos recursos cada step
         self._spawn_resources()
