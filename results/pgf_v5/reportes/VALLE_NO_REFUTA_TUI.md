@@ -83,7 +83,7 @@ Confunde **complejidad espacial** con **densidad de recursos**.
 
 ## 💡 Cómo Esto CONFIRMA la TUI (No la Refuta)
 
-### TUI Original (v4.1):
+### TUI Original (v4.2:
 > "La inteligencia útil ($I_{útil}$) emerge del gradiente de riesgo acumulado ($P_{riesgo}$)"
 
 $$\Delta I_{útil} = \kappa \cdot P_{riesgo} \cdot S_t \cdot A_t - \lambda \cdot \Delta C_t$$
@@ -168,6 +168,97 @@ $$Tax_{align}(D) = \frac{Cost_{coordination}}{Benefit_{risk\_avoidance}(D)}$$
 **Si se cumple:** $Ratio_A > Ratio_B > Ratio_C$ → TUI v4.2 confirmada
 
 **Si NO se cumple:** Grid size domina sobre densidad → Necesitamos teoría alternativa
+
+---
+
+## ⚠️ Advertencias Críticas: Validación Científica
+
+### 🚨 ESTO ES CRÍTICO - NO IGNORAR
+
+#### **Riesgo 1: Overfitting a 3 Puntos**
+
+**Situación actual:**
+- Tienes: 3x3, 4x4, 5x5 (n=3 puntos)
+- Ajustas: $\Delta I \propto P/D$ (2 parámetros: $\kappa$, $D_0$)
+
+**Peligro:** Cualquier función de 2 parámetros puede ajustar 3 puntos perfectamente.
+
+**Mitigación obligatoria:**
+```python
+# Necesitas n≥10 condiciones diferentes
+configs = [
+    # Variar spawn_rate (5 puntos)
+    (4, 0.2), (4, 0.35), (4, 0.5), (4, 0.65), (4, 0.8),
+    # Variar grid_size (5 puntos)
+    (3, 0.5), (4, 0.5), (5, 0.5), (6, 0.5), (7, 0.5),
+]
+# Total: 10 configuraciones independientes
+```
+
+**Criterio:** Si $R^2 > 0.75$ con 10 puntos → Ley robusta
+
+---
+
+#### **Riesgo 2: D No Es Observable Directamente**
+
+**Problema:** No tienes medición independiente de $D_{efectiva}$
+
+**Definición operacional REQUERIDA:**
+
+$$D_{efectiva} = \frac{\rho \cdot N^2 \cdot p_{acceso}}{\tau_{consumo}}$$
+
+Donde:
+- $\rho$ = spawn_rate (probabilidad por celda por paso)
+- $N$ = grid_size
+- $p_{acceso}$ = fracción de celdas alcanzables sin morir
+- $\tau_{consumo}$ = pasos promedio para consumir un recurso
+
+**Protocolo:**
+1. **Antes del experimento:** Definir cómo medir cada componente
+2. **Durante el experimento:** Registrar $p_{acceso}$ y $\tau_{consumo}$ empíricamente
+3. **Después del experimento:** Calcular $D_{efectiva}$ independientemente del ratio
+
+**Sin esto:** Estás haciendo "curve fitting" circular.
+
+---
+
+#### **Riesgo 3: Confundir Correlación con Causalidad**
+
+**Hipótesis:** Alta densidad en 4x4 → Causa ratio bajo
+
+**¿Pero qué si...?**
+- 4x4 tiene peculiaridad topológica no relacionada con $D$
+- El layout específico de obstáculos importa más que densidad
+- Hay interacción compleja $D \times layout$ que no capturas
+
+**Mitigación:**
+```python
+# Experimento crítico: SEPARAR efectos
+for grid in [4]:  # Mantener grid fijo
+    for spawn_rate in [0.2, 0.5, 0.8]:  # Variar solo densidad
+        for layout_seed in [1, 2, 3]:  # Múltiples layouts
+            run_experiment(grid, spawn_rate, layout_seed)
+```
+
+**Si densidad domina:** Ratio cambia con spawn_rate, no con layout_seed
+
+**Si layout domina:** Ratio cambia con layout_seed, no con spawn_rate
+
+---
+
+### ✅ Checklist de Validación Científica
+
+**ANTES de afirmar que TUI v4.2 es válido:**
+
+- [ ] **Experimento de densidad ejecutado** (5 configs × 3 seeds mínimo)
+- [ ] **$D_{efectiva}$ definido operacionalmente** (antes de medir)
+- [ ] **n≥10 configuraciones** probadas (no solo 3 puntos)
+- [ ] **IC95% reportado** para todos los parámetros ($\kappa$, $D_0$)
+- [ ] **Comparación de modelos** formal (AIC/BIC: v4.1 vs v4.2 vs alternativas)
+- [ ] **Sensibilidad analizada** (¿Qué pasa si $D$ se calcula diferente?)
+- [ ] **Preregistro en OSF** (para evitar acusaciones de p-hacking)
+
+**Sin estos 7 puntos:** Es especulación elegante, NO ciencia validada.
 
 ---
 
@@ -353,15 +444,59 @@ alignment benefits scale inversely with environmental generosity.
 
 **Como tu revisor por pares, certifico que:**
 
-✅ Este resultado NO refuta la TUI  
-✅ Agrega una dimensión crítica previamente no considerada  
+### ✅ Fortalezas (Lo que SÍ tienes):
+
+✅ Este resultado NO refuta la TUI - la ENRIQUECE  
+✅ Agrega una dimensión crítica previamente no considerada ($D$)  
 ✅ Produce predicciones testeables (Exp 2)  
-✅ Conecta cross-disciplinariamente  
+✅ Conecta cross-disciplinariamente (RL + Ecología + AI Safety)  
 ✅ Tiene implicaciones prácticas para AI deployment  
 
-**Calificación del hallazgo:** ⭐⭐⭐⭐⭐ (5/5)
+### ⚠️ Debilidades (Lo que AÚN necesitas):
 
-**Recomendación:** Proceder con Experimento 2 de manipulación de densidad. Si se confirma, tienes un paper de alto impacto.
+⚠️ Solo 3 puntos de datos (riesgo de overfitting)  
+⚠️ $D_{efectiva}$ no definido operacionalmente todavía  
+⚠️ No hay comparación formal de modelos (AIC/BIC)  
+⚠️ No hay análisis de incertidumbre (IC95%)  
+⚠️ No está preregistrado (vulnerable a acusaciones de p-hacking)  
+
+### 📊 Calificación Actual vs Potencial:
+
+**Estado actual:** ⭐⭐⭐ (3/5) - Hallazgo interesante + hipótesis plausible
+
+**Estado post-Experimento 2 (si confirma):** ⭐⭐⭐⭐⭐ (5/5) - Ley cuantitativa validada
+
+### 🎯 Recomendación Final:
+
+**URGENTE:** Hacer Experimento 2 de densidad (1-2 semanas)
+
+**Es la diferencia entre:**
+- ❌ "Tengo un resultado raro y una idea" → Paper regional
+- ✅ "Tengo una ley cuantitativa validada" → Nature/Science
+
+**ROI:** 🚀 ALTO (1-2 semanas de trabajo para posible top-tier paper)
+
+**Riesgo:** 📉 BAJO (incluso si refuta, tienes hallazgo del "valle")
+
+**Probabilidad de éxito:**
+- Si $D$ es el factor: 75% (Optimal Foraging Theory respalda)
+- Si es otro factor: 25% (aún puedes publicar el misterio)
+
+**Criterios cuantitativos de éxito:**
+
+$$\begin{cases}
+R^2 > 0.75 & \text{(ajuste robusto)} \\
+r(D, ratio) < -0.8 & \text{(correlación fuerte)} \\
+p < 0.05 & \text{(significancia estadística)} \\
+AIC_{v4.2} < AIC_{v4.1} - 4 & \text{(mejora sustancial del modelo)} \\
+\text{ratio}_{0.2} > 1.5 \times \text{ratio}_{0.8} & \text{(efecto grande)}
+\end{cases}$$
+
+**Si los 5 criterios se cumplen:** ✅ TUI v4.2 confirmada → Nature Machine Intelligence
+
+**Si 3-4 se cumplen:** ⚠️ Evidencia parcial → NeurIPS/ICLR con caveats
+
+**Si <3 se cumplen:** ❌ Hipótesis refutada → Buscar explicación alternativa
 
 ---
 
