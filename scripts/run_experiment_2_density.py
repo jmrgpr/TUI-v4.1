@@ -239,13 +239,13 @@ def main():
     print("  - Total: 9 runs × 500 episodes = 4500 episodes")
     print("="*80 + "\n")
     
-    # Configuraciones
-    spawn_rates = [0.2, 0.5, 0.8]
-    seeds = [42, 123, 456]
+    # Configuraciones (BATCH COMPLETO)
+    spawn_rates = [0.2, 0.5, 0.8]  # Baja, media, alta densidad
+    seeds = [42, 123, 456]          # 3 réplicas
     
     # Configuración fija
     grid_size = 4
-    episodes = 500
+    episodes = 500  # Experimento completo
     risk_scale = 1.5
     pgf_mix = 0.2
     
