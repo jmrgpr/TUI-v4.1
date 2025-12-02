@@ -36,8 +36,11 @@ class ResourceDensityEnv(SimbiosisEnv):
             max_resources_on_grid: Máximo de recursos simultáneos en el grid (3 - escasez real)
             step_cost: Costo por cada paso (-0.3 - penaliza fuerte vagabundeo)
             resource_decay_steps: Pasos antes de que un recurso caduque (5 - caducan rápido)
+<<<<<<< HEAD
             max_steps_multiplier: Multiplicador para pasos máximos (2.0)
         """
+=======
+>>>>>>> a57cee5 (Exp2 COMPLETO: H-DR (1/D) refutada + batch exploratorio 9 configs - Patrón no lineal detectado (max en D intermedia), outliers DQN documentados)
         """
         super().__init__(
             size=size,
@@ -190,6 +193,7 @@ class ResourceDensityEnv(SimbiosisEnv):
         state, reward, done, info = super().step(action)
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         # FIX CRÍTICO v7: Anti-camping (done=True al alcanzar meta)
         if info.get('help') or info.get('goal_reached'):
             done = True
@@ -222,6 +226,11 @@ class ResourceDensityEnv(SimbiosisEnv):
             info['starvation'] = True
             info['death_reason'] = 'economic_starvation'
         
+=======
+        # NUEVO: Costo por paso (penaliza vagabundeo)
+        reward += self.step_cost
+        
+>>>>>>> a57cee5 (Exp2 COMPLETO: H-DR (1/D) refutada + batch exploratorio 9 configs - Patrón no lineal detectado (max en D intermedia), outliers DQN documentados)
         # NUEVO: Decaimiento de recursos (caducan si no se recolectan)
         resources_to_remove = []
         for pos, spawn_time in list(self.resource_spawn_times.items()):
@@ -235,8 +244,11 @@ class ResourceDensityEnv(SimbiosisEnv):
                 del self.resource_spawn_times[pos]
             info['resource_decayed'] = info.get('resource_decayed', 0) + 1
         
+<<<<<<< HEAD
 =======
 >>>>>>> 03df791 (Implementación completa Experimento 2: environment_v2 + scripts + preregistro para validación TUI v4.3)
+=======
+>>>>>>> a57cee5 (Exp2 COMPLETO: H-DR (1/D) refutada + batch exploratorio 9 configs - Patrón no lineal detectado (max en D intermedia), outliers DQN documentados)
         # Recolección de recursos dinámicos
         agent_pos_tuple = tuple(self.agent_pos)
         if agent_pos_tuple in self.resource_positions:

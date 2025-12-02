@@ -24,7 +24,7 @@ from sim.dqn_agent import DQNAgent
 def run_experiment_with_density(
     grid_size=4,
     spawn_rate=0.5,
-    episodes=500,
+    episodes=100,  # Calibrado para entorno v3
     seed=42,
     risk_scale=1.5,
     pgf_mix=0.2,
@@ -55,13 +55,15 @@ def run_experiment_with_density(
     # Configurar semillas
     np.random.seed(seed)
     
-    # Crear entorno v2 con densidad controlada
+    # Crear entorno v2 con densidad controlada Y PRESIÓN SELECTIVA
     env = ResourceDensityEnv(
         size=grid_size,
         risk_scale=risk_scale,
         resource_spawn_rate=spawn_rate,
-        resource_reward=5.0,
-        max_resources_on_grid=10
+        resource_reward=1.0,         # REDUCIDO de 5.0
+        max_resources_on_grid=3,     # REDUCIDO de 5 a 3 (más escasez)
+        step_cost=-0.3,              # TRIPLICADO de -0.1 (castigo fuerte por vagar)
+        resource_decay_steps=5       # REDUCIDO de 10 a 5 (recursos caducan más rápido)
     )
     
     print(f"✓ Entorno v2 creado: grid {env.size}x{env.size}, spawn_rate={spawn_rate}")
@@ -84,71 +86,71 @@ def run_experiment_with_density(
     results_control = []
     episodes_data = []
     
-    # Entrenamiento
-    for ep in range(episodes):
-        # Decidir qué agente usar (mezcla PGF/Control)
-        use_pgf_this_episode = np.random.rand() < pgf_mix
-        agent = agent_pgf if use_pgf_this_episode else agent_control
-        agent_type = "PGF" if use_pgf_this_episode else "Control"
+    # CORRECCIÓN: Episodios separados por agente (no mezclados)
+    # PGF primero, luego Control - ambos con mismo número de episodios
+    for agent_type in ["PGF", "Control"]:
+        agent = agent_pgf if agent_type == "PGF" else agent_control
         
-        # Reset
-        state = env.reset()
-        done = False
-        total_reward = 0
-        steps = 0
-        resources_collected = 0
+        for ep in range(episodes):
         
-        # Episode loop
-        while not done:
-            # Convertir estado a vector
-            state_vec = np.array([v for _, v in state], dtype=np.float32)
-            action_idx = agent.act(state_vec)
-            action = actions_map[action_idx]
+            # Reset
+            state = env.reset()
+            done = False
+            total_reward = 0
+            steps = 0
+            resources_collected = 0
             
-            next_state, reward, done, info = env.step(action)
+            # Episode loop
+            while not done:
+                # Convertir estado a vector
+                state_vec = np.array([v for _, v in state], dtype=np.float32)
+                action_idx = agent.act(state_vec)
+                action = actions_map[action_idx]
+                
+                next_state, reward, done, info = env.step(action)
+                
+                # Remember transition
+                next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
+                agent.remember(state_vec, action_idx, reward, next_state_vec, done)
+                agent.learn()  # Usar learn() en lugar de replay()
+                
+                state = next_state
+                total_reward += reward
+                steps += 1
+                
+                if info.get('resource_collected', False):
+                    resources_collected += 1
+        
+            # Calcular D_efectiva al final del episodio
+            density_metrics = env.compute_D_effective()
             
-            # Remember transition
-            next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
-            agent.remember(state_vec, action_idx, reward, next_state_vec, done)
-            agent.learn()  # Usar learn() en lugar de replay()
+            # Guardar resultado
+            episode_result = {
+                'episode': ep + 1,
+                'agent': agent_type,
+                'total_reward': total_reward,
+                'steps': steps,
+                'resources_collected': resources_collected,
+                'final_resources': env.resources,
+                'D_effective': density_metrics['D_effective'],
+                'rho': density_metrics['rho'],
+                'p_acceso': density_metrics['p_acceso'],
+                'tau_consumo': density_metrics['tau_consumo'],
+                'cells_visited': density_metrics['cells_visited'],
+            }
             
-            state = next_state
-            total_reward += reward
-            steps += 1
+            episodes_data.append(episode_result)
             
-            if info.get('resource_collected', False):
-                resources_collected += 1
-        
-        # Calcular D_efectiva al final del episodio
-        density_metrics = env.compute_D_effective()
-        
-        # Guardar resultado
-        episode_result = {
-            'episode': ep + 1,
-            'agent': agent_type,
-            'total_reward': total_reward,
-            'steps': steps,
-            'resources_collected': resources_collected,
-            'final_resources': env.resources,
-            'D_effective': density_metrics['D_effective'],
-            'rho': density_metrics['rho'],
-            'p_acceso': density_metrics['p_acceso'],
-            'tau_consumo': density_metrics['tau_consumo'],
-            'cells_visited': density_metrics['cells_visited'],
-        }
-        
-        episodes_data.append(episode_result)
-        
-        if agent_type == "PGF":
-            results_pgf.append(total_reward)
-        else:
-            results_control.append(total_reward)
-        
-        # Log progreso cada 50 episodios
-        if (ep + 1) % 50 == 0:
-            avg_pgf = np.mean(results_pgf[-50:]) if results_pgf else 0
-            avg_ctrl = np.mean(results_control[-50:]) if results_control else 0
-            print(f"Episode {ep+1}/{episodes} | PGF: {avg_pgf:.2f} | Control: {avg_ctrl:.2f} | D_eff: {density_metrics['D_effective']:.3f}")
+            if agent_type == "PGF":
+                results_pgf.append(total_reward)
+            else:
+                results_control.append(total_reward)
+            
+            # Log progreso cada 50 episodios
+            if (ep + 1) % 50 == 0:
+                avg_pgf = np.mean(results_pgf[-50:]) if results_pgf else 0
+                avg_ctrl = np.mean(results_control[-50:]) if results_control else 0
+                print(f"[{agent_type}] Episode {ep+1}/{episodes} | Avg: {total_reward:.2f} | D_eff: {density_metrics['D_effective']:.3f}")
     
     # Calcular estadísticas finales
     mean_pgf = np.mean(results_pgf) if results_pgf else 0
@@ -179,8 +181,10 @@ def run_experiment_with_density(
             'seed': seed,
             'risk_scale': risk_scale,
             'pgf_mix': pgf_mix,
-            'resource_reward': 5.0,
-            'max_resources_on_grid': 10,
+            'resource_reward': env.resource_reward,
+            'max_resources_on_grid': env.max_resources_on_grid,
+            'step_cost': env.step_cost,
+            'resource_decay_steps': env.resource_decay_steps,
         },
         'results': {
             'mean_reward_pgf': float(mean_pgf),
@@ -233,19 +237,21 @@ def main():
     print("="*80)
     print("Configuraciones:")
     print("  - Grid: 4x4 (fijo)")
-    print("  - Spawn Rates: 0.2 (baja), 0.5 (media), 0.8 (alta)")
+    print("  - Spawn Rates: 0.05, 0.15, 0.30 (mapeo exploratorio)")
     print("  - Seeds: 42, 123, 456")
-    print("  - Episodes: 500 por run")
-    print("  - Total: 9 runs × 500 episodes = 4500 episodes")
+    print("  - Episodes: 100 PGF + 100 Control = 200 por config")
+    print("  - Total: 9 configs × 200 episodes = 1800 episodes")
+    print("  - Economía: step_cost=-0.3, decay=5, max_resources=3")
+    print("  - Objetivo: Mapear curva ratio(D) sin imponer forma funcional")
     print("="*80 + "\n")
     
-    # Configuraciones (BATCH COMPLETO)
-    spawn_rates = [0.2, 0.5, 0.8]  # Baja, media, alta densidad
-    seeds = [42, 123, 456]          # 3 réplicas
+    # Configuraciones (BATCH EXPLORATORIO: Mapear curva real)
+    spawn_rates = [0.05, 0.15, 0.30]  # Escasez, intermedia, abundancia
+    seeds = [42, 123, 456]            # 3 réplicas
     
     # Configuración fija
     grid_size = 4
-    episodes = 500  # Experimento completo
+    episodes = 100  # TEST RÁPIDO
     risk_scale = 1.5
     pgf_mix = 0.2
     
