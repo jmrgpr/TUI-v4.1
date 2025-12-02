@@ -61,10 +61,14 @@ class EvaluatorPGF:
         self.P_genuino = (self.C_costo * self.S_auto * self.R_robust * self.I_rep) ** 0.25
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         # --- PGF v2: Bonificaciones + Penalización Selectiva ---
 =======
         # --- PGF FASE 2: Desglose de Tensión de Riesgo ---
 >>>>>>> d762f23 (Reorganización profesional de results/: estructura por tipo, fase, semilla, algoritmo y legacy. Actualización de README.md para reproducibilidad científica.)
+=======
+        # --- PGF v2: Bonificaciones + Penalización Selectiva ---
+>>>>>>> 9a3de35 (feat: PGF v2.1 - Bonificaciones escaladas supervivencia/eficiencia)
         kappa = config.EVAL_PGF_KAPPA
         lambda_c = config.EVAL_PGF_LAMBDA_C
         
@@ -72,6 +76,7 @@ class EvaluatorPGF:
         A_t = agent_alignment * self.P_genuino
         delta_C_t = abs(env.resources - agent_resources)
         
+<<<<<<< HEAD
         # PGF v3: Amplificación 2-3× + Bonus progreso
         # PGF v3: 2-3× amplification + Progress bonus
         
@@ -95,14 +100,36 @@ class EvaluatorPGF:
             bonus_progreso = 0.3  # Nivel medio
         else:
             bonus_progreso = 0.1  # Sobreviviendo
+=======
+        # PGF v2.1: Bonificaciones escaladas + Señal de gestión de recursos
+        # Scaled bonuses + Resource management signal
+        
+        # Bonus supervivencia escalado por nivel de recursos (0.5 -> 2.0)
+        # Survival bonus scaled by resource level (0.5 -> 2.0)
+        if agent_resources > 0:
+            resource_ratio = min(1.0, agent_resources / config.ENV_INITIAL_RESOURCES)
+            bonus_supervivencia = 0.5 + 1.5 * resource_ratio
+        else:
+            bonus_supervivencia = 0.0
+        
+        # Bonus eficiencia si consume <50% de recursos disponibles (0.5)
+        # Efficiency bonus if consuming <50% of available resources (0.5)
+        bonus_eficiencia = 0.5 if delta_C_t < 0.5 * env.resources else 0.0
+>>>>>>> 9a3de35 (feat: PGF v2.1 - Bonificaciones escaladas supervivencia/eficiencia)
         
         # Penalización solo para consumo excesivo (>50% de recursos disponibles)
         # Penalize only excessive consumption (>50% of available resources)
         penalizacion_costo = lambda_c * delta_C_t if delta_C_t > 0.5 * env.resources else 0.0
         
+<<<<<<< HEAD
         # Cálculo desglosado con 3 componentes positivos
         # Breakdown calculation with 3 positive components
         pgf_bruto = kappa * delta_P * A_t + bonus_supervivencia + bonus_eficiencia + bonus_progreso
+=======
+        # Cálculo desglosado con nueva estructura
+        # Breakdown calculation with new structure
+        pgf_bruto = kappa * delta_P * A_t + bonus_supervivencia + bonus_eficiencia
+>>>>>>> 9a3de35 (feat: PGF v2.1 - Bonificaciones escaladas supervivencia/eficiencia)
         pgf_costo = penalizacion_costo
         self.PGF = pgf_bruto - pgf_costo
         
