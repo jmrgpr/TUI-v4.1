@@ -1,19 +1,13 @@
 # Publicaciones / Publications — TUI v4.1
 
-**Autor / Author**: Jose M Rivera Garcia  
-**ORCID**: [0009-0000-3013-725X](https://orcid.org/0009-0000-3013-725X)  
-**DOI**: [10.5281/zenodo.17702378](https://doi.org/10.5281/zenodo.17702378)  
-**GitHub**: [@jmrgpr](https://github.com/jmrgpr)  
-**Reddit**: [r/UnifiedIntelligence](https://www.reddit.com/r/UnifiedIntelligence/)  
-**Licencia / License**: CC BY 4.0
 
 ---
 
 ## 📄 Contenido / Contents
 
-Esta carpeta contiene documentos técnicos, reportes preliminares y materiales de publicación relacionados con el proyecto **Teoría Unificada de Inteligencia (TUI) v4.1** y su implementación experimental mediante la **Prudential Gating Function (PGF)**.
+Esta carpeta contiene documentos técnicos, reportes preliminares y materiales de publicación relacionados con el proyecto **Teoría Unificada de Inteligencia (TUI) v4.2** y su implementación experimental mediante la **Prudential Gating Function (PGF)**.
 
-*This folder contains technical documents, preliminary reports, and publication materials related to the **Unified Intelligence Theory (TUI) v4.1** project and its experimental implementation via the **Prudential Gating Function (PGF)**.*
+*This folder contains technical documents, preliminary reports, and publication materials related to the **Unified Intelligence Theory (TUI) v4.2** project and its experimental implementation via the **Prudential Gating Function (PGF)**.*
 
 ---
 
@@ -75,11 +69,11 @@ Esta carpeta contiene documentos técnicos, reportes preliminares y materiales d
 
 ## 🚀 Próximos Pasos / Next Steps
 
-### Publicación Rápida en arXiv/Zenodo
+### Publicación Rápida en Zenodo
 
 1. ✅ **HECHO**: Documento técnico completo
 2. ⏳ **PENDIENTE**: Convertir Markdown a PDF
-3. ⏳ **PENDIENTE**: Subir a arXiv (cs.AI o cs.LG)
+3. ⏳ **PENDIENTE**: Subir a Zenodo
 4. ⏳ **PENDIENTE**: Actualizar Zenodo DOI
 
 **Timeline**: 1-2 días

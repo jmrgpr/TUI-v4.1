@@ -133,11 +133,7 @@
    - Ctrl+P → Guardar como PDF (ajustar márgenes a "Mínimos")
    - O si prefieres Pandoc: Seguir `GUIA_CONVERSION_PDF.md`
 
-2. **Crear cuenta arXiv** (si no tienes)
-   - https://arxiv.org/user/register
-   - Verificar email
-   - Obtener endorsement si es tu primer submission a cs.LG
-     - Alternativa: Enviar a cs.AI primero (menos restrictivo)
+
 
 3. **Upload a Zenodo** (más rápido, sin moderación)
    - https://zenodo.org/
@@ -217,15 +213,15 @@
 
 ```bibtex
 @techreport{rivera2025pgf_v3,
-  author       = {Rivera Garcia, Jose M},
-  title        = {Prudential Gating Function v3: Multi-Seed Validation of a Risk-Aware Reward Shaping Mechanism for Reinforcement Learning},
-  institution  = {Independent Research},
-  year         = {2025},
-  month        = {December},
-  type         = {Technical Report},
-  doi          = {10.5281/zenodo.17702378},
-  url          = {https://github.com/jmrgpr/TUI-v4.1},
-  note         = {Version 1.0, Commit 1654a9d}
+   author       = {Rivera Garcia, Jose M},
+   title        = {Prudential Gating Function v3: Multi-Seed Validation of a Risk-Aware Reward Shaping Mechanism for Reinforcement Learning},
+   institution  = {Independent Research},
+   year         = {2025},
+   month        = {December},
+   type         = {Technical Report},
+   doi          = {10.5281/zenodo.17702378},
+   url          = {https://github.com/jmrgpr/TUI-v4.1},
+   note         = {Version 1.0, Commit 1654a9d}
 }
 ```
 
@@ -235,7 +231,10 @@
 
 ---
 
-**Preparado por**: Claude (Sonnet 4.5) en colaboración con Jose M Rivera Garcia  
-**Fecha**: 2 de diciembre de 2025, 12:15 PM  
-**Commit**: `1654a9d`  
+
+**Preparado por**: Jose M Rivera Garcia
+**Fecha**: 2 de diciembre de 2025, 12:15 PM
+**Commit**: `1654a9d`
 **Estado**: LISTO PARA PUBLICACIÓN
+
+*Nota: Se utilizaron herramientas basadas en IA únicamente como apoyo técnico (autocompletado, traducción, formato). Todas las decisiones científicas, análisis y conclusiones son responsabilidad exclusiva del autor. El uso de IA no influyó en la integridad científica ni en la originalidad del trabajo.*

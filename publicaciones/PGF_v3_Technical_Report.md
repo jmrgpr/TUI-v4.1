@@ -555,20 +555,16 @@ PGF v3 is a step in that direction. It is not the final answer, but it is an hon
 
 This work builds on the Unified Intelligence Theory framework, which synthesizes ideas from evolutionary biology, information theory, and AI safety research. I thank the open-source RL community for tools (PyTorch, Gymnasium) that made this work possible, and the r/UnifiedIntelligence community for feedback on early iterations.
 
-Special thanks to the AI assistants (Claude, GitHub Copilot) who helped refine the code and documentation—a reminder that human-AI collaboration is itself a form of "symbiosis."
+Note: During the research and documentation process, AI-based tools were used strictly as technical support (code completion, translation, formatting). All scientific decisions, analysis, and conclusions are the sole responsibility of the author. The use of AI tools did not influence the scientific integrity or originality of the work.
 
 ---
 
 ## References
 
-(To be formatted in proper citation style for arXiv submission)
 
-- Rivera Garcia, J.M. (2025). "Unified Intelligence Theory v4.1." Zenodo. DOI: 10.5281/zenodo.17702378
-- Ng, A.Y., Harada, D., Russell, S. (1999). "Policy invariance under reward transformations: Theory and application to reward shaping." ICML.
-- García, J., Fernández, F. (2015). "A comprehensive survey on safe reinforcement learning." JMLR.
-- Altman, E. (1999). "Constrained Markov decision processes." Chapman & Hall/CRC.
-- Bostrom, N. (2014). "Superintelligence: Paths, Dangers, Strategies." Oxford University Press.
-- Amodei, D., et al. (2016). "Concrete problems in AI safety." arXiv:1606.06565.
+
+
+
 
 ---
 

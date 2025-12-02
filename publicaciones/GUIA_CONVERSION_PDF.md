@@ -6,7 +6,7 @@
 
 ---
 
-## Opción 1: Pandoc (RECOMENDADO) ⭐
+## Opción 1: Pandoc (RECOMENDADO para Zenodo) ⭐
 
 ### ¿Qué es Pandoc?
 Herramienta de línea de comandos que convierte entre formatos de documentos (Markdown → PDF, LaTeX, DOCX, etc.)
@@ -51,7 +51,7 @@ pandoc PGF_v3_Technical_Report.md `
   --variable colorlinks=true
 ```
 
-### Comando Avanzado (Para arXiv)
+### Comando Avanzado (Para Zenodo)
 
 ```powershell
 pandoc PGF_v3_Technical_Report.md `
@@ -237,11 +237,11 @@ Start-Process PGF_v3_Technical_Report.html
 # 4. En navegador: Ctrl+P → Guardar como PDF
 ```
 
-### Si quieres MÁXIMA calidad (después de publicar en arXiv):
+### Si quieres MÁXIMA calidad:
 
 **Usa Opción 1: Pandoc + LaTeX**
 
-Pero hazlo DESPUÉS de que tengas feedback de arXiv/Zenodo. La diferencia de calidad es mínima para un Technical Report, y el HTML→PDF es suficiente para la primera versión.
+La diferencia de calidad es mínima para un Technical Report, y el HTML→PDF es suficiente para la primera versión.
 
 ---
 
@@ -336,13 +336,7 @@ Antes de subir a arXiv/Zenodo, verifica:
 
 Una vez tengas el PDF:
 
-### arXiv
-1. Crear cuenta: https://arxiv.org/user/register
-2. "Submit" → "Start New Submission"
-3. Categoría: cs.LG (primary), cs.AI (secondary)
-4. Upload PDF
-5. Copiar abstract de `METADATA_arXiv_Zenodo.md`
-6. Esperar moderación (~24h)
+
 
 ### Zenodo
 1. Login: https://zenodo.org/

@@ -2,20 +2,20 @@
 
 ## Título / Title
 
-**Inglés (Principal)**:  
+**Inglés (Principal)**:
 Prudential Gating Function v3: Multi-Seed Validation of a Risk-Aware Reward Shaping Mechanism for Reinforcement Learning
 
-**Título corto** (para headers):  
+**Título corto** (para headers):
 PGF v3: Risk-Aware Reward Shaping Multi-Seed Validation
 
 ---
 
 ## Autor / Author
 
-**Nombre completo**: Jose M Rivera Garcia  
-**Afiliación**: Independent Researcher  
-**ORCID**: 0009-0000-3013-725X  
-**Email**: jmrgpr@gmail.com  
+**Nombre completo**: Jose M Rivera Garcia
+**Afiliación**: Independent Researcher
+**ORCID**: 0009-0000-3013-725X
+**Email**: jmrgpr@gmail.com
 **País**: Puerto Rico / United States
 
 ---
@@ -47,8 +47,8 @@ Statistical analysis confirms significant improvement over the previous iteratio
 
 ## Categorías arXiv
 
-**Principal**: cs.LG (Machine Learning)  
-**Secundaria**: cs.AI (Artificial Intelligence)  
+**Principal**: cs.LG (Machine Learning)
+**Secundaria**: cs.AI (Artificial Intelligence)
 **Terciaria** (opcional): stat.ML (Machine Learning - Statistics)
 
 **Código completo**: cs.LG, cs.AI
@@ -68,7 +68,7 @@ Statistical analysis confirms significant improvement over the previous iteratio
 
 ## DOI y Versiones
 
-**DOI actual del proyecto**: 10.5281/zenodo.17702378  
+**DOI actual del proyecto**: 10.5281/zenodo.17702378
 **Nueva versión en Zenodo**: (se generará automáticamente al subir)
 
 **Nota**: En Zenodo, este Technical Report será una "nueva versión" del proyecto TUI-v4.1, manteniendo el mismo concept DOI pero con version DOI específico.
@@ -78,72 +78,15 @@ Statistical analysis confirms significant improvement over the previous iteratio
 ## Referencias Bibliográficas (formato BibTeX)
 
 ```bibtex
-@article{ng1999policy,
-  title={Policy invariance under reward transformations: Theory and application to reward shaping},
-  author={Ng, Andrew Y and Harada, Daishi and Russell, Stuart},
-  journal={ICML},
-  volume={99},
-  pages={278--287},
-  year={1999}
-}
-
-@article{garcia2015comprehensive,
-  title={A comprehensive survey on safe reinforcement learning},
-  author={Garc{\'\i}a, Javier and Fern{\'a}ndez, Fernando},
-  journal={Journal of Machine Learning Research},
-  volume={16},
-  number={1},
-  pages={1437--1480},
-  year={2015}
-}
-
-@book{altman1999constrained,
-  title={Constrained Markov decision processes},
-  author={Altman, Eitan},
-  year={1999},
-  publisher={CRC Press}
-}
-
-@article{garcia2015safe,
-  title={Safe exploration of state and action spaces in reinforcement learning},
-  author={Garc{\'\i}a, Javier and Fern{\'a}ndez, Fernando},
-  journal={Journal of Artificial Intelligence Research},
-  volume={45},
-  pages={515--564},
-  year={2012}
-}
-
-@book{bostrom2014superintelligence,
-  title={Superintelligence: Paths, dangers, strategies},
-  author={Bostrom, Nick},
-  year={2014},
-  publisher={Oxford University Press}
-}
-
-@article{amodei2016concrete,
-  title={Concrete problems in AI safety},
-  author={Amodei, Dario and Olah, Chris and Steinhardt, Jacob and Christiano, Paul and Schulman, John and Man{\'e}, Dan},
-  journal={arXiv preprint arXiv:1606.06565},
-  year={2016}
-}
-
 @misc{rivera2025tui,
-  title={Unified Intelligence Theory v4.1: A Risk-Driven Framework},
+  title={Unified Intelligence Theory v4.2: A Risk-Driven Framework},
   author={Rivera Garcia, Jose M},
   year={2025},
   doi={10.5281/zenodo.17702378},
-  url={https://github.com/jmrgpr/TUI-v4.1},
-  note={Version 4.1}
-}
-
-@article{sutton2018reinforcement,
-  title={Reinforcement learning: An introduction},
-  author={Sutton, Richard S and Barto, Andrew G},
-  year={2018},
-  publisher={MIT press}
+  url={https://github.com/jmrgpr/TUI-v4.2},
+  note={Version 4.2}
 }
 ```
-
 ---
 
 ## Licencia / License
@@ -278,3 +221,4 @@ The author declares no competing financial interests or personal relationships t
 **Fecha**: 2 de diciembre de 2025  
 **Versión**: 1.0  
 **Estado**: Listo para conversión PDF
+```
