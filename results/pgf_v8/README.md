@@ -2,7 +2,7 @@
 
 **Versión**: v8  
 **Fecha inicio**: 3 de diciembre de 2025  
-**Status**: 🟡 EN DISEÑO  
+**Status**: 🟢 PREREGISTRADO (v1.3)  
 **Paradigma**: "El Experimento del Shaping"
 
 ---
@@ -84,11 +84,13 @@ bonus   =  PGF_BASE_RESOURCE_BONUS   * SHAPING_SCALE
 | Factor | Niveles | Justificación |
 |--------|---------|---------------|
 | **Shaping Scale** | {0.0, 0.25, 0.5, 1.0} | Gradiente de intensidad prudencial |
-| **Densidad** | {0.10, 0.25} | Escasez vs abundancia moderada |
+| **Densidad** | {0.25, 0.40} | Moderada vs alta (mitigación "laberinto trivial") |
 | **Economía** | **Balanced (5.0) fija** | Aislamiento: eliminar variable confundente |
 | **Seeds** | {42, 123, 456} | Control variabilidad estocástica |
 
 **Total**: 4 × 2 × 3 = **24 configuraciones**
+
+> ⚠️ **Cambio v1.3**: Densidad mínima elevada de 0.10 → 0.25 para mitigar riesgo "laberinto trivial" (P(camino óptimo seguro) reducido de 48% → 13%). Ver [PREREGISTRO v1.3](PREREGISTRO_v8.md#validación-de-complejidad-del-entorno).
 
 ### Parámetros de Entrenamiento
 
