@@ -530,31 +530,73 @@ exp8_shaping{s}_spawn{d}_seed{seed}_episodes.csv
 exp8_shaping{s}_spawn{d}_seed{seed}_metrics.json
 ```
 
-**Columnas CSV** (por episodio):
+**Columnas CSV OBLIGATORIAS** (por episodio):
 ```python
-episode, agent_type, total_reward_env, total_reward_shaped, 
-tripwires_triggered, deaths_starvation, resources_collected,
-steps_to_goal, goal_reached, epsilon
+# Identificación
+episode: int              # Número de episodio (1-300)
+agent_type: str           # "PGF" o "Control"
+
+# Recompensas duales (CRÍTICO: ambas deben guardarse)
+total_reward_env: float   # Reward crudo del entorno (lo que "importa al mundo")
+total_reward_shaped: float # Train signal con shaping (lo que "ve" el agente)
+
+# Métricas de seguridad (CRÍTICO: contadores absolutos)
+tripwires_triggered: int  # Contador de tripwires pisados en episodio
+deaths_starvation: int    # 1 si murió por energy=0, 0 si no
+deaths_tripwire: int      # 1 si murió por tripwire fatal (solo v8.1), 0 si no
+
+# Métricas de eficiencia
+resources_collected: int  # Total recursos consumidos en episodio
+steps_to_goal: int        # Pasos tomados (si goal_reached=True)
+goal_reached: bool        # True si llegó a meta, False si timeout/muerte
+
+# Exploración
+epsilon: float            # Valor epsilon al final del episodio
 ```
 
-**Campos JSON** (agregado config):
+**⚠️ VALIDACIÓN DE PERSISTENCIA**:
+- ❌ **NO aceptar** CSV sin columnas `total_reward_env` Y `total_reward_shaped` separadas
+- ❌ **NO aceptar** CSV sin `tripwires_triggered` (contador numérico, no booleano)
+- ❌ **NO aceptar** CSV sin `resources_collected` y `steps_to_goal`
+- ✅ Si alguna columna crítica falta en output → **INVALIDAR config** y re-ejecutar
+
+**Campos JSON** (agregado por config):
 ```python
 {
-  "config": {...},
-  "pgf_stats": {
-    "mean_reward_env": float,
-    "mean_reward_shaped": float,
-    "mean_tripwires": float,
-    "mean_steps": float,
-    "survival_rate": float
+  "config": {
+    "shaping_scale": float,        # 0.0, 0.25, 0.5, 1.0
+    "spawn_rate": float,           # 0.10, 0.25
+    "seed": int,                   # 42, 123, 456
+    "balance": float,              # 5.0 (fijo)
+    "tripwire_fatal": bool,        # False en v8.0
+    "pgf_base_tripwire_penalty": float,  # 100.0
+    "pgf_base_resource_bonus": float,    # 50.0
+    "episodes": int                # 300
   },
-  "control_stats": {...},
+  "pgf_stats": {
+    "mean_reward_env": float,      # Promedio reward crudo PGF
+    "std_reward_env": float,
+    "mean_reward_shaped": float,   # Promedio reward shaped PGF
+    "std_reward_shaped": float,
+    "mean_tripwires": float,       # Promedio tripwires/episodio
+    "total_tripwires": int,        # Suma absoluta
+    "mean_resources": float,       # Promedio recursos/episodio
+    "mean_steps": float,           # Promedio steps (solo episodios exitosos)
+    "survival_rate": float,        # % episodios sin muerte
+    "success_rate": float          # % episodios goal_reached=True
+  },
+  "control_stats": {
+    # Misma estructura que pgf_stats
+  },
   "ratios": {
-    "reward_env": float,
-    "reward_shaped": float,
-    "tripwires": float,
-    "steps": float
-  }
+    "reward_env": float,           # mean_reward_env_pgf / mean_reward_env_control
+    "reward_shaped": float,        # mean_reward_shaped_pgf / mean_reward_shaped_control
+    "tripwires": float,            # mean_tripwires_pgf / mean_tripwires_control
+    "resources": float,            # mean_resources_pgf / mean_resources_control
+    "steps": float                 # mean_steps_pgf / mean_steps_control
+  },
+  "timestamp": str,                # ISO 8601
+  "duration_minutes": float        # Tiempo ejecución config
 }
 ```
 
@@ -588,8 +630,8 @@ reportes/REPORTE_FINAL_v8.md              # Narrativa completa
 ### Ajustes Post-Hoc Autorizados
 
 1. **Si convergencia persiste con s=1.0**:
-   - Autorizado: Ejecutar configs adicionales con s=2.0 (4 configs extra)
-   - NO autorizado: Cambiar hiperparámetros DQN sin preregistrar v8.1
+   - Autorizado: Activar Protocolo Fase 2 (v8.1 con TRIPWIRE_FATAL=True)
+   - NO autorizado: Cambiar hiperparámetros DQN sin preregistrar v8.0.1
 
 2. **Si H8.3 falla (control negativo)**:
    - Autorizado: Repetir configs s=0.0 con semillado alternativo
@@ -598,6 +640,10 @@ reportes/REPORTE_FINAL_v8.md              # Narrativa completa
 3. **Si outliers extremos** (ratio <0.5 o >2.0):
    - Autorizado: Análisis de sensibilidad excluyendo outlier
    - Requerido: Reportar ambos análisis (con/sin outlier)
+
+4. **Si columnas críticas faltan en CSV**:
+   - Requerido: DETENER ejecución, corregir código, re-ejecutar config
+   - NO autorizado: Análisis con datos incompletos
 
 ### Análisis Exploratorios NO Preregistrados
 
@@ -687,7 +733,128 @@ Q(s, a_risk) = -0.2 (step) + γ*(reward_future - 100*p_tripwire)
 Con p_tripwire>0.1, rama riesgosa se vuelve subóptima.
 ```
 
-### Anexo C: Cronograma Detallado
+### Anexo C: Especificación Técnica de Implementación
+
+**Parámetros de configuración OBLIGATORIOS** (no hardcodear):
+
+```python
+# Config centralizada (ej. config.py o argparse)
+class ExperimentConfig:
+    # Shaping PGF
+    PGF_BASE_TRIPWIRE_PENALTY: float = 100.0
+    PGF_BASE_RESOURCE_BONUS: float = 50.0
+    PGF_SHAPING_SCALE: float  # Variable: 0.0, 0.25, 0.5, 1.0
+    
+    # Entorno
+    TRIPWIRE_FATAL: bool = False  # Fase 1: False, Fase 2: True
+    SPAWN_RATE: float  # Variable: 0.10, 0.25
+    BALANCE: float = 5.0  # Fijo
+    
+    # Episodios
+    EPISODES_PER_AGENT: int = 300
+    SEEDS: list[int] = [42, 123, 456]
+```
+
+**Validación de output OBLIGATORIA**:
+
+```python
+def validate_csv_output(csv_path: str) -> bool:
+    """Valida que CSV contenga todas las columnas críticas"""
+    df = pd.read_csv(csv_path)
+    
+    required_columns = [
+        'episode', 'agent_type',
+        'total_reward_env',      # CRÍTICO
+        'total_reward_shaped',   # CRÍTICO
+        'tripwires_triggered',   # CRÍTICO
+        'resources_collected',   # CRÍTICO
+        'steps_to_goal',
+        'goal_reached',
+        'deaths_starvation',
+        'epsilon'
+    ]
+    
+    missing = [col for col in required_columns if col not in df.columns]
+    
+    if missing:
+        raise ValueError(f"CSV inválido: faltan columnas {missing}")
+    
+    # Validar tipos
+    assert df['tripwires_triggered'].dtype in [int, np.int64], \
+        "tripwires_triggered debe ser int, no bool"
+    
+    return True
+```
+
+**Acumulación de métricas durante entrenamiento**:
+
+```python
+def train_agent(agent, env, config, is_pgf=False):
+    """
+    Entrenar agente guardando métricas duales
+    """
+    episode_data = []
+    
+    for episode in range(config.EPISODES_PER_AGENT):
+        obs = env.reset()
+        done = False
+        
+        # Acumuladores separados
+        total_reward_env = 0.0      # Reward crudo
+        total_reward_shaped = 0.0   # Reward con shaping
+        tripwires_count = 0
+        resources_count = 0
+        steps = 0
+        
+        while not done:
+            action = agent.select_action(obs)
+            next_obs, reward, done, info = env.step(action)
+            
+            # Acumular reward crudo
+            total_reward_env += reward
+            
+            # Calcular train_signal (con shaping si PGF)
+            train_signal = reward
+            if is_pgf:
+                penalty = -config.PGF_BASE_TRIPWIRE_PENALTY * config.PGF_SHAPING_SCALE
+                bonus = config.PGF_BASE_RESOURCE_BONUS * config.PGF_SHAPING_SCALE
+                
+                if info.get('tripwire', False):
+                    train_signal += penalty
+                    tripwires_count += 1
+                
+                if info.get('resource_value', 0) > 0:
+                    train_signal += bonus
+                    resources_count += 1
+            
+            # Acumular reward shaped
+            total_reward_shaped += train_signal
+            
+            # Entrenar con señal shaped
+            agent.remember(obs, action, train_signal, next_obs, done)
+            agent.replay()
+            
+            obs = next_obs
+            steps += 1
+        
+        # Guardar episodio con AMBAS métricas
+        episode_data.append({
+            'episode': episode + 1,
+            'agent_type': 'PGF' if is_pgf else 'Control',
+            'total_reward_env': total_reward_env,      # CRÍTICO
+            'total_reward_shaped': total_reward_shaped, # CRÍTICO
+            'tripwires_triggered': tripwires_count,     # CRÍTICO
+            'resources_collected': resources_count,     # CRÍTICO
+            'steps_to_goal': steps,
+            'goal_reached': info.get('goal_reached', False),
+            'deaths_starvation': 1 if info.get('energy', 1) <= 0 else 0,
+            'epsilon': agent.epsilon
+        })
+    
+    return episode_data
+```
+
+### Anexo D: Cronograma Detallado
 
 ```
 [3 dic 14:00] Inicio implementación
