@@ -118,10 +118,12 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
     Returns:
         episode_data: Lista de diccionarios con datos por episodio
     """
+    # Mapeo de acciones
+    actions_map = ['up', 'down', 'left', 'right']
     episode_data = []
     
     for ep in range(num_episodes):
-        state = env.reset()
+        state_dict = env.reset()
         total_reward = 0
         steps = 0
         done = False
@@ -130,18 +132,23 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
         initial_resources = env.agent_resources
         
         while not done:
+            # Convertir estado abstracto a vector
+            state_vec = np.array([v for _, v in state_dict], dtype=np.float32)
+            
             # Seleccionar acción
-            action = agent.choose_action(state)
+            action_idx = agent.act(state_vec)
+            action = actions_map[action_idx]
             
             # Ejecutar acción
-            next_state, reward, done, info = env.step(action)
+            next_state_dict, reward, done, info = env.step(action)
+            next_state_vec = np.array([v for _, v in next_state_dict], dtype=np.float32)
             
             # Entrenar agente
-            agent.remember(state, action, reward, next_state, done)
-            agent.train()
+            agent.remember(state_vec, action_idx, reward, next_state_vec, done)
+            agent.learn()
             
             # Actualizar estado
-            state = next_state
+            state_dict = next_state_dict
             total_reward += reward
             steps += 1
             
@@ -216,7 +223,8 @@ def run_single_config(economy, spawn_rate, seed, num_episodes=300,
     )
     
     # Parámetros comunes DQN
-    state_size = 9  # Abstract state
+    state = env.reset()
+    state_size = len([v for _, v in state])  # Extraer tamaño del abstract state
     action_size = 4
     
     # =========================================
@@ -226,7 +234,7 @@ def run_single_config(economy, spawn_rate, seed, num_episodes=300,
         print(f"\n🤖 Entrenando agente PGF ({num_episodes} episodios)...")
     
     configure_all_seeds(seed)  # Re-seed antes de PGF
-    agent_pgf = DQNAgent(state_size, action_size, pgf_mix=0.2)
+    agent_pgf = DQNAgent(state_size, action_size)
     episodes_pgf = train_agent(env, agent_pgf, num_episodes, agent_type='PGF', 
                                 verbose_freq=50 if verbose else 99999)
     
@@ -237,7 +245,7 @@ def run_single_config(economy, spawn_rate, seed, num_episodes=300,
         print(f"\n🤖 Entrenando agente Control ({num_episodes} episodios)...")
     
     configure_all_seeds(seed)  # Re-seed antes de Control (entrenamiento simétrico)
-    agent_control = DQNAgent(state_size, action_size, pgf_mix=0.0)
+    agent_control = DQNAgent(state_size, action_size)
     episodes_control = train_agent(env, agent_control, num_episodes, agent_type='Control',
                                     verbose_freq=50 if verbose else 99999)
     
