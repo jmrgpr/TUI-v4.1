@@ -552,6 +552,11 @@ goal_reached: bool        # True si llegó a meta, False si timeout/muerte
 
 # Exploración
 epsilon: float            # Valor epsilon al final del episodio
+
+# Metadata (CRÍTICO: para análisis robusto, no depender solo de filename)
+shaping_scale: float      # 0.0, 0.25, 0.5, 1.0
+spawn_rate: float         # 0.10, 0.25
+seed: int                 # 42, 123, 456
 ```
 
 **⚠️ VALIDACIÓN DE PERSISTENCIA**:
@@ -771,7 +776,12 @@ def validate_csv_output(csv_path: str) -> bool:
         'steps_to_goal',
         'goal_reached',
         'deaths_starvation',
-        'epsilon'
+        'deaths_tripwire',
+        'epsilon',
+        # Metadata para análisis robusto
+        'shaping_scale',
+        'spawn_rate',
+        'seed'
     ]
     
     missing = [col for col in required_columns if col not in df.columns]
@@ -779,9 +789,19 @@ def validate_csv_output(csv_path: str) -> bool:
     if missing:
         raise ValueError(f"CSV inválido: faltan columnas {missing}")
     
-    # Validar tipos
-    assert df['tripwires_triggered'].dtype in [int, np.int64], \
-        "tripwires_triggered debe ser int, no bool"
+    # Validar tipos (flexible con subtipos de integer para evitar crasheos con pandas)
+    if not np.issubdtype(df['tripwires_triggered'].dtype, np.integer):
+        raise TypeError("tripwires_triggered debe ser entero (int dtype)")
+    
+    if not np.issubdtype(df['resources_collected'].dtype, np.integer):
+        raise TypeError("resources_collected debe ser entero (int dtype)")
+    
+    if not np.issubdtype(df['episode'].dtype, np.integer):
+        raise TypeError("episode debe ser entero (int dtype)")
+    
+    # Validar booleanos (pandas puede usar int 0/1)
+    if not df['goal_reached'].dtype in [bool, np.bool_, int, np.int64]:
+        raise TypeError("goal_reached debe ser bool o int 0/1")
     
     return True
 ```
@@ -823,7 +843,9 @@ def train_agent(agent, env, config, is_pgf=False):
                     train_signal += penalty
                     tripwires_count += 1
                 
-                if info.get('resource_value', 0) > 0:
+                # NOTA: Usar flag explícita 'resource_collected' en vez de resource_value>0
+                # para evitar falsos positivos si value es 0.0 pero recurso se consumió
+                if info.get('resource_collected', False):
                     train_signal += bonus
                     resources_count += 1
             
@@ -838,6 +860,8 @@ def train_agent(agent, env, config, is_pgf=False):
             steps += 1
         
         # Guardar episodio con AMBAS métricas
+        # NOTA: Usar flags explícitas para causa de muerte (no derivar de energía final)
+        # Esto garantiza métricas de seguridad confiables, especialmente en v8.1
         episode_data.append({
             'episode': episode + 1,
             'agent_type': 'PGF' if is_pgf else 'Control',
@@ -847,8 +871,13 @@ def train_agent(agent, env, config, is_pgf=False):
             'resources_collected': resources_count,     # CRÍTICO
             'steps_to_goal': steps,
             'goal_reached': info.get('goal_reached', False),
-            'deaths_starvation': 1 if info.get('energy', 1) <= 0 else 0,
-            'epsilon': agent.epsilon
+            'deaths_starvation': 1 if info.get('starvation', False) else 0,
+            'deaths_tripwire': 1 if info.get('tripwire_death', False) else 0,
+            'epsilon': agent.epsilon,
+            # Metadata adicional para análisis robusto (no depender solo de filename)
+            'shaping_scale': config.PGF_SHAPING_SCALE if is_pgf else 0.0,
+            'spawn_rate': config.SPAWN_RATE,
+            'seed': config.SEED
         })
     
     return episode_data
