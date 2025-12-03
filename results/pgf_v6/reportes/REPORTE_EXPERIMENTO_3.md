@@ -1,6 +1,6 @@
 # Experimento 3: Análisis de la Curva Goldilocks (PGF v6)
 
-**Fecha análisis**: 2025-12-03 08:46:17  
+**Fecha análisis**: 2025-12-03 09:04:57  
 **Datos analizados**: 25 configuraciones (24 robustos)  
 **Outliers detectados**: 1
 
@@ -17,11 +17,11 @@
 
 | Densidad | N | Ratio medio | Std | D_eff medio |
 |----------|---|-------------|-----|-------------|
-| 0.05 | 5 | 100.32% | 0.88 | 0.291 |
-| 0.1 | 5 | 82.23% | 46.50 | 0.498 |
-| 0.2 | 5 | 84.78% | 28.18 | 0.980 |
-| 0.3 | 5 | 100.87% | 5.92 | 1.463 |
-| 0.4 | 4 | 71.64% | 47.21 | 1.924 |
+| 0.05 | 5 | 99.82% | 4.16 | 0.245 |
+| 0.1 | 5 | 95.79% | 13.57 | 0.449 |
+| 0.2 | 5 | 98.93% | 10.23 | 0.851 |
+| 0.3 | 5 | 100.72% | 4.25 | 1.244 |
+| 0.4 | 4 | 103.07% | 3.01 | 1.643 |
 
 ---
 
@@ -29,11 +29,11 @@
 
 | Modelo | Ecuación | AIC | BIC | RSS |
 |--------|----------|-----|-----|-----|
-| Constant | `ratio = 88.65` | 165.17 | 166.35 | 21521.95 |
-| Linear | `ratio = 0.63D + 88.03` | 167.17 | 169.52 | 21518.52 |
-| Quadratic | `ratio = 12.06D² + -26.83D + 99.00` | 168.70 | 172.23 | 21104.52 |
-| Logarithmic | `ratio = 88.33 + -1.41log(D)` | 167.15 | 169.50 | 21499.30 |
-| Exponential | `ratio = 88.00exp(0.01D)` | 167.17 | 169.52 | 21518.36 |
+| Constant | `ratio = 99.52` | 100.49 | 101.67 | 1453.44 |
+| Linear | `ratio = 3.26D + 96.74` | 101.41 | 103.76 | 1389.42 |
+| Quadratic | `ratio = 2.43D² + -1.30D + 98.25` | 103.29 | 106.82 | 1382.66 |
+| Logarithmic | `ratio = 100.24 + 1.96log(D)` | 101.76 | 104.12 | 1410.29 |
+| Exponential | `ratio = 96.76exp(0.03D)` | 101.40 | 103.76 | 1389.12 |
 
 **Mejor modelo (menor AIC)**: **Constant**
 
@@ -44,23 +44,23 @@
 **Criterios cumplidos**: 1/5
 
 ❌ **1. 1 Correlation**
-   - Valor observado: `r=0.013, p=0.9533`
+   - Valor observado: `r=0.210, p=0.3249`
    - Umbral preregistrado: `|r|>0.5, p<0.01`
 
 ❌ **2. 2 Quadratic Wins**
-   - Valor observado: `ΔAIC=1.53`
+   - Valor observado: `ΔAIC=1.88`
    - Umbral preregistrado: `ΔAIC<-4`
 
 ❌ **3. 3 Inverted Parabola**
-   - Valor observado: `a=12.062, IC95%=[-13.77099263  48.68600769]`
+   - Valor observado: `a=2.426, IC95%=[-8.6936882  16.72989529]`
    - Umbral preregistrado: `a<0, IC95%<0`
 
-✅ **4. 4 Maximum Range**
-   - Valor observado: `D*=1.112`
+❌ **4. 4 Maximum Range**
+   - Valor observado: `D*=0.268`
    - Umbral preregistrado: `0.7≤D*≤1.5`
 
-❌ **5. 5 Peak Ratio**
-   - Valor observado: `ratio(D*)=84.08%`
+✅ **5. 5 Peak Ratio**
+   - Valor observado: `ratio(D*)=98.08%`
    - Umbral preregistrado: `>95%`
 
 
