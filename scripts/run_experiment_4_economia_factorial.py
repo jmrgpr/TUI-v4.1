@@ -129,7 +129,7 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
         done = False
         
         resources_collected = 0
-        initial_resources = env.agent_resources
+        initial_resources = env.resources
         
         while not done:
             # Convertir estado abstracto a vector
@@ -153,9 +153,9 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
             steps += 1
             
             # Contar recursos consumidos
-            if env.agent_resources > initial_resources:
+            if env.resources > initial_resources:
                 resources_collected += 1
-                initial_resources = env.agent_resources
+                initial_resources = env.resources
         
         # Registrar datos del episodio
         episode_data.append({
@@ -163,7 +163,7 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
             'total_reward': total_reward,
             'steps': steps,
             'resources_collected': resources_collected,
-            'final_resources': env.agent_resources,
+            'final_resources': env.resources,
             'goal_reached': info.get('goal_reached', False),
             'death_by_hazard': info.get('death_by_hazard', False),
             'epsilon': agent.epsilon
