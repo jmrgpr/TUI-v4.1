@@ -192,25 +192,27 @@ tramos = {
 
 **Criterio de éxito H8.1**: 2/3 predicciones cumplidas con p<0.05 en ANOVA.
 
-### H8.2: Interacción Shaping × Densidad
+### H8.2: Amplificación por Densidad Moderada (Exploratoria)
 
-> **Enunciado**: La densidad de recursos **modera** el coste de alineación. En escasez, prudencia es más costosa que en abundancia.
+> **Enunciado**: La densidad moderada (`spawn=0.25`) **amplificará** el efecto del shaping fuerte (`scale ≥ 0.5`) en métricas de seguridad (`tripwires_triggered`) sin degradar excesivamente `reward_env`, comparado con densidad alta (`spawn=0.40`).
+
+**Justificación teórica**: En densidades muy bajas, el shaping puede ser irrelevante (caminos seguros abundan por azar). En densidades muy altas, incluso con shaping el agente puede ser forzado a tomar riesgos por imposibilidad de evasión. La densidad moderada maximiza el **espacio de maniobra** para que el shaping diferencie conductas.
 
 **Predicciones específicas**:
 
-1. **En densidad=0.10 (escasez)**:
+1. **En densidad=0.25 (moderada)**:
    ```
-   ratio_env(s=1.0) < 0.90  (coste severo: -10%)
-   tripwires_pgf ≈ 0         (necesidad forzada de prudencia)
-   ```
-
-2. **En densidad=0.25 (abundancia)**:
-   ```
-   ratio_env(s=1.0) ≥ 0.95   (coste mitigado: -5%)
-   tripwires_pgf ≈ 0          (prudencia sin sacrificio)
+   tripwires_ratio(s=1.0) < 0.65  (reducción >35% riesgo)
+   ratio_env(s=1.0) ≥ 0.90        (coste moderado)
    ```
 
-**Criterio de éxito H8.2**: Interacción significativa (p<0.05) en ANOVA 2-way Shaping×Densidad, con diferencia ≥5 puntos porcentuales entre densidades.
+2. **En densidad=0.40 (alta)**:
+   ```
+   tripwires_ratio(s=1.0) ∈ [0.70, 0.85]  (reducción 15-30% riesgo)
+   ratio_env(s=1.0) puede ser < 0.90       (coste mayor por evasión difícil)
+   ```
+
+**Criterio de éxito H8.2**: Interacción significativa (p<0.05) en ANOVA 2-way Shaping×Densidad con η²>0.06, patrón de mayor reducción en spawn=0.25 que spawn=0.40.
 
 ### H8.3: Convergencia Conductual (Metodológica)
 
@@ -299,7 +301,7 @@ Comparar PGF vs Control en scatter plot 2D: `(safety_score, reward)`. Buscar fro
 
 ### Figura 1: Heatmap Ratio × Shaping × Densidad
 ```
-Ejes: Shaping Scale (x), Densidad (y)
+Ejes: Shaping Scale (x), Densidad (y: 0.25-0.40)
 Color: Ratio reward_env PGF/Control
 Escala: 0.80 (azul, PGF pierde) → 1.20 (rojo, PGF gana)
 ```
@@ -350,11 +352,13 @@ Detectar: ¿Existe "too much shaping"?
 ```
 results/pgf_v8/
 ├── README.md                          # Este archivo
-├── PREREGISTRO_v8.md                  # Hipótesis formales H8.1-H8.3
+├── PREREGISTRO_v8.md                  # Hipótesis formales H8.1-H8.3 (v1.3)
 ├── TRACKING_v8.md                     # Timeline ejecución
 ├── resultados/
-│   ├── exp8_shaping0.00_spawn0.10_seed42_episodes.csv
-│   ├── exp8_shaping0.00_spawn0.10_seed42_metrics.json
+│   ├── exp8_shaping0.00_spawn0.25_seed42_episodes.csv
+│   ├── exp8_shaping0.00_spawn0.25_seed42_metrics.json
+│   ├── exp8_shaping1.00_spawn0.40_seed456_episodes.csv
+│   ├── exp8_shaping1.00_spawn0.40_seed456_metrics.json
 │   ├── ...                            # 24 configs × 2 archivos
 │   └── experiment_8_summary.json      # Agregado global
 ├── analisis/
@@ -385,17 +389,17 @@ v8 busca **límite superior**: ¿existe un punto donde shaping es "demasiado fue
 ```
 Shaping débil (s<0.25):   Régimen de saturación → paridad
 Shaping moderado (s≈0.5): Zona Goldilocks → ventaja PGF óptima?
-Shaping fuerte (s=1.0):   Coste alto → ventaja solo en abundancia?
+Shaping fuerte (s=1.0):   Coste alto → ventaja solo si densidad modera?
 ```
 
 ### Predicción TUI Ampliada
 
 > "La inteligencia prudente (PGF) ofrece ventaja adaptativa **solo cuando**:
 > 1. **Riesgo efectivo es significativo** (shaping s ≥ 0.5)
-> 2. **Recursos suficientes** para exploración segura (densidad ≥ 0.15)
+> 2. **Complejidad topológica suficiente** (densidad obstáculos fuerza trade-offs)
 > 3. **Presión selectiva moderada** (ni demasiado dura ni demasiado fácil)"
 
-v8 testa puntos (1) y (2).
+v8 v1.3 testa puntos (1) y (2) con densidades {0.25, 0.40} que garantizan P(laberinto trivial) < 15%.
 
 ---
 
@@ -416,7 +420,7 @@ v8 testa puntos (1) y (2).
 
 🔄 **Shaping parametrizado**: Baselines × Scale (no hardcoded)  
 🔄 **Economía fija**: Solo Balanced (eliminar confundente)  
-🔄 **Densidades**: Solo {0.10, 0.25} (contraste escasez/abundancia)  
+🔄 **Densidades**: {0.25, 0.40} (moderada/alta, mitigación laberinto trivial v1.3)  
 🔄 **Métricas duales**: reward_env + reward_shaped  
 🔄 **Seguridad registrada**: tripwires, deaths, resources  
 🔄 **Análisis temporal**: Por tramos exploración/convergencia/estabilidad
@@ -468,7 +472,7 @@ v8 testa puntos (1) y (2).
 
 **Probabilidad**: Media  
 **Impacto**: Bajo (resultado científicamente válido)  
-**Mitigación**: No es falla del experimento. Documentar que coste de alineación es **independiente** de recursos en este régimen.
+**Mitigación**: No es falla del experimento. Documentar que amplificación por densidad moderada no se observa en rango {0.25, 0.40}. Puede requerir v9 con mayor contraste (ej. {0.15, 0.50}).
 
 ---
 
