@@ -1,10 +1,10 @@
 # 📋 PREREGISTRO EXPERIMENTAL: PGF v8 - Intensidad de Shaping
 
-**Título**: Efectos de la Intensidad de Reward Shaping en Alineación Prudencial de Agentes DQN  
-**Investigador**: Sistema TUI v4.1  
-**Fecha registro**: 3 de diciembre de 2025  
-**Protocolo**: Preregistración anterior a ejecución  
-**Versión experimento**: v8 ("El Experimento del Shaping")  
+**Título**: Efectos de la Intensidad de Reward Shaping en Alineación Prudencial de Agentes DQN
+**Investigador**: Sistema TUI v4.1
+**Fecha registro**: 3 de diciembre de 2025
+**Protocolo**: Preregistración anterior a ejecución
+**Versión experimento**: v8 ("El Experimento del Shaping")
 **Versión preregistro**: 1.3 (mitigación "laberinto trivial")
 
 ---
@@ -21,8 +21,8 @@ Este experimento investiga **cómo la intensidad del reward shaping** afecta la 
 
 ### Resultados v7 (Estado del Arte)
 
-**Experimento**: Factorial económico 3×5×3 (harsh/balanced/favorable × 5 densidades × 3 seeds)  
-**Resultado**: F=0.28, p=0.75 → Economía NO modula ventaja PGF  
+**Experimento**: Factorial económico 3×5×3 (harsh/balanced/favorable × 5 densidades × 3 seeds)
+**Resultado**: F=0.28, p=0.75 → Economía NO modula ventaja PGF
 **Diagnóstico**: Shaping PGF representa ~18% del reward base → señal insuficiente para DQN
 
 **Ver**: [`REPORTE_FINAL_v7.md`](../pgf_v7/reportes/REPORTE_FINAL_v7.md)
@@ -50,8 +50,8 @@ v8 corrige esta **insuficiencia de observabilidad** mediante métricas duales de
 
 #### Factor 1: SHAPING_SCALE (Principal)
 
-**Tipo**: Categórica, 4 niveles  
-**Valores**: {0.0, 0.25, 0.5, 1.0}  
+**Tipo**: Categórica, 4 niveles
+**Valores**: {0.0, 0.25, 0.5, 1.0}
 **Operacionalización**:
 
 ```python
@@ -70,20 +70,21 @@ if info.get('resource_value', 0) > 0:
 
 **Interpretación niveles**:
 
-| Scale | Penalty | Bonus | Interpretación |
-|-------|---------|-------|----------------|
-| 0.0 | 0 | 0 | Control puro (baseline) |
-| 0.25 | -25 | +12.5 | Shaping leve (comparable v7) |
-| 0.5 | -50 | +25 | Shaping moderado |
-| 1.0 | -100 | +50 | Shaping fuerte (equiparable goal_reward) |
+| Scale | Penalty | Bonus | Interpretación                          |
+| ----- | ------- | ----- | ---------------------------------------- |
+| 0.0   | 0       | 0     | Control puro (baseline)                  |
+| 0.25  | -25     | +12.5 | Shaping leve (comparable v7)             |
+| 0.5   | -50     | +25   | Shaping moderado                         |
+| 1.0   | -100    | +50   | Shaping fuerte (equiparable goal_reward) |
 
 #### Factor 2: DENSIDAD (Moderador)
 
-**Tipo**: Categórica, 2 niveles  
-**Valores**: {0.25, 0.40}  
+**Tipo**: Categórica, 2 niveles
+**Valores**: {0.25, 0.40}
 **Operacionalización**: `spawn_rate` en `ResourceDensityEnv`
 
 **Interpretación**:
+
 - **0.25**: Densidad moderada (~4.0 recursos por episodio en promedio)
 - **0.40**: Densidad alta (~6.4 recursos por episodio en promedio)
 
@@ -91,8 +92,8 @@ if info.get('resource_value', 0) > 0:
 
 #### Factor 3: SEED (Replicación)
 
-**Tipo**: Categórica, 3 niveles  
-**Valores**: {42, 123, 456}  
+**Tipo**: Categórica, 3 niveles
+**Valores**: {42, 123, 456}
 **Control**: Seeding completo (random + numpy + torch + cuda)
 
 ### Variables Dependientes (DVs)
@@ -104,6 +105,7 @@ ratio_reward_env = mean_reward_env_pgf / mean_reward_env_control
 ```
 
 **Interpretación**:
+
 - `< 1.0`: PGF pierde reward (coste de alineación)
 - `= 1.0`: Paridad (alineación gratis)
 - `> 1.0`: PGF gana reward (ventaja adaptativa)
@@ -123,6 +125,7 @@ tripwires_ratio = tripwires_pgf / tripwires_control
 ```
 
 **Interpretación**:
+
 - `< 0.7`: PGF reduce riesgo ≥30% (exitoso)
 - `≈ 1.0`: Sin diferencia conductual
 - `> 1.0`: PGF más riesgoso (falla crítica)
@@ -137,15 +140,15 @@ steps_ratio = mean_steps_pgf / mean_steps_control
 
 ### Variables de Control (Fijas)
 
-| Parámetro | Valor | Justificación |
-|-----------|-------|---------------|
-| **Economía** | Balanced (balance=5.0) | v7 detectó threshold aquí, maximizar sensibilidad |
-| **step_cost** | -0.2 | Estándar balanced |
-| **goal_reward** | 1.0 | Estándar |
-| **Grid size** | 4×4 | Continuidad con v7, complejidad conocida |
-| **Episodes** | 300 por agente | Convergencia demostrada en v7 |
-| **Arquitectura** | DQN 2×64 hidden | Estándar proyecto |
-| **Hiperparámetros** | lr=0.001, γ=0.95, ε: 1.0→0.01 | Estándar proyecto |
+| Parámetro                 | Valor                            | Justificación                                      |
+| -------------------------- | -------------------------------- | --------------------------------------------------- |
+| **Economía**        | Balanced (balance=5.0)           | v7 detectó threshold aquí, maximizar sensibilidad |
+| **step_cost**        | -0.2                             | Estándar balanced                                  |
+| **goal_reward**      | 1.0                              | Estándar                                           |
+| **Grid size**        | 4×4                             | Continuidad con v7, complejidad conocida            |
+| **Episodes**         | 300 por agente                   | Convergencia demostrada en v7                       |
+| **Arquitectura**     | DQN 2×64 hidden                 | Estándar proyecto                                  |
+| **Hiperparámetros** | lr=0.001, γ=0.95, ε: 1.0→0.01 | Estándar proyecto                                  |
 
 ### Tamaño Muestral
 
@@ -168,6 +171,7 @@ N_total_episodes = 14,400
 **Comportamiento**: Pisar tripwire genera penalización en reward, pero episodio continúa
 
 **Manipulación**: Solo penalty/bonus escalado vía `SHAPING_SCALE`
+
 ```python
 PGF_BASE_TRIPWIRE_PENALTY = 100.0
 PGF_BASE_RESOURCE_BONUS   = 50.0
@@ -175,12 +179,14 @@ SHAPING_SCALE ∈ {0.0, 0.25, 0.5, 1.0}
 TRIPWIRE_FATAL = False  # Default, no muerte instantánea
 ```
 
-**Criterio éxito Fase 1**: 
+**Criterio éxito Fase 1**:
+
 - Divergencia ≥15% en `ratio_reward_env` con s=1.0
 - Reducción ≥30% en `tripwires_ratio` con s=1.0
 - ANOVA Shaping significativo (p<0.05)
 
-**Criterio falla Fase 1**: 
+**Criterio falla Fase 1**:
+
 - Convergencia persiste (ratio 98-102%) incluso con s=1.0
 - Sin diferencias conductuales en tripwires
 - H8.1 refutada completamente
@@ -193,7 +199,8 @@ TRIPWIRE_FATAL = False  # Default, no muerte instantánea
 
 **Parámetro clave**: `TRIPWIRE_FATAL = True` (SIMÉTRICO para ambos agentes)
 
-**Comportamiento**: 
+**Comportamiento**:
+
 ```python
 if info.get('tripwire', False) and TRIPWIRE_FATAL:
     done = True  # Muerte instantánea
@@ -205,16 +212,19 @@ if info.get('tripwire', False) and TRIPWIRE_FATAL:
 **Nueva métrica obligatoria**: `deaths_tripwire` (separada de `deaths_starvation`)
 
 **Nota crítica - NO es asimetría**:
+
 - Ambos agentes (PGF y Control) mueren al pisar tripwire
 - NO es ventaja para PGF, es cambio en naturaleza del problema
 - Objetivo: Forzar divergencia mediante presión selectiva extrema
 
 **Preregistro requerido**: Si Fase 2 se ejecuta, requiere preregistro v8.1 separado con:
+
 - Hipótesis H8.1-bis adaptadas al régimen survival
 - Análisis de tasas de muerte como DV principal
 - Métricas de eficiencia condicionadas a supervivencia
 
-**Justificación teórica**: 
+**Justificación teórica**:
+
 - v7 y v8 Fase 1 testean "alineación como costo moderado"
 - v8 Fase 2 testaría "alineación como necesidad de supervivencia"
 - Ambos regímenes informan límites de aplicabilidad de TUI
@@ -235,34 +245,38 @@ En un Grid 4×4, el camino óptimo (Manhattan) tiene longitud 7 celdas: `(0,0)�
 
 Probabilidad de que el camino óptimo esté libre de tripwires:
 
-$$P(\text{camino seguro}) = (1 - \text{spawn\_rate})^7$$
+$$
+P(\text{camino seguro}) = (1 - \text{spawn\_rate})^7
+$$
 
-| spawn_rate | P(camino seguro) | Riesgo | Interpretación |
-|------------|------------------|--------|----------------|
-| 0.10 | **47.8%** | 🔴 CRÍTICO | ~50% configs triviales |
-| 0.25 | **13.4%** | 🟡 ACEPTABLE | ~3 de 24 configs |
-| 0.40 | **4.9%** | 🟢 ÓPTIMO | ~1 de 24 configs |
+| spawn_rate | P(camino seguro) | Riesgo       | Interpretación        |
+| ---------- | ---------------- | ------------ | ---------------------- |
+| 0.10       | **47.8%**  | 🔴 CRÍTICO  | ~50% configs triviales |
+| 0.25       | **13.4%**  | 🟡 ACEPTABLE | ~3 de 24 configs       |
+| 0.40       | **4.9%**   | 🟢 ÓPTIMO   | ~1 de 24 configs       |
 
 **Validación Monte Carlo** (10,000 grids simulados):
+
 - `spawn=0.10`: 48.3% grids con camino óptimo seguro ✗
 - `spawn=0.25`: 13.5% grids con camino óptimo seguro ✓
 - `spawn=0.40`: 4.9% grids con camino óptimo seguro ✓
 
 ### Decisión de Diseño (v1.3)
 
-**Acción correctiva**:  
+**Acción correctiva**:
 Eliminar `spawn_rate=0.10` del diseño factorial. **Usar `spawn_rate ∈ {0.25, 0.40}`**.
 
 **Justificación**:
+
 1. Reduce P(laberinto trivial) de ~48% a ~13% (factor 3.6×)
 2. Mantiene 2 niveles de densidad (diseño factorial 4×2×3 intacto)
 3. Conserva comparabilidad parcial con v7 (que usó spawn=0.25)
 4. Permite distinguir entre "shaping no funciona" vs "entorno demasiado simple"
 
-**Compromiso de Reporteo**:  
+**Compromiso de Reporteo**:
 En el análisis v8, reportaremos para cada configuración individual si existe un camino Manhattan mínimo libre de tripwires. Configuraciones con camino trivial serán analizadas por separado para confirmar convergencia estructural (no conductual).
 
-**Implicación para H8.2**:  
+**Implicación para H8.2**:
 La hipótesis de amplificación en densidad moderada asume que `spawn=0.25` tiene suficiente complejidad para forzar trade-offs. El análisis probabilístico valida que ~86% de las configuraciones con `spawn=0.25` requieren navegación estratégica.
 
 ---
@@ -278,29 +292,32 @@ La hipótesis de amplificación en densidad moderada asume que `spawn=0.25` tien
 **Predicciones cuantitativas**:
 
 #### H8.1a: Reducción de Tripwires
+
 ```
 Con SHAPING_SCALE = 1.0:
     E[tripwires_pgf] / E[tripwires_control] < 0.70
-    
+  
 Interpretación: PGF reduce riesgo en al menos 30%
 Test: t-test pareado, α=0.05, one-tailed
 Potencia: 0.85 con d=0.8
 ```
 
 #### H8.1b: Coste de Alineación Visible
+
 ```
 Con SHAPING_SCALE = 1.0:
     ratio_reward_env < 0.95
-    
+  
 Interpretación: PGF pierde ≥5% reward crudo por prudencia
 Test: t-test vs constante 1.0, α=0.05, one-tailed
 ```
 
 #### H8.1c: Compensación en Reward Shaped
+
 ```
 Con SHAPING_SCALE = 1.0:
     ratio_reward_shaped ≥ 0.95
-    
+  
 Interpretación: Desde perspectiva del agente, recompensa similar
 Test: t-test vs constante 1.0, α=0.05, two-tailed
 ```
@@ -315,32 +332,35 @@ Test: t-test vs constante 1.0, α=0.05, two-tailed
 
 > La densidad moderada (`spawn=0.25`) **amplificará** el efecto del shaping fuerte (`scale ≥ 0.5`) en métricas de seguridad (`tripwires_triggered`) sin degradar excesivamente `reward_env`, comparado con densidad alta (`spawn=0.40`).
 
-**Justificación teórica**:  
+**Justificación teórica**:
 En densidades muy bajas, el shaping puede ser irrelevante (caminos seguros abundan por azar). En densidades muy altas, incluso con shaping el agente puede ser forzado a tomar riesgos por imposibilidad de evasión. La densidad moderada maximiza el **espacio de maniobra** para que el shaping diferencie conductas.
 
 **Predicciones cuantitativas**:
 
 #### H8.2a: Reducción Mayor de Tripwires en Densidad Moderada
+
 ```
 Con SHAPING_SCALE = 1.0, spawn_rate = 0.25:
     tripwires_ratio < 0.65
-    
+  
 Interpretación: PGF reduce riesgo >35% en densidad moderada
 ```
 
 #### H8.2b: Reducción Menor en Densidad Alta
+
 ```
 Con SHAPING_SCALE = 1.0, spawn_rate = 0.40:
     tripwires_ratio ∈ [0.70, 0.85]
-    
+  
 Interpretación: PGF reduce riesgo 15-30% en densidad alta (menor margen)
 ```
 
 #### H8.2c: Interacción Estadística
+
 ```
 ANOVA 2-way: Shaping × Densidad
     F_interaction significativo (p < 0.05)
-    
+  
 Patrón: Pendiente(tripwires vs shaping) más negativa en spawn=0.25 que spawn=0.40
 ```
 
@@ -357,26 +377,29 @@ Patrón: Pendiente(tripwires vs shaping) más negativa en spawn=0.25 que spawn=0
 **Predicciones cuantitativas**:
 
 #### H8.3a: Paridad en Reward
+
 ```
 Con SHAPING_SCALE = 0.0:
     ratio_reward_env ∈ [0.98, 1.02]
-    
+  
 Test: Equivalence test (TOST), equivalence bound ±2%
 ```
 
 #### H8.3b: Paridad en Conducta
+
 ```
 Con SHAPING_SCALE = 0.0:
     |tripwires_pgf - tripwires_control| / tripwires_control < 0.10
-    
+  
 Interpretación: Diferencia <10% atribuible a ruido estocástico
 ```
 
 #### H8.3c: Ausencia de Efecto Densidad en Baseline
+
 ```
 Con SHAPING_SCALE = 0.0:
     ratio_env(spawn=0.10) ≈ ratio_env(spawn=0.25)  [diferencia <3%]
-    
+  
 Interpretación: Densidad solo importa cuando hay shaping
 ```
 
@@ -391,22 +414,26 @@ Interpretación: Densidad solo importa cuando hay shaping
 ### Análisis Primario: ANOVA 2-Way
 
 **Modelo**:
+
 ```r
 DV ~ SHAPING_SCALE * DENSIDAD + Error(SEED)
 ```
 
 **DVs a analizar**:
+
 1. `ratio_reward_env` (principal)
 2. `ratio_reward_shaped` (validación)
 3. `tripwires_ratio` (seguridad)
 4. `steps_ratio` (eficiencia)
 
 **Efectos de interés**:
+
 - **Efecto principal Shaping**: F_shaping, p_shaping (H8.1)
 - **Efecto principal Densidad**: F_density, p_density
 - **Interacción**: F_interaction, p_interaction (H8.2)
 
 **Criterios**:
+
 - α = 0.05 (ajustado Bonferroni si múltiples DVs)
 - Potencia mínima: 0.80
 - Tamaño efecto mínimo detectable: η²≥0.10 (mediano)
@@ -414,6 +441,7 @@ DV ~ SHAPING_SCALE * DENSIDAD + Error(SEED)
 ### Análisis Secundario: Post-Hoc
 
 **Comparaciones planeadas** (Tukey HSD):
+
 1. `s=0.0` vs `s=1.0` (contraste máximo)
 2. `s=0.25` vs `s=0.5` (detección threshold)
 3. `s=0.5` vs `s=1.0` (saturación?)
@@ -428,6 +456,7 @@ DV ~ SHAPING_SCALE * DENSIDAD + Error(SEED)
 **Objetivo**: Detectar threshold preciso `s*` donde relación cambia
 
 **Modelo**:
+
 ```python
 ratio_env ~ shaping_scale + I(shaping_scale > s*) * (shaping_scale - s*)
 ```
@@ -439,6 +468,7 @@ ratio_env ~ shaping_scale + I(shaping_scale > s*) * (shaping_scale - s*)
 ### Análisis Temporal: Curvas de Aprendizaje
 
 **Descomposición por tramos**:
+
 ```python
 tramos = {
     "exploration": eps 1-100,
@@ -448,11 +478,13 @@ tramos = {
 ```
 
 **Para cada tramo**:
+
 ```python
 ratio_tramo[t] = mean_reward_pgf[t] / mean_reward_control[t]
 ```
 
 **Plot**: Ratio(t) × shaping_scale, detectar si ventaja PGF:
+
 - **Emerge** (crece con t) → prudencia adaptativa
 - **Desaparece** (decrece con t) → solo bootstrapping
 - **Estable** (constante) → diferencia estructural
@@ -477,7 +509,8 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 
 **Interpretación**: Shaping efectivo Y moderado por densidad
 
-**Conclusión**: 
+**Conclusión**:
+
 - ✅ Threshold encontrado: `s* ≈ 0.5-1.0`
 - ✅ Coste de alineación visible y modulado ecológicamente
 - ✅ TUI validado en este régimen
@@ -489,6 +522,7 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 **Interpretación**: Shaping efectivo PERO independiente de recursos
 
 **Conclusión**:
+
 - ✅ Threshold encontrado
 - ❌ Densidad no modera en este setup
 - ⚠️ TUI requiere reformulación: coste alineación **no** depende de ecología
@@ -500,13 +534,15 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 **Interpretación**: Incluso s=1.0 insuficiente, shaping no rompe paridad
 
 **Conclusión**:
+
 - ❌ Fase 1 falla: shaping escalado insuficiente
 - 🔄 Activar Fase 2 (v8.1 con TRIPWIRE_FATAL=True)
 - ⚠️ Alternativa: problema arquitectural (entorno 4×4 + DQN demasiado simple)
 
 **Próximos pasos** (en orden de prioridad):
+
 1. **Protocolo Fase 2**: Ejecutar v8.1 con muerte instantánea simétrica
-2. **Si Fase 2 también falla**: 
+2. **Si Fase 2 también falla**:
    - Opción A: Grid más complejo (6×6 u 8×8) → v9
    - Opción B: Cambio algoritmo (PPO, A3C, tabular Q-learning)
    - Opción C: Conclusión límite: TUI no aplica en entornos triviales resueltos óptimamente
@@ -516,11 +552,13 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 **Interpretación**: Diseño experimental inválido
 
 **Conclusión**:
+
 - ⚠️ Confundente no controlado
 - ⚠️ PGF y Control difieren incluso sin shaping
 - 🛑 Invalidar v8, revisar implementación
 
 **Diagnóstico**:
+
 - Verificar semillado idéntico
 - Verificar inicialización redes
 - Verificar orden de entrenamiento (¿intercalar?)
@@ -531,41 +569,41 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 
 ### Figura 1: Heatmap Ratio × Shaping × Densidad
 
-**Tipo**: Heatmap 2D  
-**Ejes**: Shaping Scale (x: 0.0-1.0), Densidad (y: 0.10-0.25)  
-**Color**: Ratio reward_env (escala: 0.80 azul → 1.20 rojo)  
+**Tipo**: Heatmap 2D
+**Ejes**: Shaping Scale (x: 0.0-1.0), Densidad (y: 0.10-0.25)
+**Color**: Ratio reward_env (escala: 0.80 azul → 1.20 rojo)
 **Anotaciones**: Valores numéricos en celdas, significancia ANOVA con asteriscos
 
 **Hipótesis visual**: Degradado vertical (densidad modera) y horizontal (shaping modula)
 
 ### Figura 2: Scatter Safety-Reward Tradeoff
 
-**Tipo**: Scatter plot 2D con envolventes convexas  
-**X**: Safety Score (1 - tripwires_norm)  
-**Y**: Mean Reward Env  
-**Puntos**: PGF (rojo), Control (azul)  
-**Agrupación**: Por shaping scale (tamaño de punto)  
+**Tipo**: Scatter plot 2D con envolventes convexas
+**X**: Safety Score (1 - tripwires_norm)
+**Y**: Mean Reward Env
+**Puntos**: PGF (rojo), Control (azul)
+**Agrupación**: Por shaping scale (tamaño de punto)
 **Líneas**: Frontera de Pareto para cada grupo
 
 **Hipótesis visual**: PGF s=1.0 en cuadrante superior-derecho
 
 ### Figura 3: Curvas de Aprendizaje por Shaping
 
-**Tipo**: Line plot con ribbons (media ± SE)  
-**X**: Episodios (0-300)  
-**Y**: Ratio PGF/Control (ventana móvil 20 eps)  
-**Líneas**: Una por nivel shaping (4 curvas)  
+**Tipo**: Line plot con ribbons (media ± SE)
+**X**: Episodios (0-300)
+**Y**: Ratio PGF/Control (ventana móvil 20 eps)
+**Líneas**: Una por nivel shaping (4 curvas)
 **Colores**: Gradiente frío→cálido (s=0.0→s=1.0)
 
 **Hipótesis visual**: Separación creciente con tiempo para s≥0.5
 
 ### Figura 4: Threshold Detection (Regresión Segmentada)
 
-**Tipo**: Scatter + líneas de ajuste  
-**X**: Shaping Scale (0.0-1.0)  
-**Y**: Ratio reward_env  
-**Puntos**: 24 configs (coloreados por densidad)  
-**Líneas**: Modelo segmentado con quiebre en `s*`  
+**Tipo**: Scatter + líneas de ajuste
+**X**: Shaping Scale (0.0-1.0)
+**Y**: Ratio reward_env
+**Puntos**: 24 configs (coloreados por densidad)
+**Líneas**: Modelo segmentado con quiebre en `s*`
 **Anotación**: Valor `s*`, ΔAIC, intervalo confianza 95%
 
 **Hipótesis visual**: Quiebre visible en s* ≈ 0.5
@@ -577,12 +615,14 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 ### Durante Ejecución
 
 Por cada config (24 archivos):
+
 ```
 exp8_shaping{s}_spawn{d}_seed{seed}_episodes.csv
 exp8_shaping{s}_spawn{d}_seed{seed}_metrics.json
 ```
 
 **Columnas CSV OBLIGATORIAS** (por episodio):
+
 ```python
 # Identificación
 episode: int              # Número de episodio (1-300)
@@ -612,12 +652,14 @@ seed: int                 # 42, 123, 456
 ```
 
 **⚠️ VALIDACIÓN DE PERSISTENCIA**:
+
 - ❌ **NO aceptar** CSV sin columnas `total_reward_env` Y `total_reward_shaped` separadas
 - ❌ **NO aceptar** CSV sin `tripwires_triggered` (contador numérico, no booleano)
 - ❌ **NO aceptar** CSV sin `resources_collected` y `steps_to_goal`
 - ✅ Si alguna columna crítica falta en output → **INVALIDAR config** y re-ejecutar
 
 **Campos JSON** (agregado por config):
+
 ```python
 {
   "config": {
@@ -660,6 +702,7 @@ seed: int                 # 42, 123, 456
 ### Post-Ejecución
 
 **Análisis**:
+
 ```
 analisis/anova_shaping_density.json       # Resultados ANOVA
 analisis/threshold_detection.json         # Modelo segmentado
@@ -668,6 +711,7 @@ analisis/temporal_analysis.json           # Por tramos
 ```
 
 **Figuras**:
+
 ```
 figuras/heatmap_ratio_shaping_density.png
 figuras/scatter_safety_reward.png
@@ -676,6 +720,7 @@ figuras/threshold_regression.png
 ```
 
 **Reporte**:
+
 ```
 reportes/REPORTE_FINAL_v8.md              # Narrativa completa
 ```
@@ -687,24 +732,26 @@ reportes/REPORTE_FINAL_v8.md              # Narrativa completa
 ### Ajustes Post-Hoc Autorizados
 
 1. **Si convergencia persiste con s=1.0**:
+
    - Autorizado: Activar Protocolo Fase 2 (v8.1 con TRIPWIRE_FATAL=True)
    - NO autorizado: Cambiar hiperparámetros DQN sin preregistrar v8.0.1
-
 2. **Si H8.3 falla (control negativo)**:
+
    - Autorizado: Repetir configs s=0.0 con semillado alternativo
    - NO autorizado: Proceder con análisis de s>0 (invalidaría resultados)
-
 3. **Si outliers extremos** (ratio <0.5 o >2.0):
+
    - Autorizado: Análisis de sensibilidad excluyendo outlier
    - Requerido: Reportar ambos análisis (con/sin outlier)
-
 4. **Si columnas críticas faltan en CSV**:
+
    - Requerido: DETENER ejecución, corregir código, re-ejecutar config
    - NO autorizado: Análisis con datos incompletos
 
 ### Análisis Exploratorios NO Preregistrados
 
 Permitidos siempre que **etiquetados como exploratorios**:
+
 - Correlaciones adicionales
 - Modelos de regresión múltiple
 - Análisis por subgrupos (ej. solo seeds pares)
@@ -716,13 +763,13 @@ Permitidos siempre que **etiquetados como exploratorios**:
 
 ## 📅 Timeline Comprometida
 
-| Fase | Fecha límite | Criterio completitud |
-|------|--------------|----------------------|
-| **Preregistro** | 3 dic 2025 | Este documento aprobado |
-| **Implementación** | 3 dic 2025 | Test mode exitoso (3 configs) |
-| **Ejecución** | 3 dic 2025 | 24 CSVs + JSONs generados |
-| **Análisis** | 4 dic 2025 | ANOVA + figuras completas |
-| **Reporte** | 4 dic 2025 | REPORTE_FINAL_v8.md publicado |
+| Fase                      | Fecha límite | Criterio completitud          |
+| ------------------------- | ------------- | ----------------------------- |
+| **Preregistro**     | 3 dic 2025    | Este documento aprobado       |
+| **Implementación** | 3 dic 2025    | Test mode exitoso (3 configs) |
+| **Ejecución**      | 3 dic 2025    | 24 CSVs + JSONs generados     |
+| **Análisis**       | 4 dic 2025    | ANOVA + figuras completas     |
+| **Reporte**         | 4 dic 2025    | REPORTE_FINAL_v8.md publicado |
 
 **Deadline absoluto**: 4 de diciembre 2025, 23:59
 
@@ -740,8 +787,8 @@ Permitidos siempre que **etiquetados como exploratorios**:
 >
 > En caso de falla técnica (bugs, crashes), se documentará en TRACKING_v8.md con commit trail completo, y se reiniciará desde checkpoint válido.
 
-**Firmante**: Sistema TUI v4.1  
-**Fecha**: 3 de diciembre de 2025  
+**Firmante**: Sistema TUI v4.1
+**Fecha**: 3 de diciembre de 2025
 **Versión documento**: 1.1 (actualizado: protocolo de fases)
 
 ---
@@ -750,7 +797,7 @@ Permitidos siempre que **etiquetados como exploratorios**:
 
 1. **v7 Final Report**: `results/pgf_v7/reportes/REPORTE_FINAL_v7.md`
 2. **v8 README**: `results/pgf_v8/README.md`
-3. **Peer Review**: Codex AI Review (3 dic 2025) - "Insuficiencia de Señal"
+3. **Peer Review**:  (3 dic 2025) - "Insuficiencia de Señal"
 4. **TUI Theory**: `docs/Teoria_Unificada_Inteligencia_v4.0_CLEAN.md`
 5. **Environment v2**: `sim/environment_v2.py`
 6. **DQN Agent**: `sim/dqn_agent.py`
@@ -801,12 +848,12 @@ class ExperimentConfig:
     PGF_BASE_TRIPWIRE_PENALTY: float = 100.0
     PGF_BASE_RESOURCE_BONUS: float = 50.0
     PGF_SHAPING_SCALE: float  # Variable: 0.0, 0.25, 0.5, 1.0
-    
+  
     # Entorno
     TRIPWIRE_FATAL: bool = False  # Fase 1: False, Fase 2: True
     SPAWN_RATE: float  # Variable: 0.25, 0.40
     BALANCE: float = 5.0  # Fijo
-    
+  
     # Episodios
     EPISODES_PER_AGENT: int = 300
     SEEDS: list[int] = [42, 123, 456]
@@ -818,7 +865,7 @@ class ExperimentConfig:
 def validate_csv_output(csv_path: str) -> bool:
     """Valida que CSV contenga todas las columnas críticas"""
     df = pd.read_csv(csv_path)
-    
+  
     required_columns = [
         'episode', 'agent_type',
         'total_reward_env',      # CRÍTICO
@@ -835,26 +882,26 @@ def validate_csv_output(csv_path: str) -> bool:
         'spawn_rate',
         'seed'
     ]
-    
+  
     missing = [col for col in required_columns if col not in df.columns]
-    
+  
     if missing:
         raise ValueError(f"CSV inválido: faltan columnas {missing}")
-    
+  
     # Validar tipos (flexible con subtipos de integer para evitar crasheos con pandas)
     if not np.issubdtype(df['tripwires_triggered'].dtype, np.integer):
         raise TypeError("tripwires_triggered debe ser entero (int dtype)")
-    
+  
     if not np.issubdtype(df['resources_collected'].dtype, np.integer):
         raise TypeError("resources_collected debe ser entero (int dtype)")
-    
+  
     if not np.issubdtype(df['episode'].dtype, np.integer):
         raise TypeError("episode debe ser entero (int dtype)")
-    
+  
     # Validar booleanos (pandas puede usar int 0/1)
     if not df['goal_reached'].dtype in [bool, np.bool_, int, np.int64]:
         raise TypeError("goal_reached debe ser bool o int 0/1")
-    
+  
     return True
 ```
 
@@ -866,51 +913,51 @@ def train_agent(agent, env, config, is_pgf=False):
     Entrenar agente guardando métricas duales
     """
     episode_data = []
-    
+  
     for episode in range(config.EPISODES_PER_AGENT):
         obs = env.reset()
         done = False
-        
+      
         # Acumuladores separados
         total_reward_env = 0.0      # Reward crudo
         total_reward_shaped = 0.0   # Reward con shaping
         tripwires_count = 0
         resources_count = 0
         steps = 0
-        
+      
         while not done:
             action = agent.select_action(obs)
             next_obs, reward, done, info = env.step(action)
-            
+          
             # Acumular reward crudo
             total_reward_env += reward
-            
+          
             # Calcular train_signal (con shaping si PGF)
             train_signal = reward
             if is_pgf:
                 penalty = -config.PGF_BASE_TRIPWIRE_PENALTY * config.PGF_SHAPING_SCALE
                 bonus = config.PGF_BASE_RESOURCE_BONUS * config.PGF_SHAPING_SCALE
-                
+              
                 if info.get('tripwire', False):
                     train_signal += penalty
                     tripwires_count += 1
-                
+              
                 # NOTA: Usar flag explícita 'resource_collected' en vez de resource_value>0
                 # para evitar falsos positivos si value es 0.0 pero recurso se consumió
                 if info.get('resource_collected', False):
                     train_signal += bonus
                     resources_count += 1
-            
+          
             # Acumular reward shaped
             total_reward_shaped += train_signal
-            
+          
             # Entrenar con señal shaped
             agent.remember(obs, action, train_signal, next_obs, done)
             agent.replay()
-            
+          
             obs = next_obs
             steps += 1
-        
+      
         # Guardar episodio con AMBAS métricas
         # NOTA: Usar flags explícitas para causa de muerte (no derivar de energía final)
         # Esto garantiza métricas de seguridad confiables, especialmente en v8.1
@@ -931,7 +978,7 @@ def train_agent(agent, env, config, is_pgf=False):
             'spawn_rate': config.SPAWN_RATE,
             'seed': config.SEED
         })
-    
+  
     return episode_data
 ```
 
@@ -956,7 +1003,7 @@ def train_agent(agent, env, config, is_pgf=False):
 
 **FIN PREREGISTRO v8**
 
-**Status**: 🔒 CONGELADO (v1.3)  
+**Status**: 🔒 CONGELADO (v1.3)
 **Próxima acción**: Implementación código según especificación
 
 ---
@@ -968,11 +1015,13 @@ def train_agent(agent, env, config, is_pgf=False):
 **Cambio crítico**: Densidades ajustadas de `[0.10, 0.25]` → `[0.25, 0.40]`
 
 **Motivación**: Mitigación riesgo "laberinto trivial"
+
 - P(camino óptimo seguro) reducida de **48% → 13%** (factor 3.6×)
 - Análisis probabilístico: $(1-\text{spawn\_rate})^7$ para 7 celdas del camino Manhattan
 - Validación Monte Carlo: 10,000 grids simulados confirman análisis teórico
 
 **Modificaciones**:
+
 - ✅ Añadida sección **"§Validación de Complejidad del Entorno"** con justificación cuantitativa
 - ✅ Reformulada **H8.2** como hipótesis exploratoria positiva (amplificación por densidad moderada)
 - ✅ Actualizado diseño factorial: mantiene 4×2×3 = 24 configs
@@ -986,6 +1035,7 @@ def train_agent(agent, env, config, is_pgf=False):
 ### v1.2 (3 dic 2025, pre-ejecución)
 
 **Añadido**: Anexo C con especificaciones técnicas completas
+
 - Schemas CSV/JSON detallados con tipos y descripciones
 - Función `validate_csv_output()` con validación robusta de dtypes
 - Pseudocódigo `train_agent()` con doble acumulación (reward_env + reward_shaped)
@@ -999,6 +1049,7 @@ def train_agent(agent, env, config, is_pgf=False):
 ### v1.1 (3 dic 2025, pre-ejecución)
 
 **Añadido**: Sección "Protocolo de Fases"
+
 - Fase 1 (v8.0): `TRIPWIRE_FATAL=False` (shaping escalado)
 - Fase 2 (v8.1): `TRIPWIRE_FATAL=True` (muerte instantánea simétrica) - condicional si Fase 1 falla
 
@@ -1007,6 +1058,7 @@ def train_agent(agent, env, config, is_pgf=False):
 ### v1.0 (3 dic 2025, pre-ejecución)
 
 **Creación inicial**: Preregistro completo con:
+
 - Hipótesis H8.1 (umbral shaping), H8.2 (interacción densidad), H8.3 (control negativo)
 - Diseño factorial 4×2×3 (24 configs, 14,400 episodios totales)
 - Métricas duales (`reward_env` vs `reward_shaped`)
