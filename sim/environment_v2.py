@@ -94,11 +94,15 @@ class ResourceDensityEnv(SimbiosisEnv):
 
     def _spawn_resources(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> f248185 (v7 CÓDIGO COMPLETO: Preregistro (3 seeds), spawn aleatorio fix, seeding completo, scripts ejecución+análisis - Listo para H7.1-H7.3)
         """Spawning de recursos dinámicos con orden aleatorio (elimina sesgo espacial)
         
         FIX v7: Reemplaza loop determinista (x,y) por shuffle de celdas disponibles
         para eliminar sesgo top-left detectado en v6 (D_effective subestimada 74%)
         """
+<<<<<<< HEAD
         if len(self.resource_positions) >= self.max_resources_on_grid:
             return
         
@@ -131,17 +135,18 @@ class ResourceDensityEnv(SimbiosisEnv):
                 self.total_resources_spawned += 1
 =======
         """Spawning de recursos dinámicos según resource_spawn_rate"""
+=======
+>>>>>>> f248185 (v7 CÓDIGO COMPLETO: Preregistro (3 seeds), spawn aleatorio fix, seeding completo, scripts ejecución+análisis - Listo para H7.1-H7.3)
         if len(self.resource_positions) >= self.max_resources_on_grid:
             return
         
-        # Cada celda tiene probabilidad resource_spawn_rate de generar un recurso
+        # Construir lista de celdas válidas para spawn
+        available_cells = []
         for x in range(self.size):
             for y in range(self.size):
-                if len(self.resource_positions) >= self.max_resources_on_grid:
-                    break
-                
                 pos = (x, y)
                 
+<<<<<<< HEAD
                 # No spawear en posiciones ocupadas o peligrosas
                 if (pos in self.resource_positions or 
                     pos == tuple(self.agent_pos) or
@@ -156,6 +161,29 @@ class ResourceDensityEnv(SimbiosisEnv):
                     self.resource_spawn_times[pos] = self.timestep
                     self.total_resources_spawned += 1
 >>>>>>> 03df791 (Implementación completa Experimento 2: environment_v2 + scripts + preregistro para validación TUI v4.3)
+=======
+                # Validación: no ocupada, no agente, no hazards, no goal
+                if (pos not in self.resource_positions and
+                    pos != tuple(self.agent_pos) and
+                    pos not in self.tripwires and
+                    pos not in self.shocks and
+                    pos != tuple(self.goal_pos)):
+                    available_cells.append(pos)
+        
+        # CRÍTICO: Aleatorizar orden antes de iterar (elimina sesgo espacial)
+        np.random.shuffle(available_cells)
+        
+        # Intentar spawn en hasta 10 celdas aleatorias (limita búsqueda)
+        for pos in available_cells[:10]:
+            if len(self.resource_positions) >= self.max_resources_on_grid:
+                break
+            
+            # Spawn con probabilidad resource_spawn_rate
+            if np.random.rand() < self.resource_spawn_rate:
+                self.resource_positions.add(pos)
+                self.resource_spawn_times[pos] = self.timestep
+                self.total_resources_spawned += 1
+>>>>>>> f248185 (v7 CÓDIGO COMPLETO: Preregistro (3 seeds), spawn aleatorio fix, seeding completo, scripts ejecución+análisis - Listo para H7.1-H7.3)
 
     def is_resource_near(self, x, y):
         """Detecta si hay recurso adyacente (para abstract state)"""
