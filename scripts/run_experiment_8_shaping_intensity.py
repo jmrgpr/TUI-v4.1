@@ -183,7 +183,7 @@ def train_agent(env, agent, config, agent_type='PGF', verbose_freq=50):
             
             # Entrenar con señal shaped
             agent.remember(state_vec, action_idx, train_signal, next_state_vec, done)
-            agent.replay()
+            agent.learn()
             
             # Actualizar estado
             state_dict = next_state_dict
@@ -309,11 +309,21 @@ def run_config(config, output_dir, verbose=True):
     
     # Crear entorno con grid_size especificado
     grid_size = config.get('grid_size', DEFAULT_GRID_SIZE)
+    
+    # CRÍTICO: Generar tripwires UNA VEZ antes de entrenar ambos agentes
+    # para garantizar MISMO entorno (requisito H8.3 control negativo)
+    num_tripwires = max(1, int(grid_size * grid_size * config['spawn_rate']))
+    available_cells = [(x, y) for x in range(grid_size) for y in range(grid_size) 
+                       if not (x == 0 and y == 0) and not (x == grid_size-1 and y == grid_size-1)]
+    np.random.shuffle(available_cells)
+    tripwires_list = available_cells[:num_tripwires]
+    
     env = ResourceDensityEnv(
         size=grid_size,
-        spawn_rate=config['spawn_rate'],
+        tripwires=tripwires_list,
+        resource_spawn_rate=config['spawn_rate'],
         step_cost=BALANCED_ECONOMY['step_cost'],
-        goal_reward=BALANCED_ECONOMY['goal_reward']
+        resource_reward=BALANCED_ECONOMY['goal_reward']
     )
     
     state_size = len(env.reset())
@@ -327,11 +337,14 @@ def run_config(config, output_dir, verbose=True):
     
     # Re-configurar semilla para Control (mismo entorno, diferente política)
     configure_all_seeds(config['seed'])
+    
+    # REUTILIZAR mismo entorno (tripwires idénticos) para Control
     env = ResourceDensityEnv(
         size=grid_size,
-        spawn_rate=config['spawn_rate'],
+        tripwires=tripwires_list,  # MISMO que PGF
+        resource_spawn_rate=config['spawn_rate'],
         step_cost=BALANCED_ECONOMY['step_cost'],
-        goal_reward=BALANCED_ECONOMY['goal_reward']
+        resource_reward=BALANCED_ECONOMY['goal_reward']
     )
     
     # Entrenar Control
