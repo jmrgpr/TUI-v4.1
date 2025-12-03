@@ -156,7 +156,69 @@ N_total_episodes = 14,400
 
 ---
 
-## 📊 Hipótesis Preregistradas
+## 🔄 Protocolo de Fases (v8.0 vs v8.1)
+
+### Fase 1: v8.0 - Shaping Escalado (ESTE PREREGISTRO)
+
+**Parámetro clave**: `TRIPWIRE_FATAL = False` (ambos agentes)
+
+**Comportamiento**: Pisar tripwire genera penalización en reward, pero episodio continúa
+
+**Manipulación**: Solo penalty/bonus escalado vía `SHAPING_SCALE`
+```python
+PGF_BASE_TRIPWIRE_PENALTY = 100.0
+PGF_BASE_RESOURCE_BONUS   = 50.0
+SHAPING_SCALE ∈ {0.0, 0.25, 0.5, 1.0}
+TRIPWIRE_FATAL = False  # Default, no muerte instantánea
+```
+
+**Criterio éxito Fase 1**: 
+- Divergencia ≥15% en `ratio_reward_env` con s=1.0
+- Reducción ≥30% en `tripwires_ratio` con s=1.0
+- ANOVA Shaping significativo (p<0.05)
+
+**Criterio falla Fase 1**: 
+- Convergencia persiste (ratio 98-102%) incluso con s=1.0
+- Sin diferencias conductuales en tripwires
+- H8.1 refutada completamente
+
+### Fase 2: v8.1 - Régimen Existencial (CONDICIONAL)
+
+**⚠️ IMPORTANTE**: Esta fase **solo se ejecuta SI Fase 1 falla**
+
+**Activación**: Convergencia persiste con s=1.0 en Fase 1
+
+**Parámetro clave**: `TRIPWIRE_FATAL = True` (SIMÉTRICO para ambos agentes)
+
+**Comportamiento**: 
+```python
+if info.get('tripwire', False) and TRIPWIRE_FATAL:
+    done = True  # Muerte instantánea
+    reward = -1.0  # Penalización terminal
+```
+
+**Cambio conceptual**: De "penalización" a "supervivencia" (coste existencial máximo)
+
+**Nueva métrica obligatoria**: `deaths_tripwire` (separada de `deaths_starvation`)
+
+**Nota crítica - NO es asimetría**:
+- Ambos agentes (PGF y Control) mueren al pisar tripwire
+- NO es ventaja para PGF, es cambio en naturaleza del problema
+- Objetivo: Forzar divergencia mediante presión selectiva extrema
+
+**Preregistro requerido**: Si Fase 2 se ejecuta, requiere preregistro v8.1 separado con:
+- Hipótesis H8.1-bis adaptadas al régimen survival
+- Análisis de tasas de muerte como DV principal
+- Métricas de eficiencia condicionadas a supervivencia
+
+**Justificación teórica**: 
+- v7 y v8 Fase 1 testean "alineación como costo moderado"
+- v8 Fase 2 testaría "alineación como necesidad de supervivencia"
+- Ambos regímenes informan límites de aplicabilidad de TUI
+
+---
+
+## 📊 Hipótesis Preregistradas (Fase 1: v8.0)
 
 ### H8.1: Efecto Principal de Intensidad (Umbral de Shaping)
 
@@ -383,18 +445,19 @@ safety_score = 1 - (tripwires / max_possible_tripwires)
 
 ### Escenario 3: H8.1 Refutada (Convergencia persiste) ❌
 
-**Interpretación**: Incluso s=1.0 insuficiente, problema arquitectural
+**Interpretación**: Incluso s=1.0 insuficiente, shaping no rompe paridad
 
 **Conclusión**:
-- ❌ Entorno 4×4 + DQN demasiado simple
-- ❌ Shaping no suficiente para forzar divergencia
-- 🔄 Pivote necesario
+- ❌ Fase 1 falla: shaping escalado insuficiente
+- 🔄 Activar Fase 2 (v8.1 con TRIPWIRE_FATAL=True)
+- ⚠️ Alternativa: problema arquitectural (entorno 4×4 + DQN demasiado simple)
 
-**Próximos pasos** (en orden):
-1. **Opción Nuclear**: s=2.0 (penalty -200)
-2. **Muerte Instantánea**: `done=True` al tripwire
-3. **Grid más complejo**: 6×6 u 8×8
-4. **Cambio algoritmo**: PPO, A3C, o tabular Q-learning
+**Próximos pasos** (en orden de prioridad):
+1. **Protocolo Fase 2**: Ejecutar v8.1 con muerte instantánea simétrica
+2. **Si Fase 2 también falla**: 
+   - Opción A: Grid más complejo (6×6 u 8×8) → v9
+   - Opción B: Cambio algoritmo (PPO, A3C, tabular Q-learning)
+   - Opción C: Conclusión límite: TUI no aplica en entornos triviales resueltos óptimamente
 
 ### Escenario 4: H8.3 Refutada (Control negativo falla) ⚠️
 
@@ -566,7 +629,9 @@ Permitidos siempre que **etiquetados como exploratorios**:
 
 **Declaración**:
 
-> Este preregistro constituye un compromiso vinculante de ejecutar el experimento v8 según el diseño especificado. Cualquier desviación no autorizada (ver sección "Desviaciones Permitidas") invalida el experimento y requiere preregistro v8.1.
+> Este preregistro constituye un compromiso vinculante de ejecutar **Fase 1 (v8.0)** según el diseño especificado. Cualquier desviación no autorizada (ver sección "Desviaciones Permitidas") invalida el experimento y requiere preregistro v8.0.1.
+>
+> **Fase 2 (v8.1)** solo se ejecutará SI Fase 1 refuta completamente H8.1 (convergencia persiste con s=1.0). En ese caso, se creará preregistro v8.1 separado especificando hipótesis adaptadas al régimen TRIPWIRE_FATAL=True.
 >
 > Los resultados se reportarán honestamente independiente de si confirman o refutan las hipótesis. Resultados negativos son tan valiosos como positivos para delimitar el régimen de aplicabilidad de TUI.
 >
@@ -574,7 +639,7 @@ Permitidos siempre que **etiquetados como exploratorios**:
 
 **Firmante**: Sistema TUI v4.1  
 **Fecha**: 3 de diciembre de 2025  
-**Versión documento**: 1.0 (preregistro final)
+**Versión documento**: 1.1 (actualizado: protocolo de fases)
 
 ---
 

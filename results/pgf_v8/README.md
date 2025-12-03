@@ -106,9 +106,12 @@ total_episodes_experiment = 14,400  # 24 configs × 600 eps
 step_cost = -0.2
 goal_reward = 1.0
 balance = goal_reward / abs(step_cost) = 5.0
+TRIPWIRE_FATAL = False  # Fase 1: penalización, no muerte instantánea
 ```
 
 **Justificación**: v7 detectó threshold en balance=5.0 (ΔAIC=-185), aunque efecto débil. Fijamos en ese umbral para maximizar sensibilidad a shaping.
+
+**Nota Fase 2**: Si convergencia persiste con s=1.0, existe protocolo de escalada a v8.1 con `TRIPWIRE_FATAL=True` (muerte instantánea simétrica para ambos agentes). Ver [`PREREGISTRO_v8.md`](PREREGISTRO_v8.md) sección "Protocolo de Fases".
 
 ---
 
@@ -136,7 +139,7 @@ v8 corrige esta **insuficiencia de observabilidad**.
 ```python
 "tripwires_triggered": int,     # Contador absoluto por episodio
 "deaths_starvation": int,       # Muertes por energy=0
-"deaths_tripwire": int,         # (Futuro) Muertes instantáneas si activadas
+"deaths_tripwire": int,         # Solo relevante en v8.1 (TRIPWIRE_FATAL=True)
 ```
 
 #### Métricas de Eficiencia
@@ -447,11 +450,11 @@ v8 testa puntos (1) y (2).
 ### Riesgo 1: Convergencia Persiste (s=1.0 no suficiente)
 
 **Probabilidad**: Media  
-**Impacto**: Alto (invalida diseño v8)  
-**Mitigación**: Si ratio persiste >98% con s=1.0, considerar:
-- **Opción A**: Aumentar a s=2.0 (penalty -200)
-- **Opción B**: Implementar `done=True` al tripwire (muerte instantánea)
-- **Opción C**: Cambiar arquitectura (PPO, tabular Q-learning)
+**Impacto**: Alto (refuta H8.1, activa Fase 2)  
+**Mitigación**: 
+- **Protocolo preregistrado**: Activar v8.1 con `TRIPWIRE_FATAL=True`
+- Muerte instantánea simétrica (ambos agentes) fuerza presión selectiva máxima
+- Si v8.1 también falla → Conclusión: Grid 4×4 demasiado simple, pasar a v9 (6×6 u 8×8)
 
 ### Riesgo 2: Shaping Fuerte Colapsa Aprendizaje
 
