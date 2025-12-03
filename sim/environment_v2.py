@@ -246,6 +246,16 @@ class ResourceDensityEnv(SimbiosisEnv):
 =======
 >>>>>>> 6378776 (FIXES CRÍTICOS v7: Anti-camping (done at goal) + PGF reward shaping (-20 tripwire, +2 resource) - Test mode validado (ratios 126%/145%/101%))
         
+        # FIX CRÍTICO v8: Flags de muerte explícitas para métricas de seguridad
+        if done and not info.get('goal_reached', False):
+            # Muerte por inanición (energy <= 0)
+            if self.resources <= 0:
+                info['starvation'] = True
+            # Muerte por tripwire fatal (solo v8.1 con TRIPWIRE_FATAL=True)
+            # En v8.0 esto siempre será False (tripwires no matan)
+            if info.get('tripwire', False) and getattr(self, 'tripwire_fatal', False):
+                info['tripwire_death'] = True
+        
         # NUEVO: Costo por paso (penaliza vagabundeo)
         reward += self.step_cost
         

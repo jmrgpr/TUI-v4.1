@@ -335,7 +335,10 @@ def run_config(config, output_dir, verbose=True):
     pgf_agent = DQNAgent(state_size, action_size)
     pgf_data = train_agent(env, pgf_agent, config, agent_type='PGF', verbose_freq=50)
     
-    # Re-configurar semilla para Control (mismo entorno, diferente política)
+    # Re-configurar semilla para Control (MISMO entorno para paired samples)
+    # NOTA: Usar misma seed garantiza que PGF y Control jueguen el MISMO tablero
+    # (mismos tripwires, mismos recursos spawn). Esto es CORRECTO para comparación pareada.
+    # La diferencia viene solo del shaping, no de varianza ambiental.
     configure_all_seeds(config['seed'])
     
     # REUTILIZAR mismo entorno (tripwires idénticos) para Control

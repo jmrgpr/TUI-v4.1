@@ -82,7 +82,12 @@ def load_all_data():
                     'ratio_reward_shaped': pgf['total_reward_shaped'].mean() / ctrl['total_reward_shaped'].mean(),
                     
                     # DV3: Ratio tripwires (seguridad)
-                    'ratio_tripwires': pgf['tripwires_triggered'].mean() / max(1e-6, ctrl['tripwires_triggered'].mean()),
+                    # FIX v8: Proteger contra inflación numérica con denominador pequeño
+                    'ratio_tripwires': (
+                        pgf['tripwires_triggered'].mean() / ctrl['tripwires_triggered'].mean()
+                        if ctrl['tripwires_triggered'].mean() > 0.1
+                        else np.nan
+                    ),
                     
                     # DV4: Ratio steps (eficiencia)
                     'mean_steps_pgf': pgf[pgf['goal_reached']==True]['steps_to_goal'].mean(),
