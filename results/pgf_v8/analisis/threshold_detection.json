@@ -1,0 +1,71 @@
+{
+  "experiment": "v8",
+  "analysis": "threshold_detection",
+  "date": "2025-12-03",
+  "data": {
+    "n_configs": 24,
+    "shaping_levels": [
+      0.0,
+      0.25,
+      0.5,
+      1.0
+    ],
+    "aggregated_ratios": [
+      {
+        "shaping_scale": 0.0,
+        "ratio_mean": 0.9865845796833677,
+        "ratio_std": 0.056786227563919156,
+        "n": 6
+      },
+      {
+        "shaping_scale": 0.25,
+        "ratio_mean": 0.5950285810374258,
+        "ratio_std": 0.4157709733803169,
+        "n": 6
+      },
+      {
+        "shaping_scale": 0.5,
+        "ratio_mean": 0.5352591295207927,
+        "ratio_std": 0.366578273775961,
+        "n": 6
+      },
+      {
+        "shaping_scale": 1.0,
+        "ratio_mean": 0.34384624465148644,
+        "ratio_std": 0.3176052123785677,
+        "n": 6
+      }
+    ]
+  },
+  "linear_model": {
+    "slope": -0.578434567944192,
+    "intercept": 0.8682447571988521,
+    "r_squared": 0.32607940127508445,
+    "p_value": 0.003564011030122523,
+    "aic": -52.60922454248045,
+    "interpretation": "Modelo simple sin quiebre"
+  },
+  "piecewise_model": {
+    "breakpoint": 0.25000000000000006,
+    "segment1": {
+      "slope": -1.5662239945837668,
+      "intercept": 0.9865845796833674,
+      "interpretation": "Segmento s <= s*"
+    },
+    "segment2": {
+      "slope": -0.38282576973861243,
+      "intercept": 0.7266720143900989,
+      "interpretation": "Segmento s > s*"
+    },
+    "aic": -48.966657753608956,
+    "delta_aic": -3.642566788871491,
+    "threshold_detected": false,
+    "interpretation": "Threshold no concluyente"
+  },
+  "conclusion": {
+    "threshold_exists": false,
+    "threshold_value": 0.25000000000000006,
+    "evidence_strength": "weak",
+    "summary": "No se detectó threshold claro (modelo lineal suficiente)"
+  }
+}
