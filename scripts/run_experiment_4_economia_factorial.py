@@ -108,6 +108,8 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
     """
     Entrena un agente durante num_episodes.
     
+    FIX v7: Reward shaping activado para agente PGF (penaliza riesgos, bonifica recursos)
+    
     Args:
         env: Entorno ResourceDensityEnv
         agent: Agente DQN (PGF o Control)
@@ -121,6 +123,9 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
     # Mapeo de acciones
     actions_map = ['up', 'down', 'left', 'right']
     episode_data = []
+    
+    # Determinar si aplicamos PGF reward shaping
+    apply_pgf = (agent_type == 'PGF')
     
     for ep in range(num_episodes):
         state_dict = env.reset()
@@ -143,8 +148,18 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
             next_state_dict, reward, done, info = env.step(action)
             next_state_vec = np.array([v for _, v in next_state_dict], dtype=np.float32)
             
-            # Entrenar agente
-            agent.remember(state_vec, action_idx, reward, next_state_vec, done)
+            # FIX v7: Reward Shaping para PGF (Control ve reward crudo)
+            train_signal = reward
+            if apply_pgf:
+                # Penalizar riesgos más fuertemente (evitar tripwires)
+                if info.get('tripwire'):
+                    train_signal -= 20.0
+                # Bonificar recolección de recursos (fomentar prudencia)
+                if info.get('resource_collected'):
+                    train_signal += 2.0
+            
+            # Entrenar agente (PGF ve señal modificada, Control ve reward base)
+            agent.remember(state_vec, action_idx, train_signal, next_state_vec, done)
             agent.learn()
             
             # Actualizar estado

@@ -222,10 +222,14 @@ class ResourceDensityEnv(SimbiosisEnv):
         
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 6378776 (FIXES CRÍTICOS v7: Anti-camping (done at goal) + PGF reward shaping (-20 tripwire, +2 resource) - Test mode validado (ratios 126%/145%/101%))
         # FIX CRÍTICO v7: Anti-camping (done=True al alcanzar meta)
         if info.get('help') or info.get('goal_reached'):
             done = True
             info['goal_reached'] = True
+<<<<<<< HEAD
             # v10.8: Recompensa explícita por alcanzar meta (goal-seeking)
             reward += config.ENV_GOAL_REWARD
             info['goal_reward_applied'] = True
@@ -239,6 +243,8 @@ class ResourceDensityEnv(SimbiosisEnv):
             # En v8.0 esto siempre será False (tripwires no matan)
             if info.get('tripwire', False) and getattr(self, 'tripwire_fatal', False):
                 info['tripwire_death'] = True
+=======
+>>>>>>> 6378776 (FIXES CRÍTICOS v7: Anti-camping (done at goal) + PGF reward shaping (-20 tripwire, +2 resource) - Test mode validado (ratios 126%/145%/101%))
         
         # NUEVO: Costo por paso (penaliza vagabundeo)
         reward += self.step_cost
@@ -297,9 +303,13 @@ class ResourceDensityEnv(SimbiosisEnv):
             self.total_resources_collected += 1
             info['resource_collected'] = True
 <<<<<<< HEAD
+<<<<<<< HEAD
             info['resource_value'] = self.resource_reward  # Para PGF shaping
 =======
 >>>>>>> 03df791 (Implementación completa Experimento 2: environment_v2 + scripts + preregistro para validación TUI v4.3)
+=======
+            info['resource_value'] = self.resource_reward  # Para PGF shaping
+>>>>>>> 6378776 (FIXES CRÍTICOS v7: Anti-camping (done at goal) + PGF reward shaping (-20 tripwire, +2 resource) - Test mode validado (ratios 126%/145%/101%))
         
         # Spawn de nuevos recursos cada step
         self._spawn_resources()
