@@ -159,6 +159,14 @@ class SimbiosisEnv:
             self.resources += distractor_penalty
             reward += distractor_penalty
             info['distractor'] = True
+        # FIX CRÍTICO: Terminar episodio al alcanzar meta (anti-camping)
+        if self.agent_pos == self.goal_pos and self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH:
+            help_bonus = config.ENV_REWARD_HELP_BONUS
+            self.resources += help_bonus
+            reward += help_bonus
+            info['help'] = True
+            self.done = True  # ← TERMINAR EPISODIO INMEDIATAMENTE
+            info['goal_reached'] = True
             help_bonus = config.ENV_REWARD_HELP_BONUS
             self.resources += help_bonus
             reward += help_bonus
@@ -169,22 +177,16 @@ class SimbiosisEnv:
         if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
-<<<<<<< HEAD
-        
         # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
         # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
         max_steps = getattr(self, 'max_steps', config.ENV_MAX_STEPS_PER_EPISODE)
-        
         # Solo aplicar timeout si no se alcanzó la meta
         if not self.done:
             self.done = self.resources <= 0 or self.timestep >= max_steps
         # Bonus por episodio limpio (no tripwire/shock/distractor) solo en riesgo bajo/medio
         if self.done and self.risk_level != "high":
-=======
-        self.done = self.resources <= 0 or self.timestep >= config.ENV_MAX_STEPS_PER_EPISODE
-<<<<<<< HEAD
-        # Bonus por episodio limpio (no tripwire/shock/distractor)
-        if self.done:
+            if not info.get('tripwire') and not info.get('shock') and not info.get('distractor'):
+                reward += 1.0
 >>>>>>> a5e54fc (Diagnóstico RL: Fase E (grid 2x2) documentada, reward y bonus meta verificados. README actualizado.)
 =======
         # Bonus por episodio limpio (no tripwire/shock/distractor) solo en riesgo bajo/medio
