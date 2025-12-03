@@ -1,7 +1,7 @@
 # 🔬 EXPLORATORIOS v9: Generalización a Grids Más Complejos
 
 **Propósito**: Validar que curriculum learning generaliza a entornos de mayor complejidad (6×6 y 8×8)  
-**Status**: 📋 PLANIFICADO (opcional, post-v9 principal)  
+**Status**: ✅ 6×6 COMPLETADO | ⏸️ 8×8 OPCIONAL NO EJECUTADO  
 **Fecha**: 3 diciembre 2025
 
 ---

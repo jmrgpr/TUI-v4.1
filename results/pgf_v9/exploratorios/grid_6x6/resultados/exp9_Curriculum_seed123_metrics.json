@@ -1,0 +1,69 @@
+{
+  "config": {
+    "group": "Curriculum",
+    "seed": 123,
+    "episodes": 300,
+    "spawn_rate": 0.25,
+    "grid_size": 6,
+    "balance": 5.0,
+    "pgf_base_tripwire_penalty": 100.0,
+    "pgf_base_resource_bonus": 50.0,
+    "curriculum_stages": [
+      {
+        "scale": 0.0,
+        "episodes": 75
+      },
+      {
+        "scale": 0.25,
+        "episodes": 75
+      },
+      {
+        "scale": 0.5,
+        "episodes": 75
+      },
+      {
+        "scale": 1.0,
+        "episodes": 75
+      }
+    ]
+  },
+  "stats": {
+    "mean_reward_env_all": 119.90933333333334,
+    "std_reward_env_all": 24.32839743924979,
+    "mean_reward_env_final": 126.8524,
+    "std_reward_env_final": 0.9434339361273458,
+    "mean_tripwires_all": 1.0466666666666666,
+    "mean_tripwires_final": 0.26,
+    "total_tripwires": 314,
+    "mean_resources_all": 0.8233333333333334,
+    "mean_steps_all": 11.433333333333334,
+    "success_rate_all": 0.9466666666666667,
+    "success_rate_final": 1.0,
+    "survival_rate_all": 1.0,
+    "final_epsilon": 0.01,
+    "by_stage": {
+      "stage_1": {
+        "mean_reward_env": 100.5488,
+        "mean_tripwires": 2.3333333333333335,
+        "success_rate": 0.7866666666666666
+      },
+      "stage_2": {
+        "mean_reward_env": 125.46573333333333,
+        "mean_tripwires": 1.16,
+        "success_rate": 1.0
+      },
+      "stage_3": {
+        "mean_reward_env": 126.85466666666665,
+        "mean_tripwires": 0.3333333333333333,
+        "success_rate": 1.0
+      },
+      "stage_4": {
+        "mean_reward_env": 126.76813333333331,
+        "mean_tripwires": 0.36,
+        "success_rate": 1.0
+      }
+    }
+  },
+  "timestamp": "2025-12-03T17:06:43.604487",
+  "duration_minutes": 0.19445069233576456
+}

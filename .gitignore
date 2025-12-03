@@ -9,6 +9,10 @@ __pycache__/
 
 # Excluir solo archivos JSON grandes de results (mantener CSV y logs)
 results/**/*.json
+# EXCEPCIONES: JSONs de análisis y métricas son críticos
+!results/**/analisis/*.json
+!results/**/analisis_*.json
+!results/**/*_metrics.json
 !results/**/README*.md
 # Puedes añadir más patrones según tus necesidades
 None

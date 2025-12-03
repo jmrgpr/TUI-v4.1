@@ -1,0 +1,90 @@
+{
+  "grid_comparison": {
+    "4x4": {
+      "Curriculum": [
+        115.9316,
+        34.232400000000005,
+        116.1744
+      ],
+      "DirectoS1": [
+        116.478,
+        21.3458,
+        29.173000000000005
+      ],
+      "ControlS0": [
+        116.00119999999998,
+        113.9624,
+        116.215
+      ]
+    },
+    "6x6": {
+      "Curriculum": [
+        110.81700000000001,
+        126.8524,
+        88.40259999999998
+      ],
+      "DirectoS1": [
+        24.029599999999995,
+        24.8032,
+        24.639999999999997
+      ],
+      "ControlS0": [
+        126.76020000000003,
+        126.3686,
+        126.48820000000002
+      ]
+    }
+  },
+  "h_exp1_generalization": {
+    "ratio_4x4": {
+      "values": [
+        0.9994000062068326,
+        0.3003832843113168,
+        0.9996506475067762
+      ],
+      "mean": 0.7664779793416417,
+      "std": 0.4036498659194923,
+      "ci_lower": 0.3097051561975703,
+      "ci_upper": 1.2232508024857132
+    },
+    "ratio_6x6": {
+      "values": [
+        0.8742255061131174,
+        1.0038284827085209,
+        0.6988999764404898
+      ],
+      "mean": 0.858984655087376,
+      "std": 0.15303450963330065,
+      "ci_lower": 0.6858098050364825,
+      "ci_upper": 1.0321595051382695
+    },
+    "t_statistic": -0.3711639342587066,
+    "p_value": 0.7293378697908718,
+    "h_exp1_validated": true,
+    "interpretation": "VALIDATED"
+  },
+  "h_exp2_amplification": {
+    "difference": 0.09250667574573423,
+    "percent_improvement": 12.069058503832279,
+    "t_statistic": 0.3711639342587066,
+    "p_value_one_tailed": 0.3646689348954359,
+    "cohens_d": 0.3030540832859172,
+    "h_exp2_validated": false,
+    "interpretation": "NOT SIGNIFICANT"
+  },
+  "seed_variance_6x6": {
+    "collapsed_seeds": [],
+    "successful_seeds": [
+      42,
+      123
+    ],
+    "variance": 372.98775009333383,
+    "cv": 0.17768674503019488,
+    "interpretation": "SEED=123 RECOVERED"
+  },
+  "seed123_recovery": {
+    "4x4_reward": 34.232400000000005,
+    "6x6_reward": 126.8524,
+    "interpretation": "GRID 6\u00d76 ESTABILIZA SEED=123"
+  }
+}

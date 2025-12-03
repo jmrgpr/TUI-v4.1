@@ -1,0 +1,37 @@
+{
+  "config": {
+    "group": "DirectoS1",
+    "seed": 456,
+    "episodes": 300,
+    "spawn_rate": 0.25,
+    "grid_size": 4,
+    "balance": 5.0,
+    "pgf_base_tripwire_penalty": 100.0,
+    "pgf_base_resource_bonus": 50.0
+  },
+  "stats": {
+    "mean_reward_env_all": 28.09646666666666,
+    "std_reward_env_all": 2.892216549774848,
+    "mean_reward_env_final": 29.173000000000005,
+    "std_reward_env_final": 2.49793077631573,
+    "mean_tripwires_all": 0.10666666666666667,
+    "mean_tripwires_final": 0.02,
+    "total_tripwires": 32,
+    "mean_resources_all": 5.553333333333334,
+    "mean_steps_all": 30.0,
+    "success_rate_all": 0.0,
+    "success_rate_final": 0.0,
+    "survival_rate_all": true,
+    "final_epsilon": 0.01,
+    "by_stage": {
+      "stage_nan": {
+        "mean_reward_env": NaN,
+        "std_reward_env": NaN,
+        "success_rate": NaN,
+        "mean_tripwires": NaN
+      }
+    }
+  },
+  "timestamp": "2025-12-03T00:00:00",
+  "duration_minutes": 0.0
+}

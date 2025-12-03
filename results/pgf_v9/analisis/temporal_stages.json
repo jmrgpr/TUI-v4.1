@@ -1,0 +1,283 @@
+{
+  "analysis": "temporal_stages",
+  "experiment": "v9",
+  "date": "2025-12-03",
+  "n_seeds": 3,
+  "by_seed": {
+    "42": {
+      "stage_metrics": {
+        "1": {
+          "n_episodes": 75,
+          "mean_reward_env": 101.84253333333332,
+          "std_reward_env": 33.63990037960203,
+          "mean_reward_shaped": 101.84253333333332,
+          "mean_tripwires": 2.6,
+          "mean_resources": 0.8533333333333334,
+          "success_rate": 0.8533333333333334,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.1720768383829392,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.0
+        },
+        "2": {
+          "n_episodes": 75,
+          "mean_reward_env": 113.66666666666667,
+          "std_reward_env": 15.318359266926425,
+          "mean_reward_shaped": 101.83333333333331,
+          "mean_tripwires": 1.1066666666666667,
+          "mean_resources": 1.2666666666666666,
+          "success_rate": 0.9733333333333334,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.25
+        },
+        "3": {
+          "n_episodes": 75,
+          "mean_reward_env": 116.14573333333331,
+          "std_reward_env": 0.9301164898466667,
+          "mean_reward_shaped": 93.8124,
+          "mean_tripwires": 1.04,
+          "mean_resources": 1.1866666666666668,
+          "success_rate": 1.0,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.5
+        },
+        "4": {
+          "n_episodes": 75,
+          "mean_reward_env": 115.90626666666665,
+          "std_reward_env": 1.158278981160497,
+          "mean_reward_shaped": 46.572933333333324,
+          "mean_tripwires": 1.24,
+          "mean_resources": 1.0933333333333333,
+          "success_rate": 1.0,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 1.0
+        }
+      },
+      "slopes": {
+        "stage_1_to_2": 11.82413333333335,
+        "stage_2_to_3": 2.4790666666666397,
+        "stage_3_to_4": -0.23946666666665806
+      },
+      "collapse_detection": {
+        "sudden_collapse": false,
+        "reward_stage3": 116.14573333333331,
+        "reward_stage4": 115.90626666666665,
+        "drop": -0.23946666666665806,
+        "threshold": -50
+      },
+      "transfer_efficiency": {
+        "stage_1_to_2": 1.1161021131969748,
+        "stage_2_to_3": 1.0218099706744865,
+        "stage_3_to_4": 0.997938222440084
+      }
+    },
+    "123": {
+      "stage_metrics": {
+        "1": {
+          "n_episodes": 75,
+          "mean_reward_env": 103.18239999999999,
+          "std_reward_env": 32.31041949086511,
+          "mean_reward_shaped": 103.18239999999999,
+          "mean_tripwires": 1.92,
+          "mean_resources": 0.9066666666666666,
+          "success_rate": 0.8666666666666667,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.1720768383829392,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.0
+        },
+        "2": {
+          "n_episodes": 75,
+          "mean_reward_env": 110.55346666666667,
+          "std_reward_env": 21.111601747862725,
+          "mean_reward_shaped": 65.05346666666665,
+          "mean_tripwires": 2.2533333333333334,
+          "mean_resources": 0.8666666666666667,
+          "success_rate": 0.9466666666666667,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.25
+        },
+        "3": {
+          "n_episodes": 75,
+          "mean_reward_env": 101.76706666666666,
+          "std_reward_env": 33.67687841721569,
+          "mean_reward_shaped": 11.100400000000008,
+          "mean_tripwires": 2.2266666666666666,
+          "mean_resources": 0.8266666666666667,
+          "success_rate": 0.8533333333333334,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.5
+        },
+        "4": {
+          "n_episodes": 75,
+          "mean_reward_env": 56.32480000000001,
+          "std_reward_env": 43.282863950803716,
+          "mean_reward_shaped": 75.65813333333332,
+          "mean_tripwires": 0.76,
+          "mean_resources": 1.9066666666666667,
+          "success_rate": 0.3466666666666667,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 1.0
+        }
+      },
+      "slopes": {
+        "stage_1_to_2": 7.371066666666678,
+        "stage_2_to_3": -8.7864,
+        "stage_3_to_4": -45.442266666666654
+      },
+      "collapse_detection": {
+        "sudden_collapse": false,
+        "reward_stage3": 101.76706666666666,
+        "reward_stage4": 56.32480000000001,
+        "drop": -45.442266666666654,
+        "threshold": -50
+      },
+      "transfer_efficiency": {
+        "stage_1_to_2": 1.0714372476959897,
+        "stage_2_to_3": 0.9205235234595387,
+        "stage_3_to_4": 0.5534678540405346
+      }
+    },
+    "456": {
+      "stage_metrics": {
+        "1": {
+          "n_episodes": 75,
+          "mean_reward_env": 108.59426666666667,
+          "std_reward_env": 25.552020503667023,
+          "mean_reward_shaped": 108.59426666666667,
+          "mean_tripwires": 1.0133333333333334,
+          "mean_resources": 1.36,
+          "success_rate": 0.92,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.1720768383829392,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.0
+        },
+        "2": {
+          "n_episodes": 75,
+          "mean_reward_env": 116.25600000000001,
+          "std_reward_env": 1.0273397816822962,
+          "mean_reward_shaped": 120.08933333333334,
+          "mean_tripwires": 0.49333333333333335,
+          "mean_resources": 1.2933333333333332,
+          "success_rate": 1.0,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.25
+        },
+        "3": {
+          "n_episodes": 75,
+          "mean_reward_env": 116.37933333333335,
+          "std_reward_env": 1.0970542046443867,
+          "mean_reward_shaped": 141.71266666666668,
+          "mean_tripwires": 0.2,
+          "mean_resources": 1.4133333333333333,
+          "success_rate": 1.0,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 0.5
+        },
+        "4": {
+          "n_episodes": 75,
+          "mean_reward_env": 116.31346666666664,
+          "std_reward_env": 1.0667195144565993,
+          "mean_reward_shaped": 177.64679999999998,
+          "mean_tripwires": 0.08,
+          "mean_resources": 1.3866666666666667,
+          "success_rate": 1.0,
+          "survival_rate": 1.0,
+          "epsilon_start": 0.01,
+          "epsilon_end": 0.01,
+          "shaping_scale": 1.0
+        }
+      },
+      "slopes": {
+        "stage_1_to_2": 7.661733333333345,
+        "stage_2_to_3": 0.12333333333333485,
+        "stage_3_to_4": -0.06586666666670737
+      },
+      "collapse_detection": {
+        "sudden_collapse": false,
+        "reward_stage3": 116.37933333333335,
+        "reward_stage4": 116.31346666666664,
+        "drop": -0.06586666666670737,
+        "threshold": -50
+      },
+      "transfer_efficiency": {
+        "stage_1_to_2": 1.0705537554468807,
+        "stage_2_to_3": 1.0010608771446923,
+        "stage_3_to_4": 0.9994340346796965
+      }
+    }
+  },
+  "aggregated": {
+    "1": {
+      "n_seeds": 3,
+      "mean_reward_env": 104.53973333333333,
+      "std_reward_env": 3.5746665696879347,
+      "min_reward_env": 101.84253333333332,
+      "max_reward_env": 108.59426666666667,
+      "mean_success_rate": 0.88,
+      "std_success_rate": 0.035276684147527874
+    },
+    "2": {
+      "n_seeds": 3,
+      "mean_reward_env": 113.49204444444445,
+      "std_reward_env": 2.8552742941466867,
+      "min_reward_env": 110.55346666666667,
+      "max_reward_env": 116.25600000000001,
+      "mean_success_rate": 0.9733333333333333,
+      "std_success_rate": 0.026666666666666672
+    },
+    "3": {
+      "n_seeds": 3,
+      "mean_reward_env": 111.43071111111111,
+      "std_reward_env": 8.369776592089032,
+      "min_reward_env": 101.76706666666666,
+      "max_reward_env": 116.37933333333335,
+      "mean_success_rate": 0.9511111111111111,
+      "std_success_rate": 0.08467803948114509
+    },
+    "4": {
+      "n_seeds": 3,
+      "mean_reward_env": 96.1815111111111,
+      "std_reward_env": 34.51752480126472,
+      "min_reward_env": 56.32480000000001,
+      "max_reward_env": 116.31346666666664,
+      "mean_success_rate": 0.7822222222222223,
+      "std_success_rate": 0.3772021758705555
+    }
+  },
+  "gradual_test": {
+    "linear_model": {
+      "slope": -2.713600000000001,
+      "intercept": 113.19500000000001,
+      "r_squared": 0.20066257127546203,
+      "p_value": 0.5520462398020729
+    },
+    "stage4_residual": -6.159088888888903,
+    "stage4_predicted": 102.34060000000001,
+    "stage4_observed": 96.1815111111111,
+    "sudden_collapse_detected": false,
+    "interpretation": "GRADUAL"
+  },
+  "hypothesis_h94": {
+    "description": "Degradaci\u00f3n gradual (NO s\u00fabita) a trav\u00e9s de etapas",
+    "validated": true,
+    "interpretation": "GRADUAL"
+  }
+}

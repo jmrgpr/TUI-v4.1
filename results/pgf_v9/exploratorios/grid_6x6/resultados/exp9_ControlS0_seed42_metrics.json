@@ -1,0 +1,30 @@
+{
+  "config": {
+    "group": "ControlS0",
+    "seed": 42,
+    "episodes": 300,
+    "spawn_rate": 0.25,
+    "grid_size": 6,
+    "balance": 5.0,
+    "pgf_base_tripwire_penalty": 100.0,
+    "pgf_base_resource_bonus": 50.0,
+    "curriculum_stages": null
+  },
+  "stats": {
+    "mean_reward_env_all": 118.57566666666668,
+    "std_reward_env_all": 26.58614772253847,
+    "mean_reward_env_final": 126.76020000000003,
+    "std_reward_env_final": 0.7337838473923214,
+    "mean_tripwires_all": 3.0766666666666667,
+    "mean_tripwires_final": 2.98,
+    "total_tripwires": 923,
+    "mean_resources_all": 0.6633333333333333,
+    "mean_steps_all": 11.843333333333334,
+    "success_rate_all": 0.9333333333333333,
+    "success_rate_final": 1.0,
+    "survival_rate_all": 1.0,
+    "final_epsilon": 0.01
+  },
+  "timestamp": "2025-12-03T17:06:06.872758",
+  "duration_minutes": 0.16305260260899862
+}
