@@ -1,7 +1,7 @@
 # PGF v7 - Tracking de Progreso
 
 **Inicio**: 3 diciembre 2025, 9:51 AM  
-**Estado**: 🚧 PREPARACIÓN
+**Estado**: 🟢 VALIDADO - LISTO PARA EJECUCIÓN
 
 ---
 
@@ -10,28 +10,36 @@
 ### Setup Inicial
 - [x] Estructura de directorios creada (`results/pgf_v7/`)
 - [x] README.md con diseño experimental
+- [x] PREREGISTRO_v7.md completo (H7.1-H7.3)
 - [x] Commit cierre v6 (`9fbd049`)
 - [x] Tracking file iniciado
 
+### Preparación Scripts (COMPLETADO 10:45 AM)
+- [x] Fix spawn aleatorio en `sim/environment_v2.py` (commit `f248185`)
+- [x] **FIX CRÍTICO**: Anti-camping restaurado (commit `6378776`)
+- [x] **FIX CRÍTICO**: PGF reward shaping implementado (commit `6378776`)
+- [x] `configure_all_seeds()` en script ejecución
+- [x] `scripts/run_experiment_4_economia_factorial.py` creado
+- [x] `scripts/analyze_economia_factorial.py` creado
+- [x] `scripts/test_spawn_uniformity.py` creado
+- [x] Test de validación EXITOSO (3 configs × 10 eps)
+
+### Validación Test Mode (10:45 AM)
+- [x] Ratios diferenciados: Harsh 126%, Balanced 145%, Favorable 101%
+- [x] Anti-camping funcional (rewards < 100, no camping)
+- [x] PGF shaping activo (-20 tripwire, +2 resource)
+- [x] Seeding completo verificado
+
 ---
 
-## 🔄 En Progreso
+## ⏳ Pendiente (LISTO PARA EJECUTAR)
 
-### Preparación Scripts
-- [ ] Aplicar fix spawn aleatorio en `sim/environment_v2.py`
-- [ ] Implementar `configure_all_seeds()` en utils
-- [ ] Crear `scripts/run_experiment_4_economia_factorial.py`
-- [ ] Crear `scripts/analyze_economia_factorial.py`
-- [ ] Test de validación (3 configs × 10 eps)
-
----
-
-## ⏳ Pendiente
-
-### Ejecución
+### Ejecución (Próximo Paso)
 - [ ] Run factorial completo (45 configs, ~36 min)
-- [ ] Verificación en tiempo real (spot-checks)
-- [ ] Backup incremental de resultados
+  - Opción A: Full run con `--economies harsh balanced favorable`
+  - Opción B: Por bloques (recomendado para checkpoints)
+- [ ] Verificación en tiempo real (spot-checks cada 5 configs)
+- [ ] Backup incremental de resultados (commits por bloque)
 
 ### Análisis
 - [ ] ANOVA 2-way (Economía × Densidad)
@@ -49,7 +57,23 @@
 
 ## 🐛 Issues y Bloqueadores
 
-*(Ninguno actualmente)*
+### ✅ RESUELTOS
+
+**Issue #1 - "Efecto Placebo" (RESUELTO 10:40 AM)**
+- **Problema**: PGF y Control idénticos → ratio forzado a 100%
+- **Causa**: No reward shaping aplicado en train_agent()
+- **Solución**: Implementado shaping en commit `6378776`
+  - Penalización tripwires: -20.0
+  - Bonificación recursos: +2.0
+- **Validación**: Test mode ratios 126%/145%/101% ✅
+
+**Issue #2 - Regresión Camping Bug (RESUELTO 10:40 AM)**
+- **Problema**: Faltaba `done=True` al alcanzar meta
+- **Causa**: Fix anti-camping no migrado a environment_v2.py
+- **Solución**: Restaurado en commit `6378776`
+- **Validación**: Rewards < 100, episodios ~30 steps ✅
+
+*(Ningún bloqueador activo)*
 
 ---
 
@@ -90,12 +114,38 @@
 
 ## 📝 Notas de Sesión
 
-### 2025-12-03 09:51 AM
+### 2025-12-03 09:51 AM - Setup Inicial
 - Estructura v7 creada
 - Commit v6 exitoso (`9fbd049`)
 - README documentado con diseño completo
-- Listo para comenzar implementación de scripts
+
+### 2025-12-03 10:00 AM - Preregistro Formalizado
+- PREREGISTRO_v7.md creado (3 seeds base)
+- Hipótesis H7.1-H7.3 formalizadas
+- Criterios de éxito cuantitativos definidos
+
+### 2025-12-03 10:15 AM - Scripts Implementados
+- run_experiment_4_economia_factorial.py (commit `f248185`)
+- analyze_economia_factorial.py (commit `f248185`)
+- test_spawn_uniformity.py (commit `f248185`)
+- Spawn aleatorio fix aplicado
+
+### 2025-12-03 10:30 AM - Test Mode Inicial (FALLÓ)
+- Detectado: API DQNAgent incorrecta
+- Corregido: act/remember/learn (commit `ba187c7`)
+- Detectado: env.agent_resources → env.resources
+- Corregido: (commit `8c7004c`)
+- Resultado: Ratio 100% (agentes idénticos) ⚠️
+
+### 2025-12-03 10:40 AM - FIXES CRÍTICOS (commit `6378776`)
+- **Issue #1**: PGF reward shaping implementado
+- **Issue #2**: Anti-camping restaurado
+- Test mode EXITOSO: ratios 126%/145%/101% ✅
+
+### 2025-12-03 10:45 AM - VALIDACIÓN COMPLETA
+- 🟢 Sistema validado, listo para producción
+- Esperando confirmación para ejecutar 27,000 episodios
 
 ---
 
-*Última actualización: 3 diciembre 2025, 9:51 AM*
+*Última actualización: 3 diciembre 2025, 10:45 AM*

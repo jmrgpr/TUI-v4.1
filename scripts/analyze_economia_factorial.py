@@ -42,6 +42,25 @@ sns.set_palette("husl")
 
 
 # ============================================================================
+# HELPER: Convertir tipos NumPy a nativos de Python para JSON
+# ============================================================================
+
+def convert_numpy_types(obj):
+    """Recursivamente convierte tipos NumPy a tipos nativos de Python."""
+    if isinstance(obj, dict):
+        return {k: convert_numpy_types(v) for k, v in obj.items()}
+    elif isinstance(obj, list):
+        return [convert_numpy_types(item) for item in obj]
+    elif isinstance(obj, (np.bool_, np.generic)):
+        return bool(obj)
+    elif isinstance(obj, (np.integer, np.floating)):
+        return float(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    return obj
+
+
+# ============================================================================
 # FUNCIÓN 1: CARGAR DATOS
 # ============================================================================
 
@@ -176,6 +195,8 @@ def run_anova_2way(df, output_dir):
         },
         'h71_verdict': 'SUPPORTED' if sum(h71_criteria) >= 2 else 'NOT_SUPPORTED'
     }
+    
+    anova_results = convert_numpy_types(anova_results)
     
     output_path = Path(output_dir) / 'anova_2way_results.json'
     with open(output_path, 'w') as f:
@@ -313,7 +334,9 @@ def compare_models_by_economy(df, output_dir):
         }
     
     # Guardar JSON
-    output_path = Path(output_dir) / 'model_comparison_by_economy.json'
+    models_results = convert_numpy_types(models_results)
+    
+    output_path = Path(output_dir) / 'models_by_economy.json'
     with open(output_path, 'w') as f:
         json.dump(models_results, f, indent=2)
     
@@ -353,32 +376,46 @@ def detect_threshold(df, output_dir):
     # Regresión segmentada manual (prueba threshold en 4.0, 5.0, 6.0)
     best_threshold = None
     best_rss = np.inf
+    best_slopes = None
+    best_intercepts = None
     
-    for threshold_candidate in [4.0, 5.0, 6.0]:
-        # Split data
+    # Con solo 3 economías, solo el threshold intermedio (5.0) es viable
+    for threshold_candidate in [5.0]:
+        # Split data: harsh(3.33) vs balanced(5.0) + favorable(10.0)
         mask_low = X < threshold_candidate
         mask_high = X >= threshold_candidate
         
-        if mask_low.sum() < 2 or mask_high.sum() < 2:
+        if mask_low.sum() < 1 or mask_high.sum() < 1:
             continue  # No suficientes datos
         
-        # Ajustar regresiones separadas
-        X_low, y_low = X[mask_low], y[mask_low]
-        X_high, y_high = X[mask_high], y[mask_high]
-        
-        slope_low, intercept_low = np.polyfit(X_low, y_low, 1)
-        slope_high, intercept_high = np.polyfit(X_high, y_high, 1)
-        
-        # Calcular RSS
-        y_pred_low = slope_low * X_low + intercept_low
-        y_pred_high = slope_high * X_high + intercept_high
-        rss = np.sum((y_low - y_pred_low)**2) + np.sum((y_high - y_pred_high)**2)
-        
-        if rss < best_rss:
+        # Con 3 puntos, calcular pendientes entre pares
+        if mask_low.sum() == 1 and mask_high.sum() == 2:
+            # Harsh solo → pendiente = 0
+            # Balanced + Favorable → pendiente lineal
+            X_low, y_low = X[mask_low], y[mask_low]
+            X_high, y_high = X[mask_high], y[mask_high]
+            
+            slope_low = 0.0  # Solo 1 punto
+            intercept_low = y_low[0]
+            
+            slope_high, intercept_high = np.polyfit(X_high, y_high, 1)
+            
+            # RSS simplificado
+            y_pred_high = slope_high * X_high + intercept_high
+            rss = np.sum((y_high - y_pred_high)**2)
+            
             best_rss = rss
             best_threshold = threshold_candidate
             best_slopes = (slope_low, slope_high)
             best_intercepts = (intercept_low, intercept_high)
+    
+    # Si no se encontró threshold, usar análisis simple
+    if best_threshold is None:
+        print("   ⚠️  No se pudo ajustar regresión segmentada (solo 3 economías)")
+        best_threshold = 5.0
+        best_slopes = (0.0, 0.0)
+        best_intercepts = (y.mean(), y.mean())
+        best_rss = 0.0
     
     # Comparar con regresión lineal simple
     slope_simple, intercept_simple = np.polyfit(X, y, 1)
@@ -432,7 +469,9 @@ def detect_threshold(df, output_dir):
         'h72_verdict': 'SUPPORTED' if sum(h72_criteria) >= 2 else 'NOT_SUPPORTED'
     }
     
-    output_path = Path(output_dir) / 'threshold_regression.json'
+    threshold_results = convert_numpy_types(threshold_results)
+    
+    output_path = Path(output_dir) / 'threshold_detection.json'
     with open(output_path, 'w') as f:
         json.dump(threshold_results, f, indent=2)
     
