@@ -164,7 +164,7 @@ def train_agent(env, agent, num_episodes, agent_type='PGF', verbose_freq=50):
             
             # Actualizar estado
             state_dict = next_state_dict
-            total_reward += reward
+            total_reward += train_signal  # FIX: Acumular señal de entrenamiento (shaped), no reward crudo
             steps += 1
             
             # Contar recursos consumidos
