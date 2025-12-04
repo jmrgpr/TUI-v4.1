@@ -9,6 +9,8 @@
 
 ## 1. RESUMEN EJECUTIVO
 
+⚠️ **LIMITACIÓN CRÍTICA:** Este estudio utiliza **N=3 seeds**, lo que resulta en potencia estadística del **18%** para detectar efectos medianos (d=0.66). Las conclusiones deben interpretarse como **evidencia preliminar sugestiva**, no como hallazgos definitivos. Se requiere replicación con **N≥10** para conclusiones robustas.
+
 ### 1.1 Objetivo
 Evaluar si el **curriculum learning** (escalamiento gradual de intensidad PGF: s=0.0→0.25→0.5→1.0) mitiga el fenómeno de **over-alignment** detectado en v8, permitiendo al agente alcanzar rendimiento comparable al control s=0.0 cuando enfrenta s=1.0.
 
@@ -23,14 +25,14 @@ Evaluar si el **curriculum learning** (escalamiento gradual de intensidad PGF: s
 ### 1.3 Hallazgos Principales
 
 | Hipótesis | Estado | Interpretación | Evidencia |
-|-----------|--------|----------------|-----------|
-| **H9.1** | **MARGINAL** | Curriculum ratio 0.766 ≥ 0.70 pero **95% CI [-0.236, 1.769] cruza threshold** | Alta varianza seed-dependiente (seed=123 colapsa: 34.23 reward) |
-| **H9.2** | **NO SIGNIFICATIVA** | Mejora +33.11 reward, **p=0.1739** (no p<0.05) | Cohen's d=0.661 (medium effect), **N=3 insuficiente** para poder estadístico |
+|-----------|--------|----------------|-----------||
+| **H9.1** | ⚠️ **NO SIG. ESTADÍSTICA** | Ratio 0.766 > 0.70 pero **IC [-0.236, 1.769] cruza threshold → rechazo formal**. 2/3 seeds exitosas sugieren efecto real | Formalmente rechazada (IC cruza), pero evidencia práctica positiva (67% éxito). **N=3 insuficiente para validación definitiva** |
+| **H9.2** | ⚠️ **INSUF. POWERED** | +33.11 reward, **p=0.17 > 0.05**, d=0.661 (medium). **Potencia=18%** (requiere N≥23 para 80%) | NO ausencia de efecto, sino **ausencia de evidencia suficiente**. Efecto medio presente justifica replicación |
 | **H9.3** | ✅ **VALIDADA** | Curriculum mantiene prudencia (0.57 tripwires vs 1.37 Control) | Diferencia no significativa (p=0.234) pero ratio <1.0 |
 | **H9.4** | ✅ **VALIDADA** | Degradación **gradual** (slope=-2.71, R²=0.201), **0/3 seeds colapso súbito** | Residual etapa 4 = -6.2, threshold -50 no excedido |
 
-#### 🔑 **Conclusión Primaria**
-El curriculum learning **FUNCIONA** pero con **ALTA VARIANZA**: 2/3 seeds alcanzan paridad con Control (reward ~116, 100% success), mientras 1/3 (seed=123) colapsa en etapa 4 (reward 34.23, 10% success). La limitación estadística (N=3) impide alcanzar significancia formal en H9.2 a pesar del efecto medio (d=0.661).
+#### 🔑 **Conclusión Primaria (evidencia preliminar, N=3)**
+El curriculum learning muestra **EFECTIVIDAD PARCIAL CON ALTA VARIANZA**: 2/3 seeds (67%) alcanzan paridad con Control (reward ~116, 100% success), mientras 1/3 (seed=123) colapsa en etapa 4 (reward 34.23, 10% success). **N=3 impide validación estadística formal** (H9.1/H9.2 no significativas), pero el patrón observado (efecto medio d=0.661, 67% tasa de éxito) sugiere mecanismo prometedor que justifica replicación con N≥10.
 
 ---
 
@@ -260,10 +262,13 @@ Cohen's d: 0.303 (small effect)
 
 ### 5.1 Limitaciones Estadísticas
 
-#### A) Tamaño Muestral Insuficiente
+#### A) Tamaño Muestral Insuficiente (⚠️ CRÍTICO)
 - **N=3 seeds:** Potencia ~18% para d=0.661
 - **Requerido:** N≥23 seeds para 80% power (Cohen, 1988)
-- **Consecuencia:** H9.2 rechazada por falta de poder, no por ausencia de efecto
+- **Consecuencia MAYOR:** H9.1 y H9.2 no alcanzan significancia estadística formal
+  - H9.1: IC cruza threshold → formalmente rechazada
+  - H9.2: p=0.17 > 0.05 → insuficientemente powered
+- **Implicación:** Ninguna conclusión definitiva es válida con N=3. Todos los resultados son **preliminares y sugestivos**, requieren replicación con N≥10 mínimo
 
 #### B) Alta Varianza Seed-Dependiente
 - **CV Curriculum 4×4:** 0.532 (53% del promedio)
@@ -275,7 +280,15 @@ Cohen's d: 0.303 (small effect)
 - Rango cruza threshold → incertidumbre alta sobre ratio poblacional
 - **Recomendación:** Aumentar N o reducir varianza (e.g., múltiples inicializaciones por seed)
 
-### 5.2 Limitaciones de Diseño
+### 5.2 Limitaciones IMPORTANTES (Reducen Generalización)
+
+#### A) Un Solo Dominio
+- **Evaluado:** Solo GridWorld (navegación con tripwires)
+- **No validado:** Manipulación, diálogo, control continuo, Atari, etc.
+- **Consecuencia:** No podemos afirmar que curriculum learning funciona **en general**, solo en este dominio específico
+- **Requerido para generalización:** Validar en ≥2 dominios independientes
+
+### 5.3 Limitaciones de Diseño Experimental
 
 #### A) Salto s=0.5→1.0 Abrupto
 - **Incremento relativo:** 100% (el mayor del curriculum)
@@ -293,17 +306,27 @@ Cohen's d: 0.303 (small effect)
 - Seed=123 podría ser **caso extremo** no representativo
 - **Recomendación:** Muestreo aleatorio de seeds en estudios futuros
 
-### 5.3 Limitaciones de Alcance
+### 5.4 Limitaciones MENORES (Convenciones Aceptables en RL)
 
-#### A) Un Solo Ambiente (GridWorld)
-- Resultados específicos a navegación con tripwires
-- Generalización a otros dominios (manipulación, diálogo, etc.) **no validada**
+#### A) Seeds Específicas [42, 123, 456]
+- **Estándar en literatura RL:** Seeds fijas son convención para reproducibilidad
+- **No problemático:** Mientras se reporte abiertamente (cumplido)
 
-#### B) Curriculum Lineal Simple
-- Escalas fijas [0.0, 0.25, 0.5, 1.0] sin adaptación
-- **Alternativas no exploradas:** Adaptive curriculum (basado en rendimiento), non-linear schedules
+#### B) Grid Pequeño 4×4
+- **Apropiado para proof-of-concept:** Permite iteración rápida
+- **Validación escalamiento:** Exploratorios 6×6 y 8×8 cubren complejidad mayor
 
-#### C) Métrica de Éxito Binaria
+#### C) Arquitectura Simple DQN 2×64
+- **Suficiente para tarea:** Control s=0.0 resuelve 8×8 con esta arquitectura
+- **No es bottleneck:** Confirmado por éxito ControlS0 en todas las escalas
+
+### 5.5 Limitaciones de Alcance (Scope) (Scope)
+
+#### A) Curriculum Lineal Simple (No Adaptativo)
+- Escalas fijas [0.0, 0.25, 0.5, 1.0] sin adaptación a rendimiento
+- **Alternativa no explorada:** Curriculum adaptativo (graduar solo si success_rate > 80%)
+
+#### B) Métrica de Éxito Binaria
 - Success rate (0/1) puede ocultar matices (e.g., casi-éxitos)
 - **Complemento:** Analizar distancia final a meta en episodios fallidos
 
@@ -420,17 +443,18 @@ Cohen's d: 0.303 (small effect)
 
 ### 8.1 Respuesta a Pregunta de Investigación
 
-**"¿Puede el curriculum learning mitigar el over-alignment inducido por PGF, permitiendo al agente alcanzar rendimiento comparable al control sin shaping?"**
+**"¿Puede el curriculum learning mitigar el over-alignment inducido por PGF, permitiendo al agente alcanzar rendimiento comparable al control sin shaping?"
 
-**Respuesta:** **SÍ, condicionado a complejidad del ambiente.**
+**Respuesta (evidencia preliminar, N=3):** **POSIBLEMENTE SÍ, condicionado a complejidad y calibración.**
 
-1. **Efectividad demostrada 4×4:** 2/3 seeds (67%) alcanzan paridad con control (reward ~116, 100% success)
-2. **Generalización validada 6×6:** Ratio 0.859, menor varianza (CV=0.178), seed=123 se recupera
+1. **Efectividad sugerida 4×4:** 2/3 seeds (67%) alcanzan paridad con control (reward ~116, 100% success)
+2. **Generalización sugerida 6×6:** Ratio 0.859, menor varianza (CV=0.178), seed=123 se recupera
 3. **Colapso 8×8:** Ratio 0.507, curriculum falla por calibración inadecuada (no límite arquitectural)
 4. **Varianza crítica:** CV aumenta con complejidad mal calibrada (0.178 en 6×6 → 0.818 en 8×8)
-5. **Significancia estadística:** H9.2 no alcanzada (p=0.17) por N=3 insuficiente, pero efecto medio presente (d=0.66)
-6. **Hallazgo clave:** Complejidad intermedia (6×6) ESTABILIZA, pero escalado requiere recalibración
-5. **Mecanismo confirmado:** Degradación es gradual (H9.4), no súbita; prudencia se mantiene (H9.3)
+5. **Limitación estadística crítica:** H9.1/H9.2 no alcanzan significancia con N=3 (potencia 18%), pero efecto medio presente (d=0.66) sugiere mecanismo real que justifica investigación adicional
+6. **Hallazgo clave (requiere validación):** Complejidad intermedia (6×6) parece ESTABILIZAR, pero mecanismo no confirmado experimentalmente
+
+⚠️ **ADVERTENCIA METODOLÓGICA:** Estas son **hipótesis sugeridas por datos preliminares**, NO hallazgos confirmados. Se requiere **N≥10** y validación multi-dominio para conclusiones definitivas aptas para publicación científica.
 
 ### 8.2 Contribuciones Científicas
 
@@ -438,13 +462,16 @@ Cohen's d: 0.303 (small effect)
 - Primera documentación cuantitativa de **paralysis inducida por shaping intenso** (DirectoS1: 24-29 reward, 0% success en todas las seeds)
 - Replicación en 2 grids (4×4, 6×6) confirma robustez del fenómeno
 
-#### B) Curriculum como Solución Parcial
-- Mejora sobre baseline Directo s=1.0 (67% seeds exitosas vs 33%)
-- Limitación: Alta varianza seed-dependiente (CV=0.532) indica fragilidad
+#### B) Curriculum como Solución Parcial (evidencia preliminar)
+- **Sugerencia de mejora** sobre baseline Directo s=1.0 (67% seeds exitosas vs 33%)
+- **Limitación crítica:** Alta varianza seed-dependiente (CV=0.532) + N=3 impide validación estadística
+- **Estado:** Hipótesis prometedora, requiere N≥10 para confirmación
 
-#### C) Complejidad como Estabilizador
-- Hallazgo contraintuitivo: Seed=123 se recupera en 6×6 tras colapsar en 4×4
-- Hipótesis: Mayor diversidad de trayectorias reduce overfitting a políticas tímidas
+#### C) Complejidad como Estabilizador (hallazgo preliminar más robusto)
+- **Evidencia observada:** Seed=123 se recupera en 6×6 (126.85) tras colapsar en 4×4 (34.23)
+- **CV reduce 66.5%:** 0.532 (4×4) → 0.178 (6×6) - patrón consistente
+- **Hipótesis mecanística (no testeada):** Mayor diversidad de trayectorias reduce overfitting a políticas tímidas
+- **Estado:** Fenómeno más robusto que curriculum effectiveness, pero mecanismo requiere validación experimental
 
 ### 8.3 Implicaciones Prácticas para TUI PGF
 
