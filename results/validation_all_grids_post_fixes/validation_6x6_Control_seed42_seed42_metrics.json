@@ -1,0 +1,15 @@
+{
+  "grid": "6x6",
+  "group": "Control_seed42",
+  "seed": 42,
+  "success_rate": 0.0,
+  "reward_env_mean": -154.8914,
+  "steps_mean": 14.15,
+  "starvation_rate": 100.0,
+  "tripwires_mean": 0.0,
+  "resources_collected_mean": 0.0,
+  "epsilon_final": 0.3669578217261671,
+  "num_episodes": 200,
+  "max_steps_env": 30,
+  "manhattan_optimal": 10
+}
