@@ -50,6 +50,45 @@ pgf_v10/
 
 ---
 
+### [2025-12-04 15:30] Script v10 Desarrollado + Test Mode
+
+**Acción**: Creación `run_experiment_10_adaptive.py` y validación test mode
+
+**Desarrollo**:
+- ✅ Clase `AdaptiveCurriculum` (threshold-based, timeout 150 eps)
+- ✅ `train_adaptive_curriculum()` (episodios variables por seed)
+- ✅ `train_fixed_curriculum()` (100 eps/etapa, control rígido)
+- ✅ `train_control_s0()` (400 eps sin shaping)
+- ✅ CSV extendido: `episodes_in_stage`, `transition_triggered`, `success_rate_last_25`
+- ✅ Grid 8×8, spawn_rate 0.25, balance inicial 8.0
+- ✅ ResourceDensityEnv (API correcta)
+- ✅ NumpyEncoder para JSON serialization
+
+**Test Mode Resultados** (seed 42, threshold inicial 0.75):
+- Episodios: 170
+- Etapas alcanzadas: 5/5 (0→1→2→3→4)
+- Transiciones: 4 (todas por timeout, no threshold)
+- Success rate: 0% (8×8 extremadamente difícil)
+- Eps/etapa: {0:30, 1:30, 2:30, 3:30, 4:50}
+
+**Diagnóstico**:
+> Threshold 0.75 nunca se alcanza en 8×8 con DQN 2×64. Todas las transiciones son por timeout. Grid 8×8 confirma alta dificultad según predicción PREREGISTRO (escenario pesimista posible).
+
+**Ajuste Parámetros**:
+- ⚠️ THRESHOLD bajado: 0.75 → **0.60** (más realista para 8×8)
+- Justificación: Permitir transiciones threshold-based, no solo timeout
+- Predicción ajustada: Seeds fuertes ~50-70% success, vulnerables ~20-40%
+
+**Archivos**:
+- `scripts/run_experiment_10_adaptive.py` (757 líneas)
+- Test outputs limpios (repo limpio)
+
+**Status**: ✅ SCRIPT LISTO - Pendiente ejecutar batch completo
+
+**Próximo paso**: Decidir GO batch completo o esperar análisis v9.1 más profundo
+
+---
+
 ### [PENDIENTE] Desarrollo Lógica Adaptive
 
 **Acción**: Implementar `scripts/run_experiment_10_adaptive.py`
