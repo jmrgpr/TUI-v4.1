@@ -1,0 +1,23 @@
+{
+  "group": "FixedCurriculum",
+  "seed": 101112,
+  "grid_size": 8,
+  "n_episodes": 500,
+  "duration_min": 0.62,
+  "final_window": {
+    "mean_reward_env": 126.34,
+    "std_reward_env": 0.7681012900892282,
+    "success_rate": 1.0,
+    "mean_tripwires": 0.0
+  },
+  "curriculum_info": {
+    "type": "fixed",
+    "episodes_per_stage": {
+      "0": 100,
+      "1": 100,
+      "2": 100,
+      "3": 100,
+      "4": 100
+    }
+  }
+}
