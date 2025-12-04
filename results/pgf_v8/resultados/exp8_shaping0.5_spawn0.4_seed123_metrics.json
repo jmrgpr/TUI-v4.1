@@ -1,0 +1,46 @@
+{
+  "config": {
+    "shaping_scale": 0.5,
+    "spawn_rate": 0.4,
+    "seed": 123,
+    "balance": 5.0,
+    "tripwire_fatal": false,
+    "pgf_base_tripwire_penalty": 100.0,
+    "pgf_base_resource_bonus": 50.0,
+    "episodes": 300,
+    "grid_size": 4
+  },
+  "pgf_stats": {
+    "mean_reward_env": 23.849933333333333,
+    "std_reward_env": 2.565853074949861,
+    "mean_reward_shaped": 72.84993333333333,
+    "std_reward_shaped": 74.86566468788892,
+    "mean_tripwires": 0.24,
+    "total_tripwires": 72,
+    "mean_resources": 2.44,
+    "mean_steps": 30.0,
+    "success_rate": 0.0,
+    "survival_rate": 1.0
+  },
+  "control_stats": {
+    "mean_reward_env": 109.23356666666666,
+    "std_reward_env": 24.94881328962879,
+    "mean_reward_shaped": 109.23356666666666,
+    "std_reward_shaped": 24.94881328962879,
+    "mean_tripwires": 1.53,
+    "total_tripwires": 459,
+    "mean_resources": 1.2333333333333334,
+    "mean_steps": 7.976666666666667,
+    "success_rate": 0.9266666666666666,
+    "survival_rate": 1.0
+  },
+  "ratios": {
+    "reward_env": 0.21833886836372338,
+    "reward_shaped": 0.6669189293767147,
+    "tripwires": 0.1568627450980392,
+    "resources": 1.9783783783783782,
+    "steps": 3.760969494358546
+  },
+  "timestamp": "2025-12-03T15:10:46.616976",
+  "duration_minutes": 0.41484705607096356
+}
