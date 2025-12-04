@@ -1,0 +1,47 @@
+{
+  "group": "AdaptiveCurriculum",
+  "seed": 42,
+  "grid_size": 8,
+  "initial_balance": 4.0,
+  "n_episodes": 170,
+  "duration_min": 0.94,
+  "final_window": {
+    "mean_reward_env": 25.463999999999995,
+    "std_reward_env": 20.520143015772454,
+    "success_rate": 0.04,
+    "mean_tripwires": 0.32
+  },
+  "curriculum_info": {
+    "type": "adaptive",
+    "n_transitions": 4,
+    "transitions": [
+      {
+        "episode": 29,
+        "stage": 0,
+        "shaping_scale": 0.0
+      },
+      {
+        "episode": 59,
+        "stage": 1,
+        "shaping_scale": 0.25
+      },
+      {
+        "episode": 89,
+        "stage": 2,
+        "shaping_scale": 0.5
+      },
+      {
+        "episode": 119,
+        "stage": 3,
+        "shaping_scale": 0.75
+      }
+    ],
+    "episodes_per_stage": {
+      "0": 30,
+      "1": 30,
+      "2": 30,
+      "3": 30,
+      "4": 50
+    }
+  }
+}

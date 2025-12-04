@@ -330,10 +330,14 @@ def train_single_episode(env, agent, shaping_scale):
         total_reward_shaped += reward_shaped
         
 <<<<<<< HEAD
+<<<<<<< HEAD
         if info.get('tripwire', False):
 =======
         if info.get('tripwire_triggered', False):
 >>>>>>> 3ed58d3 (v10: Script adaptive 88 + Test mode validado)
+=======
+        if info.get('tripwire', False):
+>>>>>>> 8386521 (v10.5 FRACASO: Calibración 8x8 inviable (3 iteraciones fallidas))
             tripwires_count += 1
         if info.get('resource_collected', False):
             resources_count += 1

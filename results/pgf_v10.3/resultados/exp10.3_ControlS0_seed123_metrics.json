@@ -1,0 +1,16 @@
+{
+  "group": "ControlS0",
+  "seed": 123,
+  "grid_size": 8,
+  "initial_balance": 3.5,
+  "spawn_rate": 0.3,
+  "n_episodes": 400,
+  "duration_min": 0.78,
+  "final_window": {
+    "mean_reward_env": 126.0848,
+    "std_reward_env": 2.562460743352859,
+    "success_rate": 1.0,
+    "mean_tripwires": 2.74
+  },
+  "curriculum_info": null
+}
