@@ -101,9 +101,11 @@ ENV_RESOURCE_SPAWN_RATE = 0.40  # Validado por oráculo (balance viable con reco
 ENV_RESOURCE_THRESHOLD_LOW = 5
 
 # Recompensas y Penalizaciones Base / Base Rewards and Penalties
-ENV_REWARD_HELP_BONUS = 100.0
-ENV_PENALTY_LOW_RESOURCES = -0.01
-ENV_PENALTY_TRIPWIRE_BASE = -0.01
+ENV_REWARD_HELP_BONUS = 50
+ENV_PENALTY_LOW_RESOURCES = -10.0
+# FIX BUG #4: Tripwire penalty proporcional a resources (no insignificante)
+# Con initial_resources=2.5-7.5: -0.5 = 6-20% impacto (vs -0.01 = 0.1-0.4%)
+ENV_PENALTY_TRIPWIRE_BASE = -0.5  # Era -0.01 (50× más significativo)
 ENV_PENALTY_SHOCK_BASE = -10.0
 ENV_PENALTY_DISTRACTOR_BASE = -0.01
 >>>>>>> a5e54fc (Diagnóstico RL: Fase E (grid 2x2) documentada, reward y bonus meta verificados. README actualizado.)

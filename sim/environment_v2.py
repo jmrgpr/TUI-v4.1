@@ -29,6 +29,8 @@ class ResourceDensityEnv(SimbiosisEnv):
                  step_cost=-0.3,  # TRIPLICADO: Castigo fuerte por vagabundeo
                  resource_decay_steps=5,  # REDUCIDO de 10 a 5 (caducan rápido)
                  max_steps_multiplier=2.0):  # v10.9: Reducido 3.0→2.0 (presión temporal)
+                 max_steps_multiplier=3.0):  # FIX BUG: Margen steps parametrizado por grid
+                 max_steps_multiplier=2.0):  # v10.9: Reducido 3.0→2.0 (presión temporal)
         """
         Args:
             resource_spawn_rate: Probabilidad de que aparezca un recurso por celda por paso (ρ)
@@ -36,11 +38,9 @@ class ResourceDensityEnv(SimbiosisEnv):
             max_resources_on_grid: Máximo de recursos simultáneos en el grid (3 - escasez real)
             step_cost: Costo por cada paso (-0.3 - penaliza fuerte vagabundeo)
             resource_decay_steps: Pasos antes de que un recurso caduque (5 - caducan rápido)
-<<<<<<< HEAD
             max_steps_multiplier: Multiplicador para pasos máximos (2.0)
         """
-=======
->>>>>>> a57cee5 (Exp2 COMPLETO: H-DR (1/D) refutada + batch exploratorio 9 configs - Patrón no lineal detectado (max en D intermedia), outliers DQN documentados)
+         max_steps_multiplier: Multiplicador para pasos máximos (2.0)
         """
         super().__init__(
             size=size,
@@ -54,6 +54,7 @@ class ResourceDensityEnv(SimbiosisEnv):
             goal_pos=goal_pos
         )
         
+<<<<<<< HEAD
     # FIX BUG #1: max_steps parametrizado por grid (3× Manhattan margen)
     # Manhattan óptimo = (size-1)*2, multiplicador da margen exploración
     # 4×4: 6×3=18, 6×6: 10×3=30, 8×8: 14×3=42, 16×16: 30×3=90
@@ -64,6 +65,19 @@ class ResourceDensityEnv(SimbiosisEnv):
     self.max_resources_on_grid = max_resources_on_grid
     self.step_cost = step_cost  # NUEVO
     self.resource_decay_steps = resource_decay_steps  # NUEVO
+=======
+        # FIX BUG #1: max_steps parametrizado por grid (3× Manhattan margen)
+        # Manhattan óptimo = (size-1)*2, multiplicador da margen exploración
+        # 4×4: 6×3=18, 6×6: 10×3=30, 8×8: 14×3=42, 16×16: 30×3=90
+        manhattan_optimal = (size - 1) * 2
+        self.max_steps = int(manhattan_optimal * max_steps_multiplier)
+        
+        self.resource_spawn_rate = resource_spawn_rate
+        self.resource_reward = resource_reward
+        self.max_resources_on_grid = max_resources_on_grid
+        self.step_cost = step_cost  # NUEVO
+        self.resource_decay_steps = resource_decay_steps  # NUEVO
+>>>>>>> 3e5d24d (FIX: 4 bugs sistemáticos críticos (max_steps, risk_penalty, step_cost, penalties))
         
         # Recursos dinámicos en el grid (posiciones con comida/batería)
         self.resource_positions = set()
@@ -189,7 +203,6 @@ class ResourceDensityEnv(SimbiosisEnv):
         """Detecta si hay recurso adyacente (para abstract state)"""
         for rx, ry in self.resource_positions:
             if abs(rx - x) + abs(ry - y) == 1:
-                return True
         return False
 
     def get_abstract_state(self):
@@ -200,19 +213,7 @@ class ResourceDensityEnv(SimbiosisEnv):
             "x": x,
             "y": y,
             "coord_x": x,
-            "coord_y": y,
-            "recursos_altos": 1 if self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH else 0,
-            "recursos_bajos": 1 if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW else 0,
-            "veo_tripwire_cerca": 1 if self.is_tripwire_near(x, y) else 0,
-            "veo_shock_cerca": 1 if self.is_shock_near(x, y) else 0,
-            "veo_distractor_cerca": 1 if self.is_distractor_near(x, y) else 0,
-            "veo_meta_cerca": 1 if self.is_goal_near(x, y) else 0,
-            "veo_recurso_cerca": 1 if self.is_resource_near(x, y) else 0,  # NUEVO
-        }
-        
-        return tuple(sorted(state_features.items()))
 
-    def step(self, action: str):
         """Step con lógica de recursos dinámicos"""
         # Registrar celda visitada (para p_acceso)
         self.cells_visited.add(tuple(self.agent_pos))
@@ -270,11 +271,14 @@ class ResourceDensityEnv(SimbiosisEnv):
             info['starvation'] = True
             info['death_reason'] = 'economic_starvation'
         
+<<<<<<< HEAD
 =======
         # NUEVO: Costo por paso (penaliza vagabundeo)
         reward += self.step_cost
         
 >>>>>>> a57cee5 (Exp2 COMPLETO: H-DR (1/D) refutada + batch exploratorio 9 configs - Patrón no lineal detectado (max en D intermedia), outliers DQN documentados)
+=======
+>>>>>>> 3e5d24d (FIX: 4 bugs sistemáticos críticos (max_steps, risk_penalty, step_cost, penalties))
         # NUEVO: Decaimiento de recursos (caducan si no se recolectan)
         resources_to_remove = []
         for pos, spawn_time in list(self.resource_spawn_times.items()):

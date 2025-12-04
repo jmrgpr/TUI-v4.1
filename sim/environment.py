@@ -167,19 +167,13 @@ class SimbiosisEnv:
             info['help'] = True
             self.done = True  # ← TERMINAR EPISODIO INMEDIATAMENTE
             info['goal_reached'] = True
-            help_bonus = config.ENV_REWARD_HELP_BONUS
-            self.resources += help_bonus
-            reward += help_bonus
-            info['help'] = True
-            self.done = True  # ← TERMINAR EPISODIO INMEDIATAMENTE
-            info['goal_reached'] = True
         
         if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
-        # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
-        # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
-        max_steps = getattr(self, 'max_steps', config.ENV_MAX_STEPS_PER_EPISODE)
+    # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
+    # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
+    max_steps = getattr(self, 'max_steps', config.ENV_MAX_STEPS_PER_EPISODE)
         # Solo aplicar timeout si no se alcanzó la meta
         if not self.done:
             self.done = self.resources <= 0 or self.timestep >= max_steps
