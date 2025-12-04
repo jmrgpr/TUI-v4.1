@@ -99,7 +99,7 @@ class DQNAgent:
         rewards = torch.FloatTensor(np.array(rewards)).to(self.device)
         next_states = torch.FloatTensor(np.stack(next_states)).to(self.device)
         dones = torch.FloatTensor(np.array(dones)).to(self.device)
-        q_values = self.model(states).gather(1, actions).squeeze()
+        q_values = self.model(states).gather(1, actions).squeeze(1)
         # Usar la target network para calcular next_q y estabilizar el objetivo
         with torch.no_grad():
             next_q = self.target_model(next_states).max(1)[0]
