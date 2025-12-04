@@ -215,24 +215,44 @@ Cohen's d: 0.303 (small effect)
 - N=3 insuficiente para detectar efecto pequeño (d=0.303)
 - **Interpretación:** No hay evidencia sólida de amplificación (aunque tendencia sugerente)
 
-### 4.3 🔑 Hallazgo Crítico: Recuperación de Seed=123
+### 4.3 🔑 Hallazgo Crítico: Evolución Multiescala (4×4 → 6×6 → 8×8)
 
-#### Tabla 4: Seed=123 Comportamiento por Grid
+#### Tabla 4: Resultados Comparativos por Grid Size
 
-| Grid | Reward Env | Success Rate | Etapa 4 Reward | Interpretación |
-|------|------------|--------------|----------------|----------------|
-| **4×4** | 34.23 | 10% | 56.9 | ❌ **COLAPSO** en etapa 4 |
-| **6×6** | 126.85 | 100% | 126.8 | ✅ **RECUPERACIÓN COMPLETA** |
+| Grid | Ratio Curriculum/Control | CV Curriculum | Seed=123 Reward | Interpretación |
+|------|---------------------------|---------------|-----------------|----------------|
+| **4×4** | 0.766 ± 0.415 | 0.532 | 34.23 | ❌ MARGINAL (alta varianza) |
+| **6×6** | 0.859 ± 0.153 | 0.178 | 126.85 | ✅ ÉXITO (baja varianza) |
+| **8×8** | 0.507 ± 0.414 | 0.818 | 122.14 | ⚠️ COLAPSO PARCIAL (inestabilidad crítica) |
 
-**Análisis:**
-- En 4×4: Seed=123 colapsa en etapa 4 (reward 56.9→34.23 en últimos 50 eps)
-- En 6×6: **Misma seed=123** mantiene rendimiento óptimo etapa 4 (reward 126.8)
-- **Varianza:** CV 6×6 (0.178) < CV 4×4 (0.532) → **Mayor complejidad ESTABILIZA**
+**Análisis por Grid:**
+
+**4×4 (Baseline):**
+- Ratio marginal 0.766 (CI cruza threshold 0.70)
+- Alta varianza entre seeds (CV=0.532)
+- Seed=123 colapsa en etapa 4 (reward 34.23)
+
+**6×6 (Validación Generalización):**
+- ✅ H_exp1 VALIDADA: Ratio 0.859 ≥ 0.70
+- **Recuperación seed=123:** 34.23 → 126.85 (372% mejora)
+- Menor varianza (CV=0.178) → **complejidad ESTABILIZA**
+- Interpretación: Mayor espacio aumenta diversidad trayectorias, reduce overfitting
+
+**8×8 (Límite Arquitectural):**
+- ❌ H_exp1 extensión RECHAZADA: Ratio 0.507 < 0.70
+- **Colapso parcial:** 2/3 seeds fallan (seeds 42, 456)
+- **Seed=123 mantiene:** 122.14 reward (96% éxito) pero aislado
+- Máxima varianza (CV=0.818) → **inestabilidad crítica**
+- **Control s=0.0:** 126.02 reward (100% éxito) → arquitectura DQN 2×64 SUFICIENTE
+- **Diagnóstico:** PROBLEMA CURRICULAR, no límite arquitectural
+  - Etapas 75 eps insuficientes para consolidar en 8×8
+  - Graduación s=0.5 → 1.0 demasiado abrupta para 4× complejidad espacial
 
 **Interpretación Teórica:**
-La mayor complejidad espacial (6×6) puede **incrementar diversidad de trayectorias**, reduciendo overfitting a rutas sub-óptimas inducidas por el shaping. En 4×4, el espacio pequeño facilita convergencia prematura a políticas "tímidas" que evitan exploración necesaria en s=1.0.
-
-**Implicación:** El curriculum learning puede ser **más robusto** en ambientes complejos que en simples, contrario a intuición inicial.
+1. **6×6 sweet spot:** Complejidad intermedia optimiza diversidad sin saturar capacidad
+2. **8×8 colapso:** No por arquitectura (Control resuelve) sino por curriculum mal calibrado
+3. **Tendencia multiescala:** Ratio NO monotónico (0.766 → 0.859 → 0.507)
+4. **Recomendación:** Aumentar episodios por etapa (75 → 150) o añadir etapas intermedias en 8×8
 
 ---
 
@@ -262,10 +282,11 @@ La mayor complejidad espacial (6×6) puede **incrementar diversidad de trayector
 - **Evidencia:** Etapa 4 muestra mayor std (34.5 vs 2.9-8.4 en etapas previas)
 - **Propuesta:** Añadir etapa intermedia s=0.75 o extender etapa 4 a 150 episodios
 
-#### B) Arquitectura DQN Simple
-- **Red:** 2×64 (solo 8,448 parámetros)
-- **Limitación:** Puede alcanzar capacidad límite en grids grandes (8×8: 64 estados)
-- **Evidencia indirecta:** 6×6 estabiliza seed=123, sugiriendo que complejidad ayuda pero arquitectura podría ser bottleneck en 8×8
+#### A) Arquitectura DQN 2×64
+- **Validación 8×8:** Control sin shaping resuelve 8×8 (reward 126.02, 100% éxito)
+- **Conclusión:** Arquitectura SUFICIENTE para 64 estados (8×8)
+- **Limitación curriculum 8×8:** No es capacidad de red, sino calibración etapas (75 eps insuficiente)
+- **Recomendación:** Mantener DQN 2×64 para grids ≤8×8, considerar 3×128 para 10×10+
 
 #### C) Seeds Fijas (42, 123, 456)
 - No se exploró espacio completo de seeds (e.g., 1-1000)
@@ -358,12 +379,16 @@ La mayor complejidad espacial (6×6) puede **incrementar diversidad de trayector
 
 ### 7.2 Experimentos Exploratorios Sugeridos
 
-#### A) Experimento 8×8 (Opcional)
-- **Objetivo:** Validar límite arquitectural DQN 2×64 en grid complejo
-- **Predicción:** Si seed=123 sigue mejorando, confirma hipótesis "complejidad estabiliza"; si colapsa, detecta límite de capacidad
-- **Decisión:** Ejecutar solo si se quiere publicar generalización robusta (no crítico para conclusiones v9)
+#### A) ✅ Experimento 8×8 (COMPLETADO)
+**Objetivo:** Validar límite arquitectural DQN 2×64 en grid complejo
+**Resultados:**
+- **Ratio Curriculum/Control:** 0.507 (colapso parcial vs 0.859 en 6×6)
+- **Control s=0.0:** 126.02 reward → arquitectura SUFICIENTE
+- **Diagnóstico:** PROBLEMA CURRICULAR (75 eps/etapa insuficiente para 8×8)
+- **Seed=123:** Mantiene estabilidad (122.14) pero seeds 42/456 colapsan
+- **Conclusión:** Curriculum requiere calibración específica por grid size
 
-#### B) Ablación de Schedule
+#### B) Curriculum Adaptativo (Prioridad Alta)
 - **Condiciones:** 
   - Curriculum estándar [0.0, 0.25, 0.5, 1.0]
   - Curriculum denso [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -397,12 +422,14 @@ La mayor complejidad espacial (6×6) puede **incrementar diversidad de trayector
 
 **"¿Puede el curriculum learning mitigar el over-alignment inducido por PGF, permitiendo al agente alcanzar rendimiento comparable al control sin shaping?"**
 
-**Respuesta:** **SÍ, con limitaciones importantes.**
+**Respuesta:** **SÍ, condicionado a complejidad del ambiente.**
 
-1. **Efectividad demostrada:** 2/3 seeds (67%) alcanzan paridad con control (reward ~116, 100% success)
-2. **Varianza alta:** 1/3 seeds (33%) colapsa incluso con curriculum (seed=123: reward 34, 10% success)
-3. **Significancia estadística:** H9.2 no alcanzada (p=0.17) por N=3 insuficiente, pero efecto medio presente (d=0.66)
-4. **Generalización validada:** Efectividad se mantiene en 6×6 (ratio 0.859), con menor varianza que 4×4
+1. **Efectividad demostrada 4×4:** 2/3 seeds (67%) alcanzan paridad con control (reward ~116, 100% success)
+2. **Generalización validada 6×6:** Ratio 0.859, menor varianza (CV=0.178), seed=123 se recupera
+3. **Colapso 8×8:** Ratio 0.507, curriculum falla por calibración inadecuada (no límite arquitectural)
+4. **Varianza crítica:** CV aumenta con complejidad mal calibrada (0.178 en 6×6 → 0.818 en 8×8)
+5. **Significancia estadística:** H9.2 no alcanzada (p=0.17) por N=3 insuficiente, pero efecto medio presente (d=0.66)
+6. **Hallazgo clave:** Complejidad intermedia (6×6) ESTABILIZA, pero escalado requiere recalibración
 5. **Mecanismo confirmado:** Degradación es gradual (H9.4), no súbita; prudencia se mantiene (H9.3)
 
 ### 8.2 Contribuciones Científicas

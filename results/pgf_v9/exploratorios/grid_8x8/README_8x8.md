@@ -2,8 +2,8 @@
 
 **Grid Size**: 8×8 (64 celdas)  
 **Objetivo**: Test límites de curriculum learning en alta complejidad  
-**Status**: ⚠️ OPCIONAL (solo si 4×4 Y 6×6 éxito + tiempo)  
-**Fecha**: 3 diciembre 2025
+**Status**: ✅ **COMPLETADO** (3 diciembre 2025, 3.0 min)  
+**Resultado**: ⚠️ **COLAPSO PARCIAL** (ratio 0.507, solo seed=123 exitoso)
 
 ---
 
@@ -17,6 +17,52 @@
 - 4×4 y 6×6 validan efectividad en complejidad baja-media
 - 8×8 representa salto cualitativo (64 celdas, ~3,400 caminos)
 - Puede revelar **límite arquitectural** (DQN 2×64 insuficiente?)
+
+**Resultado obtenido:**
+- ❌ Curriculum FALLA (ratio 0.507 vs 0.859 en 6×6)
+- ✅ Arquitectura SUFICIENTE (Control s=0.0 resuelve 8×8 con reward 126.02)
+- 🔍 Diagnóstico: PROBLEMA CURRICULAR (etapas 75 eps insuficientes)
+
+---
+
+## 📊 Resultados Principales
+
+### Tabla Resumen por Grupo (últimos 50 episodios)
+
+| Grupo | Reward Env | Success Rate | Tripwires | Interpretación |
+|-------|------------|--------------|-----------|----------------|
+| **Curriculum** | 64.03 ± 52.37 | 41.3% | 1.88 | ⚠️ **COLAPSO PARCIAL** (alta varianza) |
+| **DirectoS1** | 20.49 ± 0.55 | 0% | 0.31 | ❌ **FALLA TOTAL** (esperado) |
+| **ControlS0** | 126.02 ± 0.41 | 100% | 4.26 | ✅ **ÉXITO COMPLETO** |
+
+### Resultados Detallados por Seed (Curriculum)
+
+| Seed | Reward Final | Success Rate | Etapa 4 Reward | Status |
+|------|--------------|--------------|----------------|--------|
+| **42** | 20.47 ± 0.65 | 0% | 20.51 | ❌ **COLAPSO TOTAL** |
+| **123** | 122.14 ± 20.55 | 96% | 121.74 | ✅ **ÉXITO** (único superviviente) |
+| **456** | 49.50 ± 47.68 | 28% | 57.98 | ⚠️ **DEGENERACIÓN** (colapso ep 300) |
+
+**Test H_exp1 Extensión:**
+```
+Ratio Curriculum/Control: 0.507 ± 0.414
+95% CI: [0.039, 0.975]
+Resultado: ❌ RECHAZADA (ratio < 0.70 threshold)
+Interpretación: PARTIAL COLLAPSE - Degradación 41% vs 6×6
+```
+
+**Tendencia Multiescala:**
+```
+4×4: ratio 0.766 (MARGINAL, CV=0.532)
+6×6: ratio 0.859 (ÉXITO, CV=0.178) ← pico efectividad
+8×8: ratio 0.507 (COLAPSO, CV=0.818) ← inestabilidad crítica
+```
+
+**Diagnóstico Clave:**
+- ✅ **Arquitectura DQN 2×64 SUFICIENTE** (Control resuelve 8×8 perfectamente)
+- ❌ **Curriculum MAL CALIBRADO** (75 eps/etapa insuficientes para 4× complejidad)
+- 🔑 **Seed=123 resiliente** (mantiene 122.14) pero seeds 42/456 colapsan
+- 📊 **CV aumenta** 0.178 (6×6) → 0.818 (8×8) → configuración inadecuada
 
 ---
 

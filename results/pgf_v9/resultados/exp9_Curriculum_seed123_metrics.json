@@ -2,54 +2,68 @@
   "config": {
     "group": "Curriculum",
     "seed": 123,
-    "episodes": 300,
+    "episodes": 400,
     "spawn_rate": 0.25,
-    "grid_size": 4,
+    "grid_size": 8,
     "balance": 5.0,
     "pgf_base_tripwire_penalty": 100.0,
-    "pgf_base_resource_bonus": 50.0
+    "pgf_base_resource_bonus": 50.0,
+    "curriculum_stages": [
+      {
+        "scale": 0.0,
+        "episodes": 75
+      },
+      {
+        "scale": 0.25,
+        "episodes": 75
+      },
+      {
+        "scale": 0.5,
+        "episodes": 75
+      },
+      {
+        "scale": 1.0,
+        "episodes": 75
+      }
+    ]
   },
   "stats": {
-    "mean_reward_env_all": 92.95693333333334,
-    "std_reward_env_all": 39.660880087224484,
-    "mean_reward_env_final": 34.232400000000005,
-    "std_reward_env_final": 27.37466939955063,
-    "mean_tripwires_all": 1.79,
-    "mean_tripwires_final": 0.26,
-    "total_tripwires": 537,
-    "mean_resources_all": 1.1266666666666667,
-    "mean_steps_all": 13.163333333333334,
-    "success_rate_all": 0.7533333333333333,
-    "success_rate_final": 0.1,
-    "survival_rate_all": true,
+    "mean_reward_env_all": 112.82693333333334,
+    "std_reward_env_all": 33.832492475220356,
+    "mean_reward_env_final": 122.1358,
+    "std_reward_env_final": 20.546383970054148,
+    "mean_tripwires_all": 1.7633333333333334,
+    "mean_tripwires_final": 0.22,
+    "total_tripwires": 529,
+    "mean_resources_all": 0.52,
+    "mean_steps_all": 17.14,
+    "success_rate_all": 0.88,
+    "success_rate_final": 0.96,
+    "survival_rate_all": 1.0,
     "final_epsilon": 0.01,
     "by_stage": {
       "stage_1": {
-        "mean_reward_env": 103.18239999999999,
-        "std_reward_env": 32.31041949086511,
-        "success_rate": 0.8666666666666667,
-        "mean_tripwires": 1.92
+        "mean_reward_env": 88.26933333333334,
+        "mean_tripwires": 2.8133333333333335,
+        "success_rate": 0.64
       },
       "stage_2": {
-        "mean_reward_env": 110.55346666666667,
-        "std_reward_env": 21.111601747862725,
-        "success_rate": 0.9466666666666667,
-        "mean_tripwires": 2.2533333333333334
+        "mean_reward_env": 122.16186666666664,
+        "mean_tripwires": 2.1066666666666665,
+        "success_rate": 0.96
       },
       "stage_3": {
-        "mean_reward_env": 101.76706666666666,
-        "std_reward_env": 33.67687841721569,
-        "success_rate": 0.8533333333333334,
-        "mean_tripwires": 2.2266666666666666
+        "mean_reward_env": 119.1392,
+        "mean_tripwires": 1.6666666666666667,
+        "success_rate": 0.96
       },
       "stage_4": {
-        "mean_reward_env": 56.32480000000001,
-        "std_reward_env": 43.282863950803716,
-        "success_rate": 0.3466666666666667,
-        "mean_tripwires": 0.76
+        "mean_reward_env": 121.73733333333335,
+        "mean_tripwires": 0.4666666666666667,
+        "success_rate": 0.96
       }
     }
   },
-  "timestamp": "2025-12-03T00:00:00",
-  "duration_minutes": 0.0
+  "timestamp": "2025-12-03T17:35:07.979130",
+  "duration_minutes": 0.19834342797597249
 }
