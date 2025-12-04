@@ -249,11 +249,16 @@ def create_env_and_agent(grid_size, seed):
         resource_spawn_rate=SPAWN_RATE,
         step_cost=-0.2,  # Mismo que v9.1
 <<<<<<< HEAD
+<<<<<<< HEAD
         resource_reward=1.0,  # Mismo que v9.1 (BALANCED_ECONOMY['goal_reward'])
         initial_resources=INITIAL_BALANCE  # CRÍTICO: 8.0 (no usar default 100.0)
 =======
         resource_reward=RESOURCE_REWARD / 100.0  # Normalizar (1.0 vs 100.0)
 >>>>>>> 3ed58d3 (v10: Script adaptive 88 + Test mode validado)
+=======
+        resource_reward=1.0,  # Mismo que v9.1 (BALANCED_ECONOMY['goal_reward'])
+        initial_resources=INITIAL_BALANCE  # CRÍTICO: 8.0 (no usar default 100.0)
+>>>>>>> b519eaf (FIX CRÍTICO v10: initial_resources=8.0 + resource_reward=1.0)
     )
     
     # State size (ResourceDensityEnv retorna dict, extraer tamaño)
