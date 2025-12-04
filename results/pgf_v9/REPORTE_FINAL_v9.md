@@ -3,7 +3,7 @@
 **Fecha:** 3 de diciembre de 2025  
 **Experimento:** v9 (Curriculum Learning)  
 **Investigadores:** TUI Team  
-**Preregistro:** `docs/PREREGISTRO_v9.md` (30 páginas, 4 hipótesis)
+**Preregistro:** `results/pgf_v9/PREREGISTRO_v9.md` (30 páginas, 4 hipótesis)
 
 ---
 
@@ -39,7 +39,7 @@ El curriculum learning muestra **EFECTIVIDAD PARCIAL CON ALTA VARIANZA**: 2/3 se
 ## 2. METODOLOGÍA
 
 ### 2.1 Protocolo de Replicación
-Ver `docs/PREREGISTRO_v9.md` para detalles completos. Resumen:
+Ver `results/pgf_v9/PREREGISTRO_v9.md` para detalles completos. Resumen:
 
 **Ambiente:**
 - Grid 4×4, spawn_rate=0.25 (~4 tripwires aleatorios)
@@ -587,7 +587,7 @@ python scripts/visualize_6x6_comparison.py
 
 **TUI Framework:**
 - `docs/Teoria_Unificada_Inteligencia_v4.0_CLEAN.md`
-- `docs/PREREGISTRO_v9.md`
+- `results/pgf_v9/PREREGISTRO_v9.md`
 
 ---
 
@@ -600,7 +600,7 @@ python scripts/visualize_6x6_comparison.py
 
 ## DECLARACIÓN DE INTEGRIDAD CIENTÍFICA
 
-Este reporte fue generado siguiendo estándares de preregistro (Open Science Framework guidelines). Todas las hipótesis, análisis planificados y criterios de éxito fueron declarados antes de la recolección de datos (ver `docs/PREREGISTRO_v9.md`, commit anterior a ejecución). 
+Este reporte fue generado siguiendo estándares de preregistro (Open Science Framework guidelines). Todas las hipótesis, análisis planificados y criterios de éxito fueron declarados antes de la recolección de datos (ver `results/pgf_v9/PREREGISTRO_v9.md`, commit anterior a ejecución). 
 
 **Desviaciones del preregistro:** Ninguna. Análisis exploratorio 6×6 fue marcado explícitamente como "exploratorio" y no afecta interpretación de hipótesis primarias.
 
