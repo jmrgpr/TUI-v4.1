@@ -72,13 +72,14 @@ def run_curriculum_seed(seed, output_dir):
     
     # Fase 1: 4×4
     env_4x4 = create_env(grid_size=4, max_steps_multiplier=4.0)
-    state = env_4x4.reset(seed=seed)
-    state_dim = len(state_to_vector(state))
-    action_dim = 5
     
-    # Establecer seed global para reproducibilidad
+    # Establecer seed global ANTES de reset
     torch.manual_seed(seed)
     np.random.seed(seed)
+    
+    state = env_4x4.reset()
+    state_dim = len(state_to_vector(state))
+    action_dim = 5
     
     agent_4x4 = DQNAgent(
         state_dim=state_dim,
