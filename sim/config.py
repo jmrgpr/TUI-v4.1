@@ -76,6 +76,7 @@ ENV_RESOURCE_THRESHOLD_LOW = 1.0  # Era 2.0 (escala con balance 8.0)
 ENV_RESOURCE_THRESHOLD_LOW = 1.0  # Era 2.0 (escala con balance 8.0)
 
 # Recompensas y Penalizaciones Base / Base Rewards and Penalties
+<<<<<<< HEAD
 # v11: Goal reward 20.0 (domina penalties acumulados, señal fuerte)
 # Con balance viable, goal_reward es incentivo primario
 ENV_GOAL_REWARD = 20.0  # Domina penalty_low × 20 steps (-20.0)
@@ -85,14 +86,29 @@ ENV_REWARD_HELP_BONUS = 50
 ENV_STEP_COST = -0.15  # v11: Reducido de -0.25 a -0.15 (menor fricción)
 # v11: penalty_low -0.5 (menos brutal que -1.0, exploración viable)
 ENV_PENALTY_LOW_RESOURCES = -0.5  # v11: Reducido de -1.0 a -0.5 (-50%)
+=======
+# v10.8: Goal reward CRÍTICO para aprendizaje goal-seeking
+ENV_GOAL_REWARD = 10.0  # Recompensa explícita por alcanzar meta (vs 0.0 previo)
+ENV_REWARD_HELP_BONUS = 50
+# FIX #5: Penalty proporcional (no brutal -10.0 cada step)
+# v10.8: step_cost reducido -0.25 → -0.15 (-40% castigo, facilita exploración)
+ENV_STEP_COST = -0.15  # Era -0.25 (menos castigo por explorar)
+# Con step_cost=-0.15: ratio ~7:1 vs penalty_low (señal balanceada)
+ENV_PENALTY_LOW_RESOURCES = -1.0  # Era -10.0 (mataba exploración DQN)
+>>>>>>> f27f366 (v10.8 implementada y FALLIDA: Análisis completo root cause)
 # FIX BUG #4: Tripwire penalty proporcional a resources (no insignificante)
 # Con initial_resources=2.5-7.5: -0.5 = 6-20% impacto (vs -0.01 = 0.1-0.4%)
 ENV_PENALTY_TRIPWIRE_BASE = -0.5  # Era -0.01 (50× más significativo)
 ENV_PENALTY_SHOCK_BASE = -10.0
 ENV_PENALTY_DISTRACTOR_BASE = -0.01
 
+<<<<<<< HEAD
 # v11: Resource spawn rate 0.40 (40% celdas spawn recursos, economía balanceada)
 ENV_RESOURCE_SPAWN_RATE = 0.40  # Validado por oráculo (balance viable con recolección)
+=======
+# v10.8: Resource spawn rate aumentado para economía viable
+ENV_RESOURCE_SPAWN_RATE = 0.40  # Era 0.15 → 0.30 → 0.40 (+167% original, +33% smoke test)
+>>>>>>> f27f366 (v10.8 implementada y FALLIDA: Análisis completo root cause)
 
 # ==============================================================================
 # PARÁMETROS DE EXPERIMENTACIÓN / EXPERIMENT CONFIG

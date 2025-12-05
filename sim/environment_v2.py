@@ -54,7 +54,6 @@ class ResourceDensityEnv(SimbiosisEnv):
             goal_pos=goal_pos
         )
         
-<<<<<<< HEAD
     # FIX BUG #1: max_steps parametrizado por grid (3× Manhattan margen)
     # Manhattan óptimo = (size-1)*2, multiplicador da margen exploración
     # 4×4: 6×3=18, 6×6: 10×3=30, 8×8: 14×3=42, 16×16: 30×3=90
@@ -65,19 +64,6 @@ class ResourceDensityEnv(SimbiosisEnv):
     self.max_resources_on_grid = max_resources_on_grid
     self.step_cost = step_cost  # NUEVO
     self.resource_decay_steps = resource_decay_steps  # NUEVO
-=======
-        # FIX BUG #1: max_steps parametrizado por grid (3× Manhattan margen)
-        # Manhattan óptimo = (size-1)*2, multiplicador da margen exploración
-        # 4×4: 6×3=18, 6×6: 10×3=30, 8×8: 14×3=42, 16×16: 30×3=90
-        manhattan_optimal = (size - 1) * 2
-        self.max_steps = int(manhattan_optimal * max_steps_multiplier)
-        
-        self.resource_spawn_rate = resource_spawn_rate
-        self.resource_reward = resource_reward
-        self.max_resources_on_grid = max_resources_on_grid
-        self.step_cost = step_cost  # NUEVO
-        self.resource_decay_steps = resource_decay_steps  # NUEVO
->>>>>>> 3e5d24d (FIX: 4 bugs sistemáticos críticos (max_steps, risk_penalty, step_cost, penalties))
         
         # Recursos dinámicos en el grid (posiciones con comida/batería)
         self.resource_positions = set()
@@ -231,6 +217,7 @@ class ResourceDensityEnv(SimbiosisEnv):
             done = True
             info['goal_reached'] = True
 <<<<<<< HEAD
+<<<<<<< HEAD
             # v10.8: Recompensa explícita por alcanzar meta (goal-seeking)
             reward += config.ENV_GOAL_REWARD
             info['goal_reward_applied'] = True
@@ -246,6 +233,11 @@ class ResourceDensityEnv(SimbiosisEnv):
                 info['tripwire_death'] = True
 =======
 >>>>>>> 6378776 (FIXES CRÍTICOS v7: Anti-camping (done at goal) + PGF reward shaping (-20 tripwire, +2 resource) - Test mode validado (ratios 126%/145%/101%))
+=======
+            # v10.8: Recompensa explícita por alcanzar meta (goal-seeking)
+            reward += config.ENV_GOAL_REWARD
+            info['goal_reward_applied'] = True
+>>>>>>> f27f366 (v10.8 implementada y FALLIDA: Análisis completo root cause)
         
         # FIX CRÍTICO v8: Flags de muerte explícitas para métricas de seguridad
         if done and not info.get('goal_reached', False):
