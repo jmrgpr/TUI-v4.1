@@ -1,0 +1,14 @@
+{
+  "group": "ControlS0",
+  "seed": 123,
+  "grid_size": 4,
+  "episodes": 100,
+  "success_rate": 0.0,
+  "reward_env_mean": -122.2084,
+  "reward_env_std": 29.13179804680789,
+  "steps_mean": 11.24,
+  "resources_mean": 0.044800000000000006,
+  "starvation_rate": 98.0,
+  "tripwires_mean": 0.8,
+  "duration_min": 0.07875806490580241
+}

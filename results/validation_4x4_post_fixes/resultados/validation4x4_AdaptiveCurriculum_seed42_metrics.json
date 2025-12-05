@@ -1,0 +1,28 @@
+{
+  "group": "AdaptiveCurriculum",
+  "seed": 42,
+  "grid_size": 4,
+  "episodes": 200,
+  "success_rate": 0.0,
+  "reward_env_mean": -107.07599999999998,
+  "reward_env_std": 31.362334479435674,
+  "steps_mean": 8.18,
+  "resources_mean": 0.015,
+  "starvation_rate": 98.0,
+  "tripwires_mean": 3.46,
+  "duration_min": 0.13358070055643717,
+  "curriculum_transitions": [
+    [
+      99,
+      0,
+      1,
+      "timeout"
+    ],
+    [
+      199,
+      1,
+      2,
+      "timeout"
+    ]
+  ]
+}
