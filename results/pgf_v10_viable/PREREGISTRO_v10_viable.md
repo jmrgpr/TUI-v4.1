@@ -645,7 +645,7 @@ success_rate_4x4 < 80%
 - Análisis exploratorios serán marcados como "NO preregistrados"
 - Resultados negativos serán reportados sin censura
 
-**Firma Digital (Commit Hash)**: [PENDIENTE - Commit antes de ejecutar]
+**Firma Digital (Commit Hash)**: `e099ab9` - "PREREGISTRO v10_viable: Curriculum 4x4→6x6→8x8 con economía viable post-fixes (v1.0 CONGELADO)"
 
 ---
 
