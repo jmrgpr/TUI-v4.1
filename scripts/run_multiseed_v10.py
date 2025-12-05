@@ -14,7 +14,10 @@ import sys
 import os
 from pathlib import Path
 import time
+<<<<<<< HEAD
 import numpy as np
+=======
+>>>>>>> 61e07a7 (Fase 0: Roadmap v10 completo - Estructura multi-seed/ablation/PGF offline)
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
@@ -65,12 +68,7 @@ def run_curriculum_seed(seed, output_dir):
     
     # Fase 1: 4×4
     env_4x4 = create_env(grid_size=4, max_steps_multiplier=4.0)
-    
-    # Establecer seed global ANTES de reset
-    torch.manual_seed(seed)
-    np.random.seed(seed)
-    
-    state = env_4x4.reset()
+    state = env_4x4.reset(seed=seed)
     state_dim = len(state_to_vector(state))
     action_dim = 5
     
@@ -84,7 +82,8 @@ def run_curriculum_seed(seed, output_dir):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-        hidden_dim=HIDDEN_DIM
+    hidden_dim=HIDDEN_DIM,
+    seed=seed
     )
     
     result_4x4 = train_phase(
@@ -131,7 +130,8 @@ def run_curriculum_seed(seed, output_dir):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-        hidden_dim=HIDDEN_DIM
+    hidden_dim=HIDDEN_DIM,
+    seed=seed
     )
     
     load_agent(agent_6x6, model_4x4_path)
@@ -180,7 +180,8 @@ def run_curriculum_seed(seed, output_dir):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-        hidden_dim=HIDDEN_DIM
+    hidden_dim=HIDDEN_DIM,
+    seed=seed
     )
     
     load_agent(agent_8x8, model_6x6_path)

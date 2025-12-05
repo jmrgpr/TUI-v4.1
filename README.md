@@ -304,6 +304,49 @@ jmrgpr@gmail.com | jrivera77@outlook.com | ORCID https://orcid.org/0009-0000-301
 - `notebooks/` : cuadernos de analisis y graficos.
 - `scripts/` : utilidades (fase2, merge de resumenes, comparacion SOTA).
 
+---
+
+## 📊 Serie v10: Economía Viable + Curriculum Learning
+
+### v10_viable (Baseline Single-Seed) ✅
+**Estado**: Completado y congelado  
+**Preregistro**: commit `e099ab9`  
+**Resultados**: commit `cf1438c`  
+**Fecha**: 5 de diciembre de 2025
+
+**Resumen**:
+- Economía viable validada (balance 8.0, step_cost -0.15, spawn_rate 0.40)
+- Curriculum 4×4→6×6→8×8 con seed 42
+- Gates superados: **93%, 68%, 87%** (últimos 100 eps)
+- Transfer learning funcional (8×8 primer éxito ep 1)
+- Breakthrough 6×6 documentado (ep 587, convergencia súbita)
+
+📂 **Datos**: `results/pgf_v10_viable/`  
+📄 **Reporte completo**: [REPORTE_FINAL_v10_viable.md](results/pgf_v10_viable/reportes/REPORTE_FINAL_v10_viable.md)  
+📄 **Resumen ejecutivo**: [RESUMEN_EJECUTIVO.md](results/pgf_v10_viable/RESUMEN_EJECUTIVO.md)  
+📊 **Figuras**: `results/pgf_v10_viable/figuras/` (6 visualizaciones)
+
+**⚠️ Limitaciones conocidas**:
+- **N=1** (una sola seed, seed=42)
+- 6×6 sensible a hyperparameters (requirió ajustes epsilon 0.9, max_steps 50)
+- Varianza 6×6 alta (peak 96% vs final 68%)
+
+**🔄 Trabajo en progreso**:
+- [ ] **Multi-seed validation** (N=5, seeds=[13,42,101,2025,9999]) → `pgf_v10_multiseed/`
+- [ ] **Ablation study** (curriculum vs directo 8×8) → `pgf_v10_ablation/`
+- [ ] **Análisis PGF offline** (I_op correlaciones) → `pgf_v10_pgf_offline/`
+- [ ] **Escalado 16×16** (opcional) → `pgf_v10_scalability/`
+
+**Próximos pasos v10**:
+1. Robustez (multi-seed) → confirmar reproducibilidad
+2. Causalidad (ablation) → demostrar curriculum necesario
+3. Teoría (PGF offline) → conectar con TUI/PGF
+4. Solo después: v11 (nueva familia experimentos)
+
+📖 **Roadmap completo**: Ver [Fase 0-4 en documentación interna]
+
+---
+
 ## Limitaciones actuales / Current limitations
 - Entorno "toy" Gridworld; sin benchmarks complejos (MuJoCo/Procgen).
 - Comparacion SOTA centrada en PPO; otros algoritmos no evaluados.
