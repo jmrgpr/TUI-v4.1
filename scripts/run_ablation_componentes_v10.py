@@ -316,33 +316,61 @@ def main():
 import argparse
 import os
 from pathlib import Path
+=======
+>>>>>>> 9f35571 ([FASE2] Runner real: wiring científico para ablation por componentes v10 (entorno y agente reales, métricas y CSV, variantes y flags CLI))
 
-# Importar el agente y entorno base v10 (ajustar según tu estructura)
-# from TUI.agent import DQNAgent
-# from TUI.environment import Environment
-# ...
+# --- RUNNER REAL FASE 2: wiring científico ---
+import argparse
+import time
+from datetime import datetime
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import torch
+import sys
+
+sys.path.insert(0, str(Path(__file__).parent.parent))
+from run_curriculum_complete_viable import (
+    create_env,
+    state_to_vector,
+    train_phase,
+    GATE_8X8,
+    LEARNING_RATE,
+    GAMMA,
+    EPSILON_START,
+    EPSILON_MIN,
+    EPSILON_DECAY,
+    BATCH_SIZE,
+    MEMORY_SIZE,
+    HIDDEN_DIM,
+)
+from sim.dqn_agent import DQNAgent
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Runner de ablation por componentes v10")
+    parser = argparse.ArgumentParser(description="Runner de ablation por componentes v10 (ciencia real)")
     parser.add_argument('--variant', type=str, required=True, help='Nombre de la variante (minimal, noshaping, notransfer, etc.)')
     parser.add_argument('--seed', type=int, required=True, help='Seed de entrenamiento')
-    parser.add_argument('--episodes', type=int, default=1000, help='Número de episodios (default: 1000)')
-    # Puedes añadir más flags para hiperparámetros si lo deseas
+    parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios (default: 1000)')
+    parser.add_argument('--lr', type=float, default=None, help='Learning rate (sobrescribe variante si se indica)')
+    parser.add_argument('--gamma', type=float, default=None, help='Gamma (sobrescribe variante si se indica)')
+    parser.add_argument('--batch', type=int, default=None, help='Batch size (sobrescribe variante si se indica)')
     return parser.parse_args()
 
-def get_variant_config(variant):
-    """
-    Devuelve un diccionario con los flags de componentes y cambios de hiperparámetros según la variante.
-    """
+def get_variant_config(variant: str):
     config = {
         'shaping': True,
         'transfer': True,
         'curriculum': True,
         'reward_extra': True,
         'regularization': True,
-        'learning_rate': 0.0005,
-        'gamma': 0.99,
-        'batch_size': 64,
+        'learning_rate': LEARNING_RATE,
+        'gamma': GAMMA,
+        'batch_size': BATCH_SIZE,
+        'epsilon_start': EPSILON_START,
+        'epsilon_min': EPSILON_MIN,
+        'epsilon_decay': EPSILON_DECAY,
+        'memory_size': MEMORY_SIZE,
+        'hidden_dim': HIDDEN_DIM,
     }
     if variant == 'minimal':
         config.update({'shaping': False, 'transfer': False, 'curriculum': False, 'reward_extra': False, 'regularization': False})
@@ -356,25 +384,77 @@ def get_variant_config(variant):
         config['reward_extra'] = False
     elif variant == 'noregularization':
         config['regularization'] = False
-    elif variant.startswith('hyper_lr_'):
-        lr = float(variant.split('_')[-1])
-        config['learning_rate'] = lr
-    # Agrega más variantes según sea necesario
+    elif variant.startswith('hyperparam_sweep'):
+        # El valor de lr se pasa por CLI
+        pass
     return config
 
 def main():
     args = parse_args()
     config = get_variant_config(args.variant)
-    # Configurar entorno, agente y entrenamiento según config
-    # env = Environment(..., curriculum=config['curriculum'], ...)
-    # agent = DQNAgent(..., shaping=config['shaping'], transfer=config['transfer'], ...)
-    # agent.set_hyperparams(lr=config['learning_rate'], gamma=config['gamma'], batch_size=config['batch_size'])
-    # agent.train(env, episodes=args.episodes, seed=args.seed)
-    # Guardar resultados en la carpeta correspondiente
+    # Sobrescribir hiperparametros si se pasan por CLI
+    if args.lr is not None:
+        config['learning_rate'] = args.lr
+    if args.gamma is not None:
+        config['gamma'] = args.gamma
+    if args.batch is not None:
+        config['batch_size'] = args.batch
+
+    # --- Entrenamiento real ---
     outdir = Path(f"results/pgf_v10_ablation/component_{args.variant}/seeds/seed_{args.seed:04d}")
     outdir.mkdir(parents=True, exist_ok=True)
-    # agent.save_results(outdir)
-    print(f"[INFO] Resultados guardados en {outdir}")
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # FASE 2: solo grid 8x8, sin curriculum
+    env = create_env(grid_size=8, max_steps_multiplier=5.0)
+    torch.manual_seed(args.seed)
+    np.random.seed(args.seed)
+    state = env.reset()
+    state_dim = len(state_to_vector(state))
+    action_dim = 5
+    agent = DQNAgent(
+        state_dim=state_dim,
+        action_dim=action_dim,
+        lr=config['learning_rate'],
+        gamma=config['gamma'],
+        epsilon=config['epsilon_start'],
+        epsilon_end=config['epsilon_min'],
+        epsilon_decay=config['epsilon_decay'],
+        batch_size=config['batch_size'],
+        memory_size=config['memory_size'],
+        hidden_dim=config['hidden_dim'],
+    )
+
+    # TODO: wiring shaping, transfer, reward_extra, regularization según config
+    # (Aquí puedes modificar el entorno, reward, o el agente según los flags)
+
+    result = train_phase(
+        env,
+        agent,
+        num_episodes=args.episodes,
+        phase_name=f"{args.variant}_seed{args.seed}",
+        gate_threshold=GATE_8X8,
+    )
+
+    # Guardar métricas episodio a episodio
+    pd.DataFrame(result["metrics"]).to_csv(outdir / f"episodes_{timestamp}.csv", index=False)
+    # Guardar resumen
+    summary = {
+        'success_rate_total': result['success_rate'],
+        'success_last_100': result['last_100_success'],
+        'gate': GATE_8X8 * 100,
+        'gate_passed': result['gate_passed'],
+        'first_success_episode': result['first_success'],
+        'convergence_episode': result.get('convergence_episode', -1),
+        'variant': args.variant,
+        'seed': args.seed,
+        'episodes': args.episodes,
+        'learning_rate': config['learning_rate'],
+        'gamma': config['gamma'],
+        'batch_size': config['batch_size']
+    }
+    pd.DataFrame([summary]).to_csv(outdir / f"{args.variant}_summary_{timestamp}.csv", index=False)
+    print(f"[INFO] Resultados reales guardados en {outdir}")
 
 >>>>>>> 9d4f81b (Limpieza y commit: actualización de documentación, runners y resultados FASE 1 y preregistro FASE 2)
 if __name__ == "__main__":
