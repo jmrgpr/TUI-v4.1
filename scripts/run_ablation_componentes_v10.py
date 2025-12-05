@@ -1,4 +1,5 @@
 # --- RUNNER FASE 2: Ablation científica por componentes v10 ---
+# --- RUNNER FASE 2: Ablation científica por componentes v10 ---
 import argparse
 from datetime import datetime
 from pathlib import Path
@@ -311,5 +312,70 @@ def main():
     print(f"[INFO] Resultados guardados en {outdir}")
 
 
+=======
+import argparse
+import os
+from pathlib import Path
+
+# Importar el agente y entorno base v10 (ajustar según tu estructura)
+# from TUI.agent import DQNAgent
+# from TUI.environment import Environment
+# ...
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Runner de ablation por componentes v10")
+    parser.add_argument('--variant', type=str, required=True, help='Nombre de la variante (minimal, noshaping, notransfer, etc.)')
+    parser.add_argument('--seed', type=int, required=True, help='Seed de entrenamiento')
+    parser.add_argument('--episodes', type=int, default=1000, help='Número de episodios (default: 1000)')
+    # Puedes añadir más flags para hiperparámetros si lo deseas
+    return parser.parse_args()
+
+def get_variant_config(variant):
+    """
+    Devuelve un diccionario con los flags de componentes y cambios de hiperparámetros según la variante.
+    """
+    config = {
+        'shaping': True,
+        'transfer': True,
+        'curriculum': True,
+        'reward_extra': True,
+        'regularization': True,
+        'learning_rate': 0.0005,
+        'gamma': 0.99,
+        'batch_size': 64,
+    }
+    if variant == 'minimal':
+        config.update({'shaping': False, 'transfer': False, 'curriculum': False, 'reward_extra': False, 'regularization': False})
+    elif variant == 'noshaping':
+        config['shaping'] = False
+    elif variant == 'notransfer':
+        config['transfer'] = False
+    elif variant == 'nocurriculum':
+        config['curriculum'] = False
+    elif variant == 'norewardextra':
+        config['reward_extra'] = False
+    elif variant == 'noregularization':
+        config['regularization'] = False
+    elif variant.startswith('hyper_lr_'):
+        lr = float(variant.split('_')[-1])
+        config['learning_rate'] = lr
+    # Agrega más variantes según sea necesario
+    return config
+
+def main():
+    args = parse_args()
+    config = get_variant_config(args.variant)
+    # Configurar entorno, agente y entrenamiento según config
+    # env = Environment(..., curriculum=config['curriculum'], ...)
+    # agent = DQNAgent(..., shaping=config['shaping'], transfer=config['transfer'], ...)
+    # agent.set_hyperparams(lr=config['learning_rate'], gamma=config['gamma'], batch_size=config['batch_size'])
+    # agent.train(env, episodes=args.episodes, seed=args.seed)
+    # Guardar resultados en la carpeta correspondiente
+    outdir = Path(f"results/pgf_v10_ablation/component_{args.variant}/seeds/seed_{args.seed:04d}")
+    outdir.mkdir(parents=True, exist_ok=True)
+    # agent.save_results(outdir)
+    print(f"[INFO] Resultados guardados en {outdir}")
+
+>>>>>>> 9d4f81b (Limpieza y commit: actualización de documentación, runners y resultados FASE 1 y preregistro FASE 2)
 if __name__ == "__main__":
     main()
