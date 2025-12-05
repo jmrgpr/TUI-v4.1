@@ -1,4 +1,0 @@
-phase,success_rate,last_100,gate_passed,first_success
-4x4,0.796,0.93,True,3
-6x6,0.274,0.68,True,3
-8x8,0.613,0.87,True,1

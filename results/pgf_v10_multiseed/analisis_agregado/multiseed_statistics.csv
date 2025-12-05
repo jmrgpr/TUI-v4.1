@@ -1,0 +1,4 @@
+phase,grid_size,gate_threshold,n_seeds,success_mean,success_std,success_min,success_max,first_success_mean,first_success_std,convergence_mean,convergence_std,seeds_passed_gate
+4x4,4,80.0,5,86.0,7.211102550927981,75.0,93.0,3.4,2.1908902300206643,-1.0,0.0,4
+6x6,6,20.0,4,68.5,17.214335111567145,51.0,92.0,2.0,0.816496580927726,-1.0,0.0,4
+8x8,8,10.0,4,79.5,8.660254037844384,67.0,87.0,1.0,2.0,-1.0,0.0,4
