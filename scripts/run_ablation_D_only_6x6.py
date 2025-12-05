@@ -50,9 +50,15 @@ def run_only_6x6(seed, output_dir):
         action_dim=action_dim,
         lr=LEARNING_RATE,
         gamma=GAMMA,
+<<<<<<< HEAD
         epsilon=0.98,  # Exploración inicial más alta
         epsilon_end=0.1,  # Mínimo igual que B
         epsilon_decay=0.9992,  # Decaimiento más lento
+=======
+        epsilon=EPSILON_START,
+        epsilon_end=EPSILON_MIN,
+        epsilon_decay=EPSILON_DECAY,
+>>>>>>> 7de8f43 (Ablation v10 Fase 1: runners corregidos, carpetas y documentación listas. Listo para ejecutar experimentos núcleo (A/B/C/D).)
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
         hidden_dim=HIDDEN_DIM
@@ -88,7 +94,11 @@ def run_only_6x6(seed, output_dir):
 
 def main():
     print("="*70)
+<<<<<<< HEAD
     print("ABLATION D: Solo 6x6")
+=======
+    print("ABLATION D: Solo 6×6")
+>>>>>>> 7de8f43 (Ablation v10 Fase 1: runners corregidos, carpetas y documentación listas. Listo para ejecutar experimentos núcleo (A/B/C/D).)
     print("="*70)
     print(f"\nSeeds: {SEEDS}")
     print(f"Total runs: {len(SEEDS)} × 1000 episodes = {len(SEEDS) * 1000} episodes")
@@ -97,14 +107,21 @@ def main():
     start_time = time.time()
     for i, seed in enumerate(SEEDS, 1):
         seed_dir = OUTPUT_DIR / f"seed_{seed:04d}"
+<<<<<<< HEAD
         print("\n" + "#"*50)
         print(f"# SEED {seed} ({i}/{len(SEEDS)})")
         print("#"*50)
+=======
+        print("\n" + "#"*70)
+        print(f"# SEED {seed} ({i}/{len(SEEDS)})")
+        print("#"*70)
+>>>>>>> 7de8f43 (Ablation v10 Fase 1: runners corregidos, carpetas y documentación listas. Listo para ejecutar experimentos núcleo (A/B/C/D).)
         seed_start = time.time()
         try:
             summary = run_only_6x6(seed, seed_dir)
             all_results.extend(summary)
             seed_duration = (time.time() - seed_start) / 60
+<<<<<<< HEAD
             print(f"\n✔️ Seed {seed} completado en {seed_duration:.1f} minutos")
             for res in summary:
                 success = res['success_last_100']
@@ -113,6 +130,16 @@ def main():
                 print(f"   6x6: {success:.1f}% (gate {gate:.0f}%) {passed}")
         except Exception as e:
             print(f"\n✖️ ERROR en seed {seed}: {e}")
+=======
+            print(f"\n✅ Seed {seed} completado en {seed_duration:.1f} minutos")
+            for res in summary:
+                success = res['success_last_100']
+                gate = res['gate']
+                passed = "✅" if res['gate_passed'] else "❌"
+                print(f"   6x6: {success:.1f}% (gate {gate:.0f}%) {passed}")
+        except Exception as e:
+            print(f"\n❌ ERROR en seed {seed}: {e}")
+>>>>>>> 7de8f43 (Ablation v10 Fase 1: runners corregidos, carpetas y documentación listas. Listo para ejecutar experimentos núcleo (A/B/C/D).)
             import traceback
             traceback.print_exc()
     total_duration = (time.time() - start_time) / 3600
@@ -120,7 +147,11 @@ def main():
     print("ABLATION D COMPLETADA")
     print("="*70)
     print(f"Duración total: {total_duration:.2f} horas")
+<<<<<<< HEAD
     print(f"\n📁 Resultados guardados en: {OUTPUT_DIR}")
+=======
+    print(f"\n📂 Resultados guardados en: {OUTPUT_DIR}")
+>>>>>>> 7de8f43 (Ablation v10 Fase 1: runners corregidos, carpetas y documentación listas. Listo para ejecutar experimentos núcleo (A/B/C/D).)
 
 if __name__ == "__main__":
     main()
