@@ -55,7 +55,6 @@ def load_all_summaries():
         try:
             df = pd.read_csv(summary_path)
             
-<<<<<<< HEAD
             # Detectar formato: baseline v10_viable vs multi-seed
             if 'seed' not in df.columns:
                 # Formato baseline: phase, success_rate, last_100, gate_passed, first_success
@@ -74,11 +73,6 @@ def load_all_summaries():
                     'convergence_episode': [-1] * n_rows
                 })
                 df = df_converted
-=======
-            # Asegurar columna seed
-            if 'seed' not in df.columns:
-                df['seed'] = seed
->>>>>>> 61e07a7 (Fase 0: Roadmap v10 completo - Estructura multi-seed/ablation/PGF offline)
             
             data.append(df)
             print(f"   ✅ Seed {seed}: {len(df)} fases cargadas")
@@ -116,17 +110,12 @@ def compute_statistics(df):
             'grid_size': int(grid_size),
             'gate_threshold': gate,
             'n_seeds': len(phase_data),
-<<<<<<< HEAD
             'success_mean': phase_data['success_last_100'].mean() * 100,  # Convertir fracción → %
             'success_std': phase_data['success_last_100'].std() * 100,
             'success_min': phase_data['success_last_100'].min() * 100,
             'success_max': phase_data['success_last_100'].max() * 100,
 =======
-            'success_mean': phase_data['success_last_100'].mean(),
-            'success_std': phase_data['success_last_100'].std(),
-            'success_min': phase_data['success_last_100'].min(),
-            'success_max': phase_data['success_last_100'].max(),
->>>>>>> 61e07a7 (Fase 0: Roadmap v10 completo - Estructura multi-seed/ablation/PGF offline)
+>>>>>>> be674c5 (fix: Corregir análisis multi-seed - convertir fracción%, seed 42 formato baseline)
             'first_success_mean': phase_data['first_success_episode'].mean(),
             'first_success_std': phase_data['first_success_episode'].std(),
             'convergence_mean': phase_data['convergence_episode'].mean(),
@@ -172,9 +161,9 @@ def analyze_seed42_representativeness(df):
             print(f"\n{phase}: Seed 42 no disponible")
             continue
         
-    seed42_success = seed42_data['success_last_100'].iloc[0]
-    mean_others = others_data['success_last_100'].mean()
-    std_others = others_data['success_last_100'].std()
+    seed42_success = seed42_data['success_last_100'].iloc[0] * 100  # Convertir fracción → %
+    mean_others = others_data['success_last_100'].mean() * 100
+    std_others = others_data['success_last_100'].std() * 100
         
         # Z-score
         z_score = (seed42_success - mean_others) / std_others if std_others > 0 else 0
