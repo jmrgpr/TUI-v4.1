@@ -1,6 +1,6 @@
 # REPORTE MULTI-SEED VALIDATION
 
-**Fecha**: 2025-12-05 12:57
+**Fecha**: 2025-12-05 13:31
 **Seeds**: [13, 42, 101, 2025, 9999]
 **N**: 5
 
