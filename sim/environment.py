@@ -160,7 +160,9 @@ class SimbiosisEnv:
             reward += distractor_penalty
             info['distractor'] = True
         # FIX CRÍTICO: Terminar episodio al alcanzar meta (anti-camping)
-        if self.agent_pos == self.goal_pos and self.resources > config.ENV_RESOURCE_THRESHOLD_HIGH:
+        # Antes requería resources > threshold_high (10), lo que hacía inalcanzable el goal.
+        # Ahora cualquier llegada a la meta se marca como éxito.
+        if self.agent_pos == self.goal_pos:
             help_bonus = config.ENV_REWARD_HELP_BONUS
             self.resources += help_bonus
             reward += help_bonus

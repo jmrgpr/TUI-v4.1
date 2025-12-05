@@ -29,8 +29,11 @@ class ResourceDensityEnv(SimbiosisEnv):
                  step_cost=-0.3,  # TRIPLICADO: Castigo fuerte por vagabundeo
                  resource_decay_steps=5,  # REDUCIDO de 10 a 5 (caducan rápido)
                  max_steps_multiplier=2.0):  # v10.9: Reducido 3.0→2.0 (presión temporal)
+<<<<<<< HEAD
                  max_steps_multiplier=3.0):  # FIX BUG: Margen steps parametrizado por grid
                  max_steps_multiplier=2.0):  # v10.9: Reducido 3.0→2.0 (presión temporal)
+=======
+>>>>>>> 6ffea76 (Add curriculum viable results and reorganized scripts)
         """
         Args:
             resource_spawn_rate: Probabilidad de que aparezca un recurso por celda por paso (ρ)
@@ -90,7 +93,7 @@ class ResourceDensityEnv(SimbiosisEnv):
         # Spawn inicial de recursos
         self._spawn_resources()
         
-        return self.get_abstract_state()
+                    max_steps_multiplier=2.0):  # v10.9: Reducido 3.0→2.0 (presión temporal)
 
     def _spawn_resources(self):
 <<<<<<< HEAD

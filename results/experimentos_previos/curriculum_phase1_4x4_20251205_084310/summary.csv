@@ -1,0 +1,2 @@
+grid_size,num_episodes,epsilon_decay,epsilon_min,success_rate_last100,success_rate_total,total_successes,first_success_episode,epsilon_final,gate_passed,gate_threshold
+4,500,0.999,0.1,0.0,0.0,0,,0.1,False,80.0
