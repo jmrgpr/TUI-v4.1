@@ -1,4 +1,0 @@
-Este documento ha sido movido a:
-results/pgf_v10_ablation/FASE1_DOCUMENTACION_REPRODUCIBILIDAD.md
-
-Por favor, consulte la versión actualizada en la carpeta de ablation v10 para trazabilidad y reproducibilidad.
