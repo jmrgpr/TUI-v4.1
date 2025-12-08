@@ -1,0 +1,2 @@
+seed,phase,grid_size,episodes,success_rate_total,success_last_100,gate,gate_passed,first_success_episode,convergence_episode
+101,8x8,8,1500,0.7613333333333333,0.82,10.0,True,2,-1

@@ -19,3 +19,16 @@ Ver estructura en el README principal.
 
 ## Estado
 Preparado para ejecución ordenada y registro de resultados.
+
+## Estado Fase 2 – Ablation de Componentes (8×8)
+- Baseline (RL puro): 84% ± 2.6% (3 seeds) – robusto.
+- +Regularización: 94.7% ± 4.0% – mejora y más estable.
+- +RewardExtra: 56% ± 30.3% – peor e inestable.
+- +Shaping (PGF como reward): 0% en las 3 seeds – colapso total.
+- Curriculum como componente aislado: solo seed 101 completa 4×4→6×6→8×8; seeds 13 y 42 fallan el gate en 4×4 (experimento abortado según preregistro).
+
+Conclusión:
+- Incluir regularización en el stack estable.
+- No adoptar reward_extra.
+- Descartar PGF como reward directo (shaping) en v10; usar PGF solo como métrica offline.
+- Curriculum es útil pero frágil; documentar gates/abortos por seed.

@@ -2,7 +2,7 @@
 
 **Objetivo**: Transformar v10_viable (N=1) en serie v10 completa y cerrada científicamente.
 
-**Estado**: 🔄 Fase 0 completada, Fase 1 en progreso
+**Estado**: ✅ Fase 0 completada, ✅ Fase 1 completada, ✅ Fase 2 completada, ⏳ Fase 3 pendiente
 
 ---
 
@@ -37,7 +37,7 @@ v10_viable (seed=42) → Multi-Seed → Ablation → PGF Offline → [v11]
 
 ---
 
-### 🔄 FASE 1: Robustez Multi-Seed [EN PROGRESO]
+### ✅ FASE 1: Robustez Multi-Seed [COMPLETADA]
 
 **Objetivo**: Validar reproducibilidad curriculum con N=5 seeds.
 
@@ -77,7 +77,9 @@ python scripts/analisis_multiseed_v10.py
 
 ---
 
-### ⏳ FASE 2: Ablation Study (Causalidad) [PENDIENTE]
+### ✅ FASE 2: Ablation Study (Componentes) [COMPLETADA]
+
+Estado: ablation de componentes en 8×8 ejecutada (baseline, regularización, reward_extra, shaping, curriculum). Ver `results/pgf_v10_ablation/REPORTE_ABLATION_COMPONENTES_v10.md` y `analisis_comparativo/ablation_componentes_summary_v10.csv`.
 
 **Prerequisito**: ✅ Fase 1 completada exitosamente
 

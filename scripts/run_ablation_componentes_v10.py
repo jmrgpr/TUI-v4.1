@@ -352,7 +352,16 @@ from sim.dqn_agent import DQNAgent
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Runner de ablation por componentes v10 (científico)")
-    parser.add_argument('--variant', type=str, required=True, help='minimal, noshaping, notransfer, etc.')
+    parser.add_argument(
+        '--variant',
+        type=str,
+        required=True,
+        help=(
+            "baseline|minimal|with_shaping|with_rewardextra|"
+            "with_curriculum|with_transfer|with_regularization|"
+            "hyper_lr_..., hyper_gamma_..., hyper_batch_..."
+        ),
+    )
     parser.add_argument('--seed', type=int, required=True, help='Seed de entrenamiento')
     parser.add_argument('--episodes', type=int, default=1500, help='Numero de episodios (default: 1500, igual que baseline v10)')
     parser.add_argument('--lr', type=float, default=None, help='Learning rate (sobrescribe variante si se indica)')
@@ -387,12 +396,20 @@ def parse_hyper_variant(variant: str, base_config: dict) -> dict:
 
 
 def get_variant_config(variant: str):
+    """
+    Baseline F2 = RL puro 8x8 (Config B):
+    - Sin shaping PGF
+    - Sin reward_extra
+    - Sin curriculum
+    - Sin transfer
+    - Sin regularización
+    """
     config = {
-        'shaping': True,
-        'transfer': False,  # Por defecto sin transfer, igual que baseline B
-        'curriculum': False,  # Por defecto sin curriculum, igual que baseline B
-        'reward_extra': True,
-        'regularization': False,  # Por defecto desactivada para igualar baseline v10
+        'shaping': False,
+        'transfer': False,
+        'curriculum': False,
+        'reward_extra': False,
+        'regularization': False,
         'learning_rate': LEARNING_RATE,
         'gamma': GAMMA,
         'batch_size': BATCH_SIZE,
@@ -405,29 +422,33 @@ def get_variant_config(variant: str):
         'shaping_scale': 1.0,
         'shaping_tripwire_penalty': -100.0,
         'shaping_resource_bonus': 10.0,
-        # Regularización baseline (desactivada)
+        # Regularización (solo si regularization=True)
         'weight_decay': 0.0,
         'dropout': 0.0,
         # Episodios y gate baseline v10
         'episodes': 1500,
         'gate_8x8': 0.10,  # 10% como en baseline v10
     }
-    if variant == 'minimal':
-        config.update({'shaping': False, 'transfer': False, 'curriculum': False, 'reward_extra': False, 'regularization': False})
-    elif variant == 'noshaping':
-        config['shaping'] = False
-    elif variant == 'notransfer':
-        config['transfer'] = False
-    elif variant == 'nocurriculum':
-        config['curriculum'] = False
-    elif variant == 'norewardextra':
-        config['reward_extra'] = False
-    elif variant == 'noregularization':
-        config['regularization'] = False
-        config['weight_decay'] = 0.0
-        config['dropout'] = 0.0
+
+    # Variantes que ENCIENDEN un componente
+    if variant in ('baseline', 'minimal'):
+        pass  # ya está todo en False
+    elif variant in ('with_shaping', 'shaping'):
+        config['shaping'] = True
+    elif variant in ('with_rewardextra', 'rewardextra'):
+        config['reward_extra'] = True
+    elif variant in ('with_curriculum', 'curriculum'):
+        config['curriculum'] = True
+    elif variant in ('with_transfer', 'transfer'):
+        config['transfer'] = True
+    elif variant in ('with_regularization', 'regularization'):
+        config['regularization'] = True
+        config['weight_decay'] = 1e-5
+        config['dropout'] = 0.10
     elif variant.startswith('hyper'):
         config = parse_hyper_variant(variant, config)
+    else:
+        raise ValueError(f"Variant desconocida: {variant}")
     return config
 
 
@@ -491,7 +512,7 @@ def main():
             return next_state, reward_shaped, done, info
         env.step = shaped_step
 
-    if args.variant == 'curriculum':
+    if config['curriculum']:
         # === Fase 1: 4x4 ===
         env_4x4 = make_env(4, 4.0)
         patch_shaping(env_4x4, config)

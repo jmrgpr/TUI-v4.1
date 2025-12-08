@@ -2,6 +2,7 @@
 Script de análisis avanzado para Fase 3 PGF offline.
 Genera correlaciones, tablas resumen y visualizaciones clave.
 
+
 Además de PGF vs I_op, calcula:
 - Correlación PGF vs success (si existe la columna).
 - Correlación PGF vs steps (como proxy de overhead).
@@ -126,3 +127,45 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
+=======
+"""
+import sys
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from pathlib import Path
+
+if len(sys.argv) < 2:
+    print("Uso: python analyze_pgf_offline_v10.py <carpeta_enriched>")
+    sys.exit(1)
+
+enriched_dir = Path(sys.argv[1])
+output_dir = enriched_dir.parent / "analysis"
+output_dir.mkdir(exist_ok=True)
+
+csvs = list(enriched_dir.glob("*.csv"))
+
+for csv_path in csvs:
+    df = pd.read_csv(csv_path)
+    basename = csv_path.stem.replace('_enriched','')
+    # Correlación PGF vs I_op
+    corr = df[["PGF", "I_op"]].corr().iloc[0,1]
+    with open(output_dir / f"{basename}_correlation.txt", "w") as f:
+        f.write(f"Correlación PGF vs I_op: {corr:.4f}\n")
+    # Histograma PGF
+    plt.figure()
+    sns.histplot(df["PGF"], kde=True)
+    plt.title(f"Histograma PGF - {basename}")
+    plt.savefig(output_dir / f"{basename}_hist_pgf.png")
+    plt.close()
+    # Histograma I_op
+    plt.figure()
+    sns.histplot(df["I_op"], kde=True)
+    plt.title(f"Histograma I_op - {basename}")
+    plt.savefig(output_dir / f"{basename}_hist_iop.png")
+    plt.close()
+    # Tabla resumen
+    summary = df[["PGF", "I_op"]].describe()
+    summary.to_csv(output_dir / f"{basename}_summary.csv")
+print("Análisis completado. Resultados en:", output_dir)
+>>>>>>> 03cb0ce (Close v10 Fase 2 ablation, add v9/v10 reports, and scaffold Fase 3 PGF offline)
