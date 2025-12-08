@@ -22,7 +22,13 @@ Comando de ejemplo:
 
 python scripts/analyze_pgf_offline_v10.py results/pgf_v10_pgf_offline/enriched/
 
-El script genera correlaciones, histogramas y tablas resumen para cada CSV enriquecido. Resultados en results/pgf_v10_pgf_offline/analysis/
+El script genera correlaciones, histogramas y tablas resumen para cada CSV enriquecido.
+Además produce el archivo global `pgf_vs_success_summary.csv` con:
+- medias y desviaciones de PGF e I_op,
+- tasa de éxito media (`success_rate`),
+- correlaciones PGF–I_op, PGF–success y PGF–steps.
+
+Resultados en results/pgf_v10_pgf_offline/analysis/
 
 ## Consolidación y documentación de resultados
 

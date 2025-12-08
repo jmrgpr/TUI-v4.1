@@ -1,1 +1,1 @@
-Correlación PGF vs I_op: 0.5822
+CorrelaciÃ³n PGF vs I_op: 0.5822
