@@ -9,13 +9,7 @@
 ![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)
 ## Limitaciones y amenazas a la validez / Limitations & Threats to Validity
 
-**ES:**
-- Los experimentos se realizaron en un entorno tipo “toy RL”, no en entornos complejos como MuJoCo o Procgen.
-- La comparación SOTA solo incluye PPO; no se han evaluado otros algoritmos como A2C o SAC.
-- Los resultados de SOTA se basan en una sola semilla, lo que puede limitar la robustez estadística.
-- El número de episodios y configuraciones es limitado; los resultados pueden variar con otros parámetros.
-- La métrica η_acumulativo no se ha calculado explícitamente.
-- Los resultados y conclusiones deben interpretarse como evidencia preliminar y no como validación definitiva.
+
 
 **EN:**
 - Experiments were conducted in a “toy RL” environment, not in complex benchmarks like MuJoCo or Procgen.
