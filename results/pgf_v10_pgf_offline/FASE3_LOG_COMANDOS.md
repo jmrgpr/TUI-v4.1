@@ -23,3 +23,10 @@ Comando de ejemplo:
 python scripts/analyze_pgf_offline_v10.py results/pgf_v10_pgf_offline/enriched/
 
 El script genera correlaciones, histogramas y tablas resumen para cada CSV enriquecido. Resultados en results/pgf_v10_pgf_offline/analysis/
+
+## Consolidación y documentación de resultados
+
+Fecha: 2025-12-08
+- Se consolidaron los resultados del análisis avanzado en la carpeta analysis.
+- Se completó el reporte oficial REPORTE_PGF_OFFLINE_v10.md con estadísticas, correlaciones y observaciones.
+- Todas las figuras y tablas están disponibles para revisión y publicación.
