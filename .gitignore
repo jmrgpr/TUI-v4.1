@@ -1,3 +1,15 @@
+results/pgf_v9/
+results/pgf_v9.1/
+results/pgf_v3/
+results/experimentos_previos/
+results/validations/
+results/exp_tui_experiment2_full/
+results/exp_tui_pgf_search_v3/
+results/pgf_tui_ablation/
+results/master_results.csv
+results/fase2_global_summary.csv
+results/global_summaries/
+results/PLAN_ESTRATEGICO_FASE3.md
 results/smoke_test/
 results/smoke_tests/
 results/pgf_v10/resultados/*_episodes.csv
