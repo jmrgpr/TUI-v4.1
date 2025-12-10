@@ -1,2 +1,0 @@
-# run_search_pgf.py placeholder
-# Define grids y lanza cuando estés listo.

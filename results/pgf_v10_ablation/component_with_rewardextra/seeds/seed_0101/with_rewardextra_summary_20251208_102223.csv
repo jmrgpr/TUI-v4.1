@@ -1,2 +1,0 @@
-success_rate_total,success_last_100,gate,gate_passed,first_success_episode,convergence_episode,variant,seed,episodes,learning_rate,gamma,batch_size,shaping,transfer,curriculum,reward_extra,regularization,shaping_scale,shaping_tripwire_penalty,shaping_resource_bonus,weight_decay,dropout,transfer_checkpoint
-0.6366666666666667,0.73,0.1,True,136,-1,with_rewardextra,101,1500,0.001,0.99,32,False,False,False,True,False,1.0,-100.0,10.0,0.0,0.0,
