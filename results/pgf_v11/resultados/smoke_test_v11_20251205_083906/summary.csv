@@ -1,0 +1,3 @@
+grid,success_rate,reward_mean,resources_mean,steps_mean,starvation_rate,epsilon_final,goal_reached_total,gates_passed,gates_total
+6,0.0,-26.999999999999996,0.0,20.0,0.0,0.01,0,0,4
+8,0.0,-28.199999999999985,0.0,28.0,0.0,0.01,0,0,4
