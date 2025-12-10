@@ -67,6 +67,9 @@ results/**/*.json
 !results/**/analisis_*.json
 !results/**/*_metrics.json
 !results/**/README*.md
+results/
+!results/pgf_v10_documentacion_global/
+!results/pgf_v11/
 
 # Puedes añadir más patrones según tus necesidades
 None
