@@ -25,3 +25,14 @@ dummy.png
 docs/PROTOCOLO_ALINEACION.md
 temp_deleted_docs.txt
 temp_doc_restore_candidates.txt
+results/
+data/
+plots/
+*.zip
+*.pt
+*.h5
+*.npz
+*.tmp
+*.bak
+*.log
+.ipynb_checkpoints/
