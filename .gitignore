@@ -1,3 +1,8 @@
+results/pgf_v10/resultados/*_episodes.csv
+results/pgf_v10/resultados/*_metrics.json
+results/pgf_v10/execution.log
+results/global_summaries/
+results/*/execution.log
 .venv/
 __pycache__/
 *.pyc
