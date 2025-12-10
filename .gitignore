@@ -9,11 +9,8 @@ __pycache__/
 *.log
 
 # Excluir archivos JSON/CSV grandes de results (mantener solo archivos pequeños y documentación)
-results/**/*.json
-results/**/*_episodes.csv
-!results/**/README*.md
-!results/**/*summary*.csv
-!results/**/phase2_summary.md
+results/smoke_tests/
+results/experimentos_previos/
 
 # Puedes añadir más patrones según tus necesidades
 None

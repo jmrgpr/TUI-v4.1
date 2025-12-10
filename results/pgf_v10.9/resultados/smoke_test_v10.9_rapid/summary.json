@@ -1,0 +1,56 @@
+{
+  "version": "v10.9",
+  "config": {
+    "grid_size": 6,
+    "initial_balance": 5.0,
+    "goal_reward": 20.0,
+    "step_cost": -0.25,
+    "threshold_low": 1.0,
+    "spawn_rate": 0.4,
+    "max_steps": 20,
+    "num_episodes": 500
+  },
+  "metrics_total": {
+    "success_rate": 0.0,
+    "reward_mean": -28.325760000000002,
+    "steps_mean": 19.728,
+    "resources_mean": 0.724,
+    "goal_rewards_applied": 0
+  },
+  "metrics_last_100": {
+    "success_rate": 0.0,
+    "reward_mean": -28.868000000000002,
+    "steps_mean": 19.96,
+    "resources_mean": 0.67,
+    "goal_rewards_applied": 0,
+    "epsilon_final": 0.01
+  },
+  "comparison": {
+    "v10_7": {
+      "success": 0.0,
+      "reward": -11.85,
+      "steps": 22.5
+    },
+    "v10_8": {
+      "success": 0.0,
+      "reward": -31.7,
+      "steps": 30.0
+    },
+    "v10_9": {
+      "success": 0.0,
+      "reward": -28.868000000000002,
+      "steps": 19.96
+    }
+  },
+  "gates": {
+    "passed": [
+      "\u2705 Epsilon 0.0100 < 0.1"
+    ],
+    "failed": [
+      "\u274c Success 0.0% \u2264 15%",
+      "\u274c Rewards -28.87 \u2264 0",
+      "\u26a0\ufe0f  Resources 0.67 \u2264 1.5",
+      "\u26a0\ufe0f  Steps 19.96 \u2265 15"
+    ]
+  }
+}

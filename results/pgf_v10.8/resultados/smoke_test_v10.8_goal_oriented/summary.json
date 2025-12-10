@@ -1,0 +1,40 @@
+{
+  "version": "v10.8",
+  "config": {
+    "grid_size": 6,
+    "initial_balance": 5.0,
+    "goal_reward": 10.0,
+    "step_cost": -0.15,
+    "spawn_rate": 0.4,
+    "num_episodes": 1000,
+    "epsilon_decay": 0.9995
+  },
+  "metrics_total": {
+    "success_rate": 0.0,
+    "reward_mean": -32.31227,
+    "resources_mean": 0.984,
+    "goal_rewards_applied": 0
+  },
+  "metrics_last_100": {
+    "success_rate": 0.0,
+    "reward_mean": -32.206,
+    "resources_mean": 0.94,
+    "goal_rewards_applied": 0,
+    "epsilon_final": 0.01
+  },
+  "comparison_v10_7": {
+    "success_delta": 0.0,
+    "reward_delta": -20.356,
+    "resources_delta": -0.040000000000000036
+  },
+  "gates": {
+    "passed": [
+      "\u2705 Epsilon 0.0100 < 0.1 (converge)"
+    ],
+    "failed": [
+      "\u274c Success 0.0% \u2264 10% (a\u00fan no converge)",
+      "\u26a0\ufe0f  Rewards -32.21 \u2264 0 (a\u00fan negativo)",
+      "\u26a0\ufe0f  Resources 0.94 \u2264 1.5 (marginal)"
+    ]
+  }
+}
