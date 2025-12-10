@@ -1,6 +1,6 @@
 import runpy
 from pathlib import Path
-from scripts import merge_summaries
+from scripts.experimentos_previos import merge_summaries
 
 
 def test_merge_summaries_empty(tmp_path):
@@ -13,5 +13,5 @@ def test_merge_summaries_empty(tmp_path):
 def test_merge_summaries_main_no_files(monkeypatch, tmp_path):
     monkeypatch.setattr(merge_summaries.glob, "glob", lambda pattern: [])
     monkeypatch.setattr(merge_summaries, "merge_summaries", lambda *a, **k: None)
-    runpy.run_path(str(Path("scripts/merge_summaries.py")), run_name="__main__")
+    runpy.run_path(str(Path("scripts/experimentos_previos/merge_summaries.py")), run_name="__main__")
 

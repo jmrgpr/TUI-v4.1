@@ -1,18 +1,27 @@
-# Guía de contribución TUI-v4.1
+# Guía de contribución / Contribution Guide
 
+¡Gracias por tu interés en contribuir a TUI-v4.2! Este proyecto sigue estándares científicos y de ingeniería para máxima reproducibilidad y profesionalismo.
 
-## Requisitos
-- Código limpio y documentado.
-- Experimentos reproducibles (usa seeds y exporta resultados).
-- Documenta cambios en CHANGELOG.md y README.md.
-- Mantén la estructura de carpetas y archivos.
+## Política de contribución / Contribution policy
 
-## Proceso
-1. Haz fork y crea una rama descriptiva.
-2. Realiza tus cambios y verifica que los tests pasen.
-3. Haz pull request con descripción clara.
-4. Responde a comentarios y sugerencias.
+Este repositorio es público y solo el autor puede editarlo directamente. No se permite edición directa por terceros.
 
+Si deseas contribuir, puedes enviar sugerencias, correcciones o ideas por email (jmrgpr@gmail.com) o a través de los canales oficiales de GitHub:
+
+- Issues: para reportar errores, sugerencias o preguntas.
+- Pull requests: solo se aceptarán si cumplen los estándares y son revisados por el autor.
+
+No se garantiza la aceptación de cambios externos. Todas las contribuciones serán revisadas cuidadosamente.
+
+## ¿Cómo sugerir una mejora? / How to suggest an improvement?
+
+1. Envía tu sugerencia por email a jmrgpr@gmail.com, o
+2. Usa la sección de Issues en GitHub para reportar o proponer cambios.
+3. Si tienes una propuesta técnica, puedes abrir un Pull Request, pero solo el autor puede aprobarlo y fusionarlo.
+
+No se permite edición directa del repositorio por terceros.
+
+## Buenas prácticas / Best practices
 
 - Código bilingüe (ES/EN) en comentarios y docstrings.
 - No dejar archivos sueltos en la raíz: usa las carpetas `data/`, `results/`, `docs/`, `sim/`, etc.
@@ -74,4 +83,3 @@ No direct editing of the repository by third parties is allowed.
 ## Contact
 
 For questions, suggestions or collaboration: jmrgpr@gmail.com
->>>>>>> 5e27869 (Actualización de documentación, teoría y tareas al 2025-11-28)

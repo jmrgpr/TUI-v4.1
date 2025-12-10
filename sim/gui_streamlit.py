@@ -38,6 +38,7 @@ AGENT_CONFIGS = {
 }
 AGENT_OPTIONS = list(AGENT_CONFIGS.keys())
 
+
 def main():  # pragma: no cover
     if "runs" not in st.session_state:
         st.session_state["runs"] = []
@@ -168,16 +169,5 @@ def main():  # pragma: no cover
             st.info("Historial exportado en session_runs.json")
 
 
-        runs_serializable = [sanitize_run(run) for run in st.session_state["runs"]]
-        st.download_button("Descargar historial JSON / Download history JSON", json.dumps(runs_serializable, indent=2), "historial_corridas.json")
-
-    # ===================== Panel de ayuda =====================
-
-    # ===================== Panel de ayuda =====================
-    st.markdown("---")
-    st.markdown("**Ayuda / Help:**")
-    st.markdown("Toy model para validar la Teoría Unificada de la Inteligencia. Modifica parámetros, ejecuta simulaciones y analiza resultados. Para detalles teóricos, consulta la documentación TUI.")
-
-# ===================== Ejecución del script =====================
-if __name__ == "__main__":  # pragma: no cover - interfaz interactiva
+if __name__ == "__main__":  # pragma: no cover
     main()

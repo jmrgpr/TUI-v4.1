@@ -2,7 +2,7 @@
 
 **Objetivo**: Transformar v10_viable (N=1) en serie v10 completa y cerrada científicamente.
 
-**Estado**: ✅ Fase 0 completada, ✅ Fase 1 completada, ✅ Fase 2 completada, ⏳ Fase 3 pendiente
+**Estado**: ✅ Fase 0 completada, ✅ Fase 1 completada, ✅ Fase 2 completada, ✅ Fase 3 completada
 
 ---
 
@@ -121,7 +121,7 @@ Estado: ablation de componentes en 8×8 ejecutada (baseline, regularización, re
 
 ---
 
-### ⏳ FASE 3: PGF Offline (Teoría) [PENDIENTE]
+### ✅ FASE 3: PGF Offline (Teoría) [COMPLETADA]
 
 **Prerequisito**: ✅ Fase 1 completada (datos multi-seed disponibles)
 
@@ -154,8 +154,10 @@ Estado: ablation de componentes en 8×8 ejecutada (baseline, regularización, re
 **Timeline**: 1 semana (sin cómputo, solo análisis datos)
 
 **Gate Fase 3**:
-- ✅ Si PGF correlaciona con éxito → Teoría soportada empíricamente
-- ⚠️ Si no hay correlación → PGF requiere refinamiento teórico
+- Reporte técnico: `results/pgf_v10_pgf_offline/REPORTE_PGF_OFFLINE_v10.md`
+- Log de auditoría: `results/pgf_v10_pgf_offline/FASE3_LOG_COMANDOS.md`
+- CSV global: `results/pgf_v10_pgf_offline/analysis/pgf_vs_success_summary.csv`
+- Conclusión: PGF se usará solo como métrica offline en v11.
 
 ---
 
@@ -354,10 +356,10 @@ python scripts/analisis_multiseed_v10.py
 
 ## ✅ Checklist de Cierre v10
 
-- [ ] **Fase 0**: README actualizado, estructura creada
-- [ ] **Fase 1**: Multi-seed N=5 ejecutado y analizado
-- [ ] **Fase 2**: Ablation curriculum vs directo completado
-- [ ] **Fase 3**: PGF offline análisis completado
+- [x] **Fase 0**: README actualizado, estructura creada
+- [x] **Fase 1**: Multi-seed N=5 ejecutado y analizado
+- [x] **Fase 2**: Ablation curriculum vs directo completado
+- [x] **Fase 3**: PGF offline análisis completado
 - [ ] **Fase 4** (opcional): 16×16 explorado
 - [ ] **MASTER_SUMMARY.csv** generado
 - [ ] **README_SERIE_v10.md** escrito

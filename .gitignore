@@ -14,6 +14,7 @@ results/**/*.json
 !results/**/analisis_*.json
 !results/**/*_metrics.json
 !results/**/README*.md
+
 # Puedes añadir más patrones según tus necesidades
 None
 None_episodes.csv
@@ -22,5 +23,5 @@ test.json
 test_export_empty.json
 dummy.png
 docs/PROTOCOLO_ALINEACION.md
-scripts/experimentos_previos/
-test/smoke_test/
+temp_deleted_docs.txt
+temp_doc_restore_candidates.txt

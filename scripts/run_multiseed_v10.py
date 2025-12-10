@@ -14,14 +14,7 @@ import sys
 import os
 from pathlib import Path
 import time
-<<<<<<< HEAD
-<<<<<<< HEAD
 import numpy as np
-=======
->>>>>>> 61e07a7 (Fase 0: Roadmap v10 completo - Estructura multi-seed/ablation/PGF offline)
-=======
-import numpy as np
->>>>>>> 8324c5b (Fix: Eliminar parámetro seed de DQNAgent (no existe))
 
 ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
@@ -91,7 +84,7 @@ def run_curriculum_seed(seed, output_dir):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-    hidden_dim=HIDDEN_DIM
+        hidden_dim=HIDDEN_DIM
     )
     
     result_4x4 = train_phase(
@@ -138,7 +131,7 @@ def run_curriculum_seed(seed, output_dir):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-    hidden_dim=HIDDEN_DIM
+        hidden_dim=HIDDEN_DIM
     )
     
     load_agent(agent_6x6, model_4x4_path)
@@ -187,7 +180,7 @@ def run_curriculum_seed(seed, output_dir):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-    hidden_dim=HIDDEN_DIM
+        hidden_dim=HIDDEN_DIM
     )
     
     load_agent(agent_8x8, model_6x6_path)

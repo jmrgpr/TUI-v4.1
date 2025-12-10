@@ -1,0 +1,22 @@
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+.DS_Store
+*.sqlite3
+*.log
+
+# Excluir archivos JSON/CSV grandes de results (mantener solo archivos pequeños y documentación)
+results/smoke_tests/
+results/experimentos_previos/
+
+# Puedes añadir más patrones según tus necesidades
+None
+None_episodes.csv
+test.csv
+test.json
+test_export_empty.json
+dummy.png
+docs/PROTOCOLO_ALINEACION.md

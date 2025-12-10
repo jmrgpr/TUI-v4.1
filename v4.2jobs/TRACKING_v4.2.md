@@ -62,8 +62,3 @@ Este plan transforma la prueba de concepto en una validación científica robust
 - Merge exitoso de rama `feature/tui-v4.2-refactorizacion-metodologica` a `main` y push remoto.
 - Estado: Listo para publicación y auditoría científica internacional.
 
-<<<<<<< HEAD
-=======
->>>>>>> 66a6632 (Subida de avances: baseline DQN-Control, reorganización, test y cobertura 95%. Listo para refuerzo a 98%.)
-=======
->>>>>>> ff431b8 (Docs: Bitácora y README actualizados con auditoría y refactorización final 18/11/2025)

@@ -159,6 +159,7 @@ class SimbiosisEnv:
             self.resources += distractor_penalty
             reward += distractor_penalty
             info['distractor'] = True
+        
         # FIX CRÍTICO: Terminar episodio al alcanzar meta (anti-camping)
         # Antes requería resources > threshold_high (10), lo que hacía inalcanzable el goal.
         # Ahora cualquier llegada a la meta se marca como éxito.
@@ -173,21 +174,16 @@ class SimbiosisEnv:
         if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
-    # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
-    # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
-    max_steps = getattr(self, 'max_steps', config.ENV_MAX_STEPS_PER_EPISODE)
+        
+        # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
+        # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
+        max_steps = getattr(self, 'max_steps', config.ENV_MAX_STEPS_PER_EPISODE)
+        
         # Solo aplicar timeout si no se alcanzó la meta
         if not self.done:
             self.done = self.resources <= 0 or self.timestep >= max_steps
         # Bonus por episodio limpio (no tripwire/shock/distractor) solo en riesgo bajo/medio
         if self.done and self.risk_level != "high":
-            if not info.get('tripwire') and not info.get('shock') and not info.get('distractor'):
-                reward += 1.0
->>>>>>> a5e54fc (Diagnóstico RL: Fase E (grid 2x2) documentada, reward y bonus meta verificados. README actualizado.)
-=======
-        # Bonus por episodio limpio (no tripwire/shock/distractor) solo en riesgo bajo/medio
-        if self.done and self.risk_level != "high":
->>>>>>> e960eb9 (Cobertura 99%, smoke test validado, artefactos exportados y simulador robusto listo para publicación.)
             if not info.get('tripwire') and not info.get('shock') and not info.get('distractor'):
                 reward += 1.0
 

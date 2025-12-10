@@ -33,8 +33,6 @@ from run_curriculum_complete_viable import (
 from sim.dqn_agent import DQNAgent
 
 SEEDS = [13, 42, 101, 2025, 9999]
-<<<<<<< HEAD
-<<<<<<< HEAD
 OUTPUT_DIR = Path(__file__).parent.parent / "results" / "pgf_v10_ablation" / "config_B_direct_8x8" / "seeds"
 
 
@@ -42,32 +40,12 @@ def run_direct_8x8(seed: int, output_dir: Path):
     print("\n" + "=" * 70)
     print(f"SEED {seed}: Directo 8x8")
     print("=" * 70)
-=======
-OUTPUT_DIR = ROOT / "results" / "pgf_v10_ablation" / "config_B_direct_8x8" / "seeds"
-=======
-OUTPUT_DIR = Path(__file__).parent.parent / "results" / "pgf_v10_ablation" / "config_B_direct_8x8" / "seeds"
->>>>>>> 9d4f81b (Limpieza y commit: actualización de documentación, runners y resultados FASE 1 y preregistro FASE 2)
-
-
-def run_direct_8x8(seed: int, output_dir: Path):
-    print("\n" + "=" * 70)
-    print(f"SEED {seed}: Directo 8x8")
-<<<<<<< HEAD
-    print("="*70)
->>>>>>> 7de8f43 (Ablation v10 Fase 1: runners corregidos, carpetas y documentación listas. Listo para ejecutar experimentos núcleo (A/B/C/D).)
-=======
-    print("=" * 70)
->>>>>>> 9d4f81b (Limpieza y commit: actualización de documentación, runners y resultados FASE 1 y preregistro FASE 2)
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     results_summary = []
 
-<<<<<<< HEAD
     env_8x8 = create_env(grid_size=8, max_steps_multiplier=5.0)
-=======
-    env_8x8 = create_env(grid_size=8, max_steps_multiplier=5.0)
->>>>>>> 9d4f81b (Limpieza y commit: actualización de documentación, runners y resultados FASE 1 y preregistro FASE 2)
     torch.manual_seed(seed)
     np.random.seed(seed)
     state = env_8x8.reset()
@@ -83,7 +61,7 @@ def run_direct_8x8(seed: int, output_dir: Path):
         epsilon_decay=EPSILON_DECAY,
         batch_size=BATCH_SIZE,
         memory_size=MEMORY_SIZE,
-    hidden_dim=HIDDEN_DIM,
+        hidden_dim=HIDDEN_DIM,
     )
     result_8x8 = train_phase(
         env_8x8,
@@ -124,9 +102,9 @@ def main():
     start_time = time.time()
     for i, seed in enumerate(SEEDS, 1):
         seed_dir = OUTPUT_DIR / f"seed_{seed:04d}"
-    print("\n" + "#" * 50)
-    print(f"# SEED {seed} ({i}/{len(SEEDS)})")
-    print("#" * 50)
+        print("\n" + "#" * 50)
+        print(f"# SEED {seed} ({i}/{len(SEEDS)})")
+        print("#" * 50)
         seed_start = time.time()
         try:
             summary = run_direct_8x8(seed, seed_dir)
@@ -148,6 +126,7 @@ def main():
     print("=" * 70)
     print(f"Duración total: {total_duration:.2f} horas")
     print(f"\nResultados guardados en: {OUTPUT_DIR}")
+
 
 if __name__ == "__main__":
     main()

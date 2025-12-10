@@ -92,17 +92,6 @@ def run_experiment(*args, **kwargs):
     from sim.runner import run_experiment as _run
     return _run(*args, **kwargs)
 
-# run_experiment se resuelve lazy para evitar fallos en subprocesos sin dependencias
-def run_experiment(*args, **kwargs):
-    from sim.runner import run_experiment as _run
-    return _run(*args, **kwargs)
-import torch  # Necesario para DQN / Required for DQN
-import ast
-# Visualización avanzada
-import matplotlib.pyplot as plt
-import seaborn as sns
-import warnings
-
 warnings.filterwarnings("ignore", category=RuntimeWarning, module="scipy.stats")
 warnings.filterwarnings("ignore", category=UserWarning, module="matplotlib")
 warnings.filterwarnings("ignore", category=UserWarning, message="FigureCanvasAgg is non-interactive")
@@ -183,12 +172,8 @@ def main():
         for rs in [0.5, 1.0, 1.5, 2.0]:
             print(f"Barrido de risk_scale: {rs}")
         sys.exit(0)
+    run_fn = globals().get("run_experiment")
     from sim.runner import run_experiment
-    run_fn = run_experiment
-    parser.add_argument('--epsilon_decay', type=float, default=None, help='Override epsilon decay rate for DQN exploration (if provided).')
-    parser.add_argument('--epsilon_end', type=float, default=None, help='Override final epsilon for DQN exploration (if provided).')
-
-
     parser = argparse.ArgumentParser()
     parser.add_argument('--episodes', type=int, default=1000, help='Numero de episodios / Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Semilla aleatoria / Random seed')
@@ -240,7 +225,6 @@ def main():
         config.EXP_CONFIG["lambda_gaming"] = args.lambda_gaming
 
     if args.risk_sweep:
-
         # Ejecutar barrido simple y opcional TUI-only
         results_sweep = []
         for rs in [0.5, 1.0, 1.5, 2.0]:
@@ -319,73 +303,6 @@ def main():
             **dqn_kwargs
         )
 
-    # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
-    print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")
-    res_A = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-    res_B = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
-    res_C = None
-
-    dqn_kwargs = {}
-    if args.learning_rate is not None:
-        dqn_kwargs['learning_rate'] = args.learning_rate
-    if args.gamma is not None:
-        dqn_kwargs['gamma'] = args.gamma
-    if args.epsilon is not None:
-        dqn_kwargs['epsilon'] = args.epsilon
-    if args.epsilon_decay is not None:
-        dqn_kwargs['epsilon_decay'] = args.epsilon_decay
-    if args.epsilon_end is not None:
-        dqn_kwargs['epsilon_end'] = args.epsilon_end
-    if args.dqn_control:
-        res_C = run_experiment(
-            episodes=args.episodes,
-            seed=args.seed,
-            risk_scale=args.risk_scale,
-            risk_level=args.risk_level,
-            red_team=args.red_team,
-            agent_name="DQN-Control",
-            use_pgf=False,
-            use_dqn=True,
-            pgf_mix=pgf_mix,
-            grid_size=args.grid_size,
-            state_mode="coords_only",
-            **dqn_kwargs
-        )
-
-    # Persistencia en modo normal: usar output_prefix si se provee, o nombres protocolizados
-    export_stem = None
-    if args.output_prefix:
-        export_stem = args.output_prefix
-    elif args.dqn_control:
-        export_stem = f"results/smoke_test/dqn_control_easy_seed{args.seed}"
-    elif args.tui_only:
-        export_stem = f"results/smoke_test/tui_pgf_easy_seed{args.seed}"
-
-    # Priorizar --export si se pasa explícitamente
-    export_json = args.export if args.export else (f"{export_stem}.json" if export_stem else None)
-
-    if export_json:
-        export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
-        raw_data = {'control': res_A, 'simbiosis': res_B}
-        dqn_params = {
-            'learning_rate': dqn_kwargs.get('learning_rate', config.DQN_LEARNING_RATE),
-            'gamma': dqn_kwargs.get('gamma', config.DQN_GAMMA),
-            'epsilon': dqn_kwargs.get('epsilon', config.DQN_EPSILON),
-            'epsilon_decay': dqn_kwargs.get('epsilon_decay', config.DQN_EPSILON_DECAY),
-            'epsilon_end': dqn_kwargs.get('epsilon_end', config.DQN_EPSILON_END)
-        }
-        if args.dqn_control:
-            export_data['dqn_control'] = prepare_results(res_C)
-            raw_data['dqn_control'] = res_C
-            export_data['dqn_params'] = dqn_params
-        if args.tui_only:
-            export_data['tui'] = prepare_results(res_B)
-            raw_data['tui'] = res_B
-
-        # Crear carpeta destino si no existe
-        if os.path.dirname(export_json):
-            os.makedirs(os.path.dirname(export_json), exist_ok=True)
-
     # Persistencia en modo normal: usar output_prefix si se provee, o nombres protocolizados
     export_stem = None
     if args.output_prefix:
@@ -422,81 +339,6 @@ def main():
 
         with open(export_json, 'w', encoding='utf-8') as jf:
             json.dump(export_data, jf, indent=2)
-
-        # Siempre usar la ruta base del archivo JSON para el CSV
-        csv_path = f"{os.path.splitext(export_json)[0]}_episodes.csv"
-        if os.path.dirname(csv_path):
-            os.makedirs(os.path.dirname(csv_path), exist_ok=True)
-        with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
-            writer = csv.writer(cf)
-            writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
-            for agent_name, results in raw_data.items():
-                write_episode_rows(writer, agent_name, results)
-
-            # Overrides opcionales de hiperparametros PGF (disponibles tanto en risk_sweep como en modo normal)
-            if args.pgf_kappa is not None:
-                config.EVAL_PGF_KAPPA = args.pgf_kappa
-            if args.pgf_lambda is not None:
-                config.EVAL_PGF_LAMBDA_C = args.pgf_lambda
-            pgf_mix = max(0.0, min(1.0, args.pgf_mix))
-            # Overrides de prudencia/anti-Goodhart
-            if args.sigma_thr is not None:
-                config.EXP_CONFIG["sigma_thr"] = args.sigma_thr
-            if args.gamma_lcb is not None:
-                config.EXP_CONFIG["gamma_lcb"] = args.gamma_lcb
-            if args.lambda_gaming is not None:
-                config.EXP_CONFIG["lambda_gaming"] = args.lambda_gaming
-
-            print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}")
-            res_A = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix)
-            res_B = run_experiment(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix)
-            res_C = None
-            dqn_kwargs = {}
-            if args.learning_rate is not None:
-                dqn_kwargs['learning_rate'] = args.learning_rate
-            if args.gamma is not None:
-                dqn_kwargs['gamma'] = args.gamma
-            if args.epsilon is not None:
-                dqn_kwargs['epsilon'] = args.epsilon
-            if args.epsilon_decay is not None:
-                dqn_kwargs['epsilon_decay'] = args.epsilon_decay
-            if args.epsilon_end is not None:
-                dqn_kwargs['epsilon_end'] = args.epsilon_end
-            if args.dqn_control:
-                res_C = run_experiment(
-                    episodes=args.episodes,
-                    seed=args.seed,
-                    risk_scale=args.risk_scale,
-                    risk_level=args.risk_level,
-                    red_team=args.red_team,
-                    agent_name="DQN-Control",
-                    use_pgf=False,
-                    use_dqn=True,
-                    pgf_mix=pgf_mix,
-                    state_mode="coords_only",
-                    **dqn_kwargs
-                )
-
-            # Persistencia en modo non-sweep: usar output_prefix si se provee, o args.export si se solicita
-
-            # Nuevo patrón de nombres para compatibilidad con protocolo comparativo
-            if args.dqn_control:
-                export_stem = f"results/smoke_test/dqn_control_easy_seed{args.seed}"
-            elif args.tui_only:
-                export_stem = f"results/smoke_test/tui_pgf_easy_seed{args.seed}"
-            else:
-                export_stem = None
-
-            if export_stem:
-                export_json = f"{export_stem}.json"
-                export_data = {'control': prepare_results(res_A), 'simbiosis': prepare_results(res_B)}
-                raw_data = {'control': res_A, 'simbiosis': res_B}
-                if args.dqn_control:
-                    export_data['dqn_control'] = prepare_results(res_C)
-                    raw_data['dqn_control'] = res_C
-                if args.tui_only:
-                    export_data['tui'] = prepare_results(res_B)
-                    raw_data['tui'] = res_B
 
         # Siempre usar la ruta base del archivo JSON para el CSV
         csv_path = f"{os.path.splitext(export_json)[0]}_episodes.csv"

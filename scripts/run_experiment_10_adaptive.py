@@ -248,17 +248,8 @@ def create_env_and_agent(grid_size, seed):
         tripwires=tripwires_list,
         resource_spawn_rate=SPAWN_RATE,
         step_cost=-0.2,  # Mismo que v9.1
-<<<<<<< HEAD
-<<<<<<< HEAD
         resource_reward=1.0,  # Mismo que v9.1 (BALANCED_ECONOMY['goal_reward'])
         initial_resources=INITIAL_BALANCE  # CRÍTICO: 8.0 (no usar default 100.0)
-=======
-        resource_reward=RESOURCE_REWARD / 100.0  # Normalizar (1.0 vs 100.0)
->>>>>>> 3ed58d3 (v10: Script adaptive 88 + Test mode validado)
-=======
-        resource_reward=1.0,  # Mismo que v9.1 (BALANCED_ECONOMY['goal_reward'])
-        initial_resources=INITIAL_BALANCE  # CRÍTICO: 8.0 (no usar default 100.0)
->>>>>>> b519eaf (FIX CRÍTICO v10: initial_resources=8.0 + resource_reward=1.0)
     )
     
     # State size (ResourceDensityEnv retorna dict, extraer tamaño)
@@ -329,15 +320,7 @@ def train_single_episode(env, agent, shaping_scale):
         total_reward_env += reward_env
         total_reward_shaped += reward_shaped
         
-<<<<<<< HEAD
-<<<<<<< HEAD
         if info.get('tripwire', False):
-=======
-        if info.get('tripwire_triggered', False):
->>>>>>> 3ed58d3 (v10: Script adaptive 88 + Test mode validado)
-=======
-        if info.get('tripwire', False):
->>>>>>> 8386521 (v10.5 FRACASO: Calibración 8x8 inviable (3 iteraciones fallidas))
             tripwires_count += 1
         if info.get('resource_collected', False):
             resources_count += 1

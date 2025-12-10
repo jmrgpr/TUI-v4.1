@@ -1,0 +1,23 @@
+# Acciones pendientes al 25-11-2025 (segun hallazgos de Claude y verificados)
+
+1) Ejecutar TUI/PGF puro (sin --dqn_control):
+   - Usar sim/prototipo_rl_simbiosis.py con --pgf_kappa/--pgf_lambda/--pgf_mix y --risk_scale, sin el flag --dqn_control.
+   - Semillas: 42,123,456. Riesgos: 0.5,1.0,1.5,2.0,3.0. Episodios >=200 (mejor 500/1000 para robustez).
+   - Guardar en results/exp_tui_experiment2_full o results/sweep/fase2_instrumented.
+
+2) Baselines y comparacion:
+   - Correr PPO/A2C/DQN (run_sota_comparison.py u otro) con la misma malla de seeds/risks.
+   - Repetir corridas con --red_team para medir robustez adversarial (solo existe red team sintetico; no hay bots/humanos).
+
+3) Consolidado y reportes:
+   - Ejecutar scripts/consolidate_results.py con las rutas generadas para crear results/master_results.csv.
+   - Generar plots/CSV agregados (curvas de riesgo, boxplots, IPG) y adjuntar en el folder del experimento 2.
+
+4) Validacion causal / A-B-C PGF:
+   - Correr grids o al menos un smoke de run_search_pgf.py (hoy es placeholder) para tener evidencia PGF vs control.
+
+5) Datos reales y hold-out:
+   - No hay ingest de datos reales ni protocolo hold-out implementado; decidir si se implementan o se deja documentado como fuera de alcance.
+
+6) Documentacion:
+   - Actualizar logs (experiment_log.txt) y anotar hiperparametros (kappa/lambda/mix, sigma_thr, gamma_lcb, lambda_gaming) usados.

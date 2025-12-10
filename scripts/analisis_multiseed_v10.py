@@ -114,8 +114,6 @@ def compute_statistics(df):
             'success_std': phase_data['success_last_100'].std() * 100,
             'success_min': phase_data['success_last_100'].min() * 100,
             'success_max': phase_data['success_last_100'].max() * 100,
-=======
->>>>>>> be674c5 (fix: Corregir análisis multi-seed - convertir fracción%, seed 42 formato baseline)
             'first_success_mean': phase_data['first_success_episode'].mean(),
             'first_success_std': phase_data['first_success_episode'].std(),
             'convergence_mean': phase_data['convergence_episode'].mean(),
@@ -161,9 +159,9 @@ def analyze_seed42_representativeness(df):
             print(f"\n{phase}: Seed 42 no disponible")
             continue
         
-    seed42_success = seed42_data['success_last_100'].iloc[0] * 100  # Convertir fracción → %
-    mean_others = others_data['success_last_100'].mean() * 100
-    std_others = others_data['success_last_100'].std() * 100
+        seed42_success = seed42_data['success_last_100'].iloc[0] * 100  # Convertir fracción → %
+        mean_others = others_data['success_last_100'].mean() * 100
+        std_others = others_data['success_last_100'].std() * 100
         
         # Z-score
         z_score = (seed42_success - mean_others) / std_others if std_others > 0 else 0

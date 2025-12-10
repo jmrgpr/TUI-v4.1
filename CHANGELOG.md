@@ -9,12 +9,25 @@
 - Documentación técnica y científica actualizada en README.md y TODO.md, incluyendo próximos pasos y revisión pendiente.
 - Protocolos y checklist de reproducibilidad revisados y ampliados.
 - Visualizaciones y análisis estadístico bilingües en notebooks y scripts dedicados.
+---
 
 ## [2025-11-27] Smoke test DQN: interpretación, varianza y export protocolizado
+- Interpretaciones ampliadas y análisis de varianza en `results/smoke_test/RESULTADOS_TUNING_DQN.md`, con recomendaciones accionables.
+- Flujo de exportación corregido y protocolizado; nombres de archivos por semilla/configuración y datasets regenerados (JSON/CSV seeds 42/99/123/456) en `results/smoke_test/`.
+- Protocolo y README de smoke test actualizados; añadido `scripts/run_dqn_tuning_batch.py` para ejecuciones batch.
+- Preparados runs largos y trazabilidad completa para la comparativa TUI vs DQN.
 
 ## [2025-11-26] Tuning DQN y baseline reproducible (EXP00)
+- CLI y config admiten flags `--learning_rate`, `--gamma`, `--epsilon`, `--epsilon_decay`, `--epsilon_end`, con propagación en `sim/runner.py` y `sim/dqn_agent.py`.
+- Export de resultados protocolizado y robustecido en `sim/prototipo_rl_simbiosis.py`; nombres estandarizados por experimento.
+- Penalización por gaming desactivada (`lambda_gaming=0.0`) en `sim/config.py` para tuning EXP00 del agente de control.
+- Baseline EXP00 y documentación comparativa TUI vs DQN actualizadas (`results/smoke_test/EXP00_baseline_README.md`, `PROTOCOLO_COMPARATIVO_TUI_vs_DQN.md`, `RESULTADOS_DESBLOQUEO.md`).
+- Nuevos resultados reproducibles para seeds 42/123/456 y actualización de `results/smoke_test/README.md`.
 
 ## [2025-11-21] Comparación SOTA ampliada (PPO/A2C/DQN)
+- `run_sota_comparison.py` ahora ejecuta PPO, A2C y DQN sobre risk_scale 0.5-3.0, generando resúmenes por algoritmo y uno combinado.
+- Archivos generados: `results/sota_<algo>_global_summary.csv` y `results/sota_all_global_summary.csv`.
+- Ajustes para evaluación headless (matplotlib Agg) y mezcla PGF/reward parametrizable en el prototipo para calibrar penalizaciones.
 
 ## [2025-11-19] Upload a Zenodo: Timestamp de Evidencia Preliminar
 - Subido dataset a Zenodo v2: https://doi.org/10.5281/zenodo.17654593.
@@ -84,5 +97,3 @@
 - Se movieron archivos de test y resultados experimentales (`test.csv`, `test.json`, `test_control.csv`, `test_simbiosis.csv`, `test_sweep.json`, `test_sweep_control.csv`) desde la raíz a la carpeta `results/` para mejorar trazabilidad y limpieza del workspace.
 - Se eliminó el archivo temporal vacío `test_export_empty.json`.
 - Motivo: centralizar resultados siguiendo estructura profesional.
-
-Para detalles de versiones anteriores, consulte el historial de commits en GitHub.

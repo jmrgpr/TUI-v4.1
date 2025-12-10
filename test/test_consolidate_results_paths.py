@@ -1,7 +1,7 @@
 import pandas as pd
 from pathlib import Path
 
-from scripts import consolidate_results
+from scripts.experimentos_previos import consolidate_results
 
 
 def test_consolidate_metadata_and_columns(tmp_path):

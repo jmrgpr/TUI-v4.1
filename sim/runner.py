@@ -66,16 +66,9 @@ def run_experiment(
     use_dqn=False,
     pgf_mix: float = 1.0,
     risk_level: str = "low",
-    red_team: bool = False,
-    grid_size: int = 5,
-    **kwargs):
-    red_team: bool = False,
-    grid_size: int = 5,
-    **kwargs):
         red_team: bool = False,
         grid_size: int = 5,
         **kwargs):
->>>>>>> 1304345 (Experimento DQN coords_only reproducible: código, resultados y documentación alineados. Estado trazado y listo para tuning.)
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
         for i, traj in enumerate(trajectories):
@@ -132,35 +125,6 @@ def run_experiment(
     DEFAULT_EPSILON = getattr(config, 'DQN_EPSILON', getattr(config, 'AGENT_EXPLORATION_RATE', 0.2))
     DEFAULT_EPSILON_DECAY = getattr(config, 'DQN_EPSILON_DECAY', 0.995)
     DEFAULT_EPSILON_END = getattr(config, 'DQN_EPSILON_END', 0.01)
-    # Extraer hiperparámetros DQN de kwargs o usar los de config
-    dqn_lr = kwargs.get('learning_rate', None)
-    dqn_gamma = kwargs.get('gamma', None)
-    dqn_epsilon = kwargs.get('epsilon', None)
-    dqn_epsilon_decay = kwargs.get('epsilon_decay', None)
-    dqn_epsilon_end = kwargs.get('epsilon_end', None)
-    # Defaults centralizados (usar hiperparámetros DQN del config)
-    DEFAULT_LR = getattr(config, 'DQN_LEARNING_RATE', getattr(config, 'AGENT_LEARNING_RATE', 1e-3))
-    DEFAULT_GAMMA = getattr(config, 'DQN_GAMMA', getattr(config, 'AGENT_DISCOUNT_FACTOR', 0.95))
-    DEFAULT_EPSILON = getattr(config, 'DQN_EPSILON', getattr(config, 'AGENT_EXPLORATION_RATE', 0.2))
-    DEFAULT_EPSILON_DECAY = getattr(config, 'DQN_EPSILON_DECAY', 0.995)
-    DEFAULT_EPSILON_END = getattr(config, 'DQN_EPSILON_END', 0.01)
-    dqn_epsilon_decay = kwargs.get('epsilon_decay', None)
-    dqn_epsilon_end = kwargs.get('epsilon_end', None)
-    # Defaults centralizados (usar hiperparámetros DQN del config)
-    DEFAULT_LR = getattr(config, 'DQN_LEARNING_RATE', getattr(config, 'AGENT_LEARNING_RATE', 1e-3))
-    DEFAULT_GAMMA = getattr(config, 'DQN_GAMMA', getattr(config, 'AGENT_DISCOUNT_FACTOR', 0.95))
-    DEFAULT_EPSILON = getattr(config, 'DQN_EPSILON', getattr(config, 'AGENT_EXPLORATION_RATE', 0.2))
-    DEFAULT_EPSILON_DECAY = getattr(config, 'DQN_EPSILON_DECAY', 0.995)
-    DEFAULT_EPSILON_END = getattr(config, 'DQN_EPSILON_END', 0.01)
-<<<<<<< HEAD
-=======
-    # Defaults centralizados (puedes ajustar nombres en config.py si lo prefieres)
-    DEFAULT_LR = getattr(config, 'AGENT_LEARNING_RATE', 1e-3)
-    DEFAULT_GAMMA = getattr(config, 'AGENT_DISCOUNT_FACTOR', 0.95)
-    DEFAULT_EPSILON = getattr(config, 'AGENT_EXPLORATION_RATE', 0.2)
->>>>>>> d2c76dc (Tuning DQN: flags --learning_rate, --gamma, --epsilon integrados en CLI y propagados al agente. Sin hardcoding, listo para EXP02EXP06.)
-=======
->>>>>>> 21a1864 (DQN tuning workflow: CLI flags, hyperparameter traceability, documentation actualizada. Baseline reproducible y lista para experimentos batch.)
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -364,7 +328,6 @@ def run_experiment(
             "epsilon_end": dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
         }
     return {
-<<<<<<< HEAD
         "config": {
             "grid_size": env.size,
             "risk_scale": risk_scale,
@@ -377,8 +340,6 @@ def run_experiment(
             "use_dqn": use_dqn
         },
         "dqn_params": dqn_params,
-=======
->>>>>>> 78d76e4 (Experimento 1 Grid 4x4 completado con metadata y trazabilidad)
         "avg_reward": avg_reward,
         "avg_flex": avg_flex,
         "avg_robust": avg_robust,

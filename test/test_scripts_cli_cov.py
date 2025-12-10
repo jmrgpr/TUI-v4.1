@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 import runpy
 
-from scripts import consolidate_results, merge_summaries, run_ablation_quick, run_full_experiment, run_search_pgf
+from scripts.experimentos_previos import consolidate_results, merge_summaries
 
 
 def _fake_subprocess_run(*args, **kwargs):
@@ -68,10 +68,11 @@ def test_merge_summaries_main(monkeypatch, tmp_path):
     f.write_text("x,y\n1,2\n", encoding="utf-8")
     monkeypatch.setattr(merge_summaries.glob, "glob", lambda pattern: [str(f)])
     monkeypatch.setattr(merge_summaries, "merge_summaries", lambda *a, **k: None)
-    runpy.run_path(str(Path("scripts/merge_summaries.py")), run_name="__main__")
+    runpy.run_path(str(Path("scripts/experimentos_previos/merge_summaries.py")), run_name="__main__")
 
 
 def test_run_ablation_quick_main(monkeypatch, tmp_path):
+    import scripts.experimentos_previos.run_ablation_quick as run_ablation_quick
     monkeypatch.setattr(run_ablation_quick, "OUTPUT_BASE", tmp_path)
     monkeypatch.setattr(run_ablation_quick, "LOG_FILE", tmp_path / "log.txt")
     monkeypatch.setattr(run_ablation_quick.subprocess, "run", _fake_subprocess_run)
@@ -80,6 +81,7 @@ def test_run_ablation_quick_main(monkeypatch, tmp_path):
 
 
 def test_run_full_experiment_main(monkeypatch, tmp_path):
+    import scripts.experimentos_previos.run_full_experiment as run_full_experiment
     monkeypatch.setattr(run_full_experiment.subprocess, "run", _fake_subprocess_run)
     monkeypatch.setattr(run_full_experiment.Path, "mkdir", lambda *a, **k: None)
     sys.argv = [
@@ -105,6 +107,7 @@ def test_run_full_experiment_main(monkeypatch, tmp_path):
 
 
 def test_run_full_experiment_stop_on_fail(monkeypatch, tmp_path):
+    import scripts.experimentos_previos.run_full_experiment as run_full_experiment
     monkeypatch.setattr(run_full_experiment.subprocess, "run", _fake_subprocess_run_fail)
     monkeypatch.setattr(run_full_experiment.Path, "mkdir", lambda *a, **k: None)
     sys.argv = [
@@ -124,6 +127,7 @@ def test_run_full_experiment_stop_on_fail(monkeypatch, tmp_path):
 
 
 def test_run_search_pgf_main(monkeypatch, tmp_path):
+    import scripts.experimentos_previos.run_search_pgf as run_search_pgf
     monkeypatch.setattr(run_search_pgf, "OUTPUT_BASE", tmp_path)
     monkeypatch.setattr(run_search_pgf, "LOG_FILE", tmp_path / "log.txt")
     sys.argv = ["run_search_pgf.py"]
@@ -135,6 +139,7 @@ def test_run_search_pgf_main(monkeypatch, tmp_path):
 
 def test_run_ablation_quick_fail(monkeypatch, tmp_path):
     # Simula fallo en un comando y stop_on_fail no está, debe seguir y devolver 0 con fallidos
+    import scripts.experimentos_previos.run_ablation_quick as run_ablation_quick
     monkeypatch.setattr(run_ablation_quick, "OUTPUT_BASE", tmp_path)
     monkeypatch.setattr(run_ablation_quick, "LOG_FILE", tmp_path / "log.txt")
     monkeypatch.setattr(run_ablation_quick.subprocess, "run", _fake_subprocess_run_fail)

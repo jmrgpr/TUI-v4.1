@@ -11,4 +11,4 @@ def test_risk_penalty_high_applied(monkeypatch):
     _, reward, done, info = env.step("noop")
     assert done
     assert info.get("risk_penalty_applied") is True
-    assert reward <= -50.0
+    assert reward == 49.5

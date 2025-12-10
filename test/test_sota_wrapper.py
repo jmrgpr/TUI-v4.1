@@ -50,19 +50,11 @@ def test_env_multiple_steps():
     env.reset()
     for i in range(4):
         obs, reward, done, truncated, info = env.step(i)
-<<<<<<< HEAD
-        assert obs.shape == (8,)
-        assert isinstance(reward, (int, float))
-        assert isinstance(done, bool)
-        assert isinstance(truncated, bool)
-        assert isinstance(info, dict)
-=======
     assert obs.shape == (8,)
     assert isinstance(reward, (int, float))
     assert isinstance(done, bool)
     assert isinstance(truncated, bool)
     assert isinstance(info, dict)
->>>>>>> f89d18b (Estado estable: DQN robusto, seguridad mejorada, cobertura 99%, listo para refactorización de configuración y arquitectura)
 
 
 def test_env_reset_reinitializes_evaluator():
