@@ -1,3 +1,5 @@
+results/smoke_test/
+results/smoke_tests/
 results/pgf_v10/resultados/*_episodes.csv
 results/pgf_v10/resultados/*_metrics.json
 results/pgf_v10/execution.log
