@@ -26,7 +26,7 @@
   "runs": [
     {
       "nombre": "Fase 1A - Piloto GO/NO-GO",
-      "estado": "planificado",
+      "estado": "fallido",
       "seed": 42,
       "episodes": 50,
       "grid_size": 8,
@@ -34,7 +34,13 @@
       "risk_level": "high",
       "red_team": false,
       "cmd": "python -m sim.prototipo_rl_simbiosis --episodes 50 --seed 42 --grid_size 8 --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_seed42_piloto50_v11",
-      "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios; si falla bajar risk_scale a 1.2 y repilotar"
+      "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios; si falla bajar risk_scale a 1.2 y repilotar",
+      "resultado": {
+        "len_mean": 1.0,
+        "len_median": 1.0,
+        "go_no_go": "NO-GO",
+        "nota": "Episodios de longitud 1 para todos los agentes; entorno letal. Bajar risk_scale a 1.2 y repilotar."
+      }
     },
     {
       "nombre": "Fase 1B - Batch completo",

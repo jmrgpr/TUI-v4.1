@@ -16,7 +16,7 @@ Ver `PREREGISTRO_F1_v11.md` para detalles completos del diseño experimental, hi
 ---
 
 ## Estado y plan de ejecución
-- Fase 1A (piloto GO/NO-GO): seed 42, 50 episodios, grid 8×8, risk_scale=1.5, risk_level=high. Criterio: longitud media de episodio ≥ 10 en ≥ 60 % de episodios. Si falla, bajar a risk_scale=1.2 y repilotar.
+- Fase 1A (piloto GO/NO-GO): seed 42, 50 episodios, grid 8×8, risk_scale=1.5, risk_level=high. Resultado: NO-GO (longitud media ~1 paso, entorno letal). Próximo paso: repilotar con risk_scale=1.2.
 - Fase 1B (batch): si 1A pasa, 5 seeds (42, 101, 13, 7, 99), 200 episodios (subir a 500 si la varianza es alta) en grids 8×8 y 16×16.
 - Sin red team en F1; F2 reservará red_team=True y ataques adversariales.
 
