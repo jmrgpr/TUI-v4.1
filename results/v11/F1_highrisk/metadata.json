@@ -26,7 +26,7 @@
   "runs": [
     {
       "nombre": "Fase 1A - Piloto GO/NO-GO",
-      "estado": "pendiente (prefijo limpio)",
+      "estado": "go",
       "seed": 42,
       "episodes": 50,
       "grid_size": 8,
@@ -35,7 +35,12 @@
       "red_team": false,
       "cmd": "python -m sim.prototipo_rl_simbiosis --episodes 50 --seed 42 --grid_size 8 --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_r1p2_seed42_piloto50_v11",
       "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios (medir con pgf_evol del JSON)",
-      "resultado": {}
+      "resultado": {
+        "len_mean": 29.99,
+        "len_median": 30.0,
+        "go_no_go": "GO",
+        "nota": "Episodios ~30 pasos para los 3 agentes; entorno viable con risk_scale=1.2. Prefijo limpio usado: grid8_riskhigh_r1p2_seed42_piloto50_v11."
+      }
     },
     {
       "nombre": "Fase 1B - Batch completo",
@@ -47,7 +52,7 @@
       "risk_level": "high",
       "red_team": false,
       "cmd_template": "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed <SEED> --grid_size <GRID> --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid<GRID>_riskhigh_seed<SEED>_v11",
-      "nota": "Subir a 500 episodios si la varianza es alta; solo ejecutar si 1A pasa"
+      "nota": "Usar risk_scale=1.2 (como en piloto GO). Subir a 500 episodios si la varianza es alta; solo ejecutar si 1A pasa"
     }
   ]
 }
