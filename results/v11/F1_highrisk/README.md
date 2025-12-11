@@ -16,8 +16,22 @@ Ver `PREREGISTRO_F1_v11.md` para detalles completos del diseño experimental, hi
 ---
 
 ## Estado y plan de ejecución
-- Fase 1A (piloto GO/NO-GO): seed 42, 50 episodios, grid 8×8, risk_scale=1.2, risk_level=high. Resultado: **GO** (len_media ~30 pasos, entorno viable). Output: `raw/grid8_riskhigh_seed42_piloto50_v11.*`.
-- Fase 1B (batch): si 1A pasa, 5 seeds (42, 101, 13, 7, 99), 200 episodios (subir a 500 si la varianza es alta) en grids 8×8 y 16×16.
+- Fase 1A (piloto GO/NO-GO):
+  - run_archivado: `archivados/grid8_riskhigh_seed42_piloto50_v11.*` (prefijo original, sobreescrituras previas; no usar para análisis).
+  - run3 (prefijo limpio): ejecutar con `risk_scale=1.2`, seed 42, 50 episodios, grid 8×8:
+    ```
+    python -m sim.prototipo_rl_simbiosis ^
+      --episodes 50 ^
+      --seed 42 ^
+      --grid_size 8 ^
+      --risk_scale 1.2 ^
+      --risk_level high ^
+      --dqn_control ^
+      --pgf_mix 0.2 ^
+      --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_r1p2_seed42_piloto50_v11
+    ```
+    Tras ejecutar, medir len_media/median a partir del JSON (pgf_evol) y registrar GO/NO-GO en metadata/README con este prefijo.
+- Fase 1B (batch): si 1A pasa con prefijo limpio, lanzar 5 seeds (42, 101, 13, 7, 99), 200 episodios (subir a 500 si la varianza es alta) en grids 8×8 y 16×16, con `risk_scale=1.2` y prefijos separados por seed/grid.
 - Sin red team en F1; F2 reservará red_team=True y ataques adversariales.
 
 ## Comando piloto (Fase 1A)

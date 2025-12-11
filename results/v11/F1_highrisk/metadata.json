@@ -26,21 +26,16 @@
   "runs": [
     {
       "nombre": "Fase 1A - Piloto GO/NO-GO",
-      "estado": "go",
+      "estado": "pendiente (prefijo limpio)",
       "seed": 42,
       "episodes": 50,
       "grid_size": 8,
       "risk_scale": 1.2,
       "risk_level": "high",
       "red_team": false,
-      "cmd": "python -m sim.prototipo_rl_simbiosis --episodes 50 --seed 42 --grid_size 8 --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_seed42_piloto50_v11",
-      "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios",
-      "resultado": {
-        "len_mean": 29.99,
-        "len_median": 30.0,
-        "go_no_go": "GO",
-        "nota": "Episodios completos (~30 pasos). Con risk_scale=1.2 el entorno es viable; proceder a batch."
-      }
+      "cmd": "python -m sim.prototipo_rl_simbiosis --episodes 50 --seed 42 --grid_size 8 --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_r1p2_seed42_piloto50_v11",
+      "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios (medir con pgf_evol del JSON)",
+      "resultado": {}
     },
     {
       "nombre": "Fase 1B - Batch completo",
