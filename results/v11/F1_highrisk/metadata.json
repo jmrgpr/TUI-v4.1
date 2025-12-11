@@ -43,6 +43,24 @@
       }
     },
     {
+      "nombre": "Fase 1A - Piloto GO/NO-GO (retry)",
+      "estado": "fallido",
+      "seed": 42,
+      "episodes": 50,
+      "grid_size": 8,
+      "risk_scale": 1.2,
+      "risk_level": "high",
+      "red_team": false,
+      "cmd": "python -m sim.prototipo_rl_simbiosis --episodes 50 --seed 42 --grid_size 8 --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_seed42_piloto50_v11",
+      "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios; siguiente paso bajar risk_scale a 1.0 si vuelve a fallar",
+      "resultado": {
+        "len_mean": 1.0,
+        "len_median": 1.0,
+        "go_no_go": "NO-GO",
+        "nota": "Sigue letal (episodios de 1 paso). Próximo: probar risk_scale=1.0."
+      }
+    },
+    {
       "nombre": "Fase 1B - Batch completo",
       "estado": "planificado",
       "seeds": [42, 101, 13, 7, 99],
