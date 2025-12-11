@@ -1,0 +1,134 @@
+\documentclass[11pt]{article}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{geometry}
+\usepackage{hyperref}
+\geometry{margin=2.5cm}
+
+\title{Reporte Final del Experimento F0\\[4pt]\large Protocolo v11 -- TUI v4.1}
+\author{Sistema TUI v4.1}
+\date{10 de diciembre de 2025}
+
+\begin{document}
+\maketitle
+
+\section{Introducción}
+
+Este documento resume el análisis científico y los hallazgos principales del experimento F0 bajo el protocolo v11, siguiendo estándares elevados de trazabilidad y reproducibilidad. El objetivo es validar la instrumentación, el \emph{pipeline} y la capacidad del sistema para distinguir entre agentes y condiciones experimentales en entornos de bajo riesgo.
+
+\section{Datos y configuración experimental}
+
+\begin{itemize}
+  \item \textbf{Fuente de datos}:
+    \begin{itemize}
+      \item \texttt{results/v11/F0\_baseline/raw/grid8\_risklow\_seed42\_v11.json/csv}
+      \item \texttt{results/v11/F0\_baseline/raw/grid16\_risklow\_seed42\_v11.json/csv}
+    \end{itemize}
+  \item \textbf{Episodios}: 100 por agente y \emph{grid}.
+  \item \textbf{Agentes}: Control, Simbiosis (TUI/PGF) y DQN-Control.
+  \item \textbf{Tamaños de \emph{grid}}: $8\times 8$ y $16\times 16$.
+  \item \textbf{Riesgo}: \texttt{risk\_scale} = 0.5, \texttt{risk\_level} = low.
+  \item \textbf{Protocolo}: v11.
+  \item \textbf{Semilla}: 42.
+\end{itemize}
+
+\section{Métricas clave analizadas}
+
+\begin{itemize}
+  \item Recompensa ambiental media (\texttt{avg\_reward}).
+  \item Flexibilidad (\texttt{avg\_flex}).
+  \item Robustez (\texttt{avg\_robust}).
+  \item Acción óptima (\texttt{avg\_q\_opt}).
+  \item Índice Prudencial Global (IPG).
+  \item Utilidad proxy y humana (\texttt{u\_proxy}, \texttt{u\_humans}).
+  \item Riesgo efectivo medio (\texttt{risk\_effective\_mean}).
+  \item Sorpresa media (\texttt{surprise\_mean}).
+  \item Promedios de PGF bruto y de costo (\texttt{PGF\_Bruto\_Avg}, \texttt{PGF\_Costo\_Avg}).
+\end{itemize}
+
+\section{Resultados principales}
+
+\subsection{Grid $8\times 8$, riesgo bajo}
+
+\paragraph{Control}
+\begin{itemize}
+  \item \texttt{avg\_reward} $\approx -18.84$.
+  \item \texttt{avg\_flex} = 0.50, \texttt{avg\_robust} = 1.00, \texttt{avg\_q\_opt} $\approx 0.842$.
+  \item IPG $\approx 0.668$.
+  \item \texttt{u\_proxy} $\approx -0.624$, \texttt{u\_humans} $\approx 0.763$.
+  \item \texttt{risk\_effective\_mean} $\approx 0.336$, \texttt{surprise\_mean} = 0.0.
+\end{itemize}
+
+\paragraph{Simbiosis (TUI/PGF)}
+\begin{itemize}
+  \item \texttt{avg\_reward} $\approx +14.61$.
+  \item \texttt{avg\_flex} = 0.50, \texttt{avg\_robust} $\approx 0.991$, \texttt{avg\_q\_opt} $\approx 0.847$.
+  \item IPG $\approx 0.668$.
+  \item \texttt{u\_proxy} $\approx -0.766$, \texttt{u\_humans} $\approx 0.773$.
+  \item \texttt{risk\_effective\_mean} $\approx 0.349$, \texttt{surprise\_mean} = 0.0.
+\end{itemize}
+
+\paragraph{DQN-Control}
+\begin{itemize}
+  \item \texttt{avg\_reward} $\approx -24.08$.
+  \item \texttt{avg\_flex} = 0.50, \texttt{avg\_robust} $\approx 0.989$, \texttt{avg\_q\_opt} $\approx 0.845$.
+  \item IPG $\approx 0.668$.
+  \item \texttt{u\_proxy} $\approx -0.768$, \texttt{u\_humans} $\approx 0.773$.
+  \item \texttt{risk\_effective\_mean} $\approx 0.348$, \texttt{surprise\_mean} = 0.0.
+\end{itemize}
+
+\subsection{Grid $16\times 16$, riesgo bajo}
+
+\paragraph{Control}
+\begin{itemize}
+  \item \texttt{avg\_reward} $\approx -21.19$.
+  \item \texttt{avg\_flex} = 0.50, \texttt{avg\_robust} $\approx 0.999$, \texttt{avg\_q\_opt} $\approx 0.842$.
+  \item IPG $\approx 0.503$.
+  \item \texttt{u\_proxy} $\approx -0.706$, \texttt{u\_humans} $\approx 0.773$.
+  \item \texttt{risk\_effective\_mean} $\approx 0.250$, \texttt{surprise\_mean} = 0.0.
+\end{itemize}
+
+\paragraph{Simbiosis (TUI/PGF)}
+\begin{itemize}
+  \item \texttt{avg\_reward} $\approx +15.12$.
+  \item \texttt{avg\_flex} = 0.50, \texttt{avg\_robust} $\approx 0.991$, \texttt{avg\_q\_opt} $\approx 0.847$.
+  \item IPG $\approx 0.668$.
+  \item \texttt{u\_proxy} $\approx -0.745$, \texttt{u\_humans} $\approx 0.773$.
+  \item \texttt{risk\_effective\_mean} $\approx 0.265$, \texttt{surprise\_mean} = 0.0.
+\end{itemize}
+
+\paragraph{DQN-Control}
+\begin{itemize}
+  \item \texttt{avg\_reward} $\approx -24.08$.
+  \item \texttt{avg\_flex} = 0.50, \texttt{avg\_robust} $\approx 0.989$, \texttt{avg\_q\_opt} $\approx 0.845$.
+  \item IPG $\approx 0.668$.
+  \item \texttt{u\_proxy} $\approx -0.745$, \texttt{u\_humans} $\approx 0.773$.
+  \item \texttt{risk\_effective\_mean} $\approx 0.263$, \texttt{surprise\_mean} = 0.0.
+\end{itemize}
+
+\section{Lectura crítica y hallazgos}
+
+\begin{itemize}
+  \item Ningún agente dispara \emph{tripwires} ni \emph{shocks} (surprise\_mean = 0.0), validando la seguridad y calibración del entorno en este régimen.
+  \item Simbiosis (TUI/PGF) logra recompensa ambiental positiva y estable en ambos \emph{grids}, sin sacrificar flexibilidad, robustez ni acción óptima.
+  \item El riesgo efectivo medio es similar entre agentes dentro de cada condición; la ventaja de Simbiosis no proviene de ``jugar con el riesgo'', sino de la forma en que combina PGF y \emph{reward}.
+  \item El IPG del Control se degrada al escalar el \emph{grid}, mientras que Simbiosis y DQN-Control lo mantienen alto, lo que sugiere mayor estabilidad prudencial de las variantes intervenidas.
+  \item Los proxies muestran la clásica desalineación entre recompensa ambiental y utilidad humana, que el protocolo v11 busca visibilizar explícitamente.
+  \item El sistema de métricas mecánicas (\texttt{risk\_effective}, \texttt{surprise}) funciona correctamente y no aparece explotado por los agentes en este escenario.
+\end{itemize}
+
+\section{Conclusión}
+
+El experimento F0 valida la instrumentación, el \emph{pipeline} y la capacidad del sistema para distinguir entre agentes y condiciones de forma robusta y trazable. La variante Simbiosis (TUI/PGF) muestra ventajas claras en recompensa y estabilidad sin aumentar el riesgo efectivo ni las sorpresas, cumpliendo los objetivos del protocolo v11 en un entorno de riesgo bajo.
+
+\section{Próximos pasos sugeridos}
+
+\begin{itemize}
+  \item Ejecutar un experimento F1 con \texttt{risk\_scale} alto o modo \texttt{red\_team} activado, para estresar el sistema y observar el comportamiento bajo condiciones adversas.
+  \item Analizar la aparición de sorpresas y cambios en el riesgo efectivo bajo escenarios de mayor riesgo y economía más dura (inanición, penalizaciones severas).
+  \item Extender el análisis con pruebas estadísticas formales (intervalos de confianza, contrastes) si se requiere documentación de nivel artículo.
+\end{itemize}
+
+\end{document}
+

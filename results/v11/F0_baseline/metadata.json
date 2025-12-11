@@ -1,0 +1,25 @@
+{
+  "protocolo_version": "v11",
+  "fecha_ejecucion": "2025-12-10",
+  "git_commit": "0290b03ae6acefb3d9a85793ab410c3ac8badeb4",
+  "config_global": {
+    "risk_scale": 0.5,
+    "risk_level": "low",
+    "pgf_mix": 0.2,
+    "sigma_thr": 0.5,
+    "lambda_gaming": 0.0,
+    "max_steps": 100,
+    "episodes": 100,
+    "seed": 42,
+    "grid_sizes": [8, 16],
+    "agents": ["control", "simbiosis", "dqn_control"]
+  },
+  "scripts_usados": [
+    "sim/prototipo_rl_simbiosis.py",
+    "sim/runner.py"
+  ],
+  "comandos_lanzamiento": [
+    "python -m sim.prototipo_rl_simbiosis --episodes 100 --seed 42 --grid_size 8 --risk_scale 0.5 --risk_level low --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F0_baseline/raw/grid8_risklow_seed42_v11",
+    "python -m sim.prototipo_rl_simbiosis --episodes 100 --seed 42 --grid_size 16 --risk_scale 0.5 --risk_level low --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F0_baseline/raw/grid16_risklow_seed42_v11"
+  ]
+}
