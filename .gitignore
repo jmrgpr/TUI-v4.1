@@ -1,9 +1,17 @@
-results/experimentos_previos/
-results/smoke_test/
-results/PLAN_ESTRATEGICO_FASE3.md
-results/smoke_test/
-results/global_summaries/
-results/*/execution.log
+results/
+!results/v11/
+!results/v11/**
+!results/pgf_v10_documentacion_global/
+!results/pgf_v10_documentacion_global/**
+
+# Excluir solo archivos JSON grandes de results (mantener CSV y logs)
+results/**/*.json
+# EXCEPCIONES: JSONs de análisis y métricas son críticos
+!results/**/analisis/*.json
+!results/**/analisis_*.json
+!results/**/*_metrics.json
+!results/**/README*.md
+
 .venv/
 __pycache__/
 *.pyc
@@ -13,18 +21,12 @@ __pycache__/
 .DS_Store
 *.sqlite3
 
-# Excluir solo archivos JSON grandes de results (mantener CSV y logs)
-results/**/*.json
-# EXCEPCIONES: JSONs de análisis y métricas son críticos
-!results/**/analisis/*.json
-!results/**/analisis_*.json
-!results/**/*_metrics.json
-!results/**/README*.md
-results/
-!results/pgf_v10_documentacion_global/
-!results/pgf_v11/
-!results/v11/
-!results/v11/**
+results/experimentos_previos/
+results/smoke_test/
+results/PLAN_ESTRATEGICO_FASE3.md
+results/smoke_test/
+results/global_summaries/
+results/*/execution.log
 
 # Puedes añadir más patrones según tus necesidades
 None

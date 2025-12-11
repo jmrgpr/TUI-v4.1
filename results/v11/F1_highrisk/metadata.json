@@ -3,8 +3,11 @@
   "experimento": "F1_highrisk",
   "fecha_preregistro": "2025-12-11",
   "git_commit": "1e2be116d8e35c7f739b39cb40f09cd89722eb1c",
+  "criterio_GO": "Longitud de episodio ~30 pasos en todos los runs (por agente, grid y seed) bajo riesgo alto.",
+  "seeds": [42, 101, 13, 7, 99],
+  "grids": [8, 16],
   "config_global": {
-    "risk_scale": 1.5,
+    "risk_scale": 1.2,
     "risk_level": "high",
     "pgf_mix": 0.2,
     "sigma_thr": 0.5,
@@ -15,13 +18,33 @@
     "agents": ["control", "simbiosis", "dqn_control"],
     "red_team": false
   },
+  "estadistica": "Simbiosis supera a Control en recompensa esperada y riesgo efectivo (p < 0.05, Bonferroni) y mantiene PGF bruto comparable en grids 8x8 y 16x16.",
+  "archivos_resultados": [
+    "analysis/analisis_F1_v11.ipynb",
+    "analysis/longitudes_F1_v11.csv",
+    "analysis/stat_tests_F1_v11.csv",
+    "analysis/reporte_final_F1_v11.md"
+  ],
+  "fecha_cierre": "2025-12-11",
   "scripts_usados": [
     "sim/prototipo_rl_simbiosis.py",
     "sim/runner.py"
   ],
   "comandos_lanzamiento": [
-    "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed 42 --grid_size 8 --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_seed42_v11",
-    "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed 42 --grid_size 16 --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid16_riskhigh_seed42_v11"
+    "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed 42 --grid_size 8 --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_r1p2_seed42_v11",
+    "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed 42 --grid_size 16 --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid16_riskhigh_r1p2_seed42_v11"
+  ],
+  "runs_ids": [
+    "grid8_riskhigh_r1p2_seed42_v11",
+    "grid8_riskhigh_r1p2_seed101_v11",
+    "grid8_riskhigh_r1p2_seed13_v11",
+    "grid8_riskhigh_r1p2_seed7_v11",
+    "grid8_riskhigh_r1p2_seed99_v11",
+    "grid16_riskhigh_r1p2_seed42_v11",
+    "grid16_riskhigh_r1p2_seed101_v11",
+    "grid16_riskhigh_r1p2_seed13_v11",
+    "grid16_riskhigh_r1p2_seed7_v11",
+    "grid16_riskhigh_r1p2_seed99_v11"
   ],
   "runs": [
     {
@@ -44,15 +67,31 @@
     },
     {
       "nombre": "Fase 1B - Batch completo",
-      "estado": "planificado",
+      "estado": "completado",
       "seeds": [42, 101, 13, 7, 99],
       "episodes": 200,
       "grid_sizes": [8, 16],
-      "risk_scale": 1.5,
+      "risk_scale": 1.2,
       "risk_level": "high",
       "red_team": false,
-      "cmd_template": "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed <SEED> --grid_size <GRID> --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid<GRID>_riskhigh_seed<SEED>_v11",
-      "nota": "Usar risk_scale=1.2 (como en piloto GO). Subir a 500 episodios si la varianza es alta; solo ejecutar si 1A pasa"
+      "cmd_template": "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed <SEED> --grid_size <GRID> --risk_scale 1.2 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid<GRID>_riskhigh_r1p2_seed<SEED>_v11",
+      "resultados": {
+        "grid8": {
+          "seed42": {"len_min": 25, "len_mean": 29.91, "len_max": 30},
+          "seed101": {"len_min": 15, "len_mean": 29.80, "len_max": 30},
+          "seed13": {"len_min": 26, "len_mean": 29.95, "len_max": 30},
+          "seed7": {"len_min": 25, "len_mean": 29.95, "len_max": 30},
+          "seed99": {"len_min": 23, "len_mean": 29.88, "len_max": 30}
+        },
+        "grid16": {
+          "seed42": {"len_min": 30, "len_mean": 30.00, "len_max": 30},
+          "seed101": {"len_min": 30, "len_mean": 30.00, "len_max": 30},
+          "seed13": {"len_min": 30, "len_mean": 30.00, "len_max": 30},
+          "seed7": {"len_min": 30, "len_mean": 30.00, "len_max": 30},
+          "seed99": {"len_min": 30, "len_mean": 30.00, "len_max": 30}
+        }
+      },
+      "nota": "Batch completo ejecutado con risk_scale=1.2. Todas las longitudes medias ~30 pasos; entorno estable para análisis. Subir a 500 episodios reservado si se detecta alta varianza en métricas."
     }
   ]
 }
