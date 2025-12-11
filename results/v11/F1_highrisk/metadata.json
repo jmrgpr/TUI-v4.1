@@ -22,5 +22,31 @@
   "comandos_lanzamiento": [
     "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed 42 --grid_size 8 --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_seed42_v11",
     "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed 42 --grid_size 16 --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid16_riskhigh_seed42_v11"
+  ],
+  "runs": [
+    {
+      "nombre": "Fase 1A - Piloto GO/NO-GO",
+      "estado": "planificado",
+      "seed": 42,
+      "episodes": 50,
+      "grid_size": 8,
+      "risk_scale": 1.5,
+      "risk_level": "high",
+      "red_team": false,
+      "cmd": "python -m sim.prototipo_rl_simbiosis --episodes 50 --seed 42 --grid_size 8 --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid8_riskhigh_seed42_piloto50_v11",
+      "criterio_go_no_go": "len_episode_mean >= 10 en >=60% de episodios; si falla bajar risk_scale a 1.2 y repilotar"
+    },
+    {
+      "nombre": "Fase 1B - Batch completo",
+      "estado": "planificado",
+      "seeds": [42, 101, 13, 7, 99],
+      "episodes": 200,
+      "grid_sizes": [8, 16],
+      "risk_scale": 1.5,
+      "risk_level": "high",
+      "red_team": false,
+      "cmd_template": "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed <SEED> --grid_size <GRID> --risk_scale 1.5 --risk_level high --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F1_highrisk/raw/grid<GRID>_riskhigh_seed<SEED>_v11",
+      "nota": "Subir a 500 episodios si la varianza es alta; solo ejecutar si 1A pasa"
+    }
   ]
 }
