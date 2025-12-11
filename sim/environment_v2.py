@@ -237,7 +237,14 @@ class ResourceDensityEnv(SimbiosisEnv):
             'total_collected': self.total_resources_collected,
             'cells_visited': len(self.cells_visited),
         }
-        
+
+        # Instrumentación mecánica: calcular risk_effective y surprise
+        if getattr(self, 'ENABLE_MECHANISTIC_LOGGING', True):
+            info['risk_effective'] = self.calculate_risk_effective()
+            info['surprise'] = self.calculate_surprise(info)
+            self.last_risk_effective = info['risk_effective']
+            self.last_surprise = info['surprise']
+
         return state, reward, done, info
 
     def compute_D_effective(self):
@@ -274,3 +281,32 @@ class ResourceDensityEnv(SimbiosisEnv):
             'total_cells': total_cells,
             'collection_times': self.resource_collection_times.copy(),
         }
+
+    ENABLE_MECHANISTIC_LOGGING = True  # Flag global para logging mecánico
+
+    def calculate_risk_effective(self):
+        """
+        Calcula el riesgo efectivo según la fórmula del protocolo v11.
+        R_eff = 0.5 * Proximidad + 0.3 * Energía + 0.2 * Tiempo
+        """
+        agent_x, agent_y = self.agent_pos
+        min_dist = min(
+            [abs(agent_x - tx) + abs(agent_y - ty) for tx, ty in self.tripwires],
+            default=self.size,
+        )
+        P_prox = 1.0 / (min_dist + 1)
+        V_energia = max(0.0, min(1.0, self.resources / (self.size * 2)))
+        P_tiempo = max(0.0, min(1.0, (self.max_steps - self.timestep) / self.max_steps))
+        R_eff = 0.5 * P_prox + 0.3 * V_energia + 0.2 * P_tiempo
+        return R_eff
+
+    def calculate_surprise(self, info):
+        """
+        Calcula la sorpresa según el protocolo v11.
+        Sorpresa = 1.0 si activa trampa, 0.8 si muere de hambre, 0.0 si operación nominal.
+        """
+        if info.get('tripwire', False):
+            return 1.0
+        if info.get('starvation', False):
+            return 0.8
+        return 0.0

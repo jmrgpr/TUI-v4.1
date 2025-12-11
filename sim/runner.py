@@ -4,11 +4,11 @@ Runner para experimentos RL TUI v4.1
 import numpy as np
 import torch
 import random
-from .environment import SimbiosisEnv
+from sim.environment import SimbiosisEnv
 from sim.dqn_agent import DQNAgent
 from sim.evaluator_pgf import EvaluatorPGF
-from . import config
-from .agent import Agent, Event
+import sim.config as config
+from sim.agent import Agent, Event
 
 
 def state_to_vector(state):  # pragma: no cover - helper redundante cubierto en otros tests
@@ -125,6 +125,10 @@ def run_experiment(
     DEFAULT_EPSILON = getattr(config, 'DQN_EPSILON', getattr(config, 'AGENT_EXPLORATION_RATE', 0.2))
     DEFAULT_EPSILON_DECAY = getattr(config, 'DQN_EPSILON_DECAY', 0.995)
     DEFAULT_EPSILON_END = getattr(config, 'DQN_EPSILON_END', 0.01)
+    risk_effective_evol = []
+    surprise_evol = []
+    risk_effective_avg = []
+    surprise_avg = []
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -164,6 +168,8 @@ def run_experiment(
         u_humans_steps = []
         sigma = 0.0  # Inicializar sigma para todos los caminos
         q_val = 0.0  # Inicializar q_val para todos los caminos
+        risk_effective_steps = []
+        surprise_steps = []
         for step in range(config.ENV_MAX_STEPS_PER_EPISODE):
             if use_dqn:
                 if state_mode == 'coords_only':
@@ -189,6 +195,11 @@ def run_experiment(
                     action = "noop"
                     gating_hits += 1
             next_state, reward_env, done, info = env.step(action)
+            # Registrar instrumentación mecánica si existe
+            if 'risk_effective' in info:
+                risk_effective_steps.append(info['risk_effective'])
+            if 'surprise' in info:
+                surprise_steps.append(info['surprise'])
             actions_taken.append(action)
             sigma = info.get("sigma", sigma)
             q_val = info.get("q_val", 0.0) if "q_val" in info else q_val
@@ -250,6 +261,11 @@ def run_experiment(
             if done:
                 break
         total_rewards.append(total_reward)
+        # Guardar evolución y promedios por episodio
+        risk_effective_evol.append(risk_effective_steps)
+        surprise_evol.append(surprise_steps)
+        risk_effective_avg.append(np.mean(risk_effective_steps) if risk_effective_steps else 0.0)
+        surprise_avg.append(np.mean(surprise_steps) if surprise_steps else 0.0)
         flex_recov.append(np.mean(flex_steps) if flex_steps else 0.0)
         robust_evol.append(np.mean(robust_steps) if robust_steps else 0.0)
         tripwire_steps.append(tripwire_count)
@@ -371,5 +387,9 @@ def run_experiment(
         "survival_evol": survival_evol,
         "flex_recov": flex_recov,
         "robust_evol": robust_evol,
-        "policy": policy
+        "policy": policy,
+        "risk_effective_evol": risk_effective_evol,
+        "surprise_evol": surprise_evol,
+        "risk_effective_avg": risk_effective_avg,
+        "surprise_avg": surprise_avg
     }

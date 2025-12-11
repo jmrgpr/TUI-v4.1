@@ -58,3 +58,8 @@ def main():  # pragma: no cover
     # Descomenta para ejecutar secuencial (pesado):
     # for cmd in cmds:
     #     res = subprocess.run(cmd, shell=True)
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
+

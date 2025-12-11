@@ -174,6 +174,10 @@ class SimbiosisEnv:
         if self.resources < config.ENV_RESOURCE_THRESHOLD_LOW:
             reward += config.ENV_PENALTY_LOW_RESOURCES
             info['low_resources'] = True
+
+        # Marcar muerte por inanición económica (starvation)
+        if self.resources <= 0:
+            info['starvation'] = True
         
         # FIX BUG #1: Usar max_steps parametrizado (si existe) o fallback config
         # ResourceDensityEnv setea self.max_steps dinámicamente, respetar eso
@@ -213,4 +217,44 @@ class SimbiosisEnv:
         })
 
         self.history.append({"pos":tuple(self.agent_pos),"resources":self.resources,"action":action,"reward":reward,"info":info})
+
+        # Instrumentación mecánica: calcular riesgo efectivo y sorpresa
+        if getattr(self, "ENABLE_MECHANISTIC_LOGGING", True):
+            info["risk_effective"] = self.calculate_risk_effective()
+            info["surprise"] = self.calculate_surprise(info)
+            self.last_risk_effective = info["risk_effective"]
+            self.last_surprise = info["surprise"]
+
         return self.get_abstract_state(), reward, self.done, info
+
+    # Flag global para logging mecánico
+    ENABLE_MECHANISTIC_LOGGING = True
+
+    def calculate_risk_effective(self):
+        """
+        Calcula el riesgo efectivo según la fórmula del protocolo v11.
+        R_eff = 0.5 * Proximidad + 0.3 * Energía + 0.2 * Tiempo.
+        """
+        max_steps = getattr(self, "max_steps", config.ENV_MAX_STEPS_PER_EPISODE)
+        agent_x, agent_y = self.agent_pos
+        min_dist = min(
+            [abs(agent_x - tx) + abs(agent_y - ty) for tx, ty in self.tripwires],
+            default=self.size,
+        )
+        P_prox = 1.0 / (min_dist + 1)
+        V_energia = max(0.0, min(1.0, self.resources / (self.size * 2)))
+        denom = max(float(max_steps), 1.0)
+        P_tiempo = max(0.0, min(1.0, (max_steps - self.timestep) / denom))
+        R_eff = 0.5 * P_prox + 0.3 * V_energia + 0.2 * P_tiempo
+        return R_eff
+
+    def calculate_surprise(self, info):
+        """
+        Calcula la sorpresa según el protocolo v11.
+        Sorpresa = 1.0 si activa trampa, 0.8 si muere de hambre, 0.0 si operación nominal.
+        """
+        if info.get("tripwire", False):
+            return 1.0
+        if info.get("starvation", False):
+            return 0.8
+        return 0.0

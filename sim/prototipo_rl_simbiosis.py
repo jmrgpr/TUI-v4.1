@@ -156,6 +156,8 @@ def write_episode_rows(writer, agent_name: str, results: dict):
     qopt_list = results.get('q_optimal_evol', [])
     pgf_bruto = results.get('pgf_bruto_evol', [])
     pgf_costo = results.get('pgf_costo_evol', [])
+    risk_avg_list = results.get('risk_effective_avg', [])
+    surprise_avg_list = results.get('surprise_avg', [])
     for i in range(episodes):
         reward = float(results.get('total_rewards', [0.0] * episodes)[i])
         trip = float(results.get('tripwire_steps', [0.0] * episodes)[i])
@@ -164,7 +166,9 @@ def write_episode_rows(writer, agent_name: str, results: dict):
         qopt = qopt_list[i] if i < len(qopt_list) else 0.0
         pgf_bruto_ep = float(np.mean(pgf_bruto[i])) if i < len(pgf_bruto) and pgf_bruto[i] else 0.0
         pgf_costo_ep = float(np.mean(pgf_costo[i])) if i < len(pgf_costo) and pgf_costo[i] else 0.0
-        writer.writerow([agent_name, i + 1, reward, trip, flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep])
+        risk_avg = float(risk_avg_list[i]) if i < len(risk_avg_list) else 0.0
+        surprise_avg = float(surprise_avg_list[i]) if i < len(surprise_avg_list) else 0.0
+        writer.writerow([agent_name, i + 1, reward, trip, flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep, risk_avg, surprise_avg])
 
 
 def main():
@@ -346,7 +350,19 @@ def main():
             os.makedirs(os.path.dirname(csv_path), exist_ok=True)
         with open(csv_path, 'w', newline='', encoding='utf-8') as cf:
             writer = csv.writer(cf)
-            writer.writerow(['Agente', 'Episodio', 'Recompensa', 'Tripwires', 'Flexibilidad', 'Robustez', 'Q-optimal', 'PGF_Bruto_Avg', 'PGF_Costo_Avg'])
+            writer.writerow([
+                'Agente',
+                'Episodio',
+                'Recompensa',
+                'Tripwires',
+                'Flexibilidad',
+                'Robustez',
+                'Q-optimal',
+                'PGF_Bruto_Avg',
+                'PGF_Costo_Avg',
+                'RiskEffective_Avg',
+                'Surprise_Avg',
+            ])
             for agent_name, results in raw_data.items():
                 write_episode_rows(writer, agent_name, results)
 
