@@ -1,0 +1,4 @@
+file,agent,seed,n,mean_reward,std_reward,pct_tripwires,low_n,z_mean,z_trip,outlier
+results\v11\archived\F0_baseline\raw\grid16_risklow_seed42_v11_episodes.csv,control,42.0,100,-21.1926,1.0741739790991667,0.0,True,4.513110667928496,-0.8017837257372731,True
+results\v11\archived\F0_baseline\raw\grid16_risklow_seed42_v11_episodes.csv,dqn_control,42.0,100,-24.075599999999998,0.27767185051001586,0.0,True,4.6903504649236405,-1.2919503869998783,True
+results\v11\archived\F0_baseline\raw\grid16_risklow_seed42_v11_episodes.csv,simbiosis,42.0,100,15.123118966745535,1.2262070858489749,0.0,True,4.728602822615029,-1.229880092536182,True
