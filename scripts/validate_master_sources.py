@@ -35,7 +35,12 @@ def read_table(path):
 
 
 def main():
-    master = os.path.join('results', 'master_results.csv')
+    # prefer cleaned master when available
+    candidate = os.path.join('results', 'master_results_clean.csv')
+    if os.path.exists(candidate):
+        master = candidate
+    else:
+        master = os.path.join('results', 'master_results.csv')
     outdir = os.path.join('results', 'v11', 'data')
     os.makedirs(outdir, exist_ok=True)
     report_rows = []

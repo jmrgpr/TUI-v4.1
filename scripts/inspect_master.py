@@ -1,5 +1,7 @@
 import pandas as pd
-m = pd.read_csv('results/master_results.csv')
+master_path = 'results/master_results_clean.csv' if os.path.exists('results/master_results_clean.csv') else 'results/master_results.csv'
+m = pd.read_csv(master_path)
+print('Using master file:', master_path)
 print('rows:', len(m))
 print('agent unique sample:', m['agent'].dropna().unique()[:20])
 print('counts by agent (non-null reward_total):')

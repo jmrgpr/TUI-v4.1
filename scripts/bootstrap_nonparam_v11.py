@@ -3,7 +3,8 @@ import numpy as np
 import os
 
 DATA_DIR = 'results/v11/data'
-MASTER = 'results/master_results.csv'
+# Prefer cleaned master if present
+MASTER = 'results/master_results_clean.csv' if os.path.exists('results/master_results_clean.csv') else 'results/master_results.csv'
 OUT_CSV = os.path.join(DATA_DIR, 'bootstrap_nonparam_v11.csv')
 OUT_MD = os.path.join(DATA_DIR, 'bootstrap_nonparam_v11.md')
 
