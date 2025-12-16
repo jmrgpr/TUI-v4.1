@@ -1,9 +1,0 @@
-src,dest
-C:\Proyectos\TUI-v4.1\results\v11\F0_baseline\raw\grid16_risklow_seed42_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F0_baseline\raw\grid16_risklow_seed42_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F0_baseline\raw\grid8_risklow_seed42_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F0_baseline\raw\grid8_risklow_seed42_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F1_highrisk\grid8\riskhigh\control\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F1_highrisk\grid8\riskhigh\control\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F1_highrisk\grid8\riskhigh\dqn_control\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F1_highrisk\grid8\riskhigh\dqn_control\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F1_highrisk\grid8\riskhigh\simbiosis\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F1_highrisk\grid8\riskhigh\simbiosis\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F1_highrisk\raw\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F1_highrisk\raw\grid8_riskhigh_r1p2_seed42_piloto50_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F1_highrisk\raw\grid8_riskhigh_seed42_piloto50_v11_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F1_highrisk\raw\grid8_riskhigh_seed42_piloto50_v11_episodes.csv
-C:\Proyectos\TUI-v4.1\results\v11\F2_redteam\raw\test_debug_run_episodes.csv,C:\Proyectos\TUI-v4.1\results\v11\archived\F2_redteam\raw\test_debug_run_episodes.csv
