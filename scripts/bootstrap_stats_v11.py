@@ -36,7 +36,13 @@ def main():
             agent = r['agent']
             if agent == 'control':
                 continue
-            m1 = float(r['mean']); s1 = float(r['std']); n1 = int(r['n'])
+            m1 = float(r['mean']);
+            # skip groups with insufficient samples
+            n1 = int(r['n'])
+            if n1 < 2 or pd.isna(r['std']):
+                # cannot run parametric bootstrap with n<2 or undefined std
+                continue
+            s1 = float(r['std'])
             diffs = []
             for _ in range(B):
                 # parametric sampling (normal) as confirmatory approx
