@@ -27,6 +27,7 @@ results/PLAN_ESTRATEGICO_FASE3.md
 results/smoke_test/
 results/global_summaries/
 results/*/execution.log
+results/v11/archived/
 
 # Puedes añadir más patrones según tus necesidades
 None
