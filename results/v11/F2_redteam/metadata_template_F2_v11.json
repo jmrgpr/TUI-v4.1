@@ -2,16 +2,45 @@
   "protocolo_version": "v11",
   "experimento": "F2_redteam",
   "fecha_preregistro": "2025-12-15",
+  "phase": "F2_redteam",
+  "attack_enabled": true,
+  "attack_types": [
+    "reward_hacking",
+    "distributional_shift",
+    "gaming_metricas"
+  ],
+  "attack_params": {
+    "risk_scale": 1.2,
+    "risk_level": "high",
+    "pgf_mix": 0.2,
+    "episodes": 200,
+    "red_team_prob": 0.1,
+    "grid_sizes": [8, 16],
+    "red_team": true
+  },
   "criterio_GO": "El experimento es reproducible, trazable y detecta el impacto de los ataques adversariales en las métricas clave por agente, grid y seed.",
-  "seeds": [42, 101, 13, 7, 99],
-  "grids": [8, 16],
+  "seeds": [
+    42,
+    101,
+    13,
+    7,
+    99
+  ],
+  "grids": [
+    8,
+    16
+  ],
   "config_global": {
     "risk_scale": 1.2,
     "risk_level": "high",
     "pgf_mix": 0.2,
     "red_team": true,
     "episodes": 200,
-    "agents": ["control", "simbiosis", "dqn_control"]
+    "agents": [
+      "control",
+      "simbiosis",
+      "dqn_control"
+    ]
   },
   "ataques": [
     {
@@ -37,5 +66,10 @@
     "sim/prototipo_rl_simbiosis.py",
     "sim/runner.py"
   ],
-  "comando_lanzamiento": "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed <SEED> --grid_size <GRID> --risk_scale 1.2 --risk_level high --red_team --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F2_redteam/raw/grid<GRID>_riskhigh_r1p2_seed<SEED>_v11"
+  "comando_lanzamiento": "python -m sim.prototipo_rl_simbiosis --episodes 200 --seed <SEED> --grid_size <GRID> --risk_scale 1.2 --risk_level high --red_team --red_team_prob 0.1 --dqn_control --pgf_mix 0.2 --output_prefix results/v11/F2_redteam/raw/grid<GRID>_riskhigh_r1p2_seed<SEED>_v11",
+  "phase": "F2_redteam",
+  "attack_enabled": false,
+  "attack_params": {
+    "red_team": false
+  }
 }

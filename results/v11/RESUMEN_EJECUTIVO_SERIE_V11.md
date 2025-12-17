@@ -1,43 +1,43 @@
-# Resumen Ejecutivo: Serie de Experimentos v11 (F0, F1, F2)
+# Resumen Ejecutivo: Serie v11 (F0, F1, F2)
 
 ## Objetivo
-Evaluar el desempeño, robustez y reproducibilidad de agentes en entornos de referencia, alto riesgo y redteam (ataque/defensa) bajo el protocolo v11.
+Evaluar desempeno y comportamiento bajo referencia (F0), alto riesgo (F1) y estres adversarial sintetico (F2) bajo el protocolo v11.
 
+## Fuente canonica
+- Dataset canonico (hashes + rutas): `results/v11/CANONICAL_DATASET_v11.md`
+- Reporte estadistico vigente: `results/v11/data/stats_report_v11.md`
+- Bootstrap (unidad primaria = run/seed por archivo): `results/v11/data/bootstrap_stats_v11.md`
+- Verificacion de que F2 != F1: `results/v11/data/f2_vs_f1_diff.md`
 
-## Hallazgos Clave
+## Resultados (media de recompensa por fase)
+Valores resumidos desde `results/v11/data/stats_summary_v11.csv`.
 
-Resultados principales para F0, F1 y F2 (media de recompensa total y robustez):
+### F0 (Referencia, risk_scale=0.5, red_team=False)
+| Agente      | n (runs) | Recompensa media |
+|-------------|----------|------------------|
+| control     | 2        | -20.02           |
+| dqn_control | 2        | -24.08           |
+| simbiosis   | 2        |  14.87           |
 
-### F0 (Referencia)
-| Agente      | Recompensa Media | Robustez Media |
-|-------------|------------------|----------------|
-| control     |   -9.74          |   -0.0451      |
-| dqn_control |  -60.03          |   -0.0912      |
-| simbiosis   |  -13.99          |   -0.0873      |
-| tui         |   -7.98          |   -0.0725      |
+### F1 (Alto riesgo, risk_scale=1.2, red_team=False)
+| Agente      | n (runs) | Recompensa media |
+|-------------|----------|------------------|
+| control     | 10       | -56.83           |
+| dqn_control | 10       | -60.03           |
+| simbiosis   | 10       | -13.98           |
 
-### F1 (Alto Riesgo)
-| Agente      | Recompensa Media | Robustez Media |
-|-------------|------------------|----------------|
-| control     |  -50.18          |   -0.1203      |
-| dqn_control |  -60.03          |   -0.2011      |
-| simbiosis   |  -13.99          |   -0.1987      |
-| tui         |   -7.98          |   -0.1552      |
+### F2 (Estres adversarial sintetico, risk_scale=1.2, red_team=True, red_team_prob=0.1)
+| Agente      | n (runs) | Recompensa media |
+|-------------|----------|------------------|
+| control     | 10       | -71.48           |
+| dqn_control | 10       | -70.45           |
+| simbiosis   | 10       | -46.01           |
 
-### F2 (Redteam)
-| Agente      | Riesgo | Recompensa Media | Robustez Media |
-|-------------|--------|------------------|----------------|
-| control     | 1.2    |  -50.18          |   -0.0858      |
-| dqn_control | 1.2    |  -60.03          |   -0.2015      |
-| simbiosis   | 1.2    |  -13.99          |   -0.2031      |
+## Lectura rapida (F2)
+- F2 aplica perturbaciones estocasticas del entorno (no adversario min-max). La configuracion efectiva queda registrada en cada JSON (campos `config.red_team_prob`, etc.).
+- En esta ejecucion canonicamente regenerada, F2 degrada la recompensa de todos los agentes; `simbiosis` queda por encima de `control` y `dqn_control` en recompensa media.
+- Evidencia inferencial principal: bootstrap no parametrico por run/seed en `results/v11/data/bootstrap_stats_v11.md`.
 
-Discusión honesta: En F2, el control clásico supera a todos los agentes en recompensa media, mientras que Simbiosis muestra el peor desempeño y mayor varianza. TUI mantiene una posición intermedia. Esto contradice la narrativa previa y revela una vulnerabilidad estructural: el diseño prudencial puede ser explotado por un adversario especializado. La robustez, aunque mejor en TUI que en DQN/Simbiosis, sigue siendo inferior al control clásico. Estos resultados deben ser interpretados como evidencia de trade-offs y no como validación de superioridad de TUI/Simbiosis.
+## Estado
+La documentacion y los artefactos canonicamente regenerados estan alineados y listos para usar como base de F3.
 
-Se detectaron seeds y archivos piloto/debug con conteos anómalos; estos fueron registrados y movidos a `results/v11/archived/` (log: `results/v11/archived/moved_files_log.csv`). Tras archivar esos casos, los resúmenes finales se regeneraron y validaron (copias en `results/v11/data/`).
-
-## Conclusión
-El pipeline experimental es robusto y reproducible, pero los resultados muestran que la superioridad de TUI/Simbiosis no está validada en escenarios adversariales. Las diferencias entre agentes y condiciones son claras, pero reflejan trade-offs y vulnerabilidades que deben ser reconocidos y abordados en fases futuras.
-
-----
-
-*Este resumen ejecutivo acompaña al informe completo y está diseñado para tomadores de decisión y revisores científicos.*

@@ -44,6 +44,13 @@ def main():
         for f in files:
             if f.lower().endswith('episodes.csv') or 'episodes' in f.lower():
                 path = os.path.join(root, f)
+                rel_norm = os.path.relpath(path).replace("\\", "/").lower()
+                # Evitar duplicados: no usar los CSV agregados en raw/ ni los archivados
+                if "/raw/" in rel_norm or "/archived/" in rel_norm:
+                    continue
+                # Evitar archivos de debug
+                if "test_debug_run" in rel_norm:
+                    continue
                 try:
                     df = pd.read_csv(path)
                 except Exception:

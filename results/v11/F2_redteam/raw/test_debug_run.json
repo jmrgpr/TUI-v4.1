@@ -11640,5 +11640,10 @@
     "epsilon": 0.2,
     "epsilon_decay": 0.995,
     "epsilon_end": 0.01
+  },
+  "phase": "F2_redteam",
+  "attack_enabled": false,
+  "attack_params": {
+    "red_team": false
   }
 }

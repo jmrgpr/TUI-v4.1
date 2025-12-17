@@ -1,27 +1,34 @@
-# Estadística descriptiva e inferencial mínima — v11
+# Estadistica descriptiva e inferencial minima - v11
 
-Fuente: `reports/phase2/summary_agent_risk.csv`
+Fuente: `results/master_results_clean.csv` reconsolidado a partir de los CSV canonicos listados en `results/v11/CANONICAL_DATASET_v11.md`.
 
-Tabla: n, media, std, IC95%, Cohen's d vs control y p-value (normal approx, <1e-5 indica p-value menor que la precisión numérica del análisis) por risk_scale.
+El analisis agrupa por `phase`, `agent` y `risk_scale`. Para F2, incluye un bootstrap no parametrico (ver `results/v11/data/bootstrap_stats_v11.csv`) que usa como unidad primaria la media por archivo `*_episodes.csv` (cluster por seed/run) para evitar pseudo-replicacion por episodio.
 
-      agent  risk_scale    n       mean       std    ci95_lo    ci95_hi  cohens_d  p_value_vs_control
-    control         0.5 9000  -3.230000  4.939954  -3.332061  -3.127939  0.000000                 1.0
-    control         1.0 9000  -3.350000  5.454124  -3.462683  -3.237317  0.000000                 1.0
-    control         1.5 9000  -3.470000  6.196507  -3.598021  -3.341979  0.000000                 1.0
-    control         2.0 9000  -3.817183  9.821760  -4.020103  -3.614264  0.000000                 1.0
-    control         3.0 9000  -4.050000  9.850124  -4.253506  -3.846494  0.000000                 1.0
-dqn_control         0.5 9000  -6.994308 26.292458  -7.537516  -6.451101 -0.198992               <1e-5
-dqn_control         1.0 9000  -7.922567 25.989024  -8.459505  -7.385628 -0.243515               <1e-5
-dqn_control         1.5 9000 -10.645875 35.172813 -11.372553  -9.919197 -0.284149               <1e-5
-dqn_control         2.0 9000 -11.259450 35.422971 -11.991296 -10.527604 -0.286320               <1e-5
-dqn_control         3.0 9000 -12.554683 36.809059 -13.315166 -11.794200 -0.315646               <1e-5
-  simbiosis         0.5 9000 -26.107140 73.286821 -27.621261 -24.593019 -0.440460               <1e-5
-  simbiosis         1.0 9000 -26.419203 62.906033 -27.718855 -25.119551 -0.516689               <1e-5
-  simbiosis         1.5 9000 -26.608491 67.703141 -28.007252 -25.209729 -0.481315               <1e-5
-  simbiosis         2.0 9000 -25.358306 58.245950 -26.561679 -24.154932 -0.515738               <1e-5
-  simbiosis         3.0 9000 -26.859869 67.610503 -28.256717 -25.463022 -0.472131               <1e-5
-        tui         0.5 3000 -10.750079 19.552218 -11.449746 -10.050412 -0.704754               <1e-5
-        tui         1.0 3000 -11.039192 21.116509 -11.794837 -10.283548 -0.664816               <1e-5
-        tui         1.5 3000 -11.664123 21.574887 -12.436170 -10.892075 -0.680136               <1e-5
-        tui         2.0 3000 -11.902833 22.485568 -12.707468 -11.098197 -0.573561               <1e-5
-        tui         3.0 3000 -11.930986 22.536846 -12.737457 -11.124515 -0.557648               <1e-5
+## Fase `F0_baseline`
+
+      agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  attack_enabled attack_type                                                                                                                                                                                                         attack_params
+    control        0.5  2 -20.017400 1.661984 -22.320792 -17.714008     NaN           False        none grid_size=16;risk_scale=0.5;risk_level=low;pgf_mix=0.2;episodes=100;seed=42;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+dqn_control        0.5  2 -24.075600 0.000000 -24.075600 -24.075600     NaN           False        none grid_size=16;risk_scale=0.5;risk_level=low;pgf_mix=0.2;episodes=100;seed=42;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+  simbiosis        0.5  2  14.867119 0.362039  14.365359  15.368879     NaN           False        none grid_size=16;risk_scale=0.5;risk_level=low;pgf_mix=0.2;episodes=100;seed=42;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+
+## Fase `F1_highrisk`
+
+      agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  attack_enabled attack_type                                                                                attack_params
+    control        1.2 10 -56.828955 0.594532 -57.197450 -56.460460     NaN           False        none grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.2;episodes=200;seed=101;red_team=False
+dqn_control        1.2 10 -60.031100 0.036870 -60.053952 -60.008248     NaN           False        none grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.2;episodes=200;seed=101;red_team=False
+  simbiosis        1.2 10 -13.981472 0.271463 -14.149726 -13.813217     NaN           False        none grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.2;episodes=200;seed=101;red_team=False
+
+## Fase `F2_redteam`
+
+      agent risk_scale  n       mean      std    ci95_lo    ci95_hi   p_boot  attack_enabled          attack_type                                                                                                                                                                                                          attack_params
+    control        1.2 10 -71.475665 0.639210 -71.871852 -71.079478      NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.2;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+dqn_control        1.2 10 -70.448240 1.260934 -71.229775 -69.666705 0.013197            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.2;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+  simbiosis        1.2 10 -46.005093 7.246183 -50.496324 -41.513862 0.000400            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.2;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+
+## Notas rapidas
+
+- Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run).
+- `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.
+- Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).
+
+El conjunto canónico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.

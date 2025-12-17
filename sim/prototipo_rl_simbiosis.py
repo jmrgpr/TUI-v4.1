@@ -189,6 +189,11 @@ def main():
     parser.add_argument('--risk_sweep', action='store_true', help='Ejecuta barrido de risk-scale y exporta resultados / Run risk-scale sweep and export results')
     parser.add_argument('--risk_level', type=str, default='low', choices=['low', 'high'], help='Nivel de riesgo para intervención (low/high)')
     parser.add_argument('--red_team', action='store_true', help='Activa modo red team/perturbaciones en el entorno')
+    parser.add_argument('--red_team_prob', type=float, default=None, help='Probabilidad de evento adverso por step cuando red_team=True (override de config.EXP_CONFIG[\"red_team_prob\"])')
+    parser.add_argument('--red_team_impact', type=float, default=None, help='Impacto en reward/recursos cuando ocurre evento adverso (override de config.EXP_CONFIG[\"red_team_impact\"])')
+    parser.add_argument('--red_team_move_tripwire_prob', type=float, default=None, help='Probabilidad condicional de mover tripwire durante evento (override de config.EXP_CONFIG[\"red_team_move_tripwire_prob\"])')
+    parser.add_argument('--red_team_add_shock_prob', type=float, default=None, help='Probabilidad condicional de aA±adir shock durante evento (override de config.EXP_CONFIG[\"red_team_add_shock_prob\"])')
+    parser.add_argument('--red_team_block_prob', type=float, default=None, help='Probabilidad condicional de bloquear celda durante evento (override de config.EXP_CONFIG[\"red_team_block_prob\"])')
     parser.add_argument('--sigma_thr', type=float, default=None, help='Umbral de gating por incertidumbre')
     parser.add_argument('--gamma_lcb', type=float, default=None, help='Factor de prudencia para LCB')
     parser.add_argument('--lambda_gaming', type=float, default=None, help='Penalización por gaming detectado')
@@ -227,6 +232,24 @@ def main():
         config.EXP_CONFIG["gamma_lcb"] = args.gamma_lcb
     if args.lambda_gaming is not None:
         config.EXP_CONFIG["lambda_gaming"] = args.lambda_gaming
+
+    # Red team: por defecto en config es 0.0 para evitar no-determinismo en ejecuciones normales.
+    # Si el usuario activa --red_team, habilita perturbaciones reales y trazables.
+    if args.red_team:
+        if args.red_team_prob is not None:
+            config.EXP_CONFIG["red_team_prob"] = float(args.red_team_prob)
+        if args.red_team_impact is not None:
+            config.EXP_CONFIG["red_team_impact"] = float(args.red_team_impact)
+        if args.red_team_move_tripwire_prob is not None:
+            config.EXP_CONFIG["red_team_move_tripwire_prob"] = float(args.red_team_move_tripwire_prob)
+        if args.red_team_add_shock_prob is not None:
+            config.EXP_CONFIG["red_team_add_shock_prob"] = float(args.red_team_add_shock_prob)
+        if args.red_team_block_prob is not None:
+            config.EXP_CONFIG["red_team_block_prob"] = float(args.red_team_block_prob)
+
+        # Defaults si no se pasaron overrides y estA¡ apagado (0.0).
+        if float(config.EXP_CONFIG.get("red_team_prob", 0.0) or 0.0) <= 0.0:
+            config.EXP_CONFIG["red_team_prob"] = 0.1
 
     if args.risk_sweep:
         # Ejecutar barrido simple y opcional TUI-only

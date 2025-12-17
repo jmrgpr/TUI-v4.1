@@ -1,41 +1,33 @@
-## MEGA PLAN DE EVALUACIÓN TUI v11 — POST F2
+# MEGA PLAN DE EVALUACION - Serie v11 (post F2)
 
-### Estado y diagnóstico honesto (post-F2)
+Este documento resume el estado real de la serie v11 despues de cerrar operacionalmente F2 y alinear pipeline/datos/reportes.
 
-#### 1. Fases completadas
-- [x] F0 (referencia): ejecutado y documentado (falta tabla agregada en informe)
-- [x] F1 (alto riesgo): ejecutado y documentado (falta tabla agregada en informe)
-- [x] F2 (redteam): ejecutado, tabla y análisis crítico incluidos
+## 1) Fases completadas (v11)
+- [x] F0 (baseline): ejecutado y presente en dataset canonico.
+- [x] F1 (alto riesgo): ejecutado y presente en dataset canonico.
+- [x] F2 (stress test adversarial sintetico): ejecutado con `red_team` activo y trazabilidad en JSON.
 
-#### 2. Hallazgos clave y gaps
-- Simbiosis/TUI no supera al control clásico en reward bajo redteam (F2)
-- Robustez y métricas prudenciales requieren definición formal y justificación
-- Baseline DQN/SOTA insuficiente: urge auditar o reemplazar por PPO/Safe RL
-- Faltan análisis estadísticos reales (p-valores, IC95%, tests de significancia, Cohen's d)
-- Faltan datos agregados y discusión narrativa de F0 y F1 en los informes
-- La narrativa debe ser honesta: F2 revela vulnerabilidad estructural de Simbiosis/TUI
+## 2) Hallazgos y gaps metodologicos
+- F2 no es un "red teaming" min-max: es un stress test parametrico con perturbaciones estocasticas; los claims deben reflejarlo.
+- En F2 todos los agentes empeoran vs F1 (esperable); el ranking por reward puede cambiar y la degradacion es una senal clave.
+- Baselines: `control` y `dqn_control` no son SOTA; si se quiere hacer claims fuertes, F3 debe incluir PPO/SAC/TD3 (o Safe-RL).
+- Estadistica: la unidad primaria debe ser seed/run (evitar p-values por episodio); bootstrap por clusters recomendado.
 
-- [x] Agregar tablas y discusión de F0 y F1 en INFORME_CIENTIFICO y PUBLICACION
-- [x] Definir formalmente "robustez" y otras métricas en ANEXO_TECNICO
-- [x] Reescribir narrativa de F2 para reflejar trade-offs y vulnerabilidades
-- [x] Incluir análisis estadístico inferencial mínimo (n, IC95%, effect size) en tablas clave — insertado y referenciado en `results/v11/stats_report_v11.md`
-- [ ] Añadir métricas complementarias a robustez (mediana, IQR, % tripwires, CVaR, drawdown, violin/boxplots)
-- [ ] Auditar baseline DQN; si no mejora, justificar o implementar PPO/Safe RL como baseline fuerte (o dejarlo como preregistro para F3)
-- [ ] Planificar F3: escalado, nuevos baselines, métricas C/F/T, análisis u_proxy vs u_humans
+## 3) Checklist (cerrado vs pendiente)
+- [x] Dataset canonico con hashes: `results/v11/CANONICAL_DATASET_v11.md`.
+- [x] Pipeline reproducible (master limpio + reportes): `results/v11/README_REPRODUCIBLE_v11.md`.
+- [x] Reporte estadistico vigente: `results/v11/data/stats_report_v11.md`.
+- [x] Evidencia de que F2 != F1: `results/v11/data/f2_vs_f1_diff.md`.
+- [x] Checks F2 (runs/outliers) sobre canonico: `results/v11/data/f2_final_checks.md`.
+- [ ] Definir formalmente la metrica "robustez" en el cuerpo del reporte (formula e interpretacion).
+- [ ] Agregar metricas complementarias (mediana/IQR, % tripwires, CVaR, violin/boxplots) si se busca publicacion formal.
+- [ ] Baseline fuerte (PPO/SAC/TD3 o Safe-RL) como preregistro y ejecucion en F3.
 
-#### 4. Planificación de fases siguientes
-- F3: Escalado y SOTA, con nuevos baselines (PPO/Safe RL) y métricas de C/F/T, métricas complementarias y análisis estadístico completo
-- F4: Análisis de alineación (u_proxy vs u_humans), correlación P_riesgo vs I_operativa
-- Publicación: separar paper metodológico (infraestructura, reproducibilidad, trade-offs y modos de fallo) de validación teórica (solo cuando haya evidencia)
+## 4) Plan de fases siguientes
+- F3: escalado + baseline fuerte + ablations (por ejemplo `pgf_mix`), con estadistica por seed/run.
+- F4: analisis de alineacion (u_proxy vs u_humans) y trade-offs bajo riesgo/adversidad.
 
-#### 5. Honestidad y comunicación
+## 5) Cierre operacional de F2
+- F2 se considera "cerrado" si `attack_enabled=true` en los JSON canonicos y `results/v11/data/f2_vs_f1_diff.md` muestra diferencias observables (tripwires/shocks/surprise/risk_effective).
+- Archivos piloto/debug y copias redundantes se conservan en `results/v11/archived/` (log: `results/v11/archived/moved_files_log.csv`) y no entran en el master limpio.
 
-
-*Este plan reemplaza al roadmap original y guía la serie v11 hacia fases más alineadas, rigurosas y honestas, en línea con los peer reviews y la evidencia experimental.*
-
-### Seguimiento inmediato (post-inserción)
-### Cierre F2
-- Estado: revisiones automáticas realizadas — estadística inferencial añadida, métricas por episodio calculadas, checks finales de seeds/outliers ejecutados.
-- Resultado de checks: algunos archivos piloto/diagnóstico y debug (ej. `*_piloto50_*`, `test_debug_run_episodes.csv`) tienen menos episodios que la mediana; se listan en `results/v11/data/f2_final_checks.csv` (copia) y en `results/v11/f2_final_checks.md`. Los archivos problemáticos han sido movidos a `results/v11/archived/` (log: `results/v11/archived/moved_files_log.csv`).
-- Acción recomendada: eliminar/ignorar archivos piloto/debug en agregados finales o documentarlos explícitamente. Si aceptas, marcaré F2 como cerrado y pasaré a preregistro PPO para F3.
-*** End Patch***"/>

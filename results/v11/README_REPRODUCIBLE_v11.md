@@ -1,78 +1,87 @@
 # Nota (2025-12-16): Los datos y scripts sueltos en `results/v11` han sido archivados en `results/v11/archived/`.
-# El `results/master_results.csv` activo fue reemplazado por la versión limpia (`master_results_clean.csv`).
+# El `results/master_results.csv` activo fue reemplazado por la version limpia (`master_results_clean.csv`).
 
-# Reproducible regeneration — Serie v11
+# Regeneracion reproducible - Serie v11
 
-Este README contiene los pasos y comandos exactos para regenerar los artefactos clave de la serie v11: reconstrucción del master, estadísticas descriptivas, bootstraps, validación y figuras. Sigue estos pasos desde la raíz del repositorio en Windows PowerShell con el entorno virtual activado.
+Este README enumera los pasos concretos para regenerar los artefactos de la serie v11: reconstruccion del master, validacion, estadisticas, bootstrap, manifiesto canonico y comparativas F1 vs F2. Ejecuta cada comando desde la raiz del repo en PowerShell con `.venv` activado.
 
 Prerequisitos
-- Activar entorno Python (se asume `.venv`):
+- Activar el entorno Python (se asume `.venv`):
 
 ```powershell
 & ./.venv/Scripts/Activate.ps1
 pip install -r requirements.txt
 ```
 
-1) Reconstruir master desde archivos de episodios
+1) Reconstruir el master a partir de los episodios
 
 ```powershell
 python scripts/rebuild_master_from_episodes.py
-# Resultado: `results/master_results_clean.csv`
+# Salida: `results/master_results_clean.csv`
 ```
 
-2) Validar master contra fuentes
+2) Validar el master contra las fuentes
 
 ```powershell
 python scripts/validate_master_sources_file.py results/master_results_clean.csv results/v11/data/validation_master_sources_clean.csv
-# Resultado: `results/v11/data/validation_master_sources_clean.csv` (detalla match/ mismatch por fila)
+# Salida: `results/v11/data/validation_master_sources_clean.csv`
 ```
 
-3) Generar resumen estadístico a partir del master limpio
+3) Generar resumen estadistico y reporte
 
 ```powershell
-python scripts/make_stats_from_master_clean.py
-# Resultado: `results/v11/data/stats_summary_v11.csv`
+python scripts/analisis_estadistico_v11.py
+# Salida: `results/v11/data/stats_summary_v11.csv`, `results/v11/data/stats_report_v11.md`
 ```
 
-4) Ejecutar bootstrap paramétrico (confirmatorio)
+4) Bootstrap no parametrico (cluster por seed/run)
 
 ```powershell
 python scripts/bootstrap_stats_v11.py
-# Resultado: `results/v11/data/bootstrap_stats_v11.csv` y `.md`
+# Salida: `results/v11/data/bootstrap_stats_v11.*`
 ```
 
-5) Ejecutar bootstrap no paramétrico (desde episodios)
+5) (Opcional) Recalcular los bootstraps auxiliares
 
 ```powershell
 python scripts/bootstrap_nonparam_from_episodes_v11.py
-# Resultado: `results/v11/data/bootstrap_nonparam_from_episodes_v11.csv` and `.md`
+python scripts/bootstrap_nonparam_v11.py
+# Salidas: `results/v11/data/bootstrap_nonparam_from_episodes_v11.*` y `results/v11/data/bootstrap_nonparam_v11.*`
 ```
 
-6) Ejecutar bootstrap no paramétrico (desde master limpio)
+6) Generar el manifiesto canonico con hashes
 
 ```powershell
-python scripts/bootstrap_nonparam_v11.py
-# Resultado: `results/v11/data/bootstrap_nonparam_v11.csv` and `.md`
+python scripts/generate_canonical_dataset_v11.py
+# Salida: `results/v11/CANONICAL_DATASET_v11.md`
 ```
 
-7) Generar figuras (box/violin) a partir del master limpio
+7) Verificar que F2 difiere de F1
+
+```powershell
+python scripts/diff_check_f2_vs_f1.py
+# Salida: `results/v11/data/f2_vs_f1_diff.md`
+```
+
+8) (Opcional) Graficos a partir del master
 
 ```powershell
 python scripts/plot_from_master.py
-# Resultado: PNG/SVG en `results/v11/plots/`
+# Salida: PNG/SVG en `results/v11/plots/`
 ```
 
-8) Validaciones finales (sin NaNs)
+9) Validaciones finales
 
 ```powershell
+python scripts/final_checks_f2.py
 python scripts/check_no_nans.py
 python scripts/validate_master_sources_file.py results/master_results_clean.csv results/v11/data/validation_master_sources_clean.csv
 ```
 
 Notas importantes
-- Todos los scripts prefieren `results/master_results_clean.csv` si existe. Si quieres regenerar desde consolidación antigua, elimina `results/master_results_clean.csv` y ejecuta `scripts/consolidate_results.py` según protocolo.
-- Los grupos con `n<2` se excluyen automáticamente del bootstrap paramétrico y se documentan en `results/v11/data/stats_summary_v11.csv`.
-- `results/v11/data/validation_master_sources_clean.csv` es la fuente canónica de trazabilidad; inclúyela en la revisión por pares.
+- Si editas los JSON de `F2_redteam`, vuelve a ejecutar `scripts/update_f2_metadata_fields.py` para propagar `phase/attack_*` antes de regenerar el manifiesto.
+- `results/v11/CANONICAL_DATASET_v11.md` es la fuente definitiva de qué CSV se usan en los analisis; compara los hashes si regresas datos.
+- `results/v11/data/stats_report_v11.md` y `results/v11/data/f2_vs_f1_diff.md` documentan la diferencia de F2 y sirven de respaldo al peer review.
 
 Contacto
-- Para cambios adicionales en la reproductibilidad o en la definición de columnas, abre un issue o solicita un patch en el repo.
+- Para cambios en la trazabilidad o en la definicion de columnas, abre un issue o solicita un patch en el repo.
