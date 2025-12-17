@@ -1,6 +1,7 @@
 import os
 import re
 import pandas as pd
+import json
 
 
 def find_reward_column(cols):
@@ -37,6 +38,36 @@ def extract_risk(fname):
     return None
 
 
+def env_reward_mean_from_json(json_path: str):
+    """
+    Estima reward ambiental por episodio (sumatoria por step) desde el JSON del run,
+    y devuelve el promedio sobre episodios (misma escala que `Recompensa` del CSV).
+    """
+    try:
+        with open(json_path, "r", encoding="utf-8") as fh:
+            payload = json.load(fh)
+    except Exception:
+        return None
+    evol = payload.get("reward_env_evol")
+    if not isinstance(evol, list) or not evol:
+        return None
+    ep_sums = []
+    for ep in evol:
+        if isinstance(ep, list) and ep:
+            s = 0.0
+            for x in ep:
+                try:
+                    s += float(x)
+                except Exception:
+                    pass
+            ep_sums.append(s)
+        elif isinstance(ep, (int, float)):
+            ep_sums.append(float(ep))
+    if not ep_sums:
+        return None
+    return float(sum(ep_sums) / len(ep_sums))
+
+
 def main():
     base = os.path.join('results', 'v11')
     rows = []
@@ -65,6 +96,9 @@ def main():
                 if vals.empty:
                     continue
                 reward_mean = float(vals.mean())
+                # reward ambiental: se lee del JSON asociado (si existe)
+                json_path = os.path.splitext(path)[0].replace("_episodes", "") + ".json"
+                reward_env_mean = env_reward_mean_from_json(json_path) if os.path.exists(json_path) else None
                 episodes = int(len(df))
                 agent = None
                 # try known agent cols
@@ -86,6 +120,7 @@ def main():
                     'steps': None,
                     'risk_scale': risk_scale,
                     'reward_total': reward_mean,
+                    'reward_env_total': reward_env_mean,
                     'filename': os.path.relpath(path)
                 })
 

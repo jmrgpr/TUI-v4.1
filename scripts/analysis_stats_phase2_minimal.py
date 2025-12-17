@@ -1,12 +1,12 @@
 import pandas as pd
 import numpy as np
-from scipy import stats
 
-# Minimal statistical analysis for summary_agent_risk.csv
-# Outputs: results/v11/analysis_stats_summary.csv
+# Minimal statistical analysis for Phase2 sweep artifacts (NOT v11 series).
+# Input: `reports/phase2/summary_agent_risk.csv`
+# Output: `reports/phase2/analysis_stats_summary.csv`
 
-IN_PATH = 'results/v11/data/summary_agent_risk.csv'
-OUT_PATH = 'results/v11/data/analysis_stats_summary.csv'
+IN_PATH = "reports/phase2/summary_agent_risk.csv"
+OUT_PATH = "reports/phase2/analysis_stats_summary.csv"
 
 def bootstrap_ci(data, n_boot=1000, alpha=0.05):
     boot_means = []

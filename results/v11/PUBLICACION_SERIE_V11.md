@@ -4,7 +4,7 @@
 Evaluacion reproducible de agentes bajo referencia, alto riesgo y estres adversarial sintetico: serie v11 (TUI v4.1)
 
 ## Resumen (Abstract)
-Presentamos un pipeline reproducible para evaluar agentes bajo tres fases: F0 (referencia), F1 (alto riesgo) y F2 (estres adversarial sintetico). En F2 se activa `red_team=True` y se inyectan eventos adversos estocasticos en el entorno con `red_team_prob=0.1` (no adversario min-max). Reportamos un dataset canonico con hashes, verificaciones de consistencia y estadistica inferencial por bootstrap no parametrico con unidad primaria run/seed. Los resultados muestran degradacion bajo F2 para todos los agentes, con diferencias claras entre control, DQN-control y Simbiosis.
+Presentamos un pipeline reproducible para evaluar agentes bajo tres fases: F0 (referencia), F1 (alto riesgo) y F2 (estres adversarial sintetico). En F2 se activa `red_team=True` y se inyectan eventos adversos estocasticos en el entorno con `red_team_prob=0.1` (no adversario min-max). Reportamos un dataset canonico con hashes, verificaciones de consistencia y estadistica inferencial por bootstrap no parametrico con unidad primaria run/seed. Para evitar ambiguedad por reward shaping, reportamos dos metricas: `reward_total` (recompensa exportada; puede incluir mezcla con PGF en Simbiosis) y `reward_env_total` (recompensa ambiental pura estimada desde JSON). En esta serie, Simbiosis mejora fuertemente `reward_total` y muestra solo una mejora pequena en `reward_env_total`, por lo que las conclusiones deben interpretarse como evidencia sobre el objetivo prudencial (PGF) y no como superioridad general en reward ambiental.
 
 ## Artefactos reproducibles (fuente canonica)
 - Dataset canonico y hashes: `results/v11/CANONICAL_DATASET_v11.md`
@@ -13,39 +13,45 @@ Presentamos un pipeline reproducible para evaluar agentes bajo tres fases: F0 (r
 - Check de que F2 != F1: `results/v11/data/f2_vs_f1_diff.md`
 - Pasos de regeneracion: `results/v11/README_REPRODUCIBLE_v11.md`
 
-## Resultados principales (recompensa media)
-Valores resumidos desde `results/v11/data/stats_summary_v11.csv` (n = numero de runs/archivos por agente y fase).
+## Resultados principales (dos metricas de recompensa)
+Valores resumidos desde `results/v11/data/stats_report_v11.md` (n = numero de runs/archivos por agente y fase).
 
 ### F0 (Referencia; risk_scale=0.5; red_team=False)
-| Agente      | n | Recompensa media |
-|-------------|---|------------------|
-| control     | 2 | -20.02           |
-| dqn_control | 2 | -24.08           |
-| simbiosis   | 2 |  14.87           |
+| Agente      | n | mean reward_total | mean reward_env_total |
+|-------------|---|------------------|-----------------------|
+| control     | 2 | -20.02           | -20.02                |
+| dqn_control | 2 | -24.08           | -24.08                |
+| simbiosis   | 2 |  14.87           | -22.66                |
 
 ### F1 (Alto riesgo; risk_scale=1.2; red_team=False)
-| Agente      | n  | Recompensa media |
-|-------------|----|------------------|
-| control     | 10 | -56.83           |
-| dqn_control | 10 | -60.03           |
-| simbiosis   | 10 | -13.98           |
+| Agente      | n  | mean reward_total | mean reward_env_total |
+|-------------|----|------------------|-----------------------|
+| control     | 10 | -56.83           | -56.83                |
+| dqn_control | 10 | -60.03           | -60.03                |
+| simbiosis   | 10 | -13.98           | -58.71                |
 
 ### F2 (Estres adversarial sintetico; risk_scale=1.2; red_team=True; red_team_prob=0.1)
-| Agente      | n  | Recompensa media |
-|-------------|----|------------------|
-| control     | 10 | -71.48           |
-| dqn_control | 10 | -70.45           |
-| simbiosis   | 10 | -46.01           |
+| Agente      | n  | mean reward_total | mean reward_env_total |
+|-------------|----|------------------|-----------------------|
+| control     | 10 | -71.48           | -71.48                |
+| dqn_control | 10 | -70.45           | -70.45                |
+| simbiosis   | 10 | -46.01           | -70.18                |
 
 ## Discusion (F2)
-F2 activa perturbaciones adversariales del entorno (shocks/tripwires/bloqueos) con probabilidad por step `red_team_prob`. Esto debe interpretarse como una prueba de estres sintetica, no como un red teaming con adversario que optimiza contra la politica del agente. En esta ejecucion regenerada, F2 reduce la recompensa media de todos los agentes; Simbiosis queda por encima de control y DQN-control en recompensa media, mientras que DQN-control mejora ligeramente a control.
+F2 activa perturbaciones adversariales del entorno (shocks/tripwires/bloqueos) con probabilidad por step `red_team_prob`. Esto debe interpretarse como una prueba de estres sintetica, no como un red teaming con adversario que optimiza contra la politica del agente.
+
+Interpretacion por metrica:
+- En `reward_total` (incluyendo PGF cuando aplica), Simbiosis queda por encima de `control` y `dqn_control`.
+- En `reward_env_total` (recompensa ambiental), Simbiosis queda cercana a `control`/`dqn_control` y muestra una mejora pequena (≈ +1.29 vs `control` en F2).
+
+Por tanto, el principal hallazgo empirico de v11 es que la mezcla prudencial (PGF) cambia el objetivo medido (`reward_total`), pero no demuestra superioridad sobre el reward ambiental bajo estres.
 
 ## Estadistica e inferencia
 La evidencia inferencial principal se apoya en bootstrap no parametrico por run/seed (unidad primaria = promedio por archivo `*_episodes.csv`) y se reporta en `results/v11/data/bootstrap_stats_v11.md`. Esta eleccion evita asumir normalidad y reduce el riesgo de pseudo-replicacion por episodios dependientes.
 
 ## Amenazas a la validez
 - F2 es un estres adversarial sintetico; no implementa adversario min-max.
-- La "Recompensa" reportada corresponde a la recompensa total exportada (`Recompensa`), que para `simbiosis` puede incluir mezcla PGF cuando `pgf_mix>0` (reward shaping parcial). Ver `results/v11/ANEXO_TECNICO_v11.md`.
+- `reward_total` puede incluir mezcla PGF cuando `pgf_mix>0` (reward shaping parcial). Para auditoria, `reward_env_total` se estima desde JSON. Ver `results/v11/ANEXO_TECNICO_v11.md` y `results/v11/data/stats_report_v11.md`.
 - El pipeline depende de la definicion de `red_team_prob` y otros parametros del entorno; estos quedan trazados en los JSON de cada run.
 - Para auditoria, las copias archivadas se conservan en `results/v11/archived`, pero el analisis usa solo el dataset canonico.
 

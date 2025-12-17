@@ -10,7 +10,7 @@ Referencias canonicas:
 
 ## F1_highrisk (sin ataque)
 - En F1 se evalua rendimiento bajo riesgo alto sin perturbaciones adversariales activas.
-- En el dataset canonico, el ranking por reward medio favorece a `simbiosis` frente a `control` y `dqn_control` (ver `results/v11/data/stats_report_v11.md`).
+- En el dataset canonico, `simbiosis` supera en `reward_total` a `control` y `dqn_control`, pero en `reward_env_total` queda cercana a los baselines (ver `results/v11/data/stats_report_v11.md`).
 
 ## F2_redteam (stress test adversarial sintetico)
 Definicion operacional (v11):
@@ -18,13 +18,12 @@ Definicion operacional (v11):
 - Los parametros del ataque quedan trazados en cada JSON (`attack_enabled`, `attack_type`, `attack_params`).
 
 Lectura de resultados:
-- F2 reduce el reward medio de todos los agentes respecto a F1, lo cual es consistente con un entorno mas hostil.
+- F2 reduce `reward_total` y `reward_env_total` respecto a F1, lo cual es consistente con un entorno mas hostil.
 - El ranking por reward en F2 puede mantenerse o cambiar, pero lo mas importante es medir la **degradacion** (F2 - F1) y las senales observables del ataque (tripwires/shocks/surprise/risk_effective), que se documentan en `results/v11/data/f2_vs_f1_diff.md`.
-- En el dataset canonico actual, `simbiosis` sigue mostrando mejor reward medio que `control`, pero su degradacion relativa (vs F1) es mayor; esto sugiere trade-offs y posibles fragilidades bajo stress adversarial.
+- En el dataset canonico actual, la ventaja de `simbiosis` se observa principalmente en `reward_total` (que puede incluir PGF cuando `pgf_mix>0`). En `reward_env_total` (recompensa ambiental), `simbiosis` muestra una mejora pequena vs `control` bajo F2 (≈ +1.29), pero el orden de magnitud sigue siendo similar al de los baselines.
 
 ## Nota de honestidad metodologica
 La serie v11 tiene trazabilidad fuerte, pero si se quiere publicar con claims robustos, F3 deberia:
 - Usar unidad primaria por seed/run (evitar independencia falsa por episodio).
 - Incluir un baseline RL mas estable (PPO/SAC/TD3 o Safe-RL).
 - Definir formalmente "robustez" y metricas prudenciales (formula e interpretacion).
-

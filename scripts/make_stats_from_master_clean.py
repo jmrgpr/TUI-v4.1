@@ -1,6 +1,13 @@
 import os
 import pandas as pd
 
+"""
+DEPRECATED:
+Este script fue reemplazado por `scripts/analisis_estadistico_v11.py`, que:
+- Agrupa por fase/agent/risk y soporta multiples metricas (reward_total y reward_env_total)
+- Integra bootstrap por run/seed para F2
+"""
+
 def main():
     src = os.path.join('results', 'master_results_clean.csv')
     outdir = os.path.join('results', 'v11', 'data')

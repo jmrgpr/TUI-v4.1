@@ -79,6 +79,8 @@ python scripts/validate_master_sources_file.py results/master_results_clean.csv 
 ```
 
 Notas importantes
+- `results/master_results_clean.csv` incluye `reward_total` (desde `*_episodes.csv`) y `reward_env_total` (estimado desde el JSON del run via `reward_env_evol`).
+- `results/v11/data/stats_report_v11.md` reporta ambas metricas (`reward_total` y `reward_env_total`) para evitar ambiguedad por reward shaping.
 - Si editas los JSON de `F2_redteam`, vuelve a ejecutar `scripts/update_f2_metadata_fields.py` para propagar `phase/attack_*` antes de regenerar el manifiesto.
 - `results/v11/CANONICAL_DATASET_v11.md` es la fuente definitiva de qué CSV se usan en los analisis; compara los hashes si regresas datos.
 - `results/v11/data/stats_report_v11.md` y `results/v11/data/f2_vs_f1_diff.md` documentan la diferencia de F2 y sirven de respaldo al peer review.

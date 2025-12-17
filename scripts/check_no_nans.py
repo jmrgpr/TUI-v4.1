@@ -9,7 +9,7 @@ paths = [
 
 # NaNs esperados por archivo (ej.: p-values solo aplican a ciertos grupos/agentes)
 ALLOWED_NA_COLUMNS_BY_PATH = {
-    'results/v11/data/stats_summary_v11.csv': {'p_boot'},
+    'results/v11/data/stats_summary_v11.csv': {'p_boot', 'p_boot_holm'},
 }
 ok = True
 for p in paths:

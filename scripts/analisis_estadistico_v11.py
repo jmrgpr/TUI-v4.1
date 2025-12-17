@@ -10,6 +10,11 @@ BOOTSTRAP_CSV = DATA_DIR / "bootstrap_stats_v11.csv"
 SUMMARY_CSV = DATA_DIR / "stats_summary_v11.csv"
 REPORT_MD = DATA_DIR / "stats_report_v11.md"
 
+METRICS = [
+    ("reward_total", "reward_total"),
+    ("reward_env_total", "reward_env_total"),
+]
+
 PHASE_HINTS = {
     "f0_baseline": "F0_baseline",
     "f1_highrisk": "F1_highrisk",
@@ -92,43 +97,49 @@ def load_attack_info(filepath: str, cache: dict) -> tuple[bool, str, str]:
 
 def compute_summary(master: pd.DataFrame) -> pd.DataFrame:
     master = master.dropna(subset=["agent"])
-    master = master[master["reward_total"].notna()]
     master["phase"] = master["filename"].astype(str).apply(detect_phase)
     master["risk_key"] = master["risk_scale"].apply(normalize_risk)
 
     attack_cache: dict[str, tuple[bool, str, str]] = {}
     rows = []
-    for (phase, agent, risk_key), group in master.groupby(["phase", "agent", "risk_key"]):
-        rewards = pd.to_numeric(group["reward_total"], errors="coerce").dropna()
-        if rewards.empty:
+    for metric_name, col in METRICS:
+        if col not in master.columns:
             continue
-        n = len(rewards)
-        mean = float(rewards.mean())
-        std = float(rewards.std(ddof=1)) if n > 1 else 0.0
-        se = std / math.sqrt(n) if n > 1 else 0.0
-        ci_lo = mean - 1.96 * se
-        ci_hi = mean + 1.96 * se
+        subset = master[master[col].notna()].copy()
+        if subset.empty:
+            continue
+        for (phase, agent, risk_key), group in subset.groupby(["phase", "agent", "risk_key"]):
+            values = pd.to_numeric(group[col], errors="coerce").dropna()
+            if values.empty:
+                continue
+            n = len(values)
+            mean = float(values.mean())
+            std = float(values.std(ddof=1)) if n > 1 else 0.0
+            se = std / math.sqrt(n) if n > 1 else 0.0
+            ci_lo = mean - 1.96 * se
+            ci_hi = mean + 1.96 * se
 
-        attack_records = [load_attack_info(f, attack_cache) for f in group["filename"].astype(str)]
-        attack_enabled = any(info[0] for info in attack_records)
-        attack_params = next((info[1] for info in attack_records if info[1]), "")
-        attack_type = "red_team_adversarial" if attack_enabled else "none"
+            attack_records = [load_attack_info(f, attack_cache) for f in group["filename"].astype(str)]
+            attack_enabled = any(info[0] for info in attack_records)
+            attack_params = next((info[1] for info in attack_records if info[1]), "")
+            attack_type = "red_team_adversarial" if attack_enabled else "none"
 
-        rows.append(
-            {
-                "phase": phase,
-                "agent": agent,
-                "risk_scale": risk_key,
-                "n": n,
-                "mean": mean,
-                "std": std,
-                "ci95_lo": ci_lo,
-                "ci95_hi": ci_hi,
-                "attack_enabled": attack_enabled,
-                "attack_type": attack_type,
-                "attack_params": attack_params,
-            }
-        )
+            rows.append(
+                {
+                    "phase": phase,
+                    "agent": agent,
+                    "risk_scale": risk_key,
+                    "metric": metric_name,
+                    "n": n,
+                    "mean": mean,
+                    "std": std,
+                    "ci95_lo": ci_lo,
+                    "ci95_hi": ci_hi,
+                    "attack_enabled": attack_enabled,
+                    "attack_type": attack_type,
+                    "attack_params": attack_params,
+                }
+            )
 
     summary = pd.DataFrame(rows)
     if summary.empty:
@@ -139,14 +150,17 @@ def compute_summary(master: pd.DataFrame) -> pd.DataFrame:
         if "phase" not in bootstrap.columns:
             bootstrap["phase"] = "unknown"
         bootstrap["risk_key"] = bootstrap["risk_scale"].apply(normalize_risk) if "risk_scale" in bootstrap.columns else "unknown"
+        if "metric" not in bootstrap.columns:
+            bootstrap["metric"] = "reward_total"
         summary = summary.merge(
-            bootstrap[["phase", "agent", "risk_key", "p_boot"]],
-            left_on=["phase", "agent", "risk_scale"],
-            right_on=["phase", "agent", "risk_key"],
+            bootstrap[["phase", "agent", "risk_key", "metric", "p_boot", "p_boot_holm"]],
+            left_on=["phase", "agent", "risk_scale", "metric"],
+            right_on=["phase", "agent", "risk_key", "metric"],
             how="left",
         ).drop(columns=["risk_key"])
     else:
         summary["p_boot"] = float("nan")
+        summary["p_boot_holm"] = float("nan")
 
     return summary
 
@@ -161,25 +175,34 @@ def format_report(summary: pd.DataFrame) -> str:
         "",
         "## Metrica y unidad (muy importante)",
         "",
-        "- Metrica en este reporte: `reward_total` (columna `reward_total` en `results/master_results_clean.csv`).",
-        "- Operacionalmente, `reward_total` es el promedio por run del campo `Recompensa` en `*_episodes.csv` (media de recompensas por episodio dentro del run).",
-        "- Para `simbiosis`, `Recompensa` incluye mezcla con PGF cuando `pgf_mix>0` (reward shaping). Ver `results/v11/ANEXO_TECNICO_v11.md`.",
+        "- Este reporte incluye dos metricas de recompensa:",
+        "  - `reward_total`: promedio por run del campo `Recompensa` en `*_episodes.csv` (recompensa total exportada por episodio).",
+        "  - `reward_env_total`: promedio por run de la recompensa ambiental por episodio (sumatoria por step), estimada desde `reward_env_evol` en el JSON del run.",
+        "- Para `simbiosis`, `reward_total` puede incluir mezcla con PGF cuando `pgf_mix>0` (reward shaping). Ver `results/v11/ANEXO_TECNICO_v11.md`.",
         "- `n` es el numero de runs/archivos (no episodios).",
         "",
     ]
 
-    for phase in sorted(summary["phase"].unique()):
-        section = summary[summary["phase"] == phase]
-        if section.empty:
+    for metric in summary["metric"].dropna().unique():
+        metric_section = summary[summary["metric"] == metric]
+        if metric_section.empty:
             continue
-        lines.append(f"## Fase `{phase}`")
+        lines.append(f"## Metrica `{metric}`")
         lines.append("")
-        lines.append(section[["agent", "risk_scale", "n", "mean", "std", "ci95_lo", "ci95_hi", "p_boot", "attack_enabled", "attack_type", "attack_params"]].to_string(index=False))
-        lines.append("")
+        for phase in sorted(metric_section["phase"].unique()):
+            section = metric_section[metric_section["phase"] == phase]
+            if section.empty:
+                continue
+            lines.append(f"### Fase `{phase}`")
+            lines.append("")
+            cols = ["agent", "risk_scale", "n", "mean", "std", "ci95_lo", "ci95_hi", "p_boot", "p_boot_holm", "attack_enabled", "attack_type", "attack_params"]
+            lines.append(section[cols].to_string(index=False))
+            lines.append("")
 
     lines.append("## Notas rapidas")
     lines.append("")
-    lines.append("- Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run).")
+    lines.append("- Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run) y se reportan solo para F2 vs control.")
+    lines.append("- `p_boot_holm` aplica correccion Holm (por metrica) a las comparaciones de F2 vs control.")
     lines.append("- `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.")
     lines.append("- Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).")
     lines.append("")
