@@ -37,10 +37,40 @@ En los JSON por agente:
 
 En los reportes v11, la "recompensa media" se refiere a la media agregada por run/seed (no por episodio).
 
-## 4. Otras señales observables recomendadas para F2
+### 3.1 Recompensa ambiental vs recompensa total (shaping)
+En la implementacion, el entorno produce una recompensa ambiental por step `r_env(t)` (salida directa de `env.step(...)`).
+
+Cuando `use_pgf=True` (Simbiosis), la recompensa total por step usada para entrenar/evaluar es una mezcla:
+
+`r_total(t) = (1 - m) * r_env(t) + m * PGF(t)`
+
+donde `m = pgf_mix` (en v11 se usa `pgf_mix=0.2`).
+
+Implicacion metodologica: comparar agentes en `Recompensa` mezcla el objetivo ambiental con la senal PGF; esto es **reward shaping** (parcial, acotado por `pgf_mix`). Para auditoria, los JSON incluyen `reward_env_evol` (trayectoria del reward ambiental por episodio) y `pgf_*`.
+
+### 3.2 Penalizacion por gaming (si aplica)
+Si el entorno detecta `is_gaming`, la recompensa total recibe una penalizacion adicional:
+
+`r_total(t) -= lambda_gaming * gap_proxy_value(t)`
+
+Esto queda reflejado en la `Recompensa` exportada y en contadores como `gaming_hits`.
+
+## 4. Metrica de robustez (definicion formal)
+En v11, la columna `Robustez` en `*_episodes.csv` y los campos `robust_*` en JSON se derivan de una definicion operacional simple (no es una nocion general de robustez).
+
+Definicion por step (ver `sim/evaluator_pgf.py`):
+- `R_robust(t) = 1.0` si no hay distractor en el step.
+- `R_robust(t) = 0.6` si hay distractor en el step (`info['distractor']=True`).
+
+Agregacion:
+- Robustez por episodio: `Robustez(ep) = mean_t R_robust(t)`.
+- Robustez por run: `avg_robust = mean_ep Robustez(ep)`.
+
+Rango esperado: `[0.6, 1.0]` (mas alto = menos distractores activados).
+
+## 5. Otras señales observables recomendadas para F2
 Ademas de recompensa:
 - `avg_tripwire` y `avg_shocks` (en JSON) y `%Tripwires` (en episodios agregados).
 - `risk_effective` y `surprise` (promedios/evoluciones exportadas en JSON).
 
 Ver comparativa F2 vs F1: `results/v11/data/f2_vs_f1_diff.md`.
-

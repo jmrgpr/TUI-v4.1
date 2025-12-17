@@ -21,6 +21,7 @@ Nota: `results/v11/stats_report_v11.md` existe solo como compatibilidad historic
 - Unidades experimentales: runs por (grid, seed, agente) exportados como `*_episodes.csv` y su JSON asociado.
 - En F2: `red_team=True` con `red_team_prob=0.1` (eventos adversos estocasticos en el entorno). No hay adversario que optimice contra la politica del agente.
 - Analisis: se usan solo los archivos del dataset canonico (se excluyen copias en `archived/` y agregados en `raw/`).
+- Metrica "Recompensa": corresponde a la recompensa total exportada como `Recompensa` (puede incluir mezcla con PGF cuando `pgf_mix>0`, ver `results/v11/ANEXO_TECNICO_v11.md`).
 
 ## 4. Resultados (recompensa media)
 Valores resumidos desde `results/v11/data/stats_summary_v11.csv` (n = numero de runs/archivos).
@@ -62,4 +63,3 @@ Interpretacion metodologica: F2 es una prueba de estres adversarial sintetica (p
 
 ## 7. Estado para F3
 Con el dataset canonico, verificacion F2 != F1 y bootstrap por run/seed, la base experimental queda lista para F3: nuevos baselines, nuevos ataques sinteticos (o un adversario real), y metricas adicionales (CVaR, tripwires, shocks) a nivel run/seed.
-

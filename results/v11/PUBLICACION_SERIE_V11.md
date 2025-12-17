@@ -45,9 +45,9 @@ La evidencia inferencial principal se apoya en bootstrap no parametrico por run/
 
 ## Amenazas a la validez
 - F2 es un estres adversarial sintetico; no implementa adversario min-max.
+- La "Recompensa" reportada corresponde a la recompensa total exportada (`Recompensa`), que para `simbiosis` puede incluir mezcla PGF cuando `pgf_mix>0` (reward shaping parcial). Ver `results/v11/ANEXO_TECNICO_v11.md`.
 - El pipeline depende de la definicion de `red_team_prob` y otros parametros del entorno; estos quedan trazados en los JSON de cada run.
 - Para auditoria, las copias archivadas se conservan en `results/v11/archived`, pero el analisis usa solo el dataset canonico.
 
 ## Conclusiones
 La serie v11 queda reproducible con un dataset canonico verificable, y F2 queda operacionalmente cerrado (F2 != F1 y la activacion del modo adversarial es observable). Esto habilita F3 sobre una base consistente: nuevos baselines, nuevas metricas de seguridad y/o variantes del ataque sintetico.
-

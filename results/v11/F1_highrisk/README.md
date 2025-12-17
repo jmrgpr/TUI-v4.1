@@ -61,24 +61,26 @@ Con `{seed} ∈ {42, 101, 13, 7, 99}` y `{grid} ∈ {8, 16}`. Los detalles compl
 ---
 
 ## Archivos clave
+Nota: los artefactos en `analysis/` se conservaron como analisis exploratorio inicial. Para resultados canonicos y comparables a nivel serie v11 (unidad primaria run/seed), usar:
+- `results/v11/data/stats_report_v11.md`
+- `results/v11/data/bootstrap_stats_v11.md`
+- `results/v11/CANONICAL_DATASET_v11.md`
+
 - `raw/`: JSON y CSV de episodios por combinación agente×grid×seed (incluye piloto y batch principal).
 - `analysis/analisis_F1_v11.ipynb`: notebook de análisis exploratorio y generación de tablas.
 - `analysis/longitudes_F1_v11.csv`: resumen de longitudes de episodio por grid/seed/agente.
-- `analysis/stat_tests_F1_v11.csv`: pruebas estadísticas (t-tests, Mann-Whitney U, intervalos de confianza, tamaños de efecto) comparando Simbiosis vs Control.
-- `analysis/reporte_final_F1_v11.md`: reporte científico final en Markdown.
+- `analysis/stat_tests_F1_v11.csv`: (DEPRECATED) tests por episodio; puede incurrir en pseudo-replicacion.
+- `analysis/reporte_final_F1_v11.md`: (DEPRECATED) reporte no alineado con el cierre canonico de la serie v11.
 - `analysis/export_graficos_F1_v11.py`: script para exportar boxplots e histogramas por agente y grid.
 - `metadata.json`: metadatos del experimento, parámetros globales, seeds, grids y resumen de resultados.
 
 ---
 
 ## Resultados científicos (síntesis)
-- Simbiosis mantiene episodios estables (~30 pasos) en todos los grids y seeds, mientras que Control y DQN-Control presentan mínimos ocasionalmente más cortos en escenarios de alto riesgo.
-- En ambos grids, la recompensa media de Simbiosis es mucho menos negativa que la de Control (diferencias ≈+42–44 puntos), con tamaños de efecto muy grandes y significativos tras corrección de Bonferroni.
-- Flexibilidad y robustez se mantienen prácticamente idénticas entre agentes; la robustez media es ≈0.99–1.00 en todos los casos.
-- El riesgo efectivo medio (`RiskEffective_Avg`) es sistemáticamente menor para Simbiosis que para Control, con efecto moderado y significancia estadística en las 10 comparaciones (5 seeds × 2 grids).
-- Las métricas de tripwires y `Surprise_Avg` son bajas y no muestran anomalías relevantes; no se observa colapso de seguridad ni modos de fallo catastróficos.
+- En el dataset canonico de la serie v11, F1 (risk_scale=1.2; sin ataque) muestra una diferencia clara en recompensa media entre agentes: `simbiosis` es mucho menos negativa que `control` y `dqn_control` (ver `results/v11/data/stats_report_v11.md`).
+- La evidencia inferencial principal para la serie v11 usa unidad por run/seed (no por episodio) y queda en `results/v11/data/bootstrap_stats_v11.md` (para F2) y en las tablas por fase en `results/v11/data/stats_report_v11.md`.
 
-Para una descripción detallada y tablas completas, ver `analysis/reporte_final_F1_v11.md`.
+Para el contexto completo de F1 dentro de la serie (F0/F1/F2), ver `results/v11/INFORME_CIENTIFICO_SERIE_V11.md`.
 
 ---
 
@@ -89,13 +91,11 @@ Se recomienda ejecutar un script de diagnóstico específico sobre las política
 - Posibles modos de fallo (parálisis, oscilaciones, exploración excesiva).
 - Diferencias estructurales entre DQN-Control y Simbiosis.
 
-Los hallazgos pueden añadirse en una subsección **Diagnóstico DQN** dentro de `analysis/reporte_final_F1_v11.md` y resumirse brevemente en este README.
+Los hallazgos pueden añadirse como nota tecnica en `results/v11/ANEXO_TECNICO_v11.md` o en el preregistro de F3.
 
 ---
 
 ## Trazabilidad y reproducibilidad
 - Todos los runs están registrados en `metadata.json` (incluyendo piloto GO/NO-GO y batch completo).
 - Los datos crudos se almacenan en `raw/` con nombres informativos que incluyen grid, riesgo, seed y protocolo.
-- El notebook `analysis/analisis_F1_v11.ipynb`, el reporte `analysis/reporte_final_F1_v11.md` y este README documentan el flujo completo desde los datos crudos hasta las conclusiones científicas.
-- El cierre del experimento F1_highrisk v11 queda versionado en este repositorio, listo para ser referenciado en publicaciones científicas.
-
+- Para la narrativa y reportes oficiales de v11 (con dataset canonico), ver `results/v11/README_REPRODUCIBLE_v11.md` y `results/v11/PUBLICACION_SERIE_V11.md`.

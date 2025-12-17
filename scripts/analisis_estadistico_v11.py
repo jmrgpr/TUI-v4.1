@@ -159,6 +159,13 @@ def format_report(summary: pd.DataFrame) -> str:
         "",
         "El analisis agrupa por `phase`, `agent` y `risk_scale`. Para F2, incluye un bootstrap no parametrico (ver `results/v11/data/bootstrap_stats_v11.csv`) que usa como unidad primaria la media por archivo `*_episodes.csv` (cluster por seed/run) para evitar pseudo-replicacion por episodio.",
         "",
+        "## Metrica y unidad (muy importante)",
+        "",
+        "- Metrica en este reporte: `reward_total` (columna `reward_total` en `results/master_results_clean.csv`).",
+        "- Operacionalmente, `reward_total` es el promedio por run del campo `Recompensa` en `*_episodes.csv` (media de recompensas por episodio dentro del run).",
+        "- Para `simbiosis`, `Recompensa` incluye mezcla con PGF cuando `pgf_mix>0` (reward shaping). Ver `results/v11/ANEXO_TECNICO_v11.md`.",
+        "- `n` es el numero de runs/archivos (no episodios).",
+        "",
     ]
 
     for phase in sorted(summary["phase"].unique()):
@@ -176,7 +183,7 @@ def format_report(summary: pd.DataFrame) -> str:
     lines.append("- `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.")
     lines.append("- Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).")
     lines.append("")
-    lines.append("El conjunto canónico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.")
+    lines.append("El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.")
     return "\n".join(lines)
 
 

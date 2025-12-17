@@ -1,4 +1,14 @@
-# Reporte Final – Experimento F1_highrisk (Protocolo v11)
+# reporte_final_F1_v11.md (DEPRECATED)
+
+Este documento se conserva solo como **auditoria historica**. Fue redactado antes del cierre reproducible/canonico de la serie v11 y contiene estadistica a nivel episodio (tests por episodio) que puede incurrir en **pseudo-replicacion**.
+
+Para resultados vigentes y coherentes con el dataset canonico de v11, usar:
+- `results/v11/INFORME_CIENTIFICO_SERIE_V11.md`
+- `results/v11/data/stats_report_v11.md`
+- `results/v11/data/bootstrap_stats_v11.md`
+- `results/v11/CANONICAL_DATASET_v11.md`
+
+---
 
 ## 1. Introducción
 
@@ -233,4 +243,3 @@ En conjunto, los resultados de F1_highrisk v11 apoyan la tesis de que la TUI/PGF
 ---
 
 _Reporte generado a partir del notebook `analysis/analisis_F1_v11.ipynb` y de los CSV de análisis, y consolidado para documentación científica y reproducibilidad._
-

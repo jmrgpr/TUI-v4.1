@@ -4,6 +4,13 @@ Fuente: `results/master_results_clean.csv` reconsolidado a partir de los CSV can
 
 El analisis agrupa por `phase`, `agent` y `risk_scale`. Para F2, incluye un bootstrap no parametrico (ver `results/v11/data/bootstrap_stats_v11.csv`) que usa como unidad primaria la media por archivo `*_episodes.csv` (cluster por seed/run) para evitar pseudo-replicacion por episodio.
 
+## Metrica y unidad (muy importante)
+
+- Metrica en este reporte: `reward_total` (columna `reward_total` en `results/master_results_clean.csv`).
+- Operacionalmente, `reward_total` es el promedio por run del campo `Recompensa` en `*_episodes.csv` (media de recompensas por episodio dentro del run).
+- Para `simbiosis`, `Recompensa` incluye mezcla con PGF cuando `pgf_mix>0` (reward shaping). Ver `results/v11/ANEXO_TECNICO_v11.md`.
+- `n` es el numero de runs/archivos (no episodios).
+
 ## Fase `F0_baseline`
 
       agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  attack_enabled attack_type                                                                                                                                                                                                         attack_params
@@ -31,4 +38,4 @@ dqn_control        1.2 10 -70.448240 1.260934 -71.229775 -69.666705 0.013197    
 - `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.
 - Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).
 
-El conjunto canónico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.
+El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.

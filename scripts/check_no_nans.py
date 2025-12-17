@@ -6,6 +6,11 @@ paths = [
     'results/v11/data/bootstrap_nonparam_from_episodes_v11.csv',
     'results/v11/data/stats_summary_v11.csv'
 ]
+
+# NaNs esperados por archivo (ej.: p-values solo aplican a ciertos grupos/agentes)
+ALLOWED_NA_COLUMNS_BY_PATH = {
+    'results/v11/data/stats_summary_v11.csv': {'p_boot'},
+}
 ok = True
 for p in paths:
     try:
@@ -15,10 +20,12 @@ for p in paths:
         ok = False
         continue
     na = df.isna().sum()
-    total_na = na.sum()
+    allowed = ALLOWED_NA_COLUMNS_BY_PATH.get(p, set())
+    unexpected_cols = [c for c in df.columns if c not in allowed]
+    total_na = int(df[unexpected_cols].isna().sum().sum())
     print(p, 'shape', df.shape, 'total NaNs', int(total_na))
     if total_na > 0:
-        print('NaNs per column:\n', na[na>0].to_dict())
+        print('NaNs per column:\n', na[na > 0].to_dict())
         ok = False
 
 if not ok:

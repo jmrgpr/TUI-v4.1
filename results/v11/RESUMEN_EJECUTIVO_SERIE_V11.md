@@ -37,7 +37,7 @@ Valores resumidos desde `results/v11/data/stats_summary_v11.csv`.
 - F2 aplica perturbaciones estocasticas del entorno (no adversario min-max). La configuracion efectiva queda registrada en cada JSON (campos `config.red_team_prob`, etc.).
 - En esta ejecucion canonicamente regenerada, F2 degrada la recompensa de todos los agentes; `simbiosis` queda por encima de `control` y `dqn_control` en recompensa media.
 - Evidencia inferencial principal: bootstrap no parametrico por run/seed en `results/v11/data/bootstrap_stats_v11.md`.
+- Nota de interpretacion: la "Recompensa" es la recompensa total exportada (`Recompensa`), que para `simbiosis` puede incluir mezcla PGF cuando `pgf_mix>0` (ver `results/v11/ANEXO_TECNICO_v11.md`).
 
 ## Estado
 La documentacion y los artefactos canonicamente regenerados estan alineados y listos para usar como base de F3.
-
