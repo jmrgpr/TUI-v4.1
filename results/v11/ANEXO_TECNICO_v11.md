@@ -55,18 +55,21 @@ Si el entorno detecta `is_gaming`, la recompensa total recibe una penalizacion a
 
 Esto queda reflejado en la `Recompensa` exportada y en contadores como `gaming_hits`.
 
-## 4. Metrica de robustez (definicion formal)
-En v11, la columna `Robustez` en `*_episodes.csv` y los campos `robust_*` en JSON se derivan de una definicion operacional simple (no es una nocion general de robustez).
+## 4. Métrica de robustez-distractor (definición operacional)
 
-Definicion por step (ver `sim/evaluator_pgf.py`):
+**Nota:** Esta métrica solo penaliza la presencia de distractores y no debe interpretarse como una medida de robustez general en RL. Es una señal operacional específica para este entorno.
+
+En v11, la columna `Robustez-distractor` en `*_episodes.csv` y los campos `robust_*` en JSON se derivan de una definición operacional simple (no es una noción general de robustez).
+
+Definición por step (ver `sim/evaluator_pgf.py`):
 - `R_robust(t) = 1.0` si no hay distractor en el step.
 - `R_robust(t) = 0.6` si hay distractor en el step (`info['distractor']=True`).
 
-Agregacion:
+Agregación:
 - Robustez por episodio: `Robustez(ep) = mean_t R_robust(t)`.
 - Robustez por run: `avg_robust = mean_ep Robustez(ep)`.
 
-Rango esperado: `[0.6, 1.0]` (mas alto = menos distractores activados).
+Rango esperado: `[0.6, 1.0]` (más alto = menos distractores activados).
 
 ## 5. Otras señales observables recomendadas para F2
 Ademas de recompensa:

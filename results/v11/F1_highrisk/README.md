@@ -3,12 +3,13 @@
 Este experimento pone a prueba la TUI/Simbiosis en condiciones de alto riesgo, siguiendo la estructura y trazabilidad establecidas en F0_baseline.
 
 ## Resumen
+- Nota: en la serie v11 se reportan dos recompensas (`reward_total` y `reward_env_total`) para auditar reward shaping; para resultados canónicos ver `results/v11/data/stats_report_v11.md`.
 - Batch F1_highrisk completado con `risk_scale = 1.2`, `risk_level = high` en grids 8×8 y 16×16.
 - Seeds: 42, 101, 13, 7, 99; 200 episodios por combinación agente×grid×seed.
 - Todas las configuraciones cumplen el criterio GO de longitud de episodio (~30 pasos):
   - Grid 8×8: medias 29.8–30 pasos; mínimos en control 15–26, en DQN-Control 17–30; Simbiosis siempre 30/30.
   - Grid 16×16: medias ≈30 pasos; DQN-Control presenta mínimos puntuales de 27 y 17 pasos, pero medias ≈30; control y simbiosis se mantienen en 30/30.
-- Recompensa: Control muy negativa; Simbiosis mucho menos negativa (≈+42–44 puntos frente a Control), DQN-Control similar a Control.
+- Recompensa (`reward_total`): Control muy negativa; Simbiosis mucho menos negativa (≈+42–44 puntos frente a Control), DQN-Control similar a Control. En `reward_env_total` las medias quedan cercanas entre agentes (ver `results/v11/data/stats_report_v11.md`).
 - Flexibilidad y robustez: prácticamente idénticas entre agentes; robustez media cercana a 1 en todos los casos.
 - Riesgo y PGF: Simbiosis reduce riesgo efectivo medio frente a Control y mantiene PGF bruto comparable, con diferencias significativas en riesgo efectivo (p < 0.05, Bonferroni).
 - Tripwires y surprise: tasas bajas en todos los runs, sin anomalías ni colapsos de seguridad.
@@ -77,7 +78,7 @@ Nota: los artefactos en `analysis/` se conservaron como analisis exploratorio in
 ---
 
 ## Resultados científicos (síntesis)
-- En el dataset canonico de la serie v11, F1 (risk_scale=1.2; sin ataque) muestra una diferencia clara en recompensa media entre agentes: `simbiosis` es mucho menos negativa que `control` y `dqn_control` (ver `results/v11/data/stats_report_v11.md`).
+- En `reward_total`, F1 (risk_scale=1.2; sin ataque) muestra una diferencia clara: `simbiosis` es mucho menos negativa que `control` y `dqn_control`. En `reward_env_total` las medias quedan cercanas entre agentes (ver `results/v11/data/stats_report_v11.md`).
 - La evidencia inferencial principal para la serie v11 usa unidad por run/seed (no por episodio) y queda en `results/v11/data/bootstrap_stats_v11.md` (para F2) y en las tablas por fase en `results/v11/data/stats_report_v11.md`.
 
 Para el contexto completo de F1 dentro de la serie (F0/F1/F2), ver `results/v11/INFORME_CIENTIFICO_SERIE_V11.md`.

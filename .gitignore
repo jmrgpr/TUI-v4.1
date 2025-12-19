@@ -1,4 +1,5 @@
-results/
+# Ignorar `results` por defecto, pero permitir subcarpetas canonicas (v11, docs).
+results/*
 !results/v11/
 !results/v11/**
 !results/pgf_v10_documentacion_global/
@@ -39,8 +40,8 @@ dummy.png
 docs/PROTOCOLO_ALINEACION.md
 temp_deleted_docs.txt
 temp_doc_restore_candidates.txt
-data/
-plots/
+/data/
+/plots/
 *.zip
 *.pt
 *.h5

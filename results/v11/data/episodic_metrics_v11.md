@@ -1,8 +1,22 @@
-# Métricas por episodio — v11
+# DO NOT CITE - Archivo de métricas episódicas generado para auditoría interna. No usar para comparaciones ni citas en publicaciones. Puede estar desactualizado respecto a los reportes principales.
 
-Mediana, IQR, %Tripwires, CVaR(95%), Max Drawdown por `agent` y `risk_group` (campo `risk_scale` en esta tabla = valor canónico más cercano).
+# Metricas episodicas (agregado por run/seed) - v11
 
-      agent  risk_scale    n     median  iqr  pct_tripwires     cvar95  max_drawdown
-    control         1.0 8100 -58.205000 0.60       0.285714 -60.055762  10898.771429
-dqn_control         1.0 8100 -60.000000 0.00       1.238095 -60.777452  11517.326190
-  simbiosis         1.0 8100 -14.383482 1.28       1.428571 -15.281622   2683.570677
+Este archivo resume metricas calculadas a nivel episodio, pero agregadas por run/seed (unidad primaria = archivo).
+Se usan solo CSV canonicos listados en `results/v11/CANONICAL_DATASET_v11.md` (excluye `raw/` y `archived/`).
+
+Columnas clave:
+- `*_reward_total_*`: usa `Recompensa` (recompensa total exportada; puede incluir mezcla con PGF cuando `pgf_mix>0`).
+- `*_reward_env_total_*`: usa reward ambiental por episodio estimado desde `reward_env_evol` en el JSON del run.
+- `cvar05_*`: promedio del 5% peor (cola izquierda).
+
+      phase       agent  risk_scale  n_runs  pct_tripwires_mean  mean_reward_total_mean  mean_reward_total_std  median_reward_total_mean  iqr_reward_total_mean  cvar05_reward_total_mean  max_drawdown_reward_total_mean  mean_reward_env_total_mean  mean_reward_env_total_std  median_reward_env_total_mean  iqr_reward_env_total_mean  cvar05_reward_env_total_mean  max_drawdown_reward_env_total_mean
+F0_baseline     control         0.5       2                0.00              -20.017400               1.661984                -21.600000               0.600000                -24.000000                     1980.540000                  -20.017400                   1.661984                      -21.6000                    0.60000                      -24.0000                            1980.540
+F0_baseline dqn_control         0.5       2                0.00              -24.075600               0.000000                -24.000000               0.000000                -25.070000                     2382.400000                  -24.075600                   0.000000                      -24.0000                    0.00000                      -25.0700                            2382.400
+F0_baseline   simbiosis         0.5       2                0.00               14.867119               0.362039                 14.303643               1.760000                 13.688972                        0.000000                  -22.664900                   0.452548                      -23.3600                    2.20000                      -24.1360                            2245.490
+F1_highrisk     control         1.2      10                0.30              -56.828955               0.594532                -57.562000               0.745000                -60.117100                    11308.309000                  -56.828955                   0.594532                      -57.5620                    0.74500                      -60.1171                           11308.309
+F1_highrisk dqn_control         1.2      10                1.30              -60.031100               0.036870                -60.000000               0.000000                -60.865800                    11946.206000                  -60.031100                   0.036870                      -60.0000                    0.00000                      -60.8658                           11946.206
+F1_highrisk   simbiosis         1.2      10                1.50              -13.981472               0.271463                -14.425846               1.722252                -15.417993                     2782.730547                  -58.712150                   0.337448                      -59.2790                    2.16800                      -60.2606                           11684.226
+ F2_redteam     control         1.2      10                2.45              -71.475665               0.639210                -72.660000               0.839500                -74.736500                    14235.645000                  -71.475665                   0.639210                      -72.6600                    0.83950                      -74.7365                           14235.645
+ F2_redteam dqn_control         1.2      10                1.95              -70.448240               1.260934                -72.381000               4.640250                -75.109900                    14025.232000                  -70.448240                   1.260934                      -72.3810                    4.64025                      -75.1099                           14025.232
+ F2_redteam   simbiosis         1.2      10                1.25              -46.005093               7.246183                -51.119226              21.542984                -59.375831                     9179.997515                  -70.183605                   1.429226                      -72.2335                    4.78375                      -75.1121                           13973.917

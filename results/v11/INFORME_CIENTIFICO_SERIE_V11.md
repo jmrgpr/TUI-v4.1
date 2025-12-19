@@ -26,15 +26,35 @@ Nota: `results/v11/stats_report_v11.md` existe solo como compatibilidad historic
   - `reward_env_total`: recompensa ambiental por episodio (sumatoria por step) estimada desde `reward_env_evol` en el JSON.
   Ver definiciones: `results/v11/ANEXO_TECNICO_v11.md`.
 
+### Definición formal de PGF y ejemplo numérico
+
+En Simbiosis, la recompensa total por step se calcula como:
+
+$$
+r_{total}(t) = (1 - m) \cdot r_{env}(t) + m \cdot PGF(t)
+$$
+
+donde $m = pgf\_mix$ (en v11, $pgf\_mix = 0.2$).
+
+**Ejemplo real (F2, risk_scale=1.2):**
+- Simbiosis (pgf_mix=0.2):  
+  - reward_total = **-46.01**
+  - reward_env_total = **-70.18**
+  - Gap por PGF = **+24.17** puntos
+
+Por tanto, **reward_env_total** es la métrica primaria para comparaciones justas entre agentes, ya que reward_total puede inflarse artificialmente por el shaping.
+
 ## 4. Resultados (dos metricas de recompensa)
 Valores resumidos desde `results/v11/data/stats_report_v11.md` (n = numero de runs/archivos).
 
-### 4.1 F0 (Referencia; risk_scale=0.5)
+### 4.1 F0 (Referencia descriptiva / sanity check; risk_scale=0.5)
 | Agente      | n | mean reward_total | mean reward_env_total |
 |-------------|---|------------------|-----------------------|
 | control     | 2 | -20.02           | -20.02                |
 | dqn_control | 2 | -24.08           | -24.08                |
 | simbiosis   | 2 |  14.87           | -22.66                |
+
+Nota: F0 se reporta solo como referencia descriptiva (sanity check); n=2 es insuficiente para inferencias estadísticas o comparaciones entre agentes.
 
 ### 4.2 F1 (Alto riesgo; risk_scale=1.2; red_team=False)
 | Agente      | n  | mean reward_total | mean reward_env_total |
@@ -64,7 +84,35 @@ Interpretacion por metrica:
 - En `reward_total` (incluyendo PGF cuando aplica), `simbiosis` queda por encima de `control` y `dqn_control`.
 - En `reward_env_total` (recompensa ambiental pura), `simbiosis` queda cercana a `control`/`dqn_control` y muestra una mejora pequena (≈ +1.29 vs `control` en F2).
 
+**v11 demuestra el efecto del componente prudencial (PGF) en la métrica mezclada (`reward_total`), pero no demuestra superioridad algorítmica en reward ambiental bajo estrés. Las comparaciones justas deben hacerse siempre sobre `reward_env_total`.**
+
 Interpretacion metodologica: F2 es una prueba de estres adversarial sintetica (parametrizada por `red_team_prob` y probabilidades de tipo de evento). No debe presentarse como "red team min-max" sin implementar un adversario real.
 
 ## 7. Estado para F3
-Con el dataset canonico, verificacion F2 != F1 y bootstrap por run/seed, la base experimental queda lista para F3: nuevos baselines, nuevos ataques sinteticos (o un adversario real), y metricas adicionales (CVaR, tripwires, shocks) a nivel run/seed.
+F2 queda **operacionalmente cerrado** como fase de caracterizacion:
+- Dataset canonico verificado: `results/v11/CANONICAL_DATASET_v11.md`
+- F2 != F1 demostrado: `results/v11/data/f2_vs_f1_diff.md`
+- Metricas duales reportadas (`reward_total` / `reward_env_total`) para auditar shaping
+- Bootstrap por run/seed para F2 vs control: `results/v11/data/bootstrap_stats_v11.md`
+
+Documentacion de cierre: `results/v11/F2_CLOSURE_REPORT.md`.
+
+F3 se justifica para responder preguntas causales y comparaciones justas (ablacion de `pgf_mix`, `simbiosis(pgf_mix=0.0)`, baselines modernos y/o severidad del stress test). Borrador de preregistro: `results/v11/F3_PREREGISTRATION.md`.
+
+## Apéndice: Resultados F2 estratificados por grid_size
+
+A continuación se reportan las medias de reward_total y reward_env_total por agente y tamaño de grid en F2 (risk_scale=1.2, red_team=True):
+
+| Agente      | grid_size | n  | mean reward_total | mean reward_env_total |
+|-------------|-----------|----|-------------------|----------------------|
+| control     | 8x8       | 5  | -71.72            | -71.72               |
+| control     | 16x16     | 5  | -70.83            | -70.83               |
+| dqn_control | 8x8       | 5  | -71.38            | -71.38               |
+| dqn_control | 16x16     | 5  | -70.51            | -70.51               |
+| simbiosis   | 8x8       | 5  | -49.62            | -70.68               |
+| simbiosis   | 16x16     | 5  | -42.75            | -69.68               |
+
+Notas:
+- n = número de runs por agente y grid_size.
+- Las medias se calcularon a partir de master_results_clean.csv, agrupando por agente y grid_size (extraído del path del archivo).
+- Se observa que el gap entre reward_total y reward_env_total en Simbiosis es consistente en ambos tamaños de grid, y que la diferencia entre grids es menor que la diferencia entre agentes.

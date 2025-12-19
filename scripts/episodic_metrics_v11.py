@@ -1,102 +1,244 @@
-import pandas as pd
-import numpy as np
-import os
+import json
+import re
 from pathlib import Path
 
-root = Path('results/v11')
-data_dir = root / 'data'
-out_csv = data_dir / 'episodic_metrics_v11.csv'
-out_md = data_dir / 'episodic_metrics_v11.md'
-out_csv_full = data_dir / 'episodic_metrics_v11_full.csv'
-out_md_full = data_dir / 'episodic_metrics_v11_full.md'
+import numpy as np
+import pandas as pd
 
-# utility: max drawdown of cumulative reward series
-def max_drawdown(series):
-    cum = series.cumsum()
-    peak = cum.expanding(min_periods=1).max()
-    drawdown = peak - cum
-    return drawdown.max()
+ROOT = Path("results/v11")
+MANIFEST = ROOT / "CANONICAL_DATASET_v11.md"
+OUT_DIR = ROOT / "data"
 
-# find all episode CSVs
-files = list(root.rglob('*_episodes.csv'))
-if not files:
-    raise FileNotFoundError(f'No episode CSVs found under {root}')
+OUT_CSV = OUT_DIR / "episodic_metrics_v11.csv"
+OUT_MD = OUT_DIR / "episodic_metrics_v11.md"
+OUT_CSV_FULL = OUT_DIR / "episodic_metrics_v11_full.csv"
+OUT_MD_FULL = OUT_DIR / "episodic_metrics_v11_full.md"
 
-rows = []
-CANONICAL = [0.5, 1.0, 1.5, 2.0, 3.0]
-def map_to_group(scale):
-    try:
-        if scale is None:
-            return None
-        s = float(scale)
-    except:
-        return None
-    diffs = [(abs(s - c), c) for c in CANONICAL]
-    diffs.sort()
-    return diffs[0][1]
-for f in files:
-    stem = f.stem
-    # attempt to parse risk and seed from filename like grid8_riskhigh_r1p2_seed42_v11_episodes
-    risk_scale = None
-    seed = None
-    parts = stem.split('_')
-    for p in parts:
-        if p.startswith('r') and 'p' in p:
-            # r1p2 -> 1.2
-            risk_scale = float(p[1:].replace('p','.'))
-        if p.startswith('seed'):
-            try:
-                seed = int(p.replace('seed',''))
-            except:
-                seed = None
-    try:
-        df = pd.read_csv(f)
-    except Exception as e:
-        print(f'[WARN] cannot read {f}: {e}')
-        continue
-    if 'Agente' not in df.columns and 'agent' in df.columns:
-        df = df.rename(columns={'agent':'Agente'})
-    if 'Recompensa' not in df.columns and 'Reward' in df.columns:
-        df = df.rename(columns={'Reward':'Recompensa'})
-    for agent, g in df.groupby('Agente'):
-        rewards = g['Recompensa'].astype(float)
-        n = len(rewards)
-        if n==0:
+PHASES = ("F0_baseline", "F1_highrisk", "F2_redteam")
+
+
+def canonical_episode_csvs() -> list[Path]:
+    if not MANIFEST.exists():
+        raise FileNotFoundError(f"Manifiesto no encontrado: {MANIFEST}. Ejecuta `python scripts/generate_canonical_dataset_v11.py`.")
+    csvs: list[Path] = []
+    for line in MANIFEST.read_text(encoding="utf-8", errors="replace").splitlines():
+        if not line.startswith("| F"):
             continue
-        median = rewards.median()
-        q1 = rewards.quantile(0.25)
-        q3 = rewards.quantile(0.75)
-        iqr = q3 - q1
-        pct_trip = 100.0 * (g['Tripwires'].astype(float) > 0).mean() if 'Tripwires' in g.columns else np.nan
-        # CVaR 95% (mean of worst 5%)
-        cutoff = rewards.quantile(0.05)
-        cvar95 = rewards[rewards <= cutoff].mean()
-        md = max_drawdown(rewards)
-        risk_group = map_to_group(risk_scale)
-        rows.append({'agent':agent,'risk_scale':risk_scale,'risk_group':risk_group,'seed':seed,'file':str(f),'n':n,'median':median,'iqr':iqr,'pct_tripwires':pct_trip,'cvar95':cvar95,'max_drawdown':md})
+        match = re.search(r"`([^`]+_episodes\.csv)`", line)
+        if not match:
+            continue
+        csvs.append(Path(match.group(1)))
+    return csvs
 
-if not rows:
-    raise RuntimeError('No rows generated')
 
-out_df = pd.DataFrame(rows)
-# save full per-file table (preserves raw parsed risk_scale and seed)
-os.makedirs(out_csv.parent, exist_ok=True)
-out_df.to_csv(out_csv_full, index=False)
+def detect_phase(path: Path) -> str:
+    parts = [p.lower() for p in path.parts]
+    for phase in PHASES:
+        if phase.lower() in parts:
+            return phase
+    return "untracked"
 
-# aggregate across files by agent and canonical risk_group for peer-review aggregation
-agg = out_df.groupby(['agent','risk_group']).agg({'n':'sum','median':'median','iqr':'median','pct_tripwires':'mean','cvar95':'mean','max_drawdown':'mean'}).reset_index()
-# expose the grouped/canonical risk as 'risk_scale' for compatibility with downstream reports
-agg = agg.rename(columns={'risk_group':'risk_scale'})
-agg.to_csv(out_csv, index=False)
 
-with open(out_md,'w',encoding='utf-8') as f:
-    f.write('# Métricas por episodio — v11\n\n')
-    f.write('Mediana, IQR, %Tripwires, CVaR(95%), Max Drawdown por `agent` y `risk_group` (campo `risk_scale` en esta tabla = valor canónico más cercano).\n\n')
-    f.write(agg.to_string(index=False))
+def max_drawdown(values: np.ndarray) -> float:
+    if values.size == 0:
+        return float("nan")
+    series = pd.Series(values, dtype=float)
+    cum = series.cumsum()
+    peak = cum.cummax()
+    drawdown = peak - cum
+    return float(drawdown.max())
 
-with open(out_md_full,'w',encoding='utf-8') as f:
-    f.write('# Métricas por episodio — v11 (completo)\n\n')
-    f.write('Tabla completa con `risk_scale` tal como se parseó del filename y `risk_group` mapeado a la rejilla canónica.\n\n')
-    f.write(out_df.to_string(index=False))
 
-print('Wrote', out_csv, out_md, 'and full table', out_csv_full, out_md_full)
+def cvar_left(values: np.ndarray, alpha: float = 0.05) -> float:
+    if values.size == 0:
+        return float("nan")
+    vals = values[~np.isnan(values)]
+    if vals.size == 0:
+        return float("nan")
+    k = max(1, int(np.ceil(alpha * vals.size)))
+    worst = np.sort(vals)[:k]
+    return float(np.mean(worst))
+
+
+def iqr(values: np.ndarray) -> float:
+    if values.size == 0:
+        return float("nan")
+    vals = values[~np.isnan(values)]
+    if vals.size == 0:
+        return float("nan")
+    q75, q25 = np.percentile(vals, [75, 25])
+    return float(q75 - q25)
+
+
+def env_episode_totals_from_json(json_path: Path) -> np.ndarray:
+    try:
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception:
+        return np.array([], dtype=np.float64)
+    evol = payload.get("reward_env_evol")
+    if not isinstance(evol, list) or not evol:
+        return np.array([], dtype=np.float64)
+
+    totals: list[float] = []
+    for ep in evol:
+        if isinstance(ep, list) and ep:
+            s = 0.0
+            for x in ep:
+                try:
+                    s += float(x)
+                except Exception:
+                    pass
+            totals.append(s)
+        elif isinstance(ep, (int, float)):
+            totals.append(float(ep))
+    return np.array(totals, dtype=np.float64)
+
+
+def parse_seed_from_name(name: str) -> int | None:
+    match = re.search(r"seed(\d+)", name.lower())
+    return int(match.group(1)) if match else None
+
+
+def parse_grid_from_path(path: Path) -> int | None:
+    joined = "/".join(path.parts).lower()
+    match = re.search(r"grid(\d+)", joined)
+    return int(match.group(1)) if match else None
+
+
+def compute_run_metrics(csv_path: Path) -> dict:
+    df = pd.read_csv(csv_path)
+    if "Recompensa" not in df.columns:
+        raise RuntimeError(f"Columna 'Recompensa' no encontrada en {csv_path}")
+    total_rewards = pd.to_numeric(df["Recompensa"], errors="coerce").dropna().to_numpy(dtype=np.float64)
+    tripwires = pd.to_numeric(df["Tripwires"], errors="coerce").fillna(0.0).to_numpy(dtype=np.float64) if "Tripwires" in df.columns else np.array([], dtype=np.float64)
+
+    json_path = csv_path.with_name(csv_path.name.replace("_episodes.csv", ".json"))
+    config = {}
+    if json_path.exists():
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+        config = payload.get("config") or {}
+    env_rewards = env_episode_totals_from_json(json_path) if json_path.exists() else np.array([], dtype=np.float64)
+
+    phase = detect_phase(csv_path)
+    agent = csv_path.parent.name
+    grid = config.get("grid_size") if config else None
+    seed = config.get("seed") if config else None
+    risk_scale = config.get("risk_scale") if config else None
+    risk_level = config.get("risk_level") if config else None
+    red_team = config.get("red_team") if config else None
+    pgf_mix = config.get("pgf_mix") if config else None
+
+    grid = int(grid) if grid is not None else parse_grid_from_path(csv_path)
+    seed = int(seed) if seed is not None else parse_seed_from_name(csv_path.name)
+    try:
+        risk_scale = float(risk_scale) if risk_scale is not None else None
+    except Exception:
+        risk_scale = None
+
+    pct_tripwires = float(100.0 * (tripwires > 0).mean()) if tripwires.size else float("nan")
+
+    row = {
+        "phase": phase,
+        "agent": agent,
+        "grid_size": grid,
+        "seed": seed,
+        "risk_scale": risk_scale,
+        "risk_level": risk_level,
+        "red_team": red_team,
+        "pgf_mix": pgf_mix,
+        "n_episodes_total": int(total_rewards.size),
+        "n_episodes_env": int(env_rewards.size),
+        "pct_tripwires": pct_tripwires,
+        "mean_reward_total": float(np.mean(total_rewards)) if total_rewards.size else float("nan"),
+        "median_reward_total": float(np.median(total_rewards)) if total_rewards.size else float("nan"),
+        "iqr_reward_total": iqr(total_rewards),
+        "cvar05_reward_total": cvar_left(total_rewards, alpha=0.05),
+        "max_drawdown_reward_total": max_drawdown(total_rewards),
+        "mean_reward_env_total": float(np.mean(env_rewards)) if env_rewards.size else float("nan"),
+        "median_reward_env_total": float(np.median(env_rewards)) if env_rewards.size else float("nan"),
+        "iqr_reward_env_total": iqr(env_rewards),
+        "cvar05_reward_env_total": cvar_left(env_rewards, alpha=0.05),
+        "max_drawdown_reward_env_total": max_drawdown(env_rewards),
+        "file": csv_path.as_posix(),
+    }
+    return row
+
+
+def flatten_columns(df: pd.DataFrame) -> pd.DataFrame:
+    if not isinstance(df.columns, pd.MultiIndex):
+        return df
+    df = df.copy()
+    df.columns = ["_".join([str(c) for c in col if c]) for col in df.columns.to_flat_index()]
+    return df
+
+
+def main() -> None:
+    csvs = canonical_episode_csvs()
+    if not csvs:
+        raise RuntimeError("No se encontraron CSV canonicos en el manifiesto.")
+
+    rows = []
+    for csv_path in csvs:
+        if not csv_path.exists():
+            raise FileNotFoundError(f"CSV canonico no encontrado: {csv_path}")
+        rows.append(compute_run_metrics(csv_path))
+
+    full = pd.DataFrame(rows).sort_values(["phase", "agent", "risk_scale", "grid_size", "seed"], na_position="last")
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    full.to_csv(OUT_CSV_FULL, index=False)
+
+    agg = (
+        full.groupby(["phase", "agent", "risk_scale"])
+        .agg(
+            n_runs=("file", "count"),
+            pct_tripwires_mean=("pct_tripwires", "mean"),
+            mean_reward_total_mean=("mean_reward_total", "mean"),
+            mean_reward_total_std=("mean_reward_total", "std"),
+            median_reward_total_mean=("median_reward_total", "mean"),
+            iqr_reward_total_mean=("iqr_reward_total", "mean"),
+            cvar05_reward_total_mean=("cvar05_reward_total", "mean"),
+            max_drawdown_reward_total_mean=("max_drawdown_reward_total", "mean"),
+            mean_reward_env_total_mean=("mean_reward_env_total", "mean"),
+            mean_reward_env_total_std=("mean_reward_env_total", "std"),
+            median_reward_env_total_mean=("median_reward_env_total", "mean"),
+            iqr_reward_env_total_mean=("iqr_reward_env_total", "mean"),
+            cvar05_reward_env_total_mean=("cvar05_reward_env_total", "mean"),
+            max_drawdown_reward_env_total_mean=("max_drawdown_reward_env_total", "mean"),
+        )
+        .reset_index()
+    )
+    agg = flatten_columns(agg)
+    agg.to_csv(OUT_CSV, index=False)
+
+    md_lines = [
+        "# Metricas episodicas (agregado por run/seed) - v11",
+        "",
+        "Este archivo resume metricas calculadas a nivel episodio, pero agregadas por run/seed (unidad primaria = archivo).",
+        "Se usan solo CSV canonicos listados en `results/v11/CANONICAL_DATASET_v11.md` (excluye `raw/` y `archived/`).",
+        "",
+        "Columnas clave:",
+        "- `*_reward_total_*`: usa `Recompensa` (recompensa total exportada; puede incluir mezcla con PGF cuando `pgf_mix>0`).",
+        "- `*_reward_env_total_*`: usa reward ambiental por episodio estimado desde `reward_env_evol` en el JSON del run.",
+        "- `cvar05_*`: promedio del 5% peor (cola izquierda).",
+        "",
+        agg.to_string(index=False),
+        "",
+    ]
+    OUT_MD.write_text("\n".join(md_lines), encoding="utf-8")
+
+    md_full_lines = [
+        "# Metricas episodicas (por run) - v11",
+        "",
+        "Tabla por run/seed (una fila por archivo canonico).",
+        "",
+        full.to_string(index=False),
+        "",
+    ]
+    OUT_MD_FULL.write_text("\n".join(md_full_lines), encoding="utf-8")
+
+    print(f"Wrote {OUT_CSV} and {OUT_MD} (full: {OUT_CSV_FULL}, {OUT_MD_FULL})")
+
+
+if __name__ == "__main__":
+    main()
+
