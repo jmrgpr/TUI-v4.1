@@ -29,6 +29,9 @@ results/smoke_test/
 results/global_summaries/
 results/*/execution.log
 results/v11/archived/
+results/v11/plots/
+results/v11/F1_highrisk/analysis/figuras_F1/
+results/v11/**/_tmp*
 
 # Puedes añadir más patrones según tus necesidades
 None
