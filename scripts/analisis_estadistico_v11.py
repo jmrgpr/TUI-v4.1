@@ -19,6 +19,9 @@ PHASE_HINTS = {
     "f0_baseline": "F0_baseline",
     "f1_highrisk": "F1_highrisk",
     "f2_redteam": "F2_redteam",
+    "f3/": "F3",
+    "f3_": "F3",
+    "/f3_": "F3",
 }
 
 ATTACK_COLUMNS = [

@@ -16,3 +16,15 @@ F3 es la fase preregistrada para convertir las limitaciones observadas en F2 en 
 
 ## Nota sobre JSON
 Los JSON por run son considerados datos brutos y no se versionan por tamaño; se publican sus hashes en `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md` para permitir verificación independiente de derivaciones como `reward_env_total`.
+
+## Cómo correr F3
+Desde la raíz del repo:
+
+```powershell
+python results/v11/F3/run_F3_v11.py
+python scripts/organize_F3_results.py
+python scripts/generate_canonical_dataset_v11.py
+python scripts/generate_canonical_dataset_extended_json_v11.py
+python scripts/rebuild_master_from_episodes.py
+python scripts/analisis_estadistico_v11.py
+```
