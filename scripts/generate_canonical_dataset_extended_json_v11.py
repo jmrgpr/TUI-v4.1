@@ -11,6 +11,8 @@ PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3"]
 
 def detect_phase(path: Path) -> str | None:
     lowered = [p.lower() for p in path.parts]
+    if "f3" in lowered:
+        return "F3"
     for phase in PHASES:
         if phase.lower() in lowered:
             return phase

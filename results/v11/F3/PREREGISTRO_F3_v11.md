@@ -105,7 +105,8 @@ Stopping rule: se detiene al completar el n preregistrado por condición/grupo, 
 - Para F3, se debe regenerar y publicar el manifiesto extendido al cerrar la fase.
 
 ## 10) Estructura de salida (convención)
-Mantener la estructura de F2 para reusar scripts:
-- `results/v11/F3/raw/` (agregados por condición)
-- `results/v11/F3/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed)
-- `results/v11/F3/analysis/` (reportes/figuras; preferiblemente ignorar outputs pesados)
+Mantener la estructura de F2 y separar físicamente por condición para evitar mezcla de outputs:
+- `results/v11/F3/raw/F1_highrisk/` y `results/v11/F3/raw/F2_redteam/` (agregados por grid/seed).
+- `results/v11/F3/F1_highrisk/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed).
+- `results/v11/F3/F2_redteam/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed).
+- `results/v11/F3/analysis/` (reportes/figuras; preferiblemente ignorar outputs pesados).

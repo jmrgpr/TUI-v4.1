@@ -96,4 +96,4 @@ Registrar cualquier desviacion en un log versionado (ej. `results/v11/F3_deviati
 - Figura obligatoria: degradación F2−F1 en reward_env_total por agente y grid_size.
 - Todas las exclusiones y desviaciones documentadas en F3_deviations_log.md.
 
-- Family primaria para corrección múltiple: {P1, P2} sobre reward_env_total por condición (F1, F2); M=4 comparaciones.
+- Nota: la definición canónica de la family primaria (M y comparaciones) está fijada en `results/v11/F3/PREREGISTRO_F3_v11.md`. Este borrador no debe usarse para auditoría.

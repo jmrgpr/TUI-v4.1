@@ -8,10 +8,10 @@ F3 es la fase preregistrada para convertir las limitaciones observadas en F2 en 
 - Manifiesto CSV (hashes): `results/v11/CANONICAL_DATASET_v11.md`
 - Manifiesto JSON (hashes, sin subir JSON): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
 
-## Estructura (misma convención que F2)
-- `raw/`: salidas agregadas por (grid, seed, condición) para facilitar trazabilidad.
-- `grid8/riskhigh/{control,simbiosis,dqn_control}/`: dataset por agente/seed.
-- `grid16/riskhigh/{control,simbiosis,dqn_control}/`: idem.
+## Estructura (misma convención que F2, separada por condición)
+- `raw/F1_highrisk/` y `raw/F2_redteam/`: salidas agregadas por (grid, seed) para facilitar trazabilidad.
+- `F1_highrisk/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/`: dataset por agente/seed (condición F1).
+- `F2_redteam/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/`: dataset por agente/seed (condición F2).
 - `analysis/`: análisis preregistrado (scripts/notebooks y outputs de verificación).
 
 ## Nota sobre JSON
