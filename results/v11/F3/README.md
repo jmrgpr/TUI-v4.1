@@ -1,10 +1,10 @@
-# F3_preregistration — peer-review proof (v11)
+# F3 — peer-review proof (v11)
 
 F3 es la fase preregistrada para convertir las limitaciones observadas en F2 en comparaciones causales testeables, manteniendo comparabilidad con v11 y trazabilidad (unidad primaria = run/seed).
 
 ## Documentos canónicos
-- Preregistro completo: `results/v11/F3_preregistration/PREREGISTRO_F3_v11.md`
-- Log de desviaciones (antes de analizar): `results/v11/F3_preregistration/F3_DEVIATIONS_LOG_v11.md`
+- Preregistro completo: `results/v11/F3/PREREGISTRO_F3_v11.md`
+- Log de desviaciones (antes de analizar): `results/v11/F3/F3_DEVIATIONS_LOG_v11.md`
 - Manifiesto CSV (hashes): `results/v11/CANONICAL_DATASET_v11.md`
 - Manifiesto JSON (hashes, sin subir JSON): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
 
@@ -16,4 +16,3 @@ F3 es la fase preregistrada para convertir las limitaciones observadas en F2 en 
 
 ## Nota sobre JSON
 Los JSON por run son considerados datos brutos y no se versionan por tamaño; se publican sus hashes en `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md` para permitir verificación independiente de derivaciones como `reward_env_total`.
-

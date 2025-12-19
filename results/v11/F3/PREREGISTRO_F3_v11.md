@@ -1,8 +1,8 @@
-# Preregistro F3_preregistration v11 (peer-review proof)
+# Preregistro F3 v11 (peer-review proof)
 
 **Fecha:** 2025-12-19  
 **Serie:** v11 (TUI v4.1)  
-**Fase:** F3_preregistration  
+**Fase:** F3  
 **Unidad primaria:** archivo por run (seed × grid)  
 **Métrica primaria:** `reward_env_total`  
 
@@ -89,7 +89,7 @@ Todas las demás comparaciones (otros `pgf_mix`, otros endpoints) se reportan co
 ## 7) MESI (efecto mínimo de interés) y regla de expansión de n
 - MESI para `reward_env_total` (pooled): diferencia absoluta ≥ 5% del baseline `control` (referencia F1/F2).
 - Si el IC95% de la métrica primaria es demasiado ancho para decidir el MESI, se permite expansión de n (nuevas seeds).
-- Cualquier expansión debe registrarse **antes** de ver resultados completos, en `results/v11/F3_preregistration/F3_DEVIATIONS_LOG_v11.md`.
+- Cualquier expansión debe registrarse **antes** de ver resultados completos, en `results/v11/F3/F3_DEVIATIONS_LOG_v11.md`.
 
 ## 8) Criterios de exclusión y stopping rule
 Se excluyen runs únicamente por fallas técnicas:
@@ -106,7 +106,6 @@ Stopping rule: se detiene al completar el n preregistrado por condición/grupo, 
 
 ## 10) Estructura de salida (convención)
 Mantener la estructura de F2 para reusar scripts:
-- `results/v11/F3_preregistration/raw/` (agregados por condición)
-- `results/v11/F3_preregistration/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed)
-- `results/v11/F3_preregistration/analysis/` (reportes/figuras; preferiblemente ignorar outputs pesados)
-
+- `results/v11/F3/raw/` (agregados por condición)
+- `results/v11/F3/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed)
+- `results/v11/F3/analysis/` (reportes/figuras; preferiblemente ignorar outputs pesados)

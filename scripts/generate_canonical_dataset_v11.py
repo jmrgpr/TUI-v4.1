@@ -6,7 +6,7 @@ from pathlib import Path
 ROOT = Path("results/v11")
 DOCUMENT = ROOT / "CANONICAL_DATASET_v11.md"
 AGENTS = {"control", "dqn_control", "simbiosis"}
-PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3_preregistration"]
+PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3"]
 
 
 def detect_phase(path: Path) -> str | None:
@@ -26,7 +26,7 @@ def canonical_selector(path: Path) -> bool:
         return any(p.startswith("grid") for p in parts) and "risklow" in parts and any(agent in parts for agent in AGENTS)
     if phase in {"F1_highrisk", "F2_redteam"}:
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
-    if phase == "F3_preregistration":
+    if phase == "F3":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     return False
 

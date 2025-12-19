@@ -1,8 +1,8 @@
 {
   "protocolo_version": "v11",
-  "experimento": "F3_preregistration",
+  "experimento": "F3",
   "fecha_preregistro": "2025-12-19",
-  "phase": "F3_preregistration",
+  "phase": "F3",
   "unidad_primaria": "run (seed x grid)",
   "metricas": {
     "primaria": "reward_env_total",
@@ -58,4 +58,3 @@
   },
   "nota_json": "Los JSON por run no se versionan por tamaño; publicar hashes sha256 en CANONICAL_DATASET_EXTENDED_JSON.md."
 }
-

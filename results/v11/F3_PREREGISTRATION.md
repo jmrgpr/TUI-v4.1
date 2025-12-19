@@ -1,6 +1,6 @@
 # F3_PREREGISTRATION (DRAFT) - Serie v11 (TUI v4.1)
 
-Nota (2025-12-19): el preregistro canónico “peer-review proof” de F3 vive en `results/v11/F3_preregistration/PREREGISTRO_F3_v11.md`.
+Nota (2025-12-19): el preregistro canónico “peer-review proof” de F3 vive en `results/v11/F3/PREREGISTRO_F3_v11.md`.
 Este archivo se mantiene como borrador histórico.
 
 Este documento propone un preregistro para F3 (borrador). Su objetivo es convertir las limitaciones de F2 en preguntas causales testeables, manteniendo trazabilidad y comparabilidad con v11.
