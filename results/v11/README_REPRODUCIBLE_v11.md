@@ -98,7 +98,7 @@ python scripts/validate_master_sources_file.py results/master_results_clean.csv 
 
 Notas importantes
 - `results/master_results_clean.csv` incluye `reward_total` (desde `*_episodes.csv`) y `reward_env_total` (estimado desde el JSON del run via `reward_env_evol`).
-- `reward_env_total` depende de los archivos JSON generados por cada run. Para reproducibilidad completa y verificación independiente, se requiere acceso a estos JSON fuente. El manifiesto canónico actual solo incluye hashes de los CSV; los hashes de los JSON no están incluidos (ver CANONICAL_DATASET_v11.md para aclaración formal).
+- `reward_env_total` depende de los archivos JSON generados por cada run. Para reproducibilidad completa y verificación independiente, se requiere acceso a estos JSON fuente. El manifiesto canónico actual solo incluye hashes de los CSV; para auditoría sin versionar los JSON grandes, ver el manifiesto extendido con hashes: `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md` (y ver `results/v11/CANONICAL_DATASET_v11.md` para la nota formal).
 - `results/v11/data/stats_report_v11.md` reporta ambas métricas (`reward_total` y `reward_env_total`) para evitar ambigüedad por reward shaping.
 
 # NOTA: Este README solo contiene la sección canónica (congelada) de metadatos y pasos reproducibles para v11. Cualquier plantilla o ejemplo para futuros experimentos debe mantenerse fuera de este archivo para evitar confusión o conflicto de metadatos.

@@ -10,10 +10,15 @@ Advertencia: La métrica "robustez-distractor (operacional)" se reporta únicame
 
 ## Artefactos reproducibles (fuente canonica)
 - Dataset canonico y hashes: `results/v11/CANONICAL_DATASET_v11.md`
+- Manifiesto extendido (hashes de JSON canónicos; sin subir JSON): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
 - Reporte estadistico vigente: `results/v11/data/stats_report_v11.md`
 - Bootstrap por run/seed: `results/v11/data/bootstrap_stats_v11.md`
 - Check de que F2 != F1: `results/v11/data/f2_vs_f1_diff.md`
 - Pasos de regeneracion: `results/v11/README_REPRODUCIBLE_v11.md`
+
+## Data availability / Reproducibility note
+
+El repositorio publica el dataset canónico (CSV `*_episodes.csv`) con hashes sha256 (`results/v11/CANONICAL_DATASET_v11.md`). La métrica `reward_env_total` se deriva de JSON de cada run (campo `reward_env_evol`), los cuales no se versionan en GitHub por tamaño. Para habilitar verificación independiente sin publicar los JSON, se publica un manifiesto extendido con hashes sha256 y rutas esperadas de los JSON canónicos: `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`. La recomputación exacta de `reward_env_total` requiere acceso a los JSON originales con los hashes indicados.
 
 ## Resultados principales (dos metricas de recompensa)
 Valores resumidos desde `results/v11/data/stats_report_v11.md` (n = numero de runs/archivos por agente y fase).

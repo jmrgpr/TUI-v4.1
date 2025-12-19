@@ -32,6 +32,8 @@ results/v11/archived/
 results/v11/plots/
 results/v11/F1_highrisk/analysis/figuras_F1/
 results/v11/**/_tmp*
+results/v11/F0_baseline/run_F0_baseline_v11.py
+results/v11/F1_highrisk/analysis/export_graficos_F1_v11.py
 
 # Puedes añadir más patrones según tus necesidades
 None

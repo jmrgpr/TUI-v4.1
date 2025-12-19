@@ -10,6 +10,8 @@ El presente manifiesto solo incluye los hashes de los archivos CSV canónicos (`
 
 Por transparencia, se deja constancia de que los hashes de los JSON no están incluidos en este manifiesto. Si se desea máxima trazabilidad, se recomienda generar y publicar un manifiesto extendido que incluya los hashes de los JSON utilizados para `reward_env_total`.
 
+En este repo, el manifiesto extendido (solo hashes, sin subir los JSON) se publica como `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`.
+
 En ausencia de dicho manifiesto extendido, la reproducción de `reward_env_total` debe considerarse "derivada" y dependiente de la disponibilidad de los JSON originales.
 
 ## Resumen por fase
