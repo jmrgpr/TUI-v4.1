@@ -7,6 +7,7 @@ results/*
 
 # Excluir solo archivos JSON grandes de results (mantener CSV y logs)
 results/**/*.json
+!results/**/metadata_template*.json
 # EXCEPCIONES: JSONs de análisis y métricas son críticos
 !results/**/analisis/*.json
 !results/**/analisis_*.json

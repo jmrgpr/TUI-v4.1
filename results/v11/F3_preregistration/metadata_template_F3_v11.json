@@ -1,0 +1,61 @@
+{
+  "protocolo_version": "v11",
+  "experimento": "F3_preregistration",
+  "fecha_preregistro": "2025-12-19",
+  "phase": "F3_preregistration",
+  "unidad_primaria": "run (seed x grid)",
+  "metricas": {
+    "primaria": "reward_env_total",
+    "secundarias": [
+      "reward_total",
+      "risk_effective",
+      "surprise",
+      "avg_tripwire",
+      "avg_shocks",
+      "CVaR05_env",
+      "max_drawdown_env"
+    ]
+  },
+  "condiciones": {
+    "F1_highrisk": {
+      "risk_scale": 1.2,
+      "risk_level": "high",
+      "red_team": false
+    },
+    "F2_redteam": {
+      "risk_scale": 1.2,
+      "risk_level": "high",
+      "red_team": true,
+      "red_team_prob": 0.1
+    }
+  },
+  "agentes": [
+    "control",
+    "dqn_control",
+    "simbiosis"
+  ],
+  "pgf_mix_values": [
+    0.0,
+    0.2
+  ],
+  "seeds": [
+    42,
+    101,
+    13,
+    7,
+    99
+  ],
+  "grids": [
+    8,
+    16
+  ],
+  "episodes": 200,
+  "correccion_multiple": {
+    "metodo": "Holm-Bonferroni",
+    "alpha": 0.05,
+    "two_sided": true,
+    "M_family_primaria": 6
+  },
+  "nota_json": "Los JSON por run no se versionan por tamaño; publicar hashes sha256 en CANONICAL_DATASET_EXTENDED_JSON.md."
+}
+

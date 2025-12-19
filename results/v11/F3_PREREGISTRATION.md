@@ -1,5 +1,8 @@
 # F3_PREREGISTRATION (DRAFT) - Serie v11 (TUI v4.1)
 
+Nota (2025-12-19): el preregistro canónico “peer-review proof” de F3 vive en `results/v11/F3_preregistration/PREREGISTRO_F3_v11.md`.
+Este archivo se mantiene como borrador histórico.
+
 Este documento propone un preregistro para F3 (borrador). Su objetivo es convertir las limitaciones de F2 en preguntas causales testeables, manteniendo trazabilidad y comparabilidad con v11.
 
 ## Principio
@@ -94,4 +97,3 @@ Registrar cualquier desviacion en un log versionado (ej. `results/v11/F3_deviati
 - Todas las exclusiones y desviaciones documentadas en F3_deviations_log.md.
 
 - Family primaria para corrección múltiple: {P1, P2} sobre reward_env_total por condición (F1, F2); M=4 comparaciones.
-
