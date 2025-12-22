@@ -1,5 +1,7 @@
 # Informe Cientifico: Serie v11 (F0, F1, F2)
 
+> Nota (2025-12-22): este informe cubre solo F0–F2. F3 ya fue ejecutado y cerrado (ver `results/v11/F3/README.md` y `results/v11/data/f3_preregistered_report_v11.md`). F4 está preregistrado y pendiente (ver `results/v11/F4/README.md`). Guía general: `results/v11/INDEX_SERIE_V11.md`.
+
 ## 1. Alcance
 Este informe resume la ejecucion y resultados de la serie v11 para tres fases:
 - F0_baseline: referencia en riesgo bajo.
@@ -88,7 +90,7 @@ Interpretacion por metrica:
 
 Interpretacion metodologica: F2 es una prueba de estres adversarial sintetica (parametrizada por `red_team_prob` y probabilidades de tipo de evento). No debe presentarse como "red team min-max" sin implementar un adversario real.
 
-## 7. Estado para F3
+## 7. Estado al cierre de F2 (previo a F3)
 F2 queda **operacionalmente cerrado** como fase de caracterizacion:
 - Dataset canonico verificado: `results/v11/CANONICAL_DATASET_v11.md`
 - F2 != F1 demostrado: `results/v11/data/f2_vs_f1_diff.md`
@@ -97,7 +99,7 @@ F2 queda **operacionalmente cerrado** como fase de caracterizacion:
 
 Documentacion de cierre: `results/v11/F2_CLOSURE_REPORT.md`.
 
-F3 se justifica para responder preguntas causales y comparaciones justas (ablacion de `pgf_mix`, `simbiosis(pgf_mix=0.0)`, baselines modernos y/o severidad del stress test). Borrador de preregistro: `results/v11/F3_PREREGISTRATION.md`.
+F3 se justificó para responder preguntas causales y comparaciones justas (ablación de `pgf_mix`, `simbiosis(pgf_mix=0.0)`, etc.). El preregistro canónico y el cierre de F3 están en `results/v11/F3/PREREGISTRO_F3_v11.md` y `results/v11/F3/F3_CLOSURE_REPORT.md` (el borrador histórico se conserva en `results/v11/F3_PREREGISTRATION.md`).
 
 ## Apéndice: Resultados F2 estratificados por grid_size
 

@@ -6,7 +6,7 @@ from pathlib import Path
 F4_DIR = Path("results/v11/F4")
 RAW_BASE = F4_DIR / "raw" / "F2_redteam"
 
-AGENTS = ("control", "simbiosis", "dqn_control")
+AGENTS = ("control", "simbiosis")
 
 
 def iter_raw_runs():
@@ -56,11 +56,7 @@ def load_csv_rows(csv_path: Path) -> tuple[list[dict], list[str]]:
 
 def write_agent_json(json_data: dict, out_dir: Path, agent: str, base_stem: str) -> Path:
     out_dir.mkdir(parents=True, exist_ok=True)
-    if agent == "dqn_control" and "dqn_params" in json_data:
-        agent_payload = dict(json_data[agent])
-        agent_payload["dqn_params"] = json_data["dqn_params"]
-    else:
-        agent_payload = json_data[agent]
+    agent_payload = json_data[agent]
     out_path = out_dir / f"{base_stem}.json"
     with out_path.open("w", encoding="utf-8") as f:
         json.dump(agent_payload, f, indent=2)
@@ -86,11 +82,11 @@ def agent_out_dir(condition: str, stakes_token: str, grid: int, agent: str) -> P
 def organize_f4_results() -> None:
     """
     Organiza F4 en estructura final por stakes:
-    - results/v11/F4/F2_redteam/stkL/grid{8,16}/riskhigh/{control,simbiosis,dqn_control(optional)}/
-    - results/v11/F4/F2_redteam/stkH/grid{8,16}/riskhigh/{control,simbiosis,dqn_control(optional)}/
+    - results/v11/F4/F2_redteam/stkL/grid{8,16}/riskhigh/{control,simbiosis}/
+    - results/v11/F4/F2_redteam/stkH/grid{8,16}/riskhigh/{control,simbiosis}/
 
     Regla anti-duplicados (misma idea que F3):
-    - Para pgf_mix=0.0: se exportan baselines + simbiosis (si existen).
+    - Para pgf_mix=0.0: se exportan baselines + simbiosis.
     - Para pgf_mix>0.0: se exporta solo `simbiosis` (baselines serían duplicados).
     """
     for json_path in iter_raw_runs():

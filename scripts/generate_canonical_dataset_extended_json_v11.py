@@ -104,22 +104,23 @@ def format_manifest(manifest: list[dict]) -> str:
     lines = [
         "# CANONICAL_DATASET_EXTENDED_JSON (v11)",
         "",
-        "Este manifiesto extendido publica hashes sha256 de los JSON canA3nicos asociados a cada `*_episodes.csv` de v11.",
+        "Este manifiesto extendido publica hashes sha256 de los JSON canónicos asociados a cada `*_episodes.csv` de v11.",
         "",
-        "Objetivo: permitir verificaciA3n independiente de `reward_env_total` (derivado del campo `reward_env_evol` en JSON) sin versionar los JSON grandes en el repo.",
+        "Objetivo: permitir verificación independiente de `reward_env_total` (derivado del campo `reward_env_evol` en JSON) sin inflar el repo con JSON pesados.",
         "",
         "Notas:",
-        "- Los JSON NO estA-n incluidos en GitHub por tamaA±o; aquA- solo se publican rutas y hashes.",
+        "- Por defecto el repo ignora `results/**/*.json` (ver `.gitignore`); algunos JSON históricos pueden estar versionados, otros (p.ej. F3/F4) suelen quedarse fuera.",
+        "- En todos los casos, aquí se publican rutas y hashes sha256 para auditoría/verificación; recomputar `reward_env_total` requiere acceso a los JSON con estos hashes.",
         "- Se excluye `results/v11/archived/`.",
         "",
-        "GeneraciA3n:",
+        "Generación:",
         "- Script: `scripts/generate_canonical_dataset_extended_json_v11.py`",
         "- Salida: `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`",
         "",
         "## Resumen por fase",
     ]
     for phase in PHASES:
-        lines.append(f"- `{phase}`: {counters.get(phase, 0)} JSON (uno por CSV canA3nico).")
+        lines.append(f"- `{phase}`: {counters.get(phase, 0)} JSON (uno por CSV canónico).")
     lines.append("")
     lines.append("## Manifest")
     lines.append("")
@@ -140,7 +141,7 @@ def format_manifest(manifest: list[dict]) -> str:
 def main():
     manifest = build_manifest()
     if not manifest:
-        raise RuntimeError("No se detectaron CSV canA3nicos; asegA§rate de tener los directorios de F0/F1/F2.")
+        raise RuntimeError("No se detectaron CSV canónicos; asegúrate de tener los directorios de v11 (F0/F1/F2/F3) poblados.")
     DOCUMENT.write_text(format_manifest(manifest), encoding="utf-8")
     print(f"Manifest extendido JSON generado en {DOCUMENT}")
 

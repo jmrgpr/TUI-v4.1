@@ -13,7 +13,7 @@ F4 es un experimento puente (v11 → v12) que fija `F2_redteam` y cambia solo **
   - `results/v11/F4/F2_redteam/stkL/` (low-stakes)
   - `results/v11/F4/F2_redteam/stkH/` (high-stakes, budget `B=3`)
 
-Cada grupo mantiene el patrón por `grid{8,16}/riskhigh/{control,simbiosis,dqn_control(optional)}/`.
+Cada grupo mantiene el patrón por `grid{8,16}/riskhigh/{control,simbiosis}/`.
 
 ## Cómo ejecutar
 

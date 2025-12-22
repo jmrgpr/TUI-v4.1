@@ -1,5 +1,7 @@
 # Resumen Ejecutivo: Serie v11 (F0, F1, F2)
 
+> Nota (2025-12-22): este resumen cubre solo F0–F2. Para F3 (cerrado) ver `results/v11/F3/README.md` y `results/v11/data/f3_preregistered_report_v11.md`. Para F4 (pendiente) ver `results/v11/F4/README.md`. Guía general: `results/v11/INDEX_SERIE_V11.md`.
+
 ## Objetivo
 Evaluar desempeno y comportamiento bajo referencia (F0), alto riesgo (F1) y estres adversarial sintetico (F2) bajo el protocolo v11.
 
@@ -40,4 +42,4 @@ Valores resumidos desde `results/v11/data/stats_report_v11.md`.
 - Nota de interpretacion: `reward_total` puede incluir mezcla PGF cuando `pgf_mix>0` (ver `results/v11/ANEXO_TECNICO_v11.md`); `reward_env_total` es recompensa ambiental estimada desde JSON y sirve como control contra shaping.
 
 ## Estado
-La documentacion y los artefactos canonicamente regenerados estan alineados y listos para usar como base de F3.
+F0–F2 quedan cerrados y reproducibles. Para el paquete causal/auditado de F3 y el preregistro de F4, ver `results/v11/INDEX_SERIE_V11.md`.

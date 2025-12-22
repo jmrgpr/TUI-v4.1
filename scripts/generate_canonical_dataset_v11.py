@@ -99,7 +99,7 @@ def format_manifest(manifest: list[dict]) -> str:
     lines = [
         "# CANONICAL_DATASET_v11",
         "",
-        "Este manifiesto lista los CSV canónicos del experimento v11 (F0/F1/F2) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.",
+        "Este manifiesto lista los CSV canónicos de la serie v11 (F0_baseline, F1_highrisk, F2_redteam, F3 y, cuando exista, F4) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.",
         "",
         "El script `scripts/generate_canonical_dataset_v11.py` controla la selección de archivos y el cálculo de su hash sha256.",
         "",
@@ -127,7 +127,7 @@ def format_manifest(manifest: list[dict]) -> str:
 def main():
     manifest = build_manifest()
     if not manifest:
-        raise RuntimeError("No se detectaron CSV canónicos; asegúrate de tener los directorios de F0/F1/F2.")
+        raise RuntimeError("No se detectaron CSV canónicos; asegúrate de tener los directorios de v11 (F0/F1/F2/F3) poblados.")
     DOCUMENT.write_text(format_manifest(manifest), encoding="utf-8")
     print(f"Manifest canónico generado en {DOCUMENT}")
 

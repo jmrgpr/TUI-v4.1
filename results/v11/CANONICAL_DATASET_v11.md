@@ -1,6 +1,6 @@
 # CANONICAL_DATASET_v11
 
-Este manifiesto lista los CSV canónicos del experimento v11 (F0/F1/F2) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.
+Este manifiesto lista los CSV canónicos de la serie v11 (F0_baseline, F1_highrisk, F2_redteam, F3 y, cuando exista, F4) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.
 
 El script `scripts/generate_canonical_dataset_v11.py` controla la selección de archivos y el cálculo de su hash sha256.
 
@@ -9,6 +9,7 @@ El script `scripts/generate_canonical_dataset_v11.py` controla la selección de 
 - `F1_highrisk`: 30 archivos canónicos.
 - `F2_redteam`: 30 archivos canónicos.
 - `F3`: 80 archivos canónicos.
+- `F4`: 0 archivos canónicos.
 
 ## Manifest general
 

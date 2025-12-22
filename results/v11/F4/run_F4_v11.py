@@ -52,7 +52,6 @@ def build_cmd(
         "--red_team",
         "--red_team_prob",
         "0.1",
-        "--dqn_control",
         "--pgf_mix",
         str(pgf_mix),
         "--stakes",

@@ -1,5 +1,7 @@
 # Documento para Publicacion Cientifica (v11)
 
+> Nota (2025-12-22): este documento cubre principalmente F0–F2. Para el paquete causal/auditado de F3 ver `results/v11/F3/README.md` y `results/v11/data/f3_preregistered_report_v11.md`. Para F4 (pendiente) ver `results/v11/F4/README.md`. Guía general: `results/v11/INDEX_SERIE_V11.md`.
+
 ## Titulo
 Evaluacion reproducible de agentes bajo referencia, alto riesgo y estres adversarial sintetico: serie v11 (TUI v4.1)
 
@@ -10,7 +12,7 @@ Advertencia: La métrica "robustez-distractor (operacional)" se reporta únicame
 
 ## Artefactos reproducibles (fuente canonica)
 - Dataset canonico y hashes: `results/v11/CANONICAL_DATASET_v11.md`
-- Manifiesto extendido (hashes de JSON canónicos; sin subir JSON): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
+- Manifiesto extendido (hashes de JSON canónicos; los JSON pueden o no estar versionados): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
 - Reporte estadistico vigente: `results/v11/data/stats_report_v11.md`
 - Bootstrap por run/seed: `results/v11/data/bootstrap_stats_v11.md`
 - Check de que F2 != F1: `results/v11/data/f2_vs_f1_diff.md`
@@ -18,7 +20,7 @@ Advertencia: La métrica "robustez-distractor (operacional)" se reporta únicame
 
 ## Data availability / Reproducibility note
 
-El repositorio publica el dataset canónico (CSV `*_episodes.csv`) con hashes sha256 (`results/v11/CANONICAL_DATASET_v11.md`). La métrica `reward_env_total` se deriva de JSON de cada run (campo `reward_env_evol`), los cuales no se versionan en GitHub por tamaño. Para habilitar verificación independiente sin publicar los JSON, se publica un manifiesto extendido con hashes sha256 y rutas esperadas de los JSON canónicos: `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`. La recomputación exacta de `reward_env_total` requiere acceso a los JSON originales con los hashes indicados.
+El repositorio publica el dataset canónico (CSV `*_episodes.csv`) con hashes sha256 (`results/v11/CANONICAL_DATASET_v11.md`). La métrica `reward_env_total` se deriva de JSON de cada run (campo `reward_env_evol`). Por defecto el repo ignora `results/**/*.json` (ver `.gitignore`), aunque algunos JSON históricos pueden estar versionados; en todos los casos se publica un manifiesto extendido con hashes sha256 y rutas esperadas: `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`. La recomputación exacta de `reward_env_total` requiere acceso a los JSON originales con los hashes indicados (desde el repo o entregados como dataset externo).
 
 ## Resultados principales (dos metricas de recompensa)
 Valores resumidos desde `results/v11/data/stats_report_v11.md` (n = numero de runs/archivos por agente y fase).
@@ -85,4 +87,4 @@ La evidencia inferencial principal se apoya en bootstrap no parametrico por run/
 - Para auditoria, las copias archivadas se conservan en `results/v11/archived`, pero el analisis usa solo el dataset canonico.
 
 ## Conclusiones
-La serie v11 queda reproducible con un dataset canonico verificable, y F2 queda operacionalmente cerrado (F2 != F1 y la activacion del modo adversarial es observable). Esto habilita F3 sobre una base consistente: nuevos baselines, nuevas metricas de seguridad y/o variantes del ataque sintetico.
+La serie v11 (F0–F2) queda reproducible con un dataset canónico verificable, y F2 queda operacionalmente cerrado (F2 != F1 y la activación del modo adversarial es observable). El paquete causal preregistrado de F3 ya está cerrado y auditable (ver `results/v11/F3/F3_CLOSURE_REPORT.md`). F4 está preregistrado como puente (stakes run-level + CFR) y queda pendiente de ejecución.

@@ -92,7 +92,7 @@ python scripts/validate_master_sources_file.py results/master_results_clean.csv 
 - CPU: Intel(R) Core(TM) i7-10850H CPU @ 2.70GHz
 - RAM: 32 GB (34,065,440,768 bytes)
 - GPU: NVIDIA Quadro T1000, Intel(R) UHD Graphics
-- Commit repo: 988dbbf3d73e4b14e82049cf7c547750e0f669d1
+- Commit repo: f759611ce38403fba268cd7d0d0c0bcbbca8f550
 - requirements.lock: ver archivo `results/v11/requirements.lock` generado por `pip freeze`
 
 
