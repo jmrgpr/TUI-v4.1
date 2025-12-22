@@ -24,6 +24,8 @@ python results/v11/F4/run_F4_v11.py --dry-run
 python results/v11/F4/run_F4_v11.py
 ```
 
+Nota: `run_F4_v11.py` imprime **40 comandos** (stakes × grid × seed × `pgf_mix`). Eso es esperado porque cada corrida ejecuta **`control` + `simbiosis`**; tras `scripts/organize_F4_results.py` se obtienen **60 CSV canónicos** (6 grupos × 10 runs) según `results/v11/F4/PREREGISTRO_F4_v11.md`.
+
 2) Organizar a estructura canónica por agente (split del CSV agregado + JSON por agente):
 
 ```powershell

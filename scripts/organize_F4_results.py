@@ -88,6 +88,9 @@ def organize_f4_results() -> None:
     Regla anti-duplicados (misma idea que F3):
     - Para pgf_mix=0.0: se exportan baselines + simbiosis.
     - Para pgf_mix>0.0: se exporta solo `simbiosis` (baselines serían duplicados).
+
+    Nota: `sim.prototipo_rl_simbiosis` genera `control`+`simbiosis` en un mismo run crudo; por eso el número de
+    runs crudos (comandos) puede diferir del conteo final de CSV canónicos por grupo.
     """
     for json_path in iter_raw_runs():
         base_stem = json_path.stem

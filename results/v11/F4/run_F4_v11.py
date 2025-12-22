@@ -15,6 +15,14 @@ STAKES = {
 }
 BUDGET_DEFAULT = 3
 
+# Nota importante (evitar confusión):
+# - `sim.prototipo_rl_simbiosis` ejecuta por defecto dos agentes por corrida: `control` y `simbiosis`.
+# - El preregistro define 6 grupos (C-L, C-H, S0-L, S0-H, S2-L, S2-H) con 10 runs cada uno (total 60).
+# - Este runner lanza 40 comandos (stakes × grid × seed × pgf_mix). Los “60 runs” se obtienen al organizar
+#   y aplicar la regla anti-duplicados:
+#   - Para `pgf_mix=0.0` se exportan `control` + `simbiosis` (2 CSV canónicos por corrida).
+#   - Para `pgf_mix>0.0` se exporta solo `simbiosis` (evita duplicar `control`).
+
 
 def mix_to_token(value: float) -> str:
     v = float(value)
@@ -102,7 +110,16 @@ def main() -> int:
     parser.add_argument("--dry-run", action="store_true", help="Solo imprime comandos (no ejecuta).")
     args = parser.parse_args()
 
+    if 0.0 not in [float(x) for x in args.pgf_mix]:
+        raise SystemExit("[ERROR] F4 requiere incluir pgf_mix=0.0 (S0) para exportar el baseline `control` sin duplicados.")
+
     jobs = iter_jobs(seeds=args.seeds, grids=args.grids, pgf_mix_values=args.pgf_mix, episodes=args.episodes, budget=args.budget)
+    expected_canonical_csv = 0
+    for job in jobs:
+        expected_canonical_csv += 2 if float(job["pgf_mix"]) == 0.0 else 1
+    print(f"[PLAN] Raw jobs: {len(jobs)} (cada job ejecuta control+simbiosis)")
+    print(f"[PLAN] Canónico esperado tras organize_F4_results.py: {expected_canonical_csv} CSV (meta preregistro: 60)")
+
     failures = 0
     for idx, job in enumerate(jobs, start=1):
         cmd = build_cmd(

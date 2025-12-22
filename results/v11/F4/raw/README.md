@@ -2,7 +2,7 @@
 
 Este directorio contiene salidas crudas generadas por `results/v11/F4/run_F4_v11.py`:
 
-- JSON agregados por run (incluyen `control` + `simbiosis` y, si se activa, `dqn_control`).
+- JSON agregados por run (incluyen `control` + `simbiosis`; `dqn_control` solo si se ejecuta manualmente fuera del runner de F4).
 - CSV agregados por run (filas por episodio y por agente).
 
 Estos artefactos **no se versionan** (para evitar duplicación/bloat). Para publicar:
