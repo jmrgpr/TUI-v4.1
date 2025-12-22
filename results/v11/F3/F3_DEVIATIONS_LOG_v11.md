@@ -9,3 +9,6 @@ Formato sugerido por entrada:
 - Impacto esperado (si aplica)
 - Estado (aprobado / rechazado)
 
+## Entradas
+
+- 2025-12-22 — Sin desviaciones registradas al cierre (ver `results/v11/F3/F3_CLOSURE_REPORT.md`).
