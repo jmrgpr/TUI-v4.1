@@ -1,6 +1,8 @@
 import math
 import re
 from dataclasses import dataclass
+import hashlib
+import json
 from pathlib import Path
 
 import numpy as np
@@ -48,6 +50,19 @@ def parse_pgf_mix(path: str) -> float:
     a = int(m.group(1))
     b = int(m.group(2))
     return float(f"{a}.{b}")
+
+
+def reward_env_evol_sha256(json_path: Path) -> str | None:
+    try:
+        payload = json.loads(json_path.read_text(encoding="utf-8"))
+    except Exception:
+        return None
+    evol = payload.get("reward_env_evol")
+    if not isinstance(evol, list):
+        return None
+    # Hash estable del contenido (no del JSON completo)
+    raw = repr(evol).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
 
 
 def holm_bonferroni(pvals: dict[str, float]) -> dict[str, float]:
@@ -134,9 +149,12 @@ def paired_sanity_checks(f3: pd.DataFrame) -> dict:
         k = tuple(row[c] for c in keys)
         pairs.setdefault(k, {})[float(row["pgf_mix"])] = row
 
-    env_diffs = []
-    total_diffs = []
+    env_diffs: list[float] = []
+    total_diffs: list[float] = []
     missing = 0
+    evol_hash_equal = 0
+    evol_hash_missing = 0
+    config_mix_mismatch = 0
     for k, v in pairs.items():
         if 0.0 not in v or 0.2 not in v:
             missing += 1
@@ -145,6 +163,33 @@ def paired_sanity_checks(f3: pd.DataFrame) -> dict:
         r2 = v[0.2]
         env_diffs.append(float(r2["reward_env_total"]) - float(r0["reward_env_total"]))
         total_diffs.append(float(r2["reward_total"]) - float(r0["reward_total"]))
+
+        # Comprobar que los JSON existen y que pgf_mix está aplicado allí.
+        # r0/r2["filename"] es una ruta relativa en Windows; el JSON asociado está al lado del CSV.
+        p0_csv = Path(str(r0["filename"]))
+        p2_csv = Path(str(r2["filename"]))
+        p0 = p0_csv.with_name(p0_csv.name.replace("_episodes.csv", ".json"))
+        p2 = p2_csv.with_name(p2_csv.name.replace("_episodes.csv", ".json"))
+        if not p0.exists() or not p2.exists():
+            evol_hash_missing += 1
+            continue
+        try:
+            j0 = json.loads(p0.read_text(encoding="utf-8"))
+            j2 = json.loads(p2.read_text(encoding="utf-8"))
+            mix0 = float(j0.get("config", {}).get("pgf_mix", -1))
+            mix2 = float(j2.get("config", {}).get("pgf_mix", -1))
+            if mix0 != 0.0 or mix2 != 0.2:
+                config_mix_mismatch += 1
+        except Exception:
+            evol_hash_missing += 1
+            continue
+        h0 = reward_env_evol_sha256(p0)
+        h2 = reward_env_evol_sha256(p2)
+        if h0 is None or h2 is None:
+            evol_hash_missing += 1
+            continue
+        if h0 == h2:
+            evol_hash_equal += 1
 
     env = np.array(env_diffs, dtype=np.float64) if env_diffs else np.array([], dtype=np.float64)
     tot = np.array(total_diffs, dtype=np.float64) if total_diffs else np.array([], dtype=np.float64)
@@ -158,6 +203,9 @@ def paired_sanity_checks(f3: pd.DataFrame) -> dict:
         "total_diff_min": float(np.min(tot)) if tot.size else float("nan"),
         "total_diff_max": float(np.max(tot)) if tot.size else float("nan"),
         "total_diff_mean": float(np.mean(tot)) if tot.size else float("nan"),
+        "evol_hash_equal": int(evol_hash_equal),
+        "evol_hash_missing": int(evol_hash_missing),
+        "config_mix_mismatch": int(config_mix_mismatch),
     }
 
 
@@ -274,6 +322,9 @@ def main() -> None:
     )
     lines.append(
         f"- reward_total diff (m0.2 - m0.0): min={sanity['total_diff_min']:.6g}, max={sanity['total_diff_max']:.6g}, mean={sanity['total_diff_mean']:.6g}"
+    )
+    lines.append(
+        f"- JSON check (por par): reward_env_evol sha256 iguales={sanity['evol_hash_equal']}, missing/parse_fail={sanity['evol_hash_missing']}, config_pgf_mix_mismatch={sanity['config_mix_mismatch']}"
     )
     lines.append("")
     lines.append(

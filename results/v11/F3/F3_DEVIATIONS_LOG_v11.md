@@ -12,3 +12,4 @@ Formato sugerido por entrada:
 ## Entradas
 
 - 2025-12-22 — Sin desviaciones registradas al cierre (ver `results/v11/F3/F3_CLOSURE_REPORT.md`).
+- 2025-12-22 — Se agregan chequeos y diagnósticos (sanity check ablación, integridad/truncamiento y power analysis) como documentación adicional; no cambian hipótesis ni resultados ya ejecutados.

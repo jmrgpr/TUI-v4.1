@@ -16,6 +16,8 @@ Dejar F3 en estado **auditable y peer-review proof**: trazabilidad de datos (CSV
 ### Resultados y análisis
 - Reporte preregistrado F3 (family primaria Holm-Bonferroni M=6): `results/v11/data/f3_preregistered_report_v11.md`
 - Tabla preregistrada F3 (incluye pooled y sensibilidad por grid): `results/v11/data/f3_preregistered_stats_v11.csv`
+- Chequeos de integridad/truncamiento (F3): `results/v11/data/f3_integrity_report_v11.md`
+- Power analysis (diagnóstico basado en varianza observada): `results/v11/data/f3_power_analysis_v11.md` y `results/v11/data/f3_power_analysis_v11.csv`
 
 ### Reconsolidación y descriptivos globales
 - Master reconsolidado desde episodios: `results/master_results_clean.csv`

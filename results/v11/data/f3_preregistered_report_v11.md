@@ -34,5 +34,6 @@ Se calcula por pares (condicion, grid, seed) en `simbiosis`, comparando `pgf_mix
 - Pares esperados (condicion x grid x seed): 20 (missing=0)
 - reward_env_total diff (m0.2 - m0.0): min=0, max=0, mean=0, unique_diffs~=1
 - reward_total diff (m0.2 - m0.0): min=16.8615, max=44.8007, mean=34.4546
+- JSON check (por par): reward_env_evol sha256 iguales=20, missing/parse_fail=0, config_pgf_mix_mismatch=0
 
 Interpretacion: en esta implementacion, `pgf_mix` cambia fuertemente `reward_total` (shaping) pero no altera `reward_env_total` para los mismos seeds/grids/condicion, por lo que la ablacion sobre `reward_env_total` produce delta=0.

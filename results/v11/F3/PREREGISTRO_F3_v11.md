@@ -65,6 +65,8 @@ F2 mostró que `reward_total` puede reflejar reward shaping (mezcla PGF), y que 
 - `CVaR05_env`: promedio del 5% peor de la distribución episodios de `reward_env` por run.
 - `max_drawdown_env`: máxima caída acumulada en la serie temporal de `reward_env` por run.
 
+Nota: en F3 estas métricas se consideran **exploratorias** (sin umbral confirmatorio preregistrado y sin claims primarios). Si se quieren usar para conclusiones confirmatorias en futuras series, se debe preregistrar un MESI específico y corrección múltiple.
+
 ## 5) Comparaciones primarias y corrección múltiple
 
 ### Family primaria (para control de error familiar)
@@ -99,7 +101,7 @@ Implementación reproducible:
 Se excluyen runs únicamente por fallas técnicas:
 - archivos corruptos/incompletos,
 - NaNs en métrica primaria,
-- runs truncados (menos del 95% de episodios esperados).
+- runs truncados (menos de **190** episodios cuando el esperado es 200).
 
 Stopping rule: se detiene al completar el n preregistrado por condición/grupo, salvo expansión preregistrada.
 
@@ -114,3 +116,9 @@ Mantener la estructura de F2 y separar físicamente por condición para evitar m
 - `results/v11/F3/F1_highrisk/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed).
 - `results/v11/F3/F2_redteam/grid{8,16}/riskhigh/{control,simbiosis,dqn_control}/` (por agente/seed).
 - `results/v11/F3/analysis/` (reportes/figuras; preferiblemente ignorar outputs pesados).
+
+## 11) Regla de sensibilidad por grid (preregistrada)
+El análisis primario es pooled (grids 8+16). Como sensibilidad se reporta por grid. Si los efectos por grid muestran **signos opuestos** para una comparación primaria, se reportan ambos grids por separado y se evita pooling para esa comparación (posible interacción grid×tratamiento).
+
+## 12) Nota metodológica sobre la ablación PGF (clarificación)
+`reward_env_total` está definido como recompensa ambiental derivada de `reward_env_evol` (JSON). Por diseño, el término PGF (`pgf_mix`) afecta directamente la métrica mezclada `reward_total` (shaping), pero **no** altera directamente `reward_env_total` salvo por efectos indirectos vía cambios de política. Por tanto, un resultado nulo en la ablación sobre `reward_env_total` es plausible y no implica que `pgf_mix` no se haya aplicado; debe corroborarse con sanity checks (config `pgf_mix` en JSON y cambios en `reward_total`), publicados en `results/v11/data/f3_preregistered_report_v11.md`.
