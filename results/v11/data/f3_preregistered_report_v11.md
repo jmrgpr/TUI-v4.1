@@ -1,0 +1,27 @@
+# F3 preregistered analysis (v11)
+
+Metrica primaria: `reward_env_total` (por run/seed; derivada de JSON `reward_env_evol`).
+
+Family primaria (Holm-Bonferroni, alpha=0.05, two-sided, M=6):
+- F1: simbiosis(m=0.0) vs control
+- F1: simbiosis(m=0.0) vs dqn_control
+- F2: simbiosis(m=0.0) vs control
+- F2: simbiosis(m=0.0) vs dqn_control
+- F1: simbiosis(m=0.2) vs simbiosis(m=0.0)
+- F2: simbiosis(m=0.2) vs simbiosis(m=0.0)
+
+Bootstrap: B=5000, seed=2025.
+
+## Resultados (pooled grids 8+16)
+
+| comparacion | nA | nB | delta media (A-B) | IC95% | p (2-sided) | p Holm (family) |
+| --- | ---:| ---:| ---:| --- | ---:| ---:|
+| F1:m0p0_simbiosis_vs_control | 10 | 10 | -1.88319 | [-2.29737, -1.4999] | 0.00039992 | 0.00239952 |
+| F1:m0p0_simbiosis_vs_dqn_control | 10 | 10 | 1.31895 | [1.12366, 1.51858] | 0.00039992 | 0.0019996 |
+| F2:m0p0_simbiosis_vs_control | 10 | 10 | 1.29206 | [0.423738, 2.21224] | 0.00319936 | 0.0127974 |
+| F2:m0p0_simbiosis_vs_dqn_control | 10 | 10 | 0.264635 | [-0.832182, 1.37974] | 0.671066 | 1 |
+| F1:pgf_ablation_m0p2_vs_m0p0 | 10 | 10 | 0 | [-0.284281, 0.280572] | 0.988602 | 1 |
+| F2:pgf_ablation_m0p2_vs_m0p0 | 10 | 10 | 0 | [-1.20193, 1.16121] | 0.995801 | 0.995801 |
+
+## Sensibilidad por grid
+Ver `results/v11/data/f3_preregistered_stats_v11.csv` (incluye filas por grid8 y grid16).

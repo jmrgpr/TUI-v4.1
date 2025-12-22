@@ -86,6 +86,10 @@ Todas las demás comparaciones (otros `pgf_mix`, otros endpoints) se reportan co
 - p-valores: reportar p ajustado Holm (family primaria).
 - Reporte mínimo: tablas pooled + tablas por grid (sensibilidad).
 
+Implementación reproducible:
+- Script: `scripts/f3_preregistered_analysis_v11.py`
+- Salidas: `results/v11/data/f3_preregistered_report_v11.md` y `results/v11/data/f3_preregistered_stats_v11.csv`
+
 ## 7) MESI (efecto mínimo de interés) y regla de expansión de n
 - MESI para `reward_env_total` (pooled): diferencia absoluta ≥ 5% del baseline `control` (referencia F1/F2).
 - Si el IC95% de la métrica primaria es demasiado ancho para decidir el MESI, se permite expansión de n (nuevas seeds).

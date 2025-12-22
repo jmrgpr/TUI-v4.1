@@ -42,6 +42,10 @@ ATTACK_COLUMNS = [
 
 def detect_phase(filename: str) -> str:
     lowered = filename.replace("\\", "/").lower()
+    # Prioridad: si el archivo vive bajo results/v11/F3/, debe contarse como F3
+    # incluso si contiene subcarpetas llamadas F1_highrisk / F2_redteam.
+    if "results/v11/f3/" in lowered:
+        return "F3"
     for marker, phase in PHASE_HINTS.items():
         if marker in lowered:
             return phase

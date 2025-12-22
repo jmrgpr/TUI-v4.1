@@ -27,4 +27,5 @@ python scripts/generate_canonical_dataset_v11.py
 python scripts/generate_canonical_dataset_extended_json_v11.py
 python scripts/rebuild_master_from_episodes.py
 python scripts/analisis_estadistico_v11.py
+python scripts/f3_preregistered_analysis_v11.py
 ```
