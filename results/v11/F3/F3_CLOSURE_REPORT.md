@@ -35,6 +35,10 @@ Dejar F3 en estado **auditable y peer-review proof**: trazabilidad de datos (CSV
 En `results/v11/data/f3_preregistered_report_v11.md`, la ablación `pgf_mix=0.2` vs `pgf_mix=0.0` sobre `reward_env_total` reporta Δ≈0.
 Esto no implica que `pgf_mix` no se haya aplicado: el sanity check del reporte preregistrado muestra que `reward_total` sí cambia (shaping) mientras que `reward_env_total` permanece invariante por pares (misma condición/grid/seed).
 
+## Alcance de inferencia (importante para peer review)
+- F3 evalúa `pgf_mix` como **operacionalización** (shaping lineal) y su impacto en `reward_env_total`; no pretende “probar/refutar” PGF como principio teórico general.
+- Un p-value grande por sí solo no demuestra nulidad; aquí, la evidencia clave del resultado nulo en `reward_env_total` es la **invariancia por pares** (todas las diferencias m0.2−m0.0 son exactamente 0) y la confirmación de trayectorias ambientales idénticas vía hash de `reward_env_evol` en JSON (con `pgf_mix` correcto en config).
+
 ## Desviaciones del preregistro
 Las desviaciones (si existen) deben registrarse **antes** de análisis completo en:
 - `results/v11/F3/F3_DEVIATIONS_LOG_v11.md`

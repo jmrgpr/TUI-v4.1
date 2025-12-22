@@ -158,6 +158,8 @@ def write_episode_rows(writer, agent_name: str, results: dict):
     pgf_costo = results.get('pgf_costo_evol', [])
     risk_avg_list = results.get('risk_effective_avg', [])
     surprise_avg_list = results.get('surprise_avg', [])
+    starvation_list = results.get('starvation_evol', [])
+    goal_list = results.get('goal_reached_evol', [])
     for i in range(episodes):
         reward = float(results.get('total_rewards', [0.0] * episodes)[i])
         trip = float(results.get('tripwire_steps', [0.0] * episodes)[i])
@@ -168,7 +170,25 @@ def write_episode_rows(writer, agent_name: str, results: dict):
         pgf_costo_ep = float(np.mean(pgf_costo[i])) if i < len(pgf_costo) and pgf_costo[i] else 0.0
         risk_avg = float(risk_avg_list[i]) if i < len(risk_avg_list) else 0.0
         surprise_avg = float(surprise_avg_list[i]) if i < len(surprise_avg_list) else 0.0
-        writer.writerow([agent_name, i + 1, reward, trip, flex, robust, qopt, pgf_bruto_ep, pgf_costo_ep, risk_avg, surprise_avg])
+        starvation = int(starvation_list[i]) if i < len(starvation_list) else 0
+        goal_reached = int(goal_list[i]) if i < len(goal_list) else 0
+        writer.writerow(
+            [
+                agent_name,
+                i + 1,
+                reward,
+                trip,
+                flex,
+                robust,
+                qopt,
+                pgf_bruto_ep,
+                pgf_costo_ep,
+                risk_avg,
+                surprise_avg,
+                starvation,
+                goal_reached,
+            ]
+        )
 
 
 def main():
@@ -204,6 +224,7 @@ def main():
     parser.add_argument('--pgf_kappa', type=float, default=None, help='Escala de sensibilidad PGF (override de config.EVAL_PGF_KAPPA)')
     parser.add_argument('--pgf_lambda', type=float, default=None, help='Escala de costo PGF (override de config.EVAL_PGF_LAMBDA_C)')
     parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
+    parser.add_argument('--catastrophe_penalty', type=float, default=0.0, help='Penalización adicional aplicada solo si el episodio termina con starvation (stakes / high-stakes test).')
     # Nuevos argumentos para tuning DQN
     parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
     parser.add_argument('--gamma', type=float, default=None, help='Override discount factor gamma for DQN control agent (if provided).')
@@ -266,6 +287,7 @@ def main():
                 use_pgf=False,
                 use_dqn=False,
                 pgf_mix=pgf_mix,
+                catastrophe_penalty=args.catastrophe_penalty,
             )
             res_simb = run_fn(
                 episodes=args.episodes,
@@ -277,6 +299,7 @@ def main():
                 use_pgf=True,
                 use_dqn=True,
                 pgf_mix=pgf_mix,
+                catastrophe_penalty=args.catastrophe_penalty,
             )
             if args.tui_only:
                 res_tui = run_fn(
@@ -289,6 +312,7 @@ def main():
                     use_pgf=True,
                     use_dqn=False,
                     pgf_mix=pgf_mix,
+                    catastrophe_penalty=args.catastrophe_penalty,
                 )
             else:
                 res_tui = None
@@ -302,8 +326,32 @@ def main():
 
     # --- SIEMPRE exporta en runs normales (no risk_sweep) ---
     print(f"Ejecutando experimentos / Running experiments: episodes={args.episodes}, seed={args.seed}, risk_scale={args.risk_scale}, grid_size={args.grid_size}")
-    res_A = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Control", use_pgf=False, use_dqn=False, pgf_mix=pgf_mix, grid_size=args.grid_size)
-    res_B = run_fn(episodes=args.episodes, seed=args.seed, risk_scale=args.risk_scale, risk_level=args.risk_level, red_team=args.red_team, agent_name="Simbiosis", use_pgf=True, use_dqn=True, pgf_mix=pgf_mix, grid_size=args.grid_size)
+    res_A = run_fn(
+        episodes=args.episodes,
+        seed=args.seed,
+        risk_scale=args.risk_scale,
+        risk_level=args.risk_level,
+        red_team=args.red_team,
+        agent_name="Control",
+        use_pgf=False,
+        use_dqn=False,
+        pgf_mix=pgf_mix,
+        grid_size=args.grid_size,
+        catastrophe_penalty=args.catastrophe_penalty,
+    )
+    res_B = run_fn(
+        episodes=args.episodes,
+        seed=args.seed,
+        risk_scale=args.risk_scale,
+        risk_level=args.risk_level,
+        red_team=args.red_team,
+        agent_name="Simbiosis",
+        use_pgf=True,
+        use_dqn=True,
+        pgf_mix=pgf_mix,
+        grid_size=args.grid_size,
+        catastrophe_penalty=args.catastrophe_penalty,
+    )
     res_C = None
     dqn_kwargs = {
         k: v for k, v in {
@@ -326,6 +374,7 @@ def main():
             use_dqn=True,
             pgf_mix=pgf_mix,
             grid_size=args.grid_size,
+            catastrophe_penalty=args.catastrophe_penalty,
             state_mode="coords_only",
             **dqn_kwargs
         )
@@ -382,10 +431,12 @@ def main():
                 'Robustez',
                 'Q-optimal',
                 'PGF_Bruto_Avg',
-                'PGF_Costo_Avg',
-                'RiskEffective_Avg',
-                'Surprise_Avg',
-            ])
+                 'PGF_Costo_Avg',
+                 'RiskEffective_Avg',
+                 'Surprise_Avg',
+                 'Starvation',
+                 'GoalReached',
+             ])
             for agent_name, results in raw_data.items():
                 write_episode_rows(writer, agent_name, results)
 

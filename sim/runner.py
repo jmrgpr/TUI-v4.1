@@ -66,9 +66,11 @@ def run_experiment(
     use_dqn=False,
     pgf_mix: float = 1.0,
     risk_level: str = "low",
-        red_team: bool = False,
-        grid_size: int = 5,
-        **kwargs):
+    red_team: bool = False,
+    grid_size: int = 5,
+    catastrophe_penalty: float = 0.0,
+    **kwargs,
+):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
         padded = np.full((len(trajectories), max_steps), pad_value, dtype=np.float32)
         for i, traj in enumerate(trajectories):
@@ -104,6 +106,8 @@ def run_experiment(
     reward_env_evol = []
     survival_evol = []
     shocks_evol = []
+    starvation_evol = []
+    goal_reached_evol = []
     agent = None
     u_proxy_all = []
     u_humans_all = []
@@ -152,6 +156,8 @@ def run_experiment(
         steps_to_recover = None
         tripwire_count = 0
         shock_count = 0
+        episode_starvation = 0
+        episode_goal_reached = 0
         pgf_steps = []
         pgf_bruto_steps = []
         pgf_costo_steps = []
@@ -195,6 +201,12 @@ def run_experiment(
                     action = "noop"
                     gating_hits += 1
             next_state, reward_env, done, info = env.step(action)
+            if done:
+                episode_starvation = 1 if info.get("starvation") else 0
+                episode_goal_reached = 1 if info.get("goal_reached") else 0
+                if episode_starvation and catastrophe_penalty:
+                    reward_env = float(reward_env) + float(catastrophe_penalty)
+                    info["catastrophe_penalty_applied"] = float(catastrophe_penalty)
             # Registrar instrumentación mecánica si existe
             if 'risk_effective' in info:
                 risk_effective_steps.append(info['risk_effective'])
@@ -270,6 +282,8 @@ def run_experiment(
         robust_evol.append(np.mean(robust_steps) if robust_steps else 0.0)
         tripwire_steps.append(tripwire_count)
         shocks_evol.append(shock_count)
+        starvation_evol.append(episode_starvation)
+        goal_reached_evol.append(episode_goal_reached)
         pgf_evol.append(pgf_steps)
         pgf_bruto_evol.append(pgf_bruto_steps)
         pgf_costo_evol.append(pgf_costo_steps)
@@ -355,6 +369,7 @@ def run_experiment(
             "red_team_add_shock_prob": config.EXP_CONFIG.get("red_team_add_shock_prob"),
             "red_team_block_prob": config.EXP_CONFIG.get("red_team_block_prob"),
             "pgf_mix": pgf_mix,
+            "catastrophe_penalty": catastrophe_penalty,
             "seed": seed,
             "episodes": episodes,
             "use_pgf": use_pgf,
@@ -380,6 +395,8 @@ def run_experiment(
         "total_rewards": total_rewards,
         "tripwire_steps": tripwire_steps,
         "shocks_evol": shocks_evol,
+        "starvation_evol": starvation_evol,
+        "goal_reached_evol": goal_reached_evol,
         "pgf_evol": pgf_evol,
         "pgf_bruto_evol": pgf_bruto_evol,
         "pgf_costo_evol": pgf_costo_evol,
