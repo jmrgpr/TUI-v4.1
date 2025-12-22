@@ -5,7 +5,7 @@ Este manifiesto extendido publica hashes sha256 de los JSON canónicos asociados
 Objetivo: permitir verificación independiente de `reward_env_total` (derivado del campo `reward_env_evol` en JSON) sin inflar el repo con JSON pesados.
 
 Notas:
-- Por defecto el repo ignora `results/**/*.json` (ver `.gitignore`); algunos JSON históricos pueden estar versionados, otros (p.ej. F3/F4) suelen quedarse fuera.
+- Por defecto el repo ignora `results/**/*.json` (ver `.gitignore`); algunos JSON históricos pueden estar versionados, otros (p.ej. F3/F4/F5) suelen quedarse fuera.
 - En todos los casos, aquí se publican rutas y hashes sha256 para auditoría/verificación; recomputar `reward_env_total` requiere acceso a los JSON con estos hashes.
 - Se excluye `results/v11/archived/`.
 
@@ -19,6 +19,7 @@ Generación:
 - `F2_redteam`: 30 JSON (uno por CSV canónico).
 - `F3`: 80 JSON (uno por CSV canónico).
 - `F4`: 60 JSON (uno por CSV canónico).
+- `F5`: 0 JSON (uno por CSV canónico).
 
 ## Manifest
 

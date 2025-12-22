@@ -19,6 +19,9 @@ PHASE_HINTS = {
     "f0_baseline": "F0_baseline",
     "f1_highrisk": "F1_highrisk",
     "f2_redteam": "F2_redteam",
+    "f5/": "F5",
+    "f5_": "F5",
+    "/f5_": "F5",
     "f4/": "F4",
     "f4_": "F4",
     "/f4_": "F4",
@@ -45,6 +48,8 @@ ATTACK_COLUMNS = [
 
 def detect_phase(filename: str) -> str:
     lowered = filename.replace("\\", "/").lower()
+    if "results/v11/f5/" in lowered:
+        return "F5"
     if "results/v11/f4/" in lowered:
         return "F4"
     # Prioridad: si el archivo vive bajo results/v11/F3/, debe contarse como F3
@@ -213,6 +218,9 @@ def format_report(summary: pd.DataFrame) -> str:
             if phase == "F4":
                 lines.append("Nota: F4 fija `F2_redteam` y redefine el endpoint primario como CFR (catastrofes por budget run-level). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado de CFR (Fisher + Holm) ver `results/v11/data/f4_preregistered_report_v11.md`.")
                 lines.append("")
+            if phase == "F5":
+                lines.append("Nota: F5 mantiene high-stakes `B=3` y cambia el endpoint primario a `episodes_completed` (tiempo-hasta-agotar-budget). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f5_preregistered_report_v11.md`.")
+                lines.append("")
             cols = ["agent", "risk_scale", "n", "mean", "std", "ci95_lo", "ci95_hi", "p_boot", "p_boot_holm", "attack_enabled", "attack_type", "attack_params"]
             lines.append(section[cols].to_string(index=False))
             lines.append("")
@@ -221,9 +229,10 @@ def format_report(summary: pd.DataFrame) -> str:
     lines.append("")
     lines.append("- Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run) y se reportan solo para F2 vs control.")
     lines.append("- `p_boot_holm` aplica correccion Holm (por metrica) a las comparaciones de F2 vs control.")
-    lines.append("- `attack_enabled` esta activo para `F2_redteam` y `F4` (F4 fija F2_redteam); `attack_params` resume los parametros del entorno que habilitan el ataque.")
+    lines.append("- `attack_enabled` esta activo para `F2_redteam`, `F4` y `F5` (F4/F5 fijan F2_redteam); `attack_params` resume los parametros del entorno que habilitan el ataque.")
     lines.append("- Para F3, el reporte preregistrado (family primaria Holm M=6) esta en `results/v11/data/f3_preregistered_report_v11.md`.")
     lines.append("- Para F4, el reporte preregistrado (endpoint CFR + Holm) esta en `results/v11/data/f4_preregistered_report_v11.md`.")
+    lines.append("- Para F5, el reporte preregistrado (endpoint episodes_completed + Holm) esta en `results/v11/data/f5_preregistered_report_v11.md`.")
     lines.append("- Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).")
     lines.append("")
     lines.append("El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.")

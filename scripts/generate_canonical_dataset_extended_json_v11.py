@@ -6,11 +6,13 @@ from pathlib import Path
 ROOT = Path("results/v11")
 DOCUMENT = ROOT / "CANONICAL_DATASET_EXTENDED_JSON.md"
 AGENTS = {"control", "dqn_control", "simbiosis"}
-PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3", "F4"]
+PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3", "F4", "F5"]
 
 
 def detect_phase(path: Path) -> str | None:
     lowered = [p.lower() for p in path.parts]
+    if "f5" in lowered:
+        return "F5"
     if "f4" in lowered:
         return "F4"
     if "f3" in lowered:
@@ -33,6 +35,8 @@ def canonical_selector(path: Path) -> bool:
     if phase == "F3":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     if phase == "F4":
+        return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
+    if phase == "F5":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     return False
 
@@ -109,7 +113,7 @@ def format_manifest(manifest: list[dict]) -> str:
         "Objetivo: permitir verificación independiente de `reward_env_total` (derivado del campo `reward_env_evol` en JSON) sin inflar el repo con JSON pesados.",
         "",
         "Notas:",
-        "- Por defecto el repo ignora `results/**/*.json` (ver `.gitignore`); algunos JSON históricos pueden estar versionados, otros (p.ej. F3/F4) suelen quedarse fuera.",
+        "- Por defecto el repo ignora `results/**/*.json` (ver `.gitignore`); algunos JSON históricos pueden estar versionados, otros (p.ej. F3/F4/F5) suelen quedarse fuera.",
         "- En todos los casos, aquí se publican rutas y hashes sha256 para auditoría/verificación; recomputar `reward_env_total` requiere acceso a los JSON con estos hashes.",
         "- Se excluye `results/v11/archived/`.",
         "",

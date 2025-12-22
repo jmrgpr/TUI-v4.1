@@ -6,11 +6,13 @@ from pathlib import Path
 ROOT = Path("results/v11")
 DOCUMENT = ROOT / "CANONICAL_DATASET_v11.md"
 AGENTS = {"control", "dqn_control", "simbiosis"}
-PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3", "F4"]
+PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3", "F4", "F5"]
 
 
 def detect_phase(path: Path) -> str | None:
     lowered = [p.lower() for p in path.parts]
+    if "f5" in lowered:
+        return "F5"
     if "f4" in lowered:
         return "F4"
     if "f3" in lowered:
@@ -33,6 +35,8 @@ def canonical_selector(path: Path) -> bool:
     if phase == "F3":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     if phase == "F4":
+        return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
+    if phase == "F5":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     return False
 
@@ -99,7 +103,7 @@ def format_manifest(manifest: list[dict]) -> str:
     lines = [
         "# CANONICAL_DATASET_v11",
         "",
-        "Este manifiesto lista los CSV canónicos de la serie v11 (F0_baseline, F1_highrisk, F2_redteam, F3 y, cuando exista, F4) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.",
+        "Este manifiesto lista los CSV canónicos de la serie v11 (F0_baseline, F1_highrisk, F2_redteam, F3, F4 y, cuando exista, F5) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.",
         "",
         "El script `scripts/generate_canonical_dataset_v11.py` controla la selección de archivos y el cálculo de su hash sha256.",
         "",
