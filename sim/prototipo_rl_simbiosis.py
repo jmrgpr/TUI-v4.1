@@ -224,7 +224,8 @@ def main():
     parser.add_argument('--pgf_kappa', type=float, default=None, help='Escala de sensibilidad PGF (override de config.EVAL_PGF_KAPPA)')
     parser.add_argument('--pgf_lambda', type=float, default=None, help='Escala de costo PGF (override de config.EVAL_PGF_LAMBDA_C)')
     parser.add_argument('--pgf_mix', type=float, default=0.2, help='Mezcla PGF/rew.ambiental cuando use_pgf (1.0 = solo PGF, 0.2 = 20%% PGF, 80%% reward) [DEFAULT UPDATED: 0.2 optimal post smoke-test fix]')
-    parser.add_argument('--catastrophe_penalty', type=float, default=0.0, help='Penalización adicional aplicada solo si el episodio termina con starvation (stakes / high-stakes test).')
+    parser.add_argument('--stakes', type=str, default='low', choices=['low', 'high'], help='Modo stakes (F4): low=baseline, high=budget run-level.')
+    parser.add_argument('--budget', type=int, default=None, help='Presupuesto de catástrofes B (F4). Requerido si --stakes high. Ej: 3')
     # Nuevos argumentos para tuning DQN
     parser.add_argument('--learning_rate', type=float, default=None, help='Override learning rate for DQN control agent (if provided).')
     parser.add_argument('--gamma', type=float, default=None, help='Override discount factor gamma for DQN control agent (if provided).')
@@ -239,6 +240,9 @@ def main():
         args.visualize = False
         args.plot = False
         print("[Modo rapido/test activado: episodios=10, sin visualizacion ni graficos]")
+
+    if args.stakes == "high" and args.budget is None:
+        raise SystemExit("[ERROR] --stakes high requiere --budget explícito (p.ej. 3).")
 
     # Overrides opcionales de hiperparametros PGF (disponibles tanto en risk_sweep como en modo normal)
     if args.pgf_kappa is not None:  # pragma: no cover
@@ -287,7 +291,8 @@ def main():
                 use_pgf=False,
                 use_dqn=False,
                 pgf_mix=pgf_mix,
-                catastrophe_penalty=args.catastrophe_penalty,
+                stakes_mode=args.stakes,
+                catastrophe_budget=args.budget,
             )
             res_simb = run_fn(
                 episodes=args.episodes,
@@ -299,7 +304,8 @@ def main():
                 use_pgf=True,
                 use_dqn=True,
                 pgf_mix=pgf_mix,
-                catastrophe_penalty=args.catastrophe_penalty,
+                stakes_mode=args.stakes,
+                catastrophe_budget=args.budget,
             )
             if args.tui_only:
                 res_tui = run_fn(
@@ -312,7 +318,8 @@ def main():
                     use_pgf=True,
                     use_dqn=False,
                     pgf_mix=pgf_mix,
-                    catastrophe_penalty=args.catastrophe_penalty,
+                    stakes_mode=args.stakes,
+                    catastrophe_budget=args.budget,
                 )
             else:
                 res_tui = None
@@ -337,7 +344,8 @@ def main():
         use_dqn=False,
         pgf_mix=pgf_mix,
         grid_size=args.grid_size,
-        catastrophe_penalty=args.catastrophe_penalty,
+        stakes_mode=args.stakes,
+        catastrophe_budget=args.budget,
     )
     res_B = run_fn(
         episodes=args.episodes,
@@ -350,7 +358,8 @@ def main():
         use_dqn=True,
         pgf_mix=pgf_mix,
         grid_size=args.grid_size,
-        catastrophe_penalty=args.catastrophe_penalty,
+        stakes_mode=args.stakes,
+        catastrophe_budget=args.budget,
     )
     res_C = None
     dqn_kwargs = {
@@ -374,7 +383,8 @@ def main():
             use_dqn=True,
             pgf_mix=pgf_mix,
             grid_size=args.grid_size,
-            catastrophe_penalty=args.catastrophe_penalty,
+            stakes_mode=args.stakes,
+            catastrophe_budget=args.budget,
             state_mode="coords_only",
             **dqn_kwargs
         )

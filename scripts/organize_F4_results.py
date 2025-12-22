@@ -20,15 +20,16 @@ def iter_raw_runs():
 
 
 def parse_stem(stem: str) -> dict:
-    # grid16_riskhigh_r1p2_f2rt0p1_seed42_stkH_m0p2_v11
+    # grid16_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p2_v11
     m = re.match(
-        r"^grid(?P<grid>\d+)_riskhigh_(?P<risk>r\d+p\d+)_(?P<cond>f2rt0p1)_seed(?P<seed>\d+)_(?P<stakes>stkL|stkH)_m(?P<mix_a>\d+)p(?P<mix_b>\d+)_v11$",
+        r"^grid(?P<grid>\d+)_riskhigh_(?P<risk>r\d+p\d+)_(?P<cond>f2rt0p1)_seed(?P<seed>\d+)_(?P<stakes>stkL|stkH)_b(?P<budget>\d+)_m(?P<mix_a>\d+)p(?P<mix_b>\d+)_v11$",
         stem,
     )
     if not m:
         raise ValueError(f"Nombre raw inesperado: {stem}")
     grid = int(m.group("grid"))
     seed = int(m.group("seed"))
+    budget = int(m.group("budget"))
     mix = float(f"{m.group('mix_a')}.{m.group('mix_b')}")
     stakes_token = m.group("stakes")
     risk_token = m.group("risk")
@@ -39,6 +40,7 @@ def parse_stem(stem: str) -> dict:
         "condition": "F2_redteam",
         "risk_token": risk_token,
         "stakes_token": stakes_token,
+        "budget": budget,
     }
 
 
@@ -110,7 +112,7 @@ def organize_f4_results() -> None:
             agent_csv_path = write_agent_csv(rows, fieldnames, out_dir, agent, base_stem)
             print(
                 f"[OK] {meta['condition']} {meta['stakes_token']} grid{meta['grid']} "
-                f"seed={meta['seed']} pgf_mix={meta['pgf_mix']} agent={agent}"
+                f"seed={meta['seed']} budget={meta['budget']} pgf_mix={meta['pgf_mix']} agent={agent}"
             )
             print(f"     JSON: {agent_json_path}")
             print(f"     CSV : {agent_csv_path}")
@@ -122,4 +124,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

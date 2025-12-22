@@ -68,7 +68,8 @@ def run_experiment(
     risk_level: str = "low",
     red_team: bool = False,
     grid_size: int = 5,
-    catastrophe_penalty: float = 0.0,
+    stakes_mode: str = "low",
+    catastrophe_budget: int | None = None,
     **kwargs,
 ):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
@@ -133,6 +134,12 @@ def run_experiment(
     surprise_evol = []
     risk_effective_avg = []
     surprise_avg = []
+    run_catastrophes_total = 0
+    terminated_by_budget = False
+    if stakes_mode not in {"low", "high"}:
+        raise ValueError(f"stakes_mode inválido: {stakes_mode}. Usa 'low' o 'high'.")
+    if stakes_mode == "high" and catastrophe_budget is None:
+        raise ValueError("stakes_mode='high' requiere catastrophe_budget explícito (p.ej., 3).")
     for ep in range(episodes):
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
@@ -204,9 +211,6 @@ def run_experiment(
             if done:
                 episode_starvation = 1 if info.get("starvation") else 0
                 episode_goal_reached = 1 if info.get("goal_reached") else 0
-                if episode_starvation and catastrophe_penalty:
-                    reward_env = float(reward_env) + float(catastrophe_penalty)
-                    info["catastrophe_penalty_applied"] = float(catastrophe_penalty)
             # Registrar instrumentación mecánica si existe
             if 'risk_effective' in info:
                 risk_effective_steps.append(info['risk_effective'])
@@ -296,6 +300,10 @@ def run_experiment(
         all_actions.extend(actions_taken)
         gaming_hits_total += gaming_hits
         gating_hits_total += gating_hits
+        run_catastrophes_total += int(episode_starvation)
+        if stakes_mode == "high" and catastrophe_budget is not None and run_catastrophes_total >= int(catastrophe_budget):
+            terminated_by_budget = True
+            break
     if agent is not None and not use_dqn:
         agent.reprogram_purpose("survive_and_help")
 
@@ -357,6 +365,8 @@ def run_experiment(
             "epsilon_decay": dqn_epsilon_decay if dqn_epsilon_decay is not None else DEFAULT_EPSILON_DECAY,
             "epsilon_end": dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
         }
+    episodes_completed = len(total_rewards)
+    budget_exhausted = bool(catastrophe_budget is not None and run_catastrophes_total >= int(catastrophe_budget))
     return {
         "config": {
             "grid_size": env.size,
@@ -369,11 +379,19 @@ def run_experiment(
             "red_team_add_shock_prob": config.EXP_CONFIG.get("red_team_add_shock_prob"),
             "red_team_block_prob": config.EXP_CONFIG.get("red_team_block_prob"),
             "pgf_mix": pgf_mix,
-            "catastrophe_penalty": catastrophe_penalty,
+            "stakes_mode": stakes_mode,
+            "catastrophe_budget": catastrophe_budget,
             "seed": seed,
             "episodes": episodes,
             "use_pgf": use_pgf,
             "use_dqn": use_dqn
+        },
+        "run_metrics": {
+            "catastrophes_total": int(run_catastrophes_total),
+            "budget_exhausted": bool(budget_exhausted),
+            "terminated_by_budget": bool(terminated_by_budget),
+            "episodes_completed": int(episodes_completed),
+            "cfr": 1.0 if budget_exhausted else 0.0,
         },
         "dqn_params": dqn_params,
         "avg_reward": avg_reward,

@@ -6,7 +6,8 @@
   "stakes": {
     "token": "stkL|stkH",
     "catastrophe_definition": "episode ends with starvation (resources<=0)",
-    "catastrophe_penalty": 0.0
+    "stakes_mode": "low|high",
+    "catastrophe_budget_B": 3
   },
   "grid_size": 8,
   "seed": 42,

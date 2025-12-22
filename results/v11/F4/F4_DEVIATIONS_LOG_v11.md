@@ -1,6 +1,6 @@
 # F4_DEVIATIONS_LOG_v11
 
-Este archivo registra cualquier desviación del preregistro **antes** de analizar resultados completos (p.ej., cambio de seeds, episodios, parámetros de stakes, exclusiones).
+Este archivo registra cualquier desviación del preregistro **antes** de analizar resultados completos (p.ej., cambios de seeds, episodios, budget `B`, exclusiones).
 
 Formato sugerido por entrada:
 - Fecha

@@ -1,20 +1,21 @@
-# F4 (v11) — High-Stakes / Risk-Tension Test
+# F4 (v11) — Stakes run-level (B=3) + CFR
 
-F4 es un experimento puente (v11 → v12) diseñado para aislar una sola palanca causal nueva: **stakes / tensión de riesgo efectiva** en el entorno hostil (`F2_redteam`), y evaluar si:
+F4 es un experimento puente (v11 → v12) que fija `F2_redteam` y cambia solo **stakes/riesgo efectivo** a nivel run mediante un **presupuesto de catástrofes** `B` (Adenda 01).
 
-- El “nicho” de robustez de `simbiosis` vs `control` se vuelve más nítido bajo stakes altos.
-- `pgf_mix` (shaping lineal) solo aporta valor cuando el costo de catástrofe es alto.
+## Estructura (alineada a F3)
 
-## Estructura (peer-review proof)
-
-- Outputs crudos (no canónicos): `results/v11/F4/raw/` (CSV agregados por run y JSON del runner; **no se versionan**).
-- Outputs canónicos (se versionan CSV; JSON se audita por hashes):
-  - `results/v11/F4/F2_redteam/stkL/`
-  - `results/v11/F4/F2_redteam/stkH/`
+- Preregistro y auditoría:
+  - `results/v11/F4/PREREGISTRO_F4_v11.md`
+  - `results/v11/F4/F4_ADENDA_01.md`
+  - `results/v11/F4/F4_DEVIATIONS_LOG_v11.md`
+- Outputs crudos (no canónicos; no versionar): `results/v11/F4/raw/`
+- Outputs canónicos (versionar CSV; JSON solo por hashes):
+  - `results/v11/F4/F2_redteam/stkL/` (low-stakes)
+  - `results/v11/F4/F2_redteam/stkH/` (high-stakes, budget `B=3`)
 
 Cada grupo mantiene el patrón por `grid{8,16}/riskhigh/{control,simbiosis,dqn_control(optional)}/`.
 
-## Cómo ejecutar (cuando decidas correr F4)
+## Cómo ejecutar
 
 1) Ejecutar runs crudos (genera JSON + CSV agregado por run):
 
@@ -23,7 +24,7 @@ python results/v11/F4/run_F4_v11.py --dry-run
 python results/v11/F4/run_F4_v11.py
 ```
 
-2) Organizar a estructura canónica por agente (split del CSV agregado y JSON por agente):
+2) Organizar a estructura canónica por agente (split del CSV agregado + JSON por agente):
 
 ```powershell
 python scripts/organize_F4_results.py
@@ -37,8 +38,3 @@ python scripts/analisis_estadistico_v11.py
 python scripts/generate_canonical_dataset_v11.py
 python scripts/generate_canonical_dataset_extended_json_v11.py
 ```
-
-## Documentos canónicos
-
-- Preregistro: `results/v11/F4/PREREGISTRO_F4_v11.md`
-- Deviations log: `results/v11/F4/F4_DEVIATIONS_LOG_v11.md`
