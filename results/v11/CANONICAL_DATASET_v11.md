@@ -9,7 +9,7 @@ El script `scripts/generate_canonical_dataset_v11.py` controla la selección de 
 - `F1_highrisk`: 30 archivos canónicos.
 - `F2_redteam`: 30 archivos canónicos.
 - `F3`: 80 archivos canónicos.
-- `F4`: 0 archivos canónicos.
+- `F4`: 60 archivos canónicos.
 
 ## Manifest general
 
@@ -161,6 +161,66 @@ El script `scripts/generate_canonical_dataset_v11.py` controla la selección de 
 | F3 | simbiosis | 8 | 1.2 | 7 | `results/v11/F3/F2_redteam/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed7_m0p2_v11_episodes.csv` | `c9ce597c8b9d8318facca0646a2e6eb199ba361e9f723fef8a5d3458d025ca25` |
 | F3 | simbiosis | 8 | 1.2 | 99 | `results/v11/F3/F2_redteam/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed99_m0p0_v11_episodes.csv` | `35b68d5785c7c0654372b7abb4b9519009076cc4f72dab23f550d28958501c59` |
 | F3 | simbiosis | 8 | 1.2 | 99 | `results/v11/F3/F2_redteam/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed99_m0p2_v11_episodes.csv` | `1130784ffd6cb1122bac83f951579ede008acbb00957dbcd0a5c8e39c607ba6c` |
+| F4 | control | 16 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed101_stkH_b3_m0p0_v11_episodes.csv` | `d41928c3d4d1c1709d6f9fd705156fe581d614481aa1ba3e37a47cf8ed492cb1` |
+| F4 | control | 16 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed13_stkH_b3_m0p0_v11_episodes.csv` | `ae484ee458640a0d4b1501eb36c18aa3684cec55856978ebe02089bd704396ac` |
+| F4 | control | 16 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p0_v11_episodes.csv` | `a32dcaf36dd0af8a68c8c9216a804ce64d77908ad05174cb42c6e81b30e95c7d` |
+| F4 | control | 16 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed7_stkH_b3_m0p0_v11_episodes.csv` | `9ac19efb5b2a2a4a7aab27ca6a067147d67407f1c317866485e127db91032860` |
+| F4 | control | 16 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed99_stkH_b3_m0p0_v11_episodes.csv` | `218ae48412cf7ac59d1938f7ff53b5e961777af1cc8edd62fb4f63ad817523ad` |
+| F4 | simbiosis | 16 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed101_stkH_b3_m0p0_v11_episodes.csv` | `0a6af5457c06a00f36929060661a6ecdb7902421f62270e5177ec8ee55b5ba81` |
+| F4 | simbiosis | 16 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed101_stkH_b3_m0p2_v11_episodes.csv` | `aef28f92d6bf99b7a27fb37ad32769627ad2e63cd42a1fdf2557a9b27403d6a9` |
+| F4 | simbiosis | 16 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed13_stkH_b3_m0p0_v11_episodes.csv` | `4962ba48138b4b0bc2b3d786407a8657a7f83b0db3661604e1a92b234e082e6a` |
+| F4 | simbiosis | 16 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed13_stkH_b3_m0p2_v11_episodes.csv` | `100ed71e9126c1a3912a55547bd640c59087711a0d7eb19047abd44adb769f82` |
+| F4 | simbiosis | 16 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p0_v11_episodes.csv` | `ec728c785bcf622b66ec865aaa210df90f7625cb5e260ad611d4c08624a4b002` |
+| F4 | simbiosis | 16 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p2_v11_episodes.csv` | `08fe6697a19a603b06379ac43b14d913a6b876cee00659b7e04bd2f7d8843647` |
+| F4 | simbiosis | 16 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed7_stkH_b3_m0p0_v11_episodes.csv` | `77050d1053acf166f9a010c614d401525437e8d10bb76ad0bc083edecb6c1e42` |
+| F4 | simbiosis | 16 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed7_stkH_b3_m0p2_v11_episodes.csv` | `5d385fd88ab0684fc11aa50d5755be2ebede54d1b1113a7fbe24b6527402cdc9` |
+| F4 | simbiosis | 16 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed99_stkH_b3_m0p0_v11_episodes.csv` | `ee6a22625e291136ac8f542eddc11f7073e481b4e4d9ad550410606484018499` |
+| F4 | simbiosis | 16 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkH/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed99_stkH_b3_m0p2_v11_episodes.csv` | `cbe38be639a3ef5fec2a7e27c0911a97909808ab00583d6f714b1f8bec61df3c` |
+| F4 | control | 8 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed101_stkH_b3_m0p0_v11_episodes.csv` | `85c70d4789af52a1e6d84c920876d6a1ae90493169571f5d2973592d4d4d9f1e` |
+| F4 | control | 8 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed13_stkH_b3_m0p0_v11_episodes.csv` | `6cbe8b8e0f29cd93df762a64c78d23b77ad7c393ee527a62cc888a15bddc9501` |
+| F4 | control | 8 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p0_v11_episodes.csv` | `409f3324f10a17307440985ceb4008d48d3b5ac5f03247c2df13df3f296cc8c9` |
+| F4 | control | 8 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed7_stkH_b3_m0p0_v11_episodes.csv` | `4efb727eaaa3861acdeae0395481b474b51520416bc06a376ad17cc664465f6a` |
+| F4 | control | 8 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed99_stkH_b3_m0p0_v11_episodes.csv` | `23eae2fad07efc9cbe9ecc209d2d429d3ab2a53bc6b5e3416213ad93a87e4d65` |
+| F4 | simbiosis | 8 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed101_stkH_b3_m0p0_v11_episodes.csv` | `15b37ce18f29953a1b5c64f5658e8dba13f403df79ff494dae895f8abc295003` |
+| F4 | simbiosis | 8 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed101_stkH_b3_m0p2_v11_episodes.csv` | `01e8990b61493e8af91102cfcdd6ac33d7069fed244476775232a384944220c3` |
+| F4 | simbiosis | 8 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed13_stkH_b3_m0p0_v11_episodes.csv` | `0c856baa7be83f89bc6cad77834e8918513d4d6761a49c3a9da65bc40c9e89dc` |
+| F4 | simbiosis | 8 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed13_stkH_b3_m0p2_v11_episodes.csv` | `c9609ed7cf25c0c9ccf2c7c303f73f950dfb657cc848a0eb71c3648ab3653fea` |
+| F4 | simbiosis | 8 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p0_v11_episodes.csv` | `0de243fd3dc7658422cd52efd2d142043daa89372f4011057c4158add5bed192` |
+| F4 | simbiosis | 8 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed42_stkH_b3_m0p2_v11_episodes.csv` | `5831d34df714246ea91d6d7313b24c75022bcd91ee34e773236ffd29f42b0e20` |
+| F4 | simbiosis | 8 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed7_stkH_b3_m0p0_v11_episodes.csv` | `75aef5be7353f556966923dc98a370094ea2229c89a0482b605304b6bd86c3b0` |
+| F4 | simbiosis | 8 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed7_stkH_b3_m0p2_v11_episodes.csv` | `271d101643e168b91ace23d5b915daa96acf7f48a302d0dee7b78a739f7e96a9` |
+| F4 | simbiosis | 8 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed99_stkH_b3_m0p0_v11_episodes.csv` | `d9d3c08543f33031504786409319e0d4a44fe0fee689e728ccc16f17904d8c98` |
+| F4 | simbiosis | 8 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed99_stkH_b3_m0p2_v11_episodes.csv` | `3b0b2003bc20e8bc2c64e6c12e3c5491704a0603b339c1d57e8ea7c05e71a62d` |
+| F4 | control | 16 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed101_stkL_b3_m0p0_v11_episodes.csv` | `263732e893e6ded7c80d37badc872af601f1b9bef70ea52b94aa3a78e8255a22` |
+| F4 | control | 16 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed13_stkL_b3_m0p0_v11_episodes.csv` | `d82942a3ff3ac9f85d3a4664990ec3de2bf6a9ca289ee257faa14f86b30ad560` |
+| F4 | control | 16 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed42_stkL_b3_m0p0_v11_episodes.csv` | `900da943317efd6517c61e0ccb21a24ab2f4e6ff5c11e41a9ae907d17eb3e824` |
+| F4 | control | 16 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed7_stkL_b3_m0p0_v11_episodes.csv` | `2e838d3f7dbf60aefd491e157286bcd91f4b1d3102ab3009873111b030fe69de` |
+| F4 | control | 16 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p1_seed99_stkL_b3_m0p0_v11_episodes.csv` | `3e8c9d467eaffac2c113600c799744fc2e134c918db87f6945cd63fc9fc58d3a` |
+| F4 | simbiosis | 16 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed101_stkL_b3_m0p0_v11_episodes.csv` | `b46670dda0d082cbeb4f67309a7922d1a5e101512d85bd5733b96c2ad5c74dc7` |
+| F4 | simbiosis | 16 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed101_stkL_b3_m0p2_v11_episodes.csv` | `1106080cb5076e80370192d01e6a4a31396727fe13f843b6c4da454b80c82fa7` |
+| F4 | simbiosis | 16 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed13_stkL_b3_m0p0_v11_episodes.csv` | `dcf1f3066d6d238e68d91c7d41403e2393636d25713c65669b1396dbc1cacecb` |
+| F4 | simbiosis | 16 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed13_stkL_b3_m0p2_v11_episodes.csv` | `8b57725fd129828f3d74be130f0d33feda7830e13432786fdee9ec0820d76546` |
+| F4 | simbiosis | 16 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed42_stkL_b3_m0p0_v11_episodes.csv` | `a00c6f81f24525db053a40c9422c642ea59642b4396f0920815e5ef76fb15843` |
+| F4 | simbiosis | 16 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed42_stkL_b3_m0p2_v11_episodes.csv` | `439051199fdd2c137ce7d9da4d823b8596ab851add043e1731edc4534f8cb699` |
+| F4 | simbiosis | 16 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed7_stkL_b3_m0p0_v11_episodes.csv` | `678b5ac0f41e45fae51f1c965d0bea61c2bb49471687dd21858003cd06684fb9` |
+| F4 | simbiosis | 16 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed7_stkL_b3_m0p2_v11_episodes.csv` | `421c1a782e168a05e401400364312ea73d4892fcf5ff80df40e5deea075a6fdd` |
+| F4 | simbiosis | 16 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed99_stkL_b3_m0p0_v11_episodes.csv` | `4da5d4130c4eefe9f9bfc4682fbee6885a5717975e3113215cbd84972069da85` |
+| F4 | simbiosis | 16 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkL/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p1_seed99_stkL_b3_m0p2_v11_episodes.csv` | `57d82f49aa4ecb11df835775cb2ee853c228708b0e5dcc4b0fe98b1584e420b9` |
+| F4 | control | 8 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed101_stkL_b3_m0p0_v11_episodes.csv` | `40d2660c118d0319a06e89f289f97bce6763e14e746b372525fca9a93554d1be` |
+| F4 | control | 8 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed13_stkL_b3_m0p0_v11_episodes.csv` | `4d114b515c9c0195950c0876436d9ffe5fa73dd1aa777d7a2039222ec4eca042` |
+| F4 | control | 8 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed42_stkL_b3_m0p0_v11_episodes.csv` | `9f334f3427c3f371852075f00fcc855c18ad3c997a13db60b02576f5753223ea` |
+| F4 | control | 8 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed7_stkL_b3_m0p0_v11_episodes.csv` | `1fca30ab9946d80eaecba83d3ecb62ea3a0e943f1ba8d0f67bfbac89b5c594c3` |
+| F4 | control | 8 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p1_seed99_stkL_b3_m0p0_v11_episodes.csv` | `c2957fec2df30cd777e8074649b37729e2a932e38b32f1b0117d524b458c2dd2` |
+| F4 | simbiosis | 8 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed101_stkL_b3_m0p0_v11_episodes.csv` | `dcf1c8f85c3788cbb57b235c5b678552bb6e1e4adbb4ea7647f67ccaf8d987b4` |
+| F4 | simbiosis | 8 | 1.2 | 101 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed101_stkL_b3_m0p2_v11_episodes.csv` | `9226f4e605699f2fb3f41f50d8116f3ed079c453727f705a71a498cb1566ad8b` |
+| F4 | simbiosis | 8 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed13_stkL_b3_m0p0_v11_episodes.csv` | `0469cca11384e20949e0d62f868ad99efe2d2cccaaf1f58642b5853fc2e6779e` |
+| F4 | simbiosis | 8 | 1.2 | 13 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed13_stkL_b3_m0p2_v11_episodes.csv` | `fbf8c5bb2cc59fe742953cb8ab854b458dc3777426c22f9915b228c88b2b5320` |
+| F4 | simbiosis | 8 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed42_stkL_b3_m0p0_v11_episodes.csv` | `64ac7e8e96e7da520852a005e88d1876825931d6ec7ab4a189a5c28315c30eca` |
+| F4 | simbiosis | 8 | 1.2 | 42 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed42_stkL_b3_m0p2_v11_episodes.csv` | `a551e88249233ce5d65b32d22987d42e65b16aa1430ac6028124bb053dfea708` |
+| F4 | simbiosis | 8 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed7_stkL_b3_m0p0_v11_episodes.csv` | `1ff0b55b948eccd50841ad751baf2b64ad8d7214caa9067ee4bd26a90b7d06dd` |
+| F4 | simbiosis | 8 | 1.2 | 7 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed7_stkL_b3_m0p2_v11_episodes.csv` | `f0885f1bb3ecec653cd96b65ba6abad128837b793316993fd112e8731571cf01` |
+| F4 | simbiosis | 8 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed99_stkL_b3_m0p0_v11_episodes.csv` | `fd71b1277cbc897c17f64d834ee48963ba5c8bf67d12a6856c4d9a1d446c40ff` |
+| F4 | simbiosis | 8 | 1.2 | 99 | `results/v11/F4/F2_redteam/stkL/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed99_stkL_b3_m0p2_v11_episodes.csv` | `d2d9266d5c36db40e831a08c16abe0399f911ceea564207600f8f756c8718cd5` |
 
 Se documenta adicionalmente en `results/v11/data/f2_vs_f1_diff.md` la comparativa F1 vs F2 y los campos meta `phase/attack_*` que enriquecen cada JSON.
 Los archivos `raw/` y las copias en `archived/` solo se conservan para auditoría histórica; no se usan en análisis estadístico.

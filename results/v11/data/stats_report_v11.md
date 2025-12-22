@@ -44,6 +44,14 @@ Nota: F3 se reporta aqui solo como descriptivo agregado. Para el analisis prereg
 dqn_control        1.2 20 -65.23967  5.413948 -67.612437 -62.866903     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
   simbiosis        1.2 40 -47.22058 21.572395 -53.905934 -40.535225     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 
+### Fase `F4`
+
+Nota: F4 fija `F2_redteam` y redefine el endpoint primario como CFR (catastrofes por budget run-level). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado de CFR (Fisher + Holm) ver `results/v11/data/f4_preregistered_report_v11.md`.
+
+    agent risk_scale  n       mean       std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                          attack_params
+  control        1.2 21 -67.119815  5.670546 -69.545147 -64.694482     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+simbiosis        1.2 40 -51.837504 18.164448 -57.466725 -46.208283     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+
 ## Metrica `reward_env_total`
 
 ### Fase `F0_baseline`
@@ -76,12 +84,21 @@ Nota: F3 se reporta aqui solo como descriptivo agregado. Para el analisis prereg
 dqn_control        1.2 20 -65.239670 5.413948 -67.612437 -62.866903     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
   simbiosis        1.2 40 -64.447878 5.893849 -66.274400 -62.621355     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 
+### Fase `F4`
+
+Nota: F4 fija `F2_redteam` y redefine el endpoint primario como CFR (catastrofes por budget run-level). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado de CFR (Fisher + Holm) ver `results/v11/data/f4_preregistered_report_v11.md`.
+
+    agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                          attack_params
+  control        1.2 20 -67.256680 5.782161 -69.790824 -64.722537     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+simbiosis        1.2 40 -67.752083 3.009114 -68.684617 -66.819548     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+
 ## Notas rapidas
 
 - Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run) y se reportan solo para F2 vs control.
 - `p_boot_holm` aplica correccion Holm (por metrica) a las comparaciones de F2 vs control.
-- `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.
+- `attack_enabled` esta activo para `F2_redteam` y `F4` (F4 fija F2_redteam); `attack_params` resume los parametros del entorno que habilitan el ataque.
 - Para F3, el reporte preregistrado (family primaria Holm M=6) esta en `results/v11/data/f3_preregistered_report_v11.md`.
+- Para F4, el reporte preregistrado (endpoint CFR + Holm) esta en `results/v11/data/f4_preregistered_report_v11.md`.
 - Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).
 
 El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.

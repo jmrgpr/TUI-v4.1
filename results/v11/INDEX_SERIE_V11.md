@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
 **Última actualización:** 2025-12-22  
-**Estado:** F0–F3 cerrados; F4 preregistrado y pendiente de ejecución.
+**Estado:** F0–F4 cerrados (F4 ejecutado, auditado y con cierre formal).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -10,7 +10,7 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F1_highrisk:** cerrado.
 - **F2_redteam:** cerrado (stress adversarial sintético; no min-max).
 - **F3:** cerrado (ablación `pgf_mix` + comparación justa; preregistrado y auditado).
-- **F4:** preregistrado (stakes run-level `B=3` + CFR), **no ejecutado aún**.
+- **F4:** cerrado (stakes run-level `B=3` + CFR; preregistrado y auditado).
 
 El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
 
@@ -20,6 +20,7 @@ El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
 - **Pipeline reproducible v11:** `results/v11/README_REPRODUCIBLE_v11.md`
 - **Reporte global vigente (incluye F3):** `results/v11/data/stats_report_v11.md`
 - **Cierre F3:** `results/v11/F3/F3_CLOSURE_REPORT.md`
+- **Cierre F4:** `results/v11/F4/F4_CLOSURE_REPORT.md`
 
 ## 3) Qué leer según tu objetivo
 ### A) “Quiero reproducir números / regenerar artefactos”
@@ -43,10 +44,9 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 ### D) “Quiero saber qué es F4 (y qué falta correr)”
 - **Preregistro (canónico):** `results/v11/F4/PREREGISTRO_F4_v11.md`
 - **Adenda 01 (stakes run-level + CFR):** `results/v11/F4/F4_ADENDA_01.md`
-- **Deviations log (debe estar vacío antes de correr):** `results/v11/F4/F4_DEVIATIONS_LOG_v11.md`
-- **Runner:** `results/v11/F4/run_F4_v11.py`
-- **Organizador (raw → canónico):** `scripts/organize_F4_results.py`
-- **Estructura canónica esperada (post-ejecución):** `results/v11/F4/F2_redteam/stkL/` y `results/v11/F4/F2_redteam/stkH/`
+- **Reporte preregistrado (endpoint CFR + Holm):** `results/v11/data/f4_preregistered_report_v11.md`
+- **Log de desviaciones:** `results/v11/F4/F4_DEVIATIONS_LOG_v11.md`
+- **Cierre formal:** `results/v11/F4/F4_CLOSURE_REPORT.md`
 
 ## 4) Documentos “históricos” para no confundirse
 - `results/v11/stats_report_v11.md` es solo un puntero (deprecated) al reporte vigente en `results/v11/data/stats_report_v11.md`.
@@ -60,6 +60,4 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - Carpetas `raw/` y `archived/` existen para trazabilidad operativa, pero no se usan como input canónico.
 
 ## 6) Qué falta para “cerrar v11” (resumen operativo)
-- Ejecutar F4 (stkL vs stkH con budget `B=3`) y organizar outputs canónicos.
-- Regenerar `master_results_clean.csv`, stats y manifiestos.
-- Escribir un `F4_CLOSURE_REPORT.md` que cite artefactos exactos (estilo F3).
+- v11 está cerrado (F0–F4 ejecutados, manifiestos/stats regenerados y cierres formales publicados).

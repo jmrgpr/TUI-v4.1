@@ -1,0 +1,10 @@
+hypothesis,grid,comparison,group_a,group_b,n_a,n_b,cfr_a,cfr_b,delta_cfr,ci95_lo,ci95_hi,p_value,test,mesi_cfr,p_holm_family_confirmatory
+H1,,H1: S0-H vs C-H,S0-H,C-H,10,10,1.0,1.0,0.0,0.0,0.0,1.0,fisher_exact_2sided,0.2,1.0
+H2,,H2: interaction (S0-H vs C-H) - (S0-L vs C-L),S0,C,20,20,,,0.0,0.0,0.0,1.0,permutation_dd (B=20000),0.2,1.0
+H3,,H3: S2-H vs S0-H,S2-H,S0-H,10,10,1.0,1.0,0.0,0.0,0.0,1.0,fisher_exact_2sided,0.2,1.0
+H1,8,H1: S0-H vs C-H,S0-H,C-H,5,5,1.0,1.0,0.0,0.0,0.0,1.0,fisher_exact_2sided,0.2,1.0
+H1,16,H1: S0-H vs C-H,S0-H,C-H,5,5,1.0,1.0,0.0,0.0,0.0,1.0,fisher_exact_2sided,0.2,1.0
+H3,8,H3: S2-H vs S0-H,S2-H,S0-H,5,5,1.0,1.0,0.0,0.0,0.0,1.0,fisher_exact_2sided,0.2,1.0
+H3,16,H3: S2-H vs S0-H,S2-H,S0-H,5,5,1.0,1.0,0.0,0.0,0.0,1.0,fisher_exact_2sided,0.2,1.0
+H2,8,H2: interaction (S0-H vs C-H) - (S0-L vs C-L),S0,C,10,10,,,0.0,0.0,0.0,1.0,permutation_dd (B=20000),0.2,1.0
+H2,16,H2: interaction (S0-H vs C-H) - (S0-L vs C-L),S0,C,10,10,,,0.0,0.0,0.0,1.0,permutation_dd (B=20000),0.2,1.0

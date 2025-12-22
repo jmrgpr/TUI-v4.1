@@ -32,7 +32,13 @@ Nota: `run_F4_v11.py` imprime **40 comandos** (stakes × grid × seed × `pgf_mi
 python scripts/organize_F4_results.py
 ```
 
-3) Regenerar artefactos globales v11 (master, stats, manifiestos):
+3) Ejecutar análisis preregistrado F4 (endpoint CFR + Holm):
+
+```powershell
+python scripts/f4_preregistered_analysis_v11.py
+```
+
+4) Regenerar artefactos globales v11 (master, stats, manifiestos):
 
 ```powershell
 python scripts/rebuild_master_from_episodes.py

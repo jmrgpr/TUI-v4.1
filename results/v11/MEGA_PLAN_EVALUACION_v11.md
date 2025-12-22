@@ -1,4 +1,4 @@
-# MEGA PLAN DE EVALUACION - Serie v11 (post F3 / pre F4)
+# MEGA PLAN DE EVALUACION - Serie v11 (post F4)
 
 Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3, y (iii) qué queda para cerrar v11 con F4.
 
@@ -9,7 +9,7 @@ Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/IND
 - [x] F1 (alto riesgo): ejecutado y presente en dataset canónico.
 - [x] F2 (stress test adversarial sintético): ejecutado con `red_team=True` y trazabilidad en JSON.
 - [x] F3 (causal / ablations / comparación justa): **cerrado** y auditado (ver `results/v11/F3/F3_CLOSURE_REPORT.md`).
-- [ ] F4 (stakes run-level + CFR): **preregistrado y congelado**, pero **no ejecutado aún** (ver `results/v11/F4/PREREGISTRO_F4_v11.md` y `results/v11/F4/F4_ADENDA_01.md`).
+- [x] F4 (stakes run-level + CFR): ejecutado, auditado y con cierre formal (ver `results/v11/F4/F4_CLOSURE_REPORT.md`).
 
 ## 2) Qué cambió con los hallazgos nuevos (impacto sobre el plan)
 Cambios que afectan directamente al MEGA_PLAN original (post-F2):
@@ -47,8 +47,8 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] Reporte global vigente (incluye F3): `results/v11/data/stats_report_v11.md`.
 - [x] Preregistro + cierre F3 “peer-review proof”.
 - [x] Definiciones operacionales de métricas clave (shaping, robustez-distractor, colas): `results/v11/ANEXO_TECNICO_v11.md`, `results/v11/F3/PREREGISTRO_F3_v11.md`.
-- [ ] Ejecutar F4 (runs) y producir outputs canónicos.
-- [ ] Cierre formal F4 (closure report + stats/prueba preregistrada + manifiestos actualizados).
+- [x] Ejecutar F4 (runs) y producir outputs canónicos.
+- [x] Cierre formal F4 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
@@ -61,3 +61,5 @@ En caso (a), el cierre mínimo de F4 debe incluir:
 - Manifiestos regenerados: `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`.
 - Master + stats regenerados: `results/master_results_clean.csv`, `results/v11/data/stats_report_v11.md`.
 - Un `F4_CLOSURE_REPORT.md` citando artefactos exactos.
+
+Estado actual: **v11 cerrado** (F0–F4 ejecutados, artefactos regenerados y cierres publicados).
