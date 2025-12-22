@@ -37,6 +37,8 @@ dqn_control        1.2 10 -70.448240 1.260934 -71.229775 -69.666705 0.013197    
 
 ### Fase `F3`
 
+Nota: F3 se reporta aqui solo como descriptivo agregado. Para el analisis preregistrado (por condicion F1/F2 y pgf_mix, con Holm M=6), ver `results/v11/data/f3_preregistered_report_v11.md`.
+
       agent risk_scale  n      mean       std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                           attack_params
     control        1.2 20 -64.15231  7.537587 -67.455803 -60.848817     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 dqn_control        1.2 20 -65.23967  5.413948 -67.612437 -62.866903     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
@@ -67,6 +69,8 @@ dqn_control        1.2 10 -70.448240 1.260934 -71.229775 -69.666705 0.011598    
 
 ### Fase `F3`
 
+Nota: F3 se reporta aqui solo como descriptivo agregado. Para el analisis preregistrado (por condicion F1/F2 y pgf_mix, con Holm M=6), ver `results/v11/data/f3_preregistered_report_v11.md`.
+
       agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                           attack_params
     control        1.2 20 -64.152310 7.537587 -67.455803 -60.848817     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 dqn_control        1.2 20 -65.239670 5.413948 -67.612437 -62.866903     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=101;red_team=False;red_team_prob=0.0;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
@@ -77,6 +81,7 @@ dqn_control        1.2 20 -65.239670 5.413948 -67.612437 -62.866903     NaN     
 - Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run) y se reportan solo para F2 vs control.
 - `p_boot_holm` aplica correccion Holm (por metrica) a las comparaciones de F2 vs control.
 - `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.
+- Para F3, el reporte preregistrado (family primaria Holm M=6) esta en `results/v11/data/f3_preregistered_report_v11.md`.
 - Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).
 
 El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.

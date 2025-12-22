@@ -202,6 +202,9 @@ def format_report(summary: pd.DataFrame) -> str:
                 continue
             lines.append(f"### Fase `{phase}`")
             lines.append("")
+            if phase == "F3":
+                lines.append("Nota: F3 se reporta aqui solo como descriptivo agregado. Para el analisis preregistrado (por condicion F1/F2 y pgf_mix, con Holm M=6), ver `results/v11/data/f3_preregistered_report_v11.md`.")
+                lines.append("")
             cols = ["agent", "risk_scale", "n", "mean", "std", "ci95_lo", "ci95_hi", "p_boot", "p_boot_holm", "attack_enabled", "attack_type", "attack_params"]
             lines.append(section[cols].to_string(index=False))
             lines.append("")
@@ -211,6 +214,7 @@ def format_report(summary: pd.DataFrame) -> str:
     lines.append("- Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run) y se reportan solo para F2 vs control.")
     lines.append("- `p_boot_holm` aplica correccion Holm (por metrica) a las comparaciones de F2 vs control.")
     lines.append("- `attack_enabled` esta activo solo para la fase `F2_redteam`; `attack_params` resume los parametros del entorno que habilitan el ataque.")
+    lines.append("- Para F3, el reporte preregistrado (family primaria Holm M=6) esta en `results/v11/data/f3_preregistered_report_v11.md`.")
     lines.append("- Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).")
     lines.append("")
     lines.append("El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.")
