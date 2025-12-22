@@ -121,6 +121,46 @@ def group_values(df: pd.DataFrame, *, condition: str, grid: int | None, agent: s
     return vals
 
 
+def paired_sanity_checks(f3: pd.DataFrame) -> dict:
+    """
+    Sanity check para el bloque P1 (ablación):
+    - Verifica si reward_env_total cambia entre pgf_mix=0.0 y 0.2 (por par seed+grid+condición en simbiosis).
+    - Verifica si reward_total cambia (debería, por diseño de shaping cuando pgf_mix>0).
+    """
+    s = f3[f3["agent"] == "simbiosis"].copy()
+    keys = ["condition", "grid_size", "seed"]
+    pairs = {}
+    for _, row in s.iterrows():
+        k = tuple(row[c] for c in keys)
+        pairs.setdefault(k, {})[float(row["pgf_mix"])] = row
+
+    env_diffs = []
+    total_diffs = []
+    missing = 0
+    for k, v in pairs.items():
+        if 0.0 not in v or 0.2 not in v:
+            missing += 1
+            continue
+        r0 = v[0.0]
+        r2 = v[0.2]
+        env_diffs.append(float(r2["reward_env_total"]) - float(r0["reward_env_total"]))
+        total_diffs.append(float(r2["reward_total"]) - float(r0["reward_total"]))
+
+    env = np.array(env_diffs, dtype=np.float64) if env_diffs else np.array([], dtype=np.float64)
+    tot = np.array(total_diffs, dtype=np.float64) if total_diffs else np.array([], dtype=np.float64)
+    return {
+        "pairs_total": int(len(pairs)),
+        "pairs_missing": int(missing),
+        "env_diff_min": float(np.min(env)) if env.size else float("nan"),
+        "env_diff_max": float(np.max(env)) if env.size else float("nan"),
+        "env_diff_mean": float(np.mean(env)) if env.size else float("nan"),
+        "env_diff_unique_rounded_12": int(len(set([round(float(x), 12) for x in env_diffs])) if env_diffs else 0),
+        "total_diff_min": float(np.min(tot)) if tot.size else float("nan"),
+        "total_diff_max": float(np.max(tot)) if tot.size else float("nan"),
+        "total_diff_mean": float(np.mean(tot)) if tot.size else float("nan"),
+    }
+
+
 def comparisons() -> list[Comparison]:
     comps: list[Comparison] = []
     # pooled comparisons (grid=None)
@@ -157,6 +197,7 @@ def main() -> None:
 
     master = load_master()
     f3 = prepare_f3(master)
+    sanity = paired_sanity_checks(f3)
 
     rows = []
     pvals_primary: dict[str, float] = {}
@@ -219,6 +260,25 @@ def main() -> None:
     lines.append("")
     lines.append("## Sensibilidad por grid")
     lines.append("Ver `results/v11/data/f3_preregistered_stats_v11.csv` (incluye filas por grid8 y grid16).")
+    lines.append("")
+    lines.append("## Sanity check (ablacion pgf_mix)")
+    lines.append("")
+    lines.append("Este bloque verifica la preocupacion clasica de peer review: si el delta=0 en la ablacion es un artefacto.")
+    lines.append("Se calcula por pares (condicion, grid, seed) en `simbiosis`, comparando `pgf_mix=0.2` vs `pgf_mix=0.0`:")
+    lines.append("")
+    lines.append(
+        f"- Pares esperados (condicion x grid x seed): {sanity['pairs_total']} (missing={sanity['pairs_missing']})"
+    )
+    lines.append(
+        f"- reward_env_total diff (m0.2 - m0.0): min={sanity['env_diff_min']:.6g}, max={sanity['env_diff_max']:.6g}, mean={sanity['env_diff_mean']:.6g}, unique_diffs~={sanity['env_diff_unique_rounded_12']}"
+    )
+    lines.append(
+        f"- reward_total diff (m0.2 - m0.0): min={sanity['total_diff_min']:.6g}, max={sanity['total_diff_max']:.6g}, mean={sanity['total_diff_mean']:.6g}"
+    )
+    lines.append("")
+    lines.append(
+        "Interpretacion: en esta implementacion, `pgf_mix` cambia fuertemente `reward_total` (shaping) pero no altera `reward_env_total` para los mismos seeds/grids/condicion, por lo que la ablacion sobre `reward_env_total` produce delta=0."
+    )
     lines.append("")
     OUT_MD.write_text("\n".join(lines), encoding="utf-8")
     print(f"[OK] Escrito: {OUT_CSV}")

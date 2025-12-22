@@ -25,3 +25,14 @@ Bootstrap: B=5000, seed=2025.
 
 ## Sensibilidad por grid
 Ver `results/v11/data/f3_preregistered_stats_v11.csv` (incluye filas por grid8 y grid16).
+
+## Sanity check (ablacion pgf_mix)
+
+Este bloque verifica la preocupacion clasica de peer review: si el delta=0 en la ablacion es un artefacto.
+Se calcula por pares (condicion, grid, seed) en `simbiosis`, comparando `pgf_mix=0.2` vs `pgf_mix=0.0`:
+
+- Pares esperados (condicion x grid x seed): 20 (missing=0)
+- reward_env_total diff (m0.2 - m0.0): min=0, max=0, mean=0, unique_diffs~=1
+- reward_total diff (m0.2 - m0.0): min=16.8615, max=44.8007, mean=34.4546
+
+Interpretacion: en esta implementacion, `pgf_mix` cambia fuertemente `reward_total` (shaping) pero no altera `reward_env_total` para los mismos seeds/grids/condicion, por lo que la ablacion sobre `reward_env_total` produce delta=0.

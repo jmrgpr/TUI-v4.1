@@ -29,9 +29,12 @@ Dejar F3 en estado **auditable y peer-review proof**: trazabilidad de datos (CSV
 - Los CSV organizados de F3 están versionados en GitHub; los JSON de runs no se versionan por tamaño y se auditan mediante hashes (manifiesto extendido).
 - El análisis preregistrado de F3 se ejecuta desde `scripts/f3_preregistered_analysis_v11.py` y publica las salidas citadas.
 
+## Nota técnica sobre el “delta 0” en la ablación
+En `results/v11/data/f3_preregistered_report_v11.md`, la ablación `pgf_mix=0.2` vs `pgf_mix=0.0` sobre `reward_env_total` reporta Δ≈0.
+Esto no implica que `pgf_mix` no se haya aplicado: el sanity check del reporte preregistrado muestra que `reward_total` sí cambia (shaping) mientras que `reward_env_total` permanece invariante por pares (misma condición/grid/seed).
+
 ## Desviaciones del preregistro
 Las desviaciones (si existen) deben registrarse **antes** de análisis completo en:
 - `results/v11/F3/F3_DEVIATIONS_LOG_v11.md`
 
 Estado al cierre: **sin desviaciones registradas** (ver log).
-
