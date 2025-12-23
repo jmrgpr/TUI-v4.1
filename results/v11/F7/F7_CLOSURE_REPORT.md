@@ -1,9 +1,10 @@
 # F7_CLOSURE_REPORT (v11)
 
-**Fecha:** YYYY-MM-DD  
+**Fecha:** 2025-12-23  
 **Fase:** F7 (calibración budget `B` → `B*` + confirmatorio CFR, high-stakes)  
 **Condición base:** `F2_redteam` (high-stakes con `B*`)  
-**Repositorio:** TUI-v4.1
+**Repositorio:** TUI-v4.1  
+**Commit (selección B* + ejecución confirmatoria):** `0bc72ff`
 
 ## Objetivo del cierre
 Dejar F7 en estado **auditable y peer-review proof**: (i) outputs canónicos (CSV) versionados, (ii) trazabilidad de JSON por hashes sin subir datos brutos, y (iii) análisis preregistrado publicado con control de error familiar.
@@ -37,13 +38,19 @@ Dejar F7 en estado **auditable y peer-review proof**: (i) outputs canónicos (CS
 - El análisis preregistrado se ejecuta desde `scripts/f7_preregistered_analysis_v11.py`.
 
 ## Resultados confirmatorios (endpoint CFR)
-Completar con el resultado del reporte preregistrado:
-- H1 (S0-H vs C-H): PASS / INCONCLUSIVE (ΔCFR, p, p Holm)
-- H3 (S2-H vs S0-H): PASS / INCONCLUSIVE (ΔCFR, p, p Holm)
+Selección de budget:
+- `B* = 40` (ver `results/v11/F7/analysis/f7_pilot_selection_v11.json` y `results/v11/data/f7_pilot_selection_v11.md`).
+
+Según `results/v11/data/f7_preregistered_report_v11.md`, el endpoint primario **CFR** (budget-exhaustion) deja de saturar (headroom real) y la family confirmatoria (Holm-Bonferroni, alpha=0.05; MESI_CFR=0.20) arroja:
+
+- Resumen por grupo (pooled grids 8+16): C-H CFR=0.900, S0-H CFR=0.700, S2-H CFR=0.800.
+- H1 (S0-H vs C-H): ΔCFR=-0.200, IC95%=[-0.500, 0.000], p=0.5, p Holm=1 → **INCONCLUSIVE**.
+- H3 (S2-H vs S0-H): ΔCFR=+0.100, IC95%=[-0.200, 0.400], p=1, p Holm=1 → **INCONCLUSIVE**.
+
+Nota: el objetivo metodológico de F7 (evitar ceiling effect) se cumple; el objetivo confirmatorio queda inconcluso con n=10 por grupo.
 
 ## Desviaciones del preregistro
 Registrar desviaciones **antes** de análisis completo en:
 - `results/v11/F7/F7_DEVIATIONS_LOG_v11.md`
 
-Estado al cierre: (completar).
-
+Estado al cierre: **sin desviaciones registradas** (ver log).

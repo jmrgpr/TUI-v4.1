@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
 **Última actualización:** 2025-12-23  
-**Estado:** F0–F6 cerrados y auditados (con errata post‑cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO) + F7 preregistrado (pendiente).
+**Estado:** F0–F7 cerrados y auditados (con errata post‑cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -13,7 +13,7 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F4:** cerrado (stakes run-level `B=3` + CFR; preregistrado y auditado).
 - **F5:** cerrado (high-stakes `B=3`, endpoint primario `episodes_completed`; ver `results/v11/data/f5_preregistered_report_v11.md` y `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - **F6:** cerrado (high-stakes `B=3`, endpoint primario CFR con calibración de `red_team_prob`; ver `results/v11/data/f6_preregistered_report_v11.md` y `results/v11/F6/F6_CLOSURE_REPORT.md`).
-- **F7:** preregistrado (**pendiente**; calibración de budget `B` → `B*` para des‑saturar CFR; ver `results/v11/F7/PREREGISTRO_F7_v11.md`).
+- **F7:** cerrado (calibración budget `B` → `B*` para des‑saturar CFR; ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
 - **RV1 (Repair Validation):** cerrado (**FAIL/NO-GO**; invariantes OK, pero sin señal mínima de mejora en reward).
 - **RV2 (Repair Validation):** cerrado (**PASS/GO**; invariantes I1/I2 OK; E1/E2 descriptivos).
 
@@ -113,4 +113,4 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - Antes de ejecutar una fase nueva (p.ej. F7), ver `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md` (y decidir si se abre una serie nueva tras corregir el runner).
 - RV1 cerró como **NO-GO** (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
 - RV2 cerró como **PASS/GO** y habilita re‑intentar fases confirmatorias bajo el nuevo régimen (agente persistente).
-- F7 está preregistrado; siguiente paso operativo: correr piloto → seleccionar `B*` → correr confirmatorio → organizar → análisis → cierre.
+- F7 está cerrado: `B*` seleccionado + confirmatorio ejecutado + canónicos + análisis preregistrado.
