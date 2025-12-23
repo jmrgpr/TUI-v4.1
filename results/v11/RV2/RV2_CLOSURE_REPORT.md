@@ -1,52 +1,34 @@
 # RV2_CLOSURE_REPORT — Repair Validation (v11 post-errata)
 
 **Serie:** v11 (post-errata)  
-**Fase:** RV2 — Repair Validation (GO/NO-GO por invariantes)  
-**Fecha de cierre:** YYYY-MM-DD (America/Puerto_Rico)  
-**Estado:** DRAFT (completar al finalizar RV2)
-
----
+**Fase:** RV2 — Repair Validation  
+**Fecha de cierre:** 2025-12-23 (America/Puerto_Rico)  
+**Estado:** PASS
 
 ## 1) Resumen ejecutivo
 
-- **Objetivo:** validar que el sistema está listo para F7+ verificando invariantes I1/I2.
-- **Resultado:** PASS / FAIL (completar).
-- **Desviaciones:** ver `results/v11/RV2/RV2_DEVIATIONS_LOG_v11.md`.
+- Objetivo: validar invariantes I1/I2 (ciclo de vida del agente + estabilidad de shape) para habilitar F7+.
+- Decisión: **GO (PASS)**.
+- Invariantes: I1(all)=PASS, I2(all)=PASS.
 
----
+## 2) Setup congelado
 
-## 2) Setup congelado (según preregistro)
-
-- `episodes=200`, `grid=16`, `seeds={42,101,13}`
-- `risk_scale=1.2`, `risk_level=high`, `red_team_prob=0.03`
-- stakes LOW (sin budget)
+- episodes=200, grid=16, seeds=[42, 101, 13]
+- risk_scale=1.2, risk_level=high, red_team_prob=0.03
+- stakes=LOW (sin budget)
 - condiciones: C (Control-DQN), S0 (Simbiosis pgf_mix=0.0)
 
----
+## 3) Artefactos
 
-## 3) Invariantes (I1/I2)
+- Metrics (canónico): `results/v11/RV2/rv2_run_metrics.csv` (sha256=5b4faf061aff6c225844e5177b7df82bf001b9966edcd3546826d4af3dcbc562)
+- Invariants (canónico): `results/v11/RV2/rv2_invariants.json` (sha256=910a0f3e7ae7820f1e6c2bec726343816aa9a01915cef66392e923c47b3d9e34)
+- Raw (local-only): `results/v11/RV2/raw`
 
-Completar con evidencia de:
-- `agent_id` constante por run
-- contadores (`memory_size`, `_learn_steps`, `epsilon`) no reinician por episodio
-- sin errores de dimensión; `state_dim` constante
+## 4) Descriptivos (no gating)
 
-Artefactos:
-- `results/v11/RV2/rv2_invariants.json`
-- `results/v11/RV2/rv2_run_metrics.csv`
+- `delta_learn` y `delta_starv` se reportan en el CSV, pero no determinan PASS/FAIL en RV2.
 
----
+## 5) Siguiente paso
 
-## 4) Descriptivos (E1/E2)
-
-Reportar (sin gating):
-- `Δlearn` (early vs late)
-- `Δstarv` (starvation early vs late)
-
----
-
-## 5) Decisión GO/NO-GO
-
-- PASS/GO → habilita F7+ bajo el nuevo régimen (agente persistente).
-- FAIL/NO-GO → no ejecutar F7; corregir y repetir RV2.
-
+- Si PASS: habilita ejecutar F7+ bajo el nuevo régimen (agente persistente).
+- Si FAIL: no ejecutar F7; corregir y repetir RV2.
