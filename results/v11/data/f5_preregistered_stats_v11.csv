@@ -1,0 +1,7 @@
+hypothesis,grid,comparison,group_a,group_b,n_pairs,mean_a,mean_b,mean_diff,median_diff,ci95_mean_lo,ci95_mean_hi,ci95_median_lo,ci95_median_hi,p_perm_signflip_mean_2sided,mesi_ec,p_holm_family_confirmatory
+H1,,H1: S0-H vs C-H,S0-H,C-H,10,14.9,10.4,4.5,2.0,1.6,7.8,1.0,9.0,0.0234375,5,0.046875
+H3,,H3: S2-H vs S0-H,S2-H,S0-H,10,14.9,14.9,0.0,0.0,0.0,0.0,0.0,0.0,1.0,5,1.0
+H1,8,H1: S0-H vs C-H,S0-H,C-H,5,10.8,6.2,4.6,2.0,0.8,9.0,0.0,12.0,0.125,5,0.046875
+H1,16,H1: S0-H vs C-H,S0-H,C-H,5,19.0,14.6,4.4,2.0,0.4,10.0,-2.0,14.0,0.25,5,0.046875
+H3,8,H3: S2-H vs S0-H,S2-H,S0-H,5,10.8,10.8,0.0,0.0,0.0,0.0,0.0,0.0,1.0,5,1.0
+H3,16,H3: S2-H vs S0-H,S2-H,S0-H,5,19.0,19.0,0.0,0.0,0.0,0.0,0.0,0.0,1.0,5,1.0

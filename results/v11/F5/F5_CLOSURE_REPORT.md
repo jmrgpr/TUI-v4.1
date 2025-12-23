@@ -1,7 +1,7 @@
 # F5_CLOSURE_REPORT (v11)
 
-**Fecha:** YYYY-MM-DD  
-**Fase:** F5  
+**Fecha:** 2025-12-23  
+**Fase:** F5 (high-stakes `B=3` + endpoint `episodes_completed`)  
 **Condición fija:** `F2_redteam` (high-stakes `B=3`)  
 **Repositorio:** TUI-v4.1
 
@@ -35,9 +35,16 @@ Dejar F5 en estado **auditable y peer-review proof**: (i) outputs canónicos (CS
 - El análisis preregistrado se ejecuta desde `scripts/f5_preregistered_analysis_v11.py`.
 
 ## Resultados confirmatorios (endpoint `episodes_completed`)
-*(Completar al cerrar, citando `results/v11/data/f5_preregistered_report_v11.md`.)*
+Según `results/v11/data/f5_preregistered_report_v11.md`, el endpoint primario `episodes_completed` (high-stakes `B=3`, mayor = mejor) se analizó con family confirmatoria Holm-Bonferroni (alpha=0.05) y MESI_EC=5:
+
+- Resumen por grupo (pooled grids 8+16): C-H mean=10.4, S0-H mean=14.9, S2-H mean=14.9; CFR (secundario) = 1 en todos los grupos.
+- H1 (S0-H vs C-H): mean diff=4.5, IC95% mean=[1.6, 7.8], p=0.0234375, p Holm=0.046875 → **INCONCLUSIVE** (el punto estimado no alcanza MESI_EC=5).
+- H3 (S2-H vs S0-H): diff=0.0, IC95%=[0.0, 0.0], p=1.0, p Holm=1.0 → **INCONCLUSIVE** (sin evidencia de efecto de `pgf_mix=0.2` en el endpoint primario).
+
+Nota: CFR vuelve a saturar en 1.0 bajo `B=3` (coherente con F4); por eso F5 usa `episodes_completed` como endpoint primario para evitar ceiling effect del endpoint CFR.
 
 ## Desviaciones del preregistro
 Registrar desviaciones **antes** de análisis completo en:
 - `results/v11/F5/F5_DEVIATIONS_LOG_v11.md`
 
+Estado al cierre: **sin desviaciones registradas** (ver log).

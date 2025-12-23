@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
-**Última actualización:** 2025-12-22  
-**Estado:** F0–F4 cerrados; **F5 preregistrado** y pendiente de ejecución.
+**Última actualización:** 2025-12-23  
+**Estado:** F0–F5 cerrados y auditados (v11 cerrado).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -11,7 +11,7 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F2_redteam:** cerrado (stress adversarial sintético; no min-max).
 - **F3:** cerrado (ablación `pgf_mix` + comparación justa; preregistrado y auditado).
 - **F4:** cerrado (stakes run-level `B=3` + CFR; preregistrado y auditado).
-- **F5:** preregistrado (high-stakes `B=3`), pendiente (endpoint primario `episodes_completed`).
+- **F5:** cerrado (high-stakes `B=3`, endpoint primario `episodes_completed`; ver `results/v11/data/f5_preregistered_report_v11.md` y `results/v11/F5/F5_CLOSURE_REPORT.md`).
 
 El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
 
@@ -19,9 +19,10 @@ El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
 - **Manifiesto canónico CSV (sha256):** `results/v11/CANONICAL_DATASET_v11.md`
 - **Manifiesto JSON (sha256 por run):** `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
 - **Pipeline reproducible v11:** `results/v11/README_REPRODUCIBLE_v11.md`
-- **Reporte global vigente (incluye F3):** `results/v11/data/stats_report_v11.md`
+- **Reporte global vigente (incluye F5):** `results/v11/data/stats_report_v11.md`
 - **Cierre F3:** `results/v11/F3/F3_CLOSURE_REPORT.md`
 - **Cierre F4:** `results/v11/F4/F4_CLOSURE_REPORT.md`
+- **Cierre F5:** `results/v11/F5/F5_CLOSURE_REPORT.md`
 
 ## 3) Qué leer según tu objetivo
 ### A) “Quiero reproducir números / regenerar artefactos”
@@ -49,13 +50,14 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - **Log de desviaciones:** `results/v11/F4/F4_DEVIATIONS_LOG_v11.md`
 - **Cierre formal:** `results/v11/F4/F4_CLOSURE_REPORT.md`
 
-### E) “Quiero saber qué es F5 (y qué falta correr)”
+### E) “Quiero saber qué es F5 (qué se corrió y dónde está)”
 - **Preregistro (canónico):** `results/v11/F5/PREREGISTRO_F5_v11.md`
-- **Log de desviaciones (debe estar vacío antes de correr):** `results/v11/F5/F5_DEVIATIONS_LOG_v11.md`
+- **Log de desviaciones:** `results/v11/F5/F5_DEVIATIONS_LOG_v11.md`
 - **Runner:** `results/v11/F5/run_F5_v11.py`
 - **Organizador (raw → canónico):** `scripts/organize_F5_results.py`
 - **Análisis preregistrado (endpoint `episodes_completed` + Holm):** `scripts/f5_preregistered_analysis_v11.py`
-- **Cierre formal (se completa al terminar):** `results/v11/F5/F5_CLOSURE_REPORT.md`
+- **Reporte preregistrado:** `results/v11/data/f5_preregistered_report_v11.md`
+- **Cierre formal:** `results/v11/F5/F5_CLOSURE_REPORT.md`
 
 ## 4) Documentos “históricos” para no confundirse
 - `results/v11/stats_report_v11.md` es solo un puntero (deprecated) al reporte vigente en `results/v11/data/stats_report_v11.md`.
@@ -69,6 +71,4 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - Carpetas `raw/` y `archived/` existen para trazabilidad operativa, pero no se usan como input canónico.
 
 ## 6) Qué falta para “cerrar v11” (resumen operativo)
-- Ejecutar F5 (high-stakes `B=3`) y organizar outputs canónicos.
-- Ejecutar análisis preregistrado F5 y completar `results/v11/F5/F5_CLOSURE_REPORT.md`.
-- Regenerar `master_results_clean.csv`, stats y manifiestos.
+- v11 está cerrado: F0-F5 ejecutados, organizados y auditados; stats, master y manifiestos están regenerados.

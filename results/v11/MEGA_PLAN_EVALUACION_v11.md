@@ -1,6 +1,6 @@
-# MEGA PLAN DE EVALUACION - Serie v11 (post F4 / pre F5)
+# MEGA PLAN DE EVALUACION - Serie v11 (post F5; v11 cerrado)
 
-Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4, y (iii) qué queda para cerrar v11 con F5 (o diferirlo formalmente).
+Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4/F5, y (iii) qué queda como siguiente paso (si se decide extender la serie).
 
 Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/INDEX_SERIE_V11.md`.
 
@@ -10,7 +10,7 @@ Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/IND
 - [x] F2 (stress test adversarial sintético): ejecutado con `red_team=True` y trazabilidad en JSON.
 - [x] F3 (causal / ablations / comparación justa): **cerrado** y auditado (ver `results/v11/F3/F3_CLOSURE_REPORT.md`).
 - [x] F4 (stakes run-level + CFR): ejecutado, auditado y con cierre formal (ver `results/v11/F4/F4_CLOSURE_REPORT.md`).
-- [ ] F5 (high-stakes B=3, endpoint `episodes_completed`): preregistrado y pendiente (ver `results/v11/F5/PREREGISTRO_F5_v11.md`).
+- [x] F5 (high-stakes `B=3`, endpoint `episodes_completed`): ejecutado, auditado y con cierre formal (ver `results/v11/F5/F5_CLOSURE_REPORT.md`).
 
 ## 2) Qué cambió con los hallazgos nuevos (impacto sobre el plan)
 Cambios que afectan directamente al MEGA_PLAN original (post-F2):
@@ -37,6 +37,11 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - F5 mantiene high-stakes `B=3` (misma definición de catástrofe) y cambia el endpoint confirmatorio a `episodes_completed` (tiempo-hasta-agotar-budget).
 - Ver: `results/v11/F4/F4_CLOSURE_REPORT.md` y `results/v11/F5/PREREGISTRO_F5_v11.md`.
 
+6) **Resultado de F5 (y qué deja resuelto vs abierto)**
+- F5 evitó el ceiling effect del endpoint CFR, pero mantuvo CFR=1 como secundario (budget agotado en todos los runs).
+- Endpoint primario `episodes_completed` mostró diferencias pooled: S0-H vs C-H mean diff=4.5 episodios (p Holm=0.046875), pero el punto estimado no supera MESI_EC=5, por lo que la decisión confirmatoria queda **INCONCLUSIVE** (ver `results/v11/data/f5_preregistered_report_v11.md`).
+- `pgf_mix=0.2` vs `pgf_mix=0.0` no mostró efecto en el endpoint primario (diff=0; ver H3 en `results/v11/data/f5_preregistered_report_v11.md`).
+
 ## 3) Artefactos canónicos (fuente de verdad)
 - Dataset canónico (CSV + sha256): `results/v11/CANONICAL_DATASET_v11.md`
 - Manifiesto de JSON (sha256 por run): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
@@ -55,8 +60,8 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] Definiciones operacionales de métricas clave (shaping, robustez-distractor, colas): `results/v11/ANEXO_TECNICO_v11.md`, `results/v11/F3/PREREGISTRO_F3_v11.md`.
 - [x] Ejecutar F4 (runs) y producir outputs canónicos.
 - [x] Cierre formal F4 (closure report + análisis preregistrado + manifiestos/stats actualizados).
-- [ ] Ejecutar F5 (runs) y producir outputs canónicos.
-- [ ] Cierre formal F5 (closure report + análisis preregistrado + manifiestos/stats actualizados).
+- [x] Ejecutar F5 (runs) y producir outputs canónicos.
+- [x] Cierre formal F5 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
@@ -75,4 +80,4 @@ En caso (a), el cierre mínimo de F5 debe incluir:
 - Reporte preregistrado F5 en `results/v11/data/` y un `F5_CLOSURE_REPORT.md` citando artefactos exactos.
 - Manifiestos y stats regenerados (master + reportes + hashes).
 
-Estado actual: F0–F4 cerrados; **F5 preregistrado** y pendiente.
+Estado actual: F0–F5 cerrados; v11 está **cerrado** y auditable (ver `results/v11/F5/F5_CLOSURE_REPORT.md`).
