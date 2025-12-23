@@ -154,13 +154,23 @@ def main() -> int:
             if len(rewards) != len(starvation):
                 raise RuntimeError(f"Mismatch rewards/starvation: {len(rewards)} vs {len(starvation)} (seed={seed}, cond={cond_key})")
 
-            early_mean, late_mean, delta_learn = compute_early_late(rewards)
-            starv_early = float(np.mean(starvation[:50]))
-            starv_late = float(np.mean(starvation[150:]))
-            delta_starv = float(starv_late - starv_early)
+            if args.smoke:
+                early_mean = float("nan")
+                late_mean = float("nan")
+                delta_learn = float("nan")
+                starv_early = float("nan")
+                starv_late = float("nan")
+                delta_starv = float("nan")
+                mesi = float("nan")
+                e1_pass = False
+            else:
+                early_mean, late_mean, delta_learn = compute_early_late(rewards)
+                starv_early = float(np.mean(starvation[:50]))
+                starv_late = float(np.mean(starvation[150:]))
+                delta_starv = float(starv_late - starv_early)
 
-            mesi = mesi_rv(early_mean)
-            e1_pass = bool(delta_learn >= mesi)
+                mesi = mesi_rv(early_mean)
+                e1_pass = bool(delta_learn >= mesi)
 
             inv = payload.get("rv1_invariants") or {}
             agent_ids = [int(x) for x in inv.get("agent_id_by_episode", [])]
