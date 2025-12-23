@@ -26,6 +26,19 @@ def state_to_vector(state):  # pragma: no cover - helper redundante cubierto en 
         return np.array([float(state)], dtype=np.float32)
 
 
+def _ensure_state_dim(vec: np.ndarray, expected_dim: int) -> np.ndarray:
+    """
+    Asegura que el vector de estado tenga dimensión fija (requisito para DQN).
+    Si el vector es más corto, rellena con ceros. Si es más largo, trunca.
+    """
+    v = np.asarray(vec, dtype=np.float32).reshape(-1)
+    if v.size < expected_dim:
+        return np.pad(v, (0, expected_dim - v.size), constant_values=0.0)
+    if v.size > expected_dim:
+        return v[:expected_dim]
+    return v
+
+
 def _behavior_prob(agent, state, action):
     """
     Estima probabilidad de comportamiento para OPE-DR.
@@ -141,21 +154,24 @@ def run_experiment(
     if stakes_mode == "high" and catastrophe_budget is None:
         raise ValueError("stakes_mode='high' requiere catastrophe_budget explícito (p.ej., 3).")
     for ep in range(episodes):
+        # Instanciar el agente una sola vez por run (no por episodio) para permitir
+        # aprendizaje acumulativo entre episodios y mantener consistencia de buffers/schedules.
+        if agent is None:
+            if use_dqn:
+                agent = DQNAgent(
+                    state_dim,
+                    action_dim,
+                    lr=dqn_lr if dqn_lr is not None else DEFAULT_LR,
+                    gamma=dqn_gamma if dqn_gamma is not None else DEFAULT_GAMMA,
+                    epsilon=dqn_epsilon if dqn_epsilon is not None else DEFAULT_EPSILON,
+                    epsilon_decay=dqn_epsilon_decay if dqn_epsilon_decay is not None else DEFAULT_EPSILON_DECAY,
+                    epsilon_end=dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
+                )
+            else:
+                agent = Agent(name=agent_name, resources=config.ENV_INITIAL_RESOURCES)
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
         state = env.reset()
-        if use_dqn:
-            agent = DQNAgent(
-                state_dim,
-                action_dim,
-                lr=dqn_lr if dqn_lr is not None else DEFAULT_LR,
-                gamma=dqn_gamma if dqn_gamma is not None else DEFAULT_GAMMA,
-                epsilon=dqn_epsilon if dqn_epsilon is not None else DEFAULT_EPSILON,
-                epsilon_decay=dqn_epsilon_decay if dqn_epsilon_decay is not None else DEFAULT_EPSILON_DECAY,
-                epsilon_end=dqn_epsilon_end if dqn_epsilon_end is not None else DEFAULT_EPSILON_END
-            )
-        else:
-            agent = Agent(name=agent_name, resources=config.ENV_INITIAL_RESOURCES)
         agent.P_riesgo = 0.0
         agent.P_riesgo_prev = 0.0
         agent.resources = env.resources
@@ -188,9 +204,9 @@ def run_experiment(
                 if state_mode == 'coords_only':
                     # Extraer solo coord_x y coord_y del estado
                     coords = [v for k, v in state if k in ('coord_x', 'coord_y')]
-                    state_vec = np.array(coords, dtype=np.float32)
+                    state_vec = _ensure_state_dim(np.array(coords, dtype=np.float32), state_dim)
                 else:
-                    state_vec = np.array([v for _, v in state], dtype=np.float32)
+                    state_vec = _ensure_state_dim(state_to_vector(state), state_dim)
                 action_idx = agent.act(state_vec)
                 action = config.AGENT_ACTIONS[action_idx]
             else:
@@ -243,7 +259,11 @@ def run_experiment(
             ope_weights.append(weight)
             ope_rewards.append(reward_env)
             if use_dqn:
-                next_state_vec = np.array([v for _, v in next_state], dtype=np.float32)
+                if state_mode == 'coords_only':
+                    coords_next = [v for k, v in next_state if k in ('coord_x', 'coord_y')]
+                    next_state_vec = _ensure_state_dim(np.array(coords_next, dtype=np.float32), state_dim)
+                else:
+                    next_state_vec = _ensure_state_dim(state_to_vector(next_state), state_dim)
                 agent.remember(state_vec, action_idx, r_pgf, next_state_vec, done)
                 agent.learn()
             else:
@@ -259,7 +279,9 @@ def run_experiment(
                     state_vec = np.array(coords, dtype=np.float32)
                     q_vals = agent.model(torch.FloatTensor(state_vec).unsqueeze(0)).detach().cpu().numpy()[0]
                 else:
-                    q_vals = agent.model(torch.FloatTensor(state_to_vector(state)).unsqueeze(0)).detach().cpu().numpy()[0]
+                    q_vals = agent.model(
+                        torch.FloatTensor(_ensure_state_dim(state_to_vector(state), state_dim)).unsqueeze(0)
+                    ).detach().cpu().numpy()[0]
                 optimal_action_idx = int(np.argmax(q_vals))
                 q_optimal_steps.append(1 if action_idx == optimal_action_idx else 0)
             else:

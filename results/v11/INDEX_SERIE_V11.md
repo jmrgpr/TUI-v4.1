@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
 **Última actualización:** 2025-12-23  
-**Estado:** F0–F6 cerrados y auditados (v11 + extensión F6 cerrada).
+**Estado:** F0–F6 cerrados y auditados (con errata post‑cierre) + RV1 pendiente (repair validation).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -13,8 +13,11 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F4:** cerrado (stakes run-level `B=3` + CFR; preregistrado y auditado).
 - **F5:** cerrado (high-stakes `B=3`, endpoint primario `episodes_completed`; ver `results/v11/data/f5_preregistered_report_v11.md` y `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - **F6:** cerrado (high-stakes `B=3`, endpoint primario CFR con calibración de `red_team_prob`; ver `results/v11/data/f6_preregistered_report_v11.md` y `results/v11/F6/F6_CLOSURE_REPORT.md`).
+- **RV1 (Repair Validation):** pendiente (post‑errata; valida aprendizaje acumulativo entre episodios antes de F7+).
 
 El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
+
+**Nota crítica (post‑cierre):** ver `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md`.
 
 ## 2) Fuente de verdad (si solo lees 5 archivos)
 - **Manifiesto canónico CSV (sha256):** `results/v11/CANONICAL_DATASET_v11.md`
@@ -61,7 +64,7 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - **Reporte preregistrado:** `results/v11/data/f5_preregistered_report_v11.md`
 - **Cierre formal:** `results/v11/F5/F5_CLOSURE_REPORT.md`
 
-### F) “Quiero saber qué es F6 (qué se corrió y dónde está)”
+### F) "Quiero saber qué es F6 (qué se corrió y dónde está)"
 - **Preregistro (canónico):** `results/v11/F6/PREREGISTRO_F6_v11.md`
 - **Log de desviaciones:** `results/v11/F6/F6_DEVIATIONS_LOG_v11.md`
 - **Runner (piloto→p*→confirmatorio):** `results/v11/F6/run_F6_v11.py`
@@ -70,6 +73,11 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - **Reporte preregistrado:** `results/v11/data/f6_preregistered_report_v11.md`
 - **Piloto p*:** `results/v11/data/f6_pilot_selection_v11.md`
 - **Cierre formal:** `results/v11/F6/F6_CLOSURE_REPORT.md`
+
+### G) "Quiero ejecutar RV1 (repair validation) antes de F7+"
+- **Preregistro (canónico):** `results/v11/RV1/PREREGISTRO_REPAIR_VALIDATION_v11.md`
+- **Log de desviaciones:** `results/v11/RV1/RV1_DEVIATIONS_LOG_v11.md`
+- **Cierre (template):** `results/v11/RV1/RV1_CLOSURE_REPORT.md`
 
 ## 4) Documentos “históricos” para no confundirse
 - `results/v11/stats_report_v11.md` es solo un puntero (deprecated) al reporte vigente en `results/v11/data/stats_report_v11.md`.
@@ -84,3 +92,5 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 
 ## 6) Qué falta (resumen operativo)
 - v11 y su extensión F6 están cerrados; stats, master y manifiestos están regenerados.
+- Antes de ejecutar una fase nueva (p.ej. F7), ver `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md` (y decidir si se abre una serie nueva tras corregir el runner).
+- Ejecutar RV1 (repair validation) para confirmar invariantes de aprendizaje/shape antes de re‑calibrar (`B` / `red_team_prob`) en una fase nueva.

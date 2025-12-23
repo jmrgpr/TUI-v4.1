@@ -5,6 +5,8 @@
 
 Este README enumera los pasos concretos para regenerar los artefactos de la serie v11: reconstruccion del master, validacion, estadisticas, bootstrap, manifiesto canonico y comparativas F1 vs F2. Ejecuta cada comando desde la raiz del repo en PowerShell con `.venv` activado.
 
+**Nota (2025-12-23):** ver errata post-cierre sobre el ciclo de vida del agente en `sim/runner.py` (impacta interpretaciones de aprendizaje entre episodios): `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md`.
+
 Prerequisitos
 - Activar el entorno Python (se asume `.venv`):
 

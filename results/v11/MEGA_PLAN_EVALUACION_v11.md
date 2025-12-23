@@ -2,6 +2,8 @@
 
 Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4/F5, y (iii) la extensión F6 (diseñada para resolver el ceiling effect de CFR sin reabrir F4/F5).
 
+**ERRATA (post‑cierre):** se documentó una limitación de implementación sobre el ciclo de vida del agente (reinicio por episodio) que puede afectar interpretaciones de “aprendizaje entre episodios”. Ver `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md`.
+
 Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/INDEX_SERIE_V11.md`.
 
 ## 1) Estado por fases (v11)
@@ -54,6 +56,11 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - En confirmatorio, CFR volvió a saturar en `1.0` en todos los grupos (C-H, S0-H, S2-H) ⇒ H1/H3 **INCONCLUSIVE** (ver `results/v11/data/f6_preregistered_report_v11.md`).
 - Señal descriptiva: `episodes_completed` es mayor en Simbiosis que en Control, pero no es claim confirmatorio en F6 (ver `results/v11/F6/F6_CLOSURE_REPORT.md`).
 
+9) **ERRATA (ciclo de vida del agente) y ajuste del roadmap**
+- Se detectó post‑cierre que `sim/runner.py` instanciaba el agente dentro del loop de episodios (`for ep in range(episodes)`), lo que implica un régimen tipo **episodic‑reset** (sin aprendizaje acumulado entre episodios).
+- Esto **no invalida** la auditabilidad de los artefactos (CSV/hashes), pero **sí limita** claims sobre “aprendizaje a través de 200 episodios”.
+- Roadmap ajustado: antes de ejecutar una fase nueva (p.ej. F7), corregir el runner y correr una micro‑validación de aprendizaje (“repair validation”) bajo un identificador de serie nuevo para evitar mezclar regímenes.
+
 ## 3) Artefactos canónicos (fuente de verdad)
 - Dataset canónico (CSV + sha256): `results/v11/CANONICAL_DATASET_v11.md`
 - Manifiesto de JSON (sha256 por run): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
@@ -76,6 +83,7 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] Cierre formal F5 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [x] Ejecutar F6 (piloto → p* → confirmatorio) y producir outputs canónicos.
 - [x] Cierre formal F6 (closure report + análisis preregistrado + manifiestos/stats actualizados).
+- [ ] RV1 (Repair Validation post‑errata): confirmar aprendizaje acumulativo entre episodios + robustez de shapes antes de re‑calibrar (`B` / `red_team_prob`) en una fase nueva.
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
@@ -94,4 +102,4 @@ En caso (a), el cierre mínimo de F5 debe incluir:
 - Reporte preregistrado F5 en `results/v11/data/` y un `F5_CLOSURE_REPORT.md` citando artefactos exactos.
 - Manifiestos y stats regenerados (master + reportes + hashes).
 
-Estado actual: F0–F6 cerrados y auditables.
+Estado actual: F0–F6 cerrados y auditables; errata documentada; RV1 pendiente.
