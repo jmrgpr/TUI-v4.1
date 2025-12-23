@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
 **Última actualización:** 2025-12-23  
-**Estado:** F0–F7 cerrados y auditados (con errata post‑cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO).
+**Estado:** F0-F7 cerrados y auditados (con errata post-cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO) + F8 preregistrado (pendiente).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -14,6 +14,7 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F5:** cerrado (high-stakes `B=3`, endpoint primario `episodes_completed`; ver `results/v11/data/f5_preregistered_report_v11.md` y `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - **F6:** cerrado (high-stakes `B=3`, endpoint primario CFR con calibración de `red_team_prob`; ver `results/v11/data/f6_preregistered_report_v11.md` y `results/v11/F6/F6_CLOSURE_REPORT.md`).
 - **F7:** cerrado (calibración budget `B` → `B*` para des‑saturar CFR; ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
+- **F8:** preregistrado (replicación H1-only para cierre; ver `results/v11/F8/PREREGISTRO_F8_v11.md`).
 - **RV1 (Repair Validation):** cerrado (**FAIL/NO-GO**; invariantes OK, pero sin señal mínima de mejora en reward).
 - **RV2 (Repair Validation):** cerrado (**PASS/GO**; invariantes I1/I2 OK; E1/E2 descriptivos).
 
@@ -97,6 +98,14 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - **Organizador (raw → canónico):** `scripts/organize_F7_results.py`
 - **Análisis preregistrado:** `scripts/f7_preregistered_analysis_v11.py`
 
+### J) "Quiero ejecutar F8 (replicación H1-only para cerrar CFR sin Holm)"
+- **Preregistro (canónico):** `results/v11/F8/PREREGISTRO_F8_v11.md`
+- **Log de desviaciones:** `results/v11/F8/F8_DEVIATIONS_LOG_v11.md`
+- **Cierre:** `results/v11/F8/F8_CLOSURE_REPORT.md`
+- **Runner (confirm/expand):** `results/v11/F8/run_F8_v11.py`
+- **Organizador (raw → canónico):** `scripts/organize_F8_results.py`
+- **Análisis preregistrado:** `scripts/f8_preregistered_analysis_v11.py`
+
 ## 4) Documentos “históricos” para no confundirse
 - `results/v11/stats_report_v11.md` es solo un puntero (deprecated) al reporte vigente en `results/v11/data/stats_report_v11.md`.
 - `results/v11/episodic_metrics_v11.md` es solo un puntero (deprecated) a `results/v11/data/episodic_metrics_v11.md`.
@@ -114,3 +123,4 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - RV1 cerró como **NO-GO** (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
 - RV2 cerró como **PASS/GO** y habilita re‑intentar fases confirmatorias bajo el nuevo régimen (agente persistente).
 - F7 está cerrado: `B*` seleccionado + confirmatorio ejecutado + canónicos + análisis preregistrado.
+- F8 está preregistrado (H1-only) para convertir la señal de F7 en veredicto confirmatorio sin Holm; pendiente de ejecución.

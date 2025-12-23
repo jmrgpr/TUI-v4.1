@@ -1,4 +1,4 @@
-# MEGA PLAN DE EVALUACION - Serie v11 (post F5; extensión F6)
+# MEGA PLAN DE EVALUACION - Serie v11 (post F7; F8 preregistrado)
 
 Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4/F5, y (iii) la extensión F6 (diseñada para resolver el ceiling effect de CFR sin reabrir F4/F5).
 
@@ -14,6 +14,8 @@ Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/IND
 - [x] F4 (stakes run-level + CFR): ejecutado, auditado y con cierre formal (ver `results/v11/F4/F4_CLOSURE_REPORT.md`).
 - [x] F5 (high-stakes `B=3`, endpoint `episodes_completed`): ejecutado, auditado y con cierre formal (ver `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - [x] F6 (calibración `red_team_prob` para CFR con `B=3`): ejecutado, auditado y con cierre formal (ver `results/v11/F6/F6_CLOSURE_REPORT.md`).
+- [x] F7 (budget calibration `B` → `B*` para des‑saturar CFR): ejecutado y cerrado (ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
+- [ ] F8 (replicación H1-only para cierre de CFR sin Holm): preregistrado; pendiente de ejecución (ver `results/v11/F8/PREREGISTRO_F8_v11.md`).
 
 ## 2) Qué cambió con los hallazgos nuevos (impacto sobre el plan)
 Cambios que afectan directamente al MEGA_PLAN original (post-F2):
@@ -59,7 +61,7 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 9) **ERRATA (ciclo de vida del agente) y ajuste del roadmap**
 - Se detectó post‑cierre que `sim/runner.py` instanciaba el agente dentro del loop de episodios (`for ep in range(episodes)`), lo que implica un régimen tipo **episodic‑reset** (sin aprendizaje acumulado entre episodios).
 - Esto **no invalida** la auditabilidad de los artefactos (CSV/hashes), pero **sí limita** claims sobre “aprendizaje a través de 200 episodios”.
-- Roadmap ajustado: antes de ejecutar una fase nueva (p.ej. F7), corregir el runner y correr una micro‑validación de aprendizaje (“repair validation”) bajo un identificador de serie nuevo para evitar mezclar regímenes.
+- Roadmap ajustado (hecho): se corrigió el runner; RV1 cerró **FAIL/NO-GO**; RV2 cerró **PASS/GO**; F7 se ejecutó bajo agente persistente; F8 queda preregistrado para cerrar H1 (CFR) sin Holm.
 
 ## 3) Artefactos canónicos (fuente de verdad)
 - Dataset canónico (CSV + sha256): `results/v11/CANONICAL_DATASET_v11.md`
@@ -86,12 +88,17 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] RV1 (Repair Validation post‑errata): ejecutado y cerrado (**FAIL/NO-GO**) — invariantes OK, pero sin señal mínima de mejora intra-run en reward (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
 - [x] RV2 (Repair Validation post‑errata; invariantes como gating): ejecutado y cerrado (**PASS/GO**) (ver `results/v11/RV2/RV2_CLOSURE_REPORT.md`).
 - [x] F7 (budget calibration `B` → `B*` para des‑saturar CFR): ejecutado y cerrado (ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
+- [ ] F8 (replicación H1-only para cierre CFR sin Holm): preregistrado; pendiente de ejecución (ver `results/v11/F8/PREREGISTRO_F8_v11.md`).
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
 v11 queda cerrado cuando:
 - F0–F4 están cerradas y auditables (ya lo están), y
 - F5 queda **(a)** ejecutado y cerrado **o** **(b)** explícitamente diferido (con una nota formal en `results/v11/F5/F5_DEVIATIONS_LOG_v11.md` indicando “no ejecutado”).
+
+Para un cierre “sin dudas” del arco **high-stakes CFR** (post‑errata):
+- F7 deja headroom real (B*), pero el veredicto puede quedar INCONCLUSIVE por potencia/multiplicidad.
+- F8 existe para cerrar **H1** (S0-H vs C-H) como claim confirmatorio H1-only; ejecutarlo y cerrarlo (o diferirlo explícitamente) deja el paquete v11 más sólido.
 
 En caso (a), el cierre mínimo de F4 debe incluir:
 - Outputs canónicos en `results/v11/F4/F2_redteam/stk{L,H}/` (CSV versionados).

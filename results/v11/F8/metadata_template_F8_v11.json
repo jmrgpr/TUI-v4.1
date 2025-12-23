@@ -1,0 +1,22 @@
+{
+  "phase": "F8",
+  "series": "v11",
+  "date": "YYYY-MM-DD",
+  "stage": "confirm|expand",
+  "condition": "F2_redteam",
+  "stakes": {
+    "token": "stkH",
+    "catastrophe_definition": "episode ends with starvation (resources<=0)",
+    "stakes_mode": "high",
+    "catastrophe_budget_B": 40
+  },
+  "grid_size": 16,
+  "seed": 601,
+  "episodes": 200,
+  "risk_scale": 1.2,
+  "risk_level": "high",
+  "red_team": true,
+  "red_team_prob": 0.03,
+  "pgf_mix": 0.0
+}
+

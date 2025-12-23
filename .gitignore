@@ -44,6 +44,7 @@ results/v11/F4/raw/**/*.csv
 results/v11/F5/raw/**/*.csv
 results/v11/F6/raw/**/*.csv
 results/v11/F7/raw/**/*.csv
+results/v11/F8/raw/**/*.csv
 results/v11/RV1/raw/**/*.csv
 results/v11/RV2/raw/**/*.csv
 
