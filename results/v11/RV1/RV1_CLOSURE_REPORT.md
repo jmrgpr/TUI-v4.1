@@ -2,58 +2,30 @@
 
 **Serie:** v11 (post-errata)  
 **Fase:** RV1 — Repair Validation  
-**Fecha de cierre:** YYYY-MM-DD (America/Puerto_Rico)  
-**Estado:** DRAFT (completar al finalizar RV1)
-
----
+**Fecha de cierre:** 2025-12-23 (America/Puerto_Rico)  
+**Estado:** FAIL
 
 ## 1) Resumen ejecutivo
 
-- **Objetivo:** validar que el fix de `sim/runner.py` habilita aprendizaje acumulativo por run (agente persistente) y robustez de shapes DQN antes de ejecutar fases confirmatorias (F7+).
-- **Resultado:** PASS / FAIL (completar).
-- **Stop rules activadas:** SI / NO (completar).
-- **Desviaciones:** ver `results/v11/RV1/RV1_DEVIATIONS_LOG_v11.md`.
-
----
+- Objetivo: validar persistencia del agente por run + robustez de shape + señal mínima de aprendizaje intra-run.
+- Decisión: **NO-GO (FAIL)**.
+- Invariantes: I1(all)=PASS, I2(all)=PASS.
+- Señal mínima E1 (>=2/3 seeds por condición): C=0/3, S0=0/3 ⇒ FAIL.
 
 ## 2) Setup congelado (según preregistro)
 
-- Episodios por run: 200
-- Grid: 16
-- Seeds: {42, 101, 13}
-- Stakes: LOW (sin budget)
-- Condiciones: C (Control-DQN) y S0 (Simbiosis pgf_mix=0.0)
+- episodes=200, grid=16, seeds=[42, 101, 13]
+- risk_scale=1.2, risk_level=high, red_team_prob=0.03
+- stakes=LOW (sin budget)
+- condiciones: C (Control-DQN), S0 (Simbiosis pgf_mix=0.0)
 
----
+## 3) Artefactos
 
-## 3) Invariantes (I1/I2)
+- Metrics (canónico): `results/v11/RV1/rv1_run_metrics.csv` (sha256=2da042871fb10b42845432b1995f7ca46a2653a4bcd6e920f2f314236846b8e0)
+- Invariants (canónico): `results/v11/RV1/rv1_invariants.json` (sha256=e5ac61ece84b4c024344f60ce1221af45e3928368746927531d383bf6689de57)
+- Raw (local-only): `results/v11/RV1/raw`
 
-Completar con evidencia de:
-- `agent_id` constante por run
-- contadores que crecen (p.ej. buffer/timesteps/updates)
-- ausencia de errores de dimensión
-- `state_dim_final` constante
+## 4) Siguiente paso
 
-Referencias:
-- `results/v11/RV1/rv1_invariants.json` (cuando exista)
-
----
-
-## 4) Señal mínima de aprendizaje (E1/E2)
-
-Completar tabla por seed y condición:
-- early_mean (1–50)
-- late_mean (151–200)
-- Δlearn
-- starvation early/late (si aplica)
-
-Referencias:
-- `results/v11/RV1/rv1_run_metrics.csv` (cuando exista)
-
----
-
-## 5) Decisión GO/NO-GO
-
-- **PASS/GO** (si aplica): habilita ejecutar F7 (calibración de B / headroom de CFR) bajo el nuevo régimen.
-- **FAIL/NO-GO** (si aplica): no ejecutar F7; corregir instrumentación/runner y repetir RV1.
-
+- Si PASS: se habilita re-intentar una fase confirmatoria (F7+) bajo el nuevo régimen (agente persistente).
+- Si FAIL: no ejecutar F7; corregir instrumentación/runner y repetir RV1.
