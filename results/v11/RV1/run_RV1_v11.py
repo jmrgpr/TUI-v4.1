@@ -2,10 +2,14 @@ import argparse
 import csv
 import hashlib
 import json
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
+
+REPO_ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(REPO_ROOT))
 
 from sim import config
 from sim.runner import run_experiment
@@ -310,4 +314,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-
