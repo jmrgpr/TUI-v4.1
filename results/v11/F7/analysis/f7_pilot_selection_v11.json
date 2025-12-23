@@ -1,0 +1,55 @@
+{
+  "phase": "F7",
+  "series": "v11",
+  "timestamp_utc": "2025-12-23T18:49:58+00:00",
+  "pilot": {
+    "grid": 16,
+    "seeds": [
+      9001,
+      9002,
+      9003,
+      9004,
+      9005
+    ],
+    "candidates": [
+      3,
+      5,
+      10,
+      20,
+      40
+    ],
+    "rows": [
+      {
+        "budget_B": 3,
+        "n": 5,
+        "cfr_control": 1.0
+      },
+      {
+        "budget_B": 5,
+        "n": 5,
+        "cfr_control": 1.0
+      },
+      {
+        "budget_B": 10,
+        "n": 5,
+        "cfr_control": 1.0
+      },
+      {
+        "budget_B": 20,
+        "n": 5,
+        "cfr_control": 1.0
+      },
+      {
+        "budget_B": 40,
+        "n": 5,
+        "cfr_control": 0.8
+      }
+    ],
+    "rule": "closest-to-0.5 within [0.3,0.7], else closest-to-0.5; tie -> smallest B"
+  },
+  "red_team_prob": 0.03,
+  "rt_token": "rt0p03",
+  "B_star": 40,
+  "B_star_token": "b40",
+  "cfr_control_B_star": 0.8
+}
