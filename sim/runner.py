@@ -83,6 +83,7 @@ def run_experiment(
     grid_size: int = 5,
     stakes_mode: str = "low",
     catastrophe_budget: int | None = None,
+    record_invariants: bool = False,
     **kwargs,
 ):
     def pad_trajectories(trajectories, max_steps=config.ENV_MAX_STEPS_PER_EPISODE, pad_value=np.nan):
@@ -123,6 +124,7 @@ def run_experiment(
     starvation_evol = []
     goal_reached_evol = []
     agent = None
+    rv1_invariants = None
     u_proxy_all = []
     u_humans_all = []
     ope_weights = []
@@ -169,9 +171,23 @@ def run_experiment(
                 )
             else:
                 agent = Agent(name=agent_name, resources=config.ENV_INITIAL_RESOURCES)
+            if record_invariants:
+                rv1_invariants = {
+                    "agent_class": agent.__class__.__name__,
+                    "agent_name": str(agent_name),
+                    "state_mode": str(state_mode),
+                    "state_dim": int(state_dim),
+                    "agent_id_by_episode": [],
+                    "dqn_memory_size_by_episode": [],
+                    "dqn_learn_steps_by_episode": [],
+                    "dqn_epsilon_by_episode": [],
+                    "policy_size_by_episode": [],
+                }
         if (ep+1) % 10 == 0 or ep == 0:
             print(f"Progreso / Progress: Episodio {ep+1}/{episodes}")
         state = env.reset()
+        if record_invariants and rv1_invariants is not None:
+            rv1_invariants["agent_id_by_episode"].append(int(id(agent)))
         agent.P_riesgo = 0.0
         agent.P_riesgo_prev = 0.0
         agent.resources = env.resources
@@ -326,6 +342,13 @@ def run_experiment(
         if stakes_mode == "high" and catastrophe_budget is not None and run_catastrophes_total >= int(catastrophe_budget):
             terminated_by_budget = True
             break
+        if record_invariants and rv1_invariants is not None:
+            if use_dqn:
+                rv1_invariants["dqn_memory_size_by_episode"].append(int(len(getattr(agent, "memory", []))))
+                rv1_invariants["dqn_learn_steps_by_episode"].append(int(getattr(agent, "_learn_steps", 0)))
+                rv1_invariants["dqn_epsilon_by_episode"].append(float(getattr(agent, "epsilon", 0.0)))
+            else:
+                rv1_invariants["policy_size_by_episode"].append(int(len(getattr(agent, "policy", {}) or {})))
     if agent is not None and not use_dqn:
         agent.reprogram_purpose("survive_and_help")
 
@@ -389,7 +412,7 @@ def run_experiment(
         }
     episodes_completed = len(total_rewards)
     budget_exhausted = bool(catastrophe_budget is not None and run_catastrophes_total >= int(catastrophe_budget))
-    return {
+    payload = {
         "config": {
             "grid_size": env.size,
             "risk_scale": risk_scale,
@@ -455,3 +478,6 @@ def run_experiment(
         "risk_effective_avg": risk_effective_avg,
         "surprise_avg": surprise_avg
     }
+    if record_invariants and rv1_invariants is not None:
+        payload["rv1_invariants"] = rv1_invariants
+    return payload

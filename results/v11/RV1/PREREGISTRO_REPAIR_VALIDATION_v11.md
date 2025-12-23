@@ -37,16 +37,27 @@ En un entorno sin budget (low-stakes), debe observarse **mejora intra-run** (del
 
 ## 3) Diseño experimental (mínimo y controlado)
 ### 3.1 Entorno y configuración
-- Escenario: **F2 / hostil** (el mismo de v11).
+- Escenario: **F2 / hostil** (el mismo de v11): `risk_level=high` + `red_team=True`.
 - Modo stakes: **LOW** (sin terminación por budget) para permitir 200 episodios completos y ver aprendizaje.
 - Episodios por run: **200**
 - Grids: **{16}** (para minimizar varianza en validación)
 - Seeds: **{42, 101, 13}** (3 seeds)
+-
+- Parámetros congelados del entorno (explícitos):
+  - `risk_scale = 1.2`
+  - `risk_level = "high"`
+  - `red_team = True`
+  - `red_team_prob = 0.03`
+  - `red_team_impact = -1.0`
+  - `red_team_move_tripwire_prob = 0.4`
+  - `red_team_add_shock_prob = 0.3`
+  - `red_team_block_prob = 0.3`
+  - `state_mode = "abstract"`
 
 ### 3.2 Agentes / condiciones
 Se corren 2 condiciones (mínimo necesario para validar persistencia en ambos caminos):
-- **C (Control-DQN)**
-- **S0 (Simbiosis con pgf_mix=0.0)**
+- **C (Control-DQN):** `use_dqn=True`, `use_pgf=False`
+- **S0 (Simbiosis con pgf_mix=0.0):** `use_dqn=True`, `use_pgf=True`, `pgf_mix=0.0`
 
 > Nota: `S2 (pgf_mix=0.2)` es opcional. Solo se ejecuta si C y S0 pasan invariantes; si se corre, se marca como “extensión no necesaria” (no cambia el criterio PASS/FAIL).
 
@@ -125,4 +136,3 @@ Guardar en `results/v11/RV1/`:
 ## 10) Decisión posterior
 - Si RV1 = PASS → ejecutar F7 (calibrar B / recuperar headroom en CFR) bajo el nuevo régimen.
 - Si RV1 = FAIL → corregir runner/estado/logging; no ejecutar fases confirmatorias.
-

@@ -20,11 +20,27 @@ RV1 existe para validar (de forma **preregistrada**) que el fix en `sim/runner.p
 
 ## Cómo ejecutar (manual, por ahora)
 
-RV1 está pensado para correrse con:
-- `episodes=200`
-- `grid=16`
-- `seeds={42,101,13}`
+RV1 se corre con el runner dedicado:
+
+```powershell
+python results/v11/RV1/run_RV1_v11.py
+```
+
+Preflight (sin ejecutar):
+
+```powershell
+python results/v11/RV1/run_RV1_v11.py --dry-run
+```
+
+Smoke test corto (no canónico; escribe en `_tmp_smoke`):
+
+```powershell
+python results/v11/RV1/run_RV1_v11.py --smoke
+```
+
+Parámetros congelados por defecto (según preregistro):
+- `episodes=200`, `grid=16`, `seeds={42,101,13}`
+- `risk_scale=1.2`, `risk_level=high`, `red_team_prob=0.03`
 - stakes **LOW** (sin budget) para observar aprendizaje intra-run.
 
 Al terminar, completa `RV1_CLOSURE_REPORT.md` con PASS/FAIL según el preregistro.
-
