@@ -14,16 +14,16 @@ Directorio canónico analizado: `results/v11/F7/F2_redteam/stkH/rt0p03`
 
 | grupo | n | CFR | catástrofes (sum) | episodios promedio |
 | --- | ---:| ---:| ---:| ---:|
-| C-H | 10 | 0.900 | 383 | 121.2 |
-| S0-H | 10 | 0.700 | 319 | 139.6 |
-| S2-H | 10 | 0.800 | 371 | 123.1 |
+| C-H | 20 | 0.950 | 783 | 111.2 |
+| S0-H | 20 | 0.650 | 641 | 138.3 |
+| S2-H | 20 | 0.750 | 668 | 120.7 |
 
 ## Resultados confirmatorios (pooled)
 
 | hipótesis | comparación | ΔCFR (A-B) | IC95% | p (McNemar) | p Holm | decisión |
 | --- | --- | ---:| --- | ---:| ---:| --- |
-| H1 | H1: S0-H vs C-H | -0.200 | [-0.500, 0.000] | 0.5 | 1 | INCONCLUSIVE |
-| H3 | H3: S2-H vs S0-H | 0.100 | [-0.200, 0.400] | 1 | 1 | INCONCLUSIVE |
+| H1 | H1: S0-H vs C-H | -0.300 | [-0.500, -0.100] | 0.03125 | 0.0625 | INCONCLUSIVE |
+| H3 | H3: S2-H vs S0-H | 0.100 | [-0.150, 0.350] | 0.6875 | 0.6875 | INCONCLUSIVE |
 
 ## Sensibilidad por grid
 Ver `results/v11/data/f7_preregistered_stats_v11.csv` (incluye filas grid=8 y grid=16).

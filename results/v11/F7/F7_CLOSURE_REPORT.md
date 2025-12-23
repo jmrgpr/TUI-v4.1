@@ -4,7 +4,7 @@
 **Fase:** F7 (calibración budget `B` → `B*` + confirmatorio CFR, high-stakes)  
 **Condición base:** `F2_redteam` (high-stakes con `B*`)  
 **Repositorio:** TUI-v4.1  
-**Commit (selección B* + ejecución confirmatoria):** `0bc72ff`
+**Commit (selección B*):** `0bc72ff`
 
 ## Objetivo del cierre
 Dejar F7 en estado **auditable y peer-review proof**: (i) outputs canónicos (CSV) versionados, (ii) trazabilidad de JSON por hashes sin subir datos brutos, y (iii) análisis preregistrado publicado con control de error familiar.
@@ -33,7 +33,7 @@ Dejar F7 en estado **auditable y peer-review proof**: (i) outputs canónicos (CS
 ## Confirmaciones mínimas (checklist)
 - Separación física por fase: `results/v11/F7/` (sin mezclar con F4–F6).
 - Piloto ejecutado y `B*` seleccionado según regla preregistrada (ver reporte/JSON).
-- Conteo canónico esperado (confirmatorio base): 30 CSV `*_episodes.csv` (3 grupos × 10 runs) bajo `results/v11/F7/F2_redteam/stkH/rt*/`.
+- Conteo canónico (confirmatorio): 60 CSV `*_episodes.csv` (3 grupos × 20 runs) bajo `results/v11/F7/F2_redteam/stkH/rt*/`.
 - JSON por run no se versionan; se auditan por hashes en el manifiesto extendido.
 - El análisis preregistrado se ejecuta desde `scripts/f7_preregistered_analysis_v11.py`.
 
@@ -43,11 +43,11 @@ Selección de budget:
 
 Según `results/v11/data/f7_preregistered_report_v11.md`, el endpoint primario **CFR** (budget-exhaustion) deja de saturar (headroom real) y la family confirmatoria (Holm-Bonferroni, alpha=0.05; MESI_CFR=0.20) arroja:
 
-- Resumen por grupo (pooled grids 8+16): C-H CFR=0.900, S0-H CFR=0.700, S2-H CFR=0.800.
-- H1 (S0-H vs C-H): ΔCFR=-0.200, IC95%=[-0.500, 0.000], p=0.5, p Holm=1 → **INCONCLUSIVE**.
-- H3 (S2-H vs S0-H): ΔCFR=+0.100, IC95%=[-0.200, 0.400], p=1, p Holm=1 → **INCONCLUSIVE**.
+- Resumen por grupo (pooled grids 8+16; n=20 por grupo): C-H CFR=0.950, S0-H CFR=0.650, S2-H CFR=0.750.
+- H1 (S0-H vs C-H): ΔCFR=-0.300, IC95%=[-0.500, -0.100], p=0.03125, p Holm=0.0625 → **INCONCLUSIVE**.
+- H3 (S2-H vs S0-H): ΔCFR=+0.100, IC95%=[-0.150, 0.350], p=0.6875, p Holm=0.6875 → **INCONCLUSIVE**.
 
-Nota: el objetivo metodológico de F7 (evitar ceiling effect) se cumple; el objetivo confirmatorio queda inconcluso con n=10 por grupo.
+Nota: el objetivo metodológico de F7 (evitar ceiling effect) se cumple. Con la expansión preregistrada (n=20 por grupo), H1 queda cerca del umbral (p sin ajustar <0.05) pero no pasa Holm.
 
 ## Desviaciones del preregistro
 Registrar desviaciones **antes** de análisis completo en:
