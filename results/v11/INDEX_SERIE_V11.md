@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
 **Última actualización:** 2025-12-23  
-**Estado:** F0–F6 cerrados y auditados (con errata post‑cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 preregistrado (pendiente).
+**Estado:** F0–F6 cerrados y auditados (con errata post‑cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO) + F7 preregistrado (pendiente).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -13,8 +13,9 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F4:** cerrado (stakes run-level `B=3` + CFR; preregistrado y auditado).
 - **F5:** cerrado (high-stakes `B=3`, endpoint primario `episodes_completed`; ver `results/v11/data/f5_preregistered_report_v11.md` y `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - **F6:** cerrado (high-stakes `B=3`, endpoint primario CFR con calibración de `red_team_prob`; ver `results/v11/data/f6_preregistered_report_v11.md` y `results/v11/F6/F6_CLOSURE_REPORT.md`).
+- **F7:** preregistrado (**pendiente**; calibración de budget `B` → `B*` para des‑saturar CFR; ver `results/v11/F7/PREREGISTRO_F7_v11.md`).
 - **RV1 (Repair Validation):** cerrado (**FAIL/NO-GO**; invariantes OK, pero sin señal mínima de mejora en reward).
-- **RV2 (Repair Validation):** preregistrado (**pendiente**; GO/NO-GO solo por invariantes I1/I2; E1/E2 descriptivos).
+- **RV2 (Repair Validation):** cerrado (**PASS/GO**; invariantes I1/I2 OK; E1/E2 descriptivos).
 
 El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
 
@@ -86,7 +87,15 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - **Log de desviaciones:** `results/v11/RV2/RV2_DEVIATIONS_LOG_v11.md`
 - **Cierre:** `results/v11/RV2/RV2_CLOSURE_REPORT.md`
 - **Runner:** `results/v11/RV2/run_RV2_v11.py`
-- **Outputs canónicos (al ejecutar):** `results/v11/RV2/rv2_run_metrics.csv` y `results/v11/RV2/rv2_invariants.json`
+- **Outputs canónicos:** `results/v11/RV2/rv2_run_metrics.csv` y `results/v11/RV2/rv2_invariants.json`
+
+### I) "Quiero ejecutar F7 (budget calibration para CFR)"
+- **Preregistro (canónico):** `results/v11/F7/PREREGISTRO_F7_v11.md`
+- **Log de desviaciones:** `results/v11/F7/F7_DEVIATIONS_LOG_v11.md`
+- **Cierre:** `results/v11/F7/F7_CLOSURE_REPORT.md`
+- **Runner (piloto/select/confirm):** `results/v11/F7/run_F7_v11.py`
+- **Organizador (raw → canónico):** `scripts/organize_F7_results.py`
+- **Análisis preregistrado:** `scripts/f7_preregistered_analysis_v11.py`
 
 ## 4) Documentos “históricos” para no confundirse
 - `results/v11/stats_report_v11.md` es solo un puntero (deprecated) al reporte vigente en `results/v11/data/stats_report_v11.md`.
@@ -103,4 +112,5 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - v11 y su extensión F6 están cerrados; stats, master y manifiestos están regenerados.
 - Antes de ejecutar una fase nueva (p.ej. F7), ver `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md` (y decidir si se abre una serie nueva tras corregir el runner).
 - RV1 cerró como **NO-GO** (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
-- RV2 está preregistrado para validar solo invariantes (I1/I2) como gating; si RV2 pasa, habilita re‑intentar fases confirmatorias bajo el nuevo régimen.
+- RV2 cerró como **PASS/GO** y habilita re‑intentar fases confirmatorias bajo el nuevo régimen (agente persistente).
+- F7 está preregistrado; siguiente paso operativo: correr piloto → seleccionar `B*` → correr confirmatorio → organizar → análisis → cierre.

@@ -84,7 +84,8 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] Ejecutar F6 (piloto → p* → confirmatorio) y producir outputs canónicos.
 - [x] Cierre formal F6 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [x] RV1 (Repair Validation post‑errata): ejecutado y cerrado (**FAIL/NO-GO**) — invariantes OK, pero sin señal mínima de mejora intra-run en reward (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
-- [ ] RV2 (Repair Validation post‑errata; invariantes como gating): preregistrado (pendiente). Si RV2 pasa, habilita re‑intentar fases confirmatorias (F7+).
+- [x] RV2 (Repair Validation post‑errata; invariantes como gating): ejecutado y cerrado (**PASS/GO**) (ver `results/v11/RV2/RV2_CLOSURE_REPORT.md`).
+- [ ] F7 (budget calibration `B` → `B*` para des‑saturar CFR): preregistrado (pendiente) — ver `results/v11/F7/PREREGISTRO_F7_v11.md`.
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
