@@ -83,7 +83,7 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] Cierre formal F5 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [x] Ejecutar F6 (piloto → p* → confirmatorio) y producir outputs canónicos.
 - [x] Cierre formal F6 (closure report + análisis preregistrado + manifiestos/stats actualizados).
-- [ ] RV1 (Repair Validation post‑errata): confirmar aprendizaje acumulativo entre episodios + robustez de shapes antes de re‑calibrar (`B` / `red_team_prob`) en una fase nueva.
+- [x] RV1 (Repair Validation post‑errata): ejecutado y cerrado (**FAIL/NO-GO**) — invariantes OK, pero sin señal mínima de mejora intra-run en reward (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
@@ -102,4 +102,4 @@ En caso (a), el cierre mínimo de F5 debe incluir:
 - Reporte preregistrado F5 en `results/v11/data/` y un `F5_CLOSURE_REPORT.md` citando artefactos exactos.
 - Manifiestos y stats regenerados (master + reportes + hashes).
 
-Estado actual: F0–F6 cerrados y auditables; errata documentada; RV1 pendiente.
+Estado actual: F0–F6 cerrados y auditables; errata documentada; RV1 cerrado (FAIL/NO-GO).
