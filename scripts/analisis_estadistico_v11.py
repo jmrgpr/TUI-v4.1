@@ -19,6 +19,9 @@ PHASE_HINTS = {
     "f0_baseline": "F0_baseline",
     "f1_highrisk": "F1_highrisk",
     "f2_redteam": "F2_redteam",
+    "f6/": "F6",
+    "f6_": "F6",
+    "/f6_": "F6",
     "f5/": "F5",
     "f5_": "F5",
     "/f5_": "F5",
@@ -48,6 +51,8 @@ ATTACK_COLUMNS = [
 
 def detect_phase(filename: str) -> str:
     lowered = filename.replace("\\", "/").lower()
+    if "results/v11/f6/" in lowered:
+        return "F6"
     if "results/v11/f5/" in lowered:
         return "F5"
     if "results/v11/f4/" in lowered:
@@ -220,6 +225,9 @@ def format_report(summary: pd.DataFrame) -> str:
                 lines.append("")
             if phase == "F5":
                 lines.append("Nota: F5 mantiene high-stakes `B=3` y cambia el endpoint primario a `episodes_completed` (tiempo-hasta-agotar-budget). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f5_preregistered_report_v11.md`.")
+                lines.append("")
+            if phase == "F6":
+                lines.append("Nota: F6 mantiene high-stakes `B=3` y vuelve a CFR como endpoint primario, pero calibra `red_team_prob` via un piloto preregistrado (seleccion de p*). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f6_preregistered_report_v11.md` y el piloto en `results/v11/data/f6_pilot_selection_v11.md`.")
                 lines.append("")
             cols = ["agent", "risk_scale", "n", "mean", "std", "ci95_lo", "ci95_hi", "p_boot", "p_boot_holm", "attack_enabled", "attack_type", "attack_params"]
             lines.append(section[cols].to_string(index=False))

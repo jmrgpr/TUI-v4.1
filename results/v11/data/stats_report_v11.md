@@ -60,6 +60,14 @@ Nota: F5 mantiene high-stakes `B=3` y cambia el endpoint primario a `episodes_co
   control        1.2 11 -62.977111  4.614102 -65.703871 -60.250351     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 simbiosis        1.2 20 -45.117730 20.243781 -53.989959 -36.245502     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 
+### Fase `F6`
+
+Nota: F6 mantiene high-stakes `B=3` y vuelve a CFR como endpoint primario, pero calibra `red_team_prob` via un piloto preregistrado (seleccion de p*). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f6_preregistered_report_v11.md` y el piloto en `results/v11/data/f6_pilot_selection_v11.md`.
+
+    agent risk_scale  n       mean       std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                           attack_params
+  control        1.2 10 -60.874663  3.110817 -62.802768 -58.946559     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.03;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+simbiosis        1.2 20 -40.572841 21.540708 -50.013472 -31.132209     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.03;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+
 ## Metrica `reward_env_total`
 
 ### Fase `F0_baseline`
@@ -107,6 +115,14 @@ Nota: F5 mantiene high-stakes `B=3` y cambia el endpoint primario a `episodes_co
     agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                          attack_params
   control        1.2 10 -62.960222 4.863333 -65.974547 -59.945897     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 simbiosis        1.2 20 -64.596527 1.475884 -65.243362 -63.949692     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.1;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+
+### Fase `F6`
+
+Nota: F6 mantiene high-stakes `B=3` y vuelve a CFR como endpoint primario, pero calibra `red_team_prob` via un piloto preregistrado (seleccion de p*). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f6_preregistered_report_v11.md` y el piloto en `results/v11/data/f6_pilot_selection_v11.md`.
+
+    agent risk_scale  n       mean      std    ci95_lo    ci95_hi  p_boot  p_boot_holm  attack_enabled          attack_type                                                                                                                                                                                                           attack_params
+  control        1.2 10 -60.874663 3.110817 -62.802768 -58.946559     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.03;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
+simbiosis        1.2 20 -61.439574 1.219588 -61.974082 -60.905066     NaN          NaN            True red_team_adversarial grid_size=16;risk_scale=1.2;risk_level=high;pgf_mix=0.0;episodes=200;seed=123;red_team=True;red_team_prob=0.03;red_team_impact=-1.0;red_team_move_tripwire_prob=0.4;red_team_add_shock_prob=0.3;red_team_block_prob=0.3
 
 ## Notas rapidas
 

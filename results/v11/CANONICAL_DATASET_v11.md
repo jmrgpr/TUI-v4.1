@@ -1,6 +1,6 @@
 # CANONICAL_DATASET_v11
 
-Este manifiesto lista los CSV canónicos de la serie v11 (F0_baseline, F1_highrisk, F2_redteam, F3, F4 y, cuando exista, F5) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.
+Este manifiesto lista los CSV canónicos de la serie v11 (F0_baseline, F1_highrisk, F2_redteam, F3, F4, F5 y, cuando exista, F6) y excluye las copias archivadas en `results/v11/archived` para garantizar trazabilidad única.
 
 El script `scripts/generate_canonical_dataset_v11.py` controla la selección de archivos y el cálculo de su hash sha256.
 
@@ -11,6 +11,7 @@ El script `scripts/generate_canonical_dataset_v11.py` controla la selección de 
 - `F3`: 80 archivos canónicos.
 - `F4`: 60 archivos canónicos.
 - `F5`: 30 archivos canónicos.
+- `F6`: 30 archivos canónicos.
 
 ## Manifest general
 
@@ -252,6 +253,36 @@ El script `scripts/generate_canonical_dataset_v11.py` controla la selección de 
 | F5 | simbiosis | 8 | 1.2 | 404 | `results/v11/F5/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed404_stkH_b3_m0p2_v11_episodes.csv` | `e0275c40c896e1c2a733c074a38465bd24bb4f7f6b9ac7abc3040b3409933224` |
 | F5 | simbiosis | 8 | 1.2 | 808 | `results/v11/F5/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed808_stkH_b3_m0p0_v11_episodes.csv` | `cc542183016e633bc1794de139e1facac891f02934c8b156694ff7e40efe94f4` |
 | F5 | simbiosis | 8 | 1.2 | 808 | `results/v11/F5/F2_redteam/stkH/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p1_seed808_stkH_b3_m0p2_v11_episodes.csv` | `0dc2255af178f82e51736e1e5b511a2d0187fda409bcf2e6c0fb78ed2d84ae41` |
+| F6 | control | 16 | 1.2 | 123 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p03_seed123_stkH_b3_m0p0_v11_episodes.csv` | `77186a9cdb3d01ee4ce3ac6c62cfdaba8dc6b276c7fcd1cc812cee733c4eb794` |
+| F6 | control | 16 | 1.2 | 271 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p03_seed271_stkH_b3_m0p0_v11_episodes.csv` | `9cd632f12bc7473f9b040240727b74c8a6d259ea48ca450038376edeabe7af0f` |
+| F6 | control | 16 | 1.2 | 314 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p03_seed314_stkH_b3_m0p0_v11_episodes.csv` | `1d391a9a16055001ec931d4e67175cf4f1274efc85f089c39f4dd7c4b73e7eaf` |
+| F6 | control | 16 | 1.2 | 404 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p03_seed404_stkH_b3_m0p0_v11_episodes.csv` | `990ac483b83f10f1ffb152cfa5b28b2ff3c0aefa70dd91b56ca20cb80e18e035` |
+| F6 | control | 16 | 1.2 | 808 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/control/grid16_riskhigh_r1p2_f2rt0p03_seed808_stkH_b3_m0p0_v11_episodes.csv` | `5726a851854f7532caf74cbab948f9718aad7c88726c122a216c1a3a4486df96` |
+| F6 | simbiosis | 16 | 1.2 | 123 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed123_stkH_b3_m0p0_v11_episodes.csv` | `af222bac4495d85c35ac5f2193d69cfaf7f85f9c77d97e0820a467fea786be13` |
+| F6 | simbiosis | 16 | 1.2 | 123 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed123_stkH_b3_m0p2_v11_episodes.csv` | `3e2377f3d47dd4be5154f2cff40a90a229e55e4ebf3eb0218995f2857f6d2243` |
+| F6 | simbiosis | 16 | 1.2 | 271 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed271_stkH_b3_m0p0_v11_episodes.csv` | `b72453cf31dcbde4f683ed5800943863ca8fd13ae2ec83d9efc9e1a75d9e3570` |
+| F6 | simbiosis | 16 | 1.2 | 271 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed271_stkH_b3_m0p2_v11_episodes.csv` | `9e170425d9a0827305a9d4cd9a4c83738f0cd6550994b497a4c4dff222140a42` |
+| F6 | simbiosis | 16 | 1.2 | 314 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed314_stkH_b3_m0p0_v11_episodes.csv` | `27a4c29412c2c001a769a5d32643e52cd6ce90cd12bf8c0208b3478503140281` |
+| F6 | simbiosis | 16 | 1.2 | 314 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed314_stkH_b3_m0p2_v11_episodes.csv` | `2c6da073a8066183346d1b0d2ad682686d98557bbae797a8c4a863850e5256f2` |
+| F6 | simbiosis | 16 | 1.2 | 404 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed404_stkH_b3_m0p0_v11_episodes.csv` | `5732dee84931c80e6cd8a6853dca4bd6070570b3b1e09169f06ed0f47cb51f5a` |
+| F6 | simbiosis | 16 | 1.2 | 404 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed404_stkH_b3_m0p2_v11_episodes.csv` | `cf9f796b4f4982cc0a87dc0a00768930eb9f41ad77b47a91c31159c5ae220569` |
+| F6 | simbiosis | 16 | 1.2 | 808 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed808_stkH_b3_m0p0_v11_episodes.csv` | `ea3ea641c5aa349c535c97cbf1d045673233f9701711d8ee1ba9863893101ffd` |
+| F6 | simbiosis | 16 | 1.2 | 808 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid16/riskhigh/simbiosis/grid16_riskhigh_r1p2_f2rt0p03_seed808_stkH_b3_m0p2_v11_episodes.csv` | `54afb1957b6895eed8722c980e53773e2a378410cfe1b51776a40c33cd4f3f14` |
+| F6 | control | 8 | 1.2 | 123 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p03_seed123_stkH_b3_m0p0_v11_episodes.csv` | `234eb9dc24a9554a4d3aa1246d7717d64be512a9938bb6714051d1b67528f53a` |
+| F6 | control | 8 | 1.2 | 271 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p03_seed271_stkH_b3_m0p0_v11_episodes.csv` | `975d1734ba10d8358992251261d6bfe511c2743988291938aedb871580c389be` |
+| F6 | control | 8 | 1.2 | 314 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p03_seed314_stkH_b3_m0p0_v11_episodes.csv` | `21498b5bf7fcf9fa2ad4e0be1e9a9fd905015554aa1efac42e927e3bc6c0619a` |
+| F6 | control | 8 | 1.2 | 404 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p03_seed404_stkH_b3_m0p0_v11_episodes.csv` | `fa60c581a78cf4f77e345dd93ae17cfaf9beaeacfc2584ab07282d327ec80a38` |
+| F6 | control | 8 | 1.2 | 808 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/control/grid8_riskhigh_r1p2_f2rt0p03_seed808_stkH_b3_m0p0_v11_episodes.csv` | `7eaa07e9b884cf7b7c2e5bb3d7f84d4b9c6b102388bfe27c1ed7c631133b3e97` |
+| F6 | simbiosis | 8 | 1.2 | 123 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed123_stkH_b3_m0p0_v11_episodes.csv` | `6363485d188815af14349570ab072391d8d3fa1538345d2483e4184e20d3b364` |
+| F6 | simbiosis | 8 | 1.2 | 123 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed123_stkH_b3_m0p2_v11_episodes.csv` | `7fa049904e96142629bbfee42e8f907c2b6792368222b6a0f3acc4bec4df838f` |
+| F6 | simbiosis | 8 | 1.2 | 271 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed271_stkH_b3_m0p0_v11_episodes.csv` | `3745f33f1658b54aa262c895f06ab6395fd281aaf86bfafa18db93a20e39f68f` |
+| F6 | simbiosis | 8 | 1.2 | 271 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed271_stkH_b3_m0p2_v11_episodes.csv` | `8255ee97bba0f45f50f2fd304428e062b90388769986ea98a181619e3de60241` |
+| F6 | simbiosis | 8 | 1.2 | 314 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed314_stkH_b3_m0p0_v11_episodes.csv` | `905f83691145d29d4da513f8bc2b1f4806237445becfd325a1f180cc8fbd6b80` |
+| F6 | simbiosis | 8 | 1.2 | 314 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed314_stkH_b3_m0p2_v11_episodes.csv` | `f923761fcacebe12cc9229f1b7b4cabb9b348b1e6e4ff6a5e3af54d1a7f7d3f7` |
+| F6 | simbiosis | 8 | 1.2 | 404 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed404_stkH_b3_m0p0_v11_episodes.csv` | `173b206a5d04b7a5e1f451086883afeca7c46de6508ebb43a0ef712a111c64a4` |
+| F6 | simbiosis | 8 | 1.2 | 404 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed404_stkH_b3_m0p2_v11_episodes.csv` | `568678b03c9ef126b5c147fbc00060b4e8231ebc069f51e6789985f3676927a8` |
+| F6 | simbiosis | 8 | 1.2 | 808 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed808_stkH_b3_m0p0_v11_episodes.csv` | `56c93e81f989764a0f75a41b07681dbded34af959e8c57f19cb7330764c96d94` |
+| F6 | simbiosis | 8 | 1.2 | 808 | `results/v11/F6/F2_redteam/stkH/rt0p03/grid8/riskhigh/simbiosis/grid8_riskhigh_r1p2_f2rt0p03_seed808_stkH_b3_m0p2_v11_episodes.csv` | `1b1bbecf778370599055e7eda33a5c054981bb05349ce4e36dafac8b85c5b24c` |
 
 Se documenta adicionalmente en `results/v11/data/f2_vs_f1_diff.md` la comparativa F1 vs F2 y los campos meta `phase/attack_*` que enriquecen cada JSON.
 Los archivos `raw/` y las copias en `archived/` solo se conservan para auditoría histórica; no se usan en análisis estadístico.

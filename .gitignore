@@ -13,6 +13,7 @@ results/**/*.json
 !results/**/analisis_*.json
 !results/**/*_metrics.json
 !results/**/README*.md
+!results/v11/F6/analysis/f6_pilot_selection_v11.json
 
 .venv/
 __pycache__/
@@ -38,6 +39,7 @@ results/v11/F1_highrisk/analysis/export_graficos_F1_v11.py
 results/v11/F3/raw/**/*.csv
 results/v11/F4/raw/**/*.csv
 results/v11/F5/raw/**/*.csv
+results/v11/F6/raw/**/*.csv
 
 # Puedes añadir más patrones según tus necesidades
 None

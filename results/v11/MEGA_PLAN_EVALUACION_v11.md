@@ -1,6 +1,6 @@
-# MEGA PLAN DE EVALUACION - Serie v11 (post F5; v11 cerrado)
+# MEGA PLAN DE EVALUACION - Serie v11 (post F5; extensión F6)
 
-Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4/F5, y (iii) qué queda como siguiente paso (si se decide extender la serie).
+Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4/F5, y (iii) la extensión F6 (diseñada para resolver el ceiling effect de CFR sin reabrir F4/F5).
 
 Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/INDEX_SERIE_V11.md`.
 
@@ -11,6 +11,7 @@ Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/IND
 - [x] F3 (causal / ablations / comparación justa): **cerrado** y auditado (ver `results/v11/F3/F3_CLOSURE_REPORT.md`).
 - [x] F4 (stakes run-level + CFR): ejecutado, auditado y con cierre formal (ver `results/v11/F4/F4_CLOSURE_REPORT.md`).
 - [x] F5 (high-stakes `B=3`, endpoint `episodes_completed`): ejecutado, auditado y con cierre formal (ver `results/v11/F5/F5_CLOSURE_REPORT.md`).
+- [x] F6 (calibración `red_team_prob` para CFR con `B=3`): ejecutado, auditado y con cierre formal (ver `results/v11/F6/F6_CLOSURE_REPORT.md`).
 
 ## 2) Qué cambió con los hallazgos nuevos (impacto sobre el plan)
 Cambios que afectan directamente al MEGA_PLAN original (post-F2):
@@ -42,6 +43,17 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - Endpoint primario `episodes_completed` mostró diferencias pooled: S0-H vs C-H mean diff=4.5 episodios (p Holm=0.046875), pero el punto estimado no supera MESI_EC=5, por lo que la decisión confirmatoria queda **INCONCLUSIVE** (ver `results/v11/data/f5_preregistered_report_v11.md`).
 - `pgf_mix=0.2` vs `pgf_mix=0.0` no mostró efecto en el endpoint primario (diff=0; ver H3 en `results/v11/data/f5_preregistered_report_v11.md`).
 
+7) **F6 (por qué existe y qué intenta resolver)**
+- F4 mostró ceiling effect con CFR bajo `B=3` y `red_team_prob=0.1` (CFR≈1.0 en todos los grupos).
+- F5 evitó el ceiling effect cambiando endpoint a `episodes_completed`, pero la decisión confirmatoria quedó inconclusa por MESI (Δ=4.5 < 5).
+- F6 vuelve a CFR como endpoint primario, pero calibra **solo** `red_team_prob` mediante un piloto preregistrado para seleccionar un `p*` tal que el CFR de Control quede ~0.5 (evita saturación y deja espacio de discriminación).
+- Ver preregistro: `results/v11/F6/PREREGISTRO_F6_v11.md`.
+
+8) **Resultado de F6**
+- El piloto no logró evitar saturación: `CFR_control(p)=1.0` para `{0.03, 0.05, 0.07}`, por lo que `p*` quedó en `0.03` por la regla de desempate (ver `results/v11/data/f6_pilot_selection_v11.md`).
+- En confirmatorio, CFR volvió a saturar en `1.0` en todos los grupos (C-H, S0-H, S2-H) ⇒ H1/H3 **INCONCLUSIVE** (ver `results/v11/data/f6_preregistered_report_v11.md`).
+- Señal descriptiva: `episodes_completed` es mayor en Simbiosis que en Control, pero no es claim confirmatorio en F6 (ver `results/v11/F6/F6_CLOSURE_REPORT.md`).
+
 ## 3) Artefactos canónicos (fuente de verdad)
 - Dataset canónico (CSV + sha256): `results/v11/CANONICAL_DATASET_v11.md`
 - Manifiesto de JSON (sha256 por run): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
@@ -62,6 +74,8 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] Cierre formal F4 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [x] Ejecutar F5 (runs) y producir outputs canónicos.
 - [x] Cierre formal F5 (closure report + análisis preregistrado + manifiestos/stats actualizados).
+- [x] Ejecutar F6 (piloto → p* → confirmatorio) y producir outputs canónicos.
+- [x] Cierre formal F6 (closure report + análisis preregistrado + manifiestos/stats actualizados).
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
@@ -80,4 +94,4 @@ En caso (a), el cierre mínimo de F5 debe incluir:
 - Reporte preregistrado F5 en `results/v11/data/` y un `F5_CLOSURE_REPORT.md` citando artefactos exactos.
 - Manifiestos y stats regenerados (master + reportes + hashes).
 
-Estado actual: F0–F5 cerrados; v11 está **cerrado** y auditable (ver `results/v11/F5/F5_CLOSURE_REPORT.md`).
+Estado actual: F0–F6 cerrados y auditables.
