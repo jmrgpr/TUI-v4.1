@@ -32,9 +32,10 @@ Esto puede afectar especialmente fases high‑stakes (F4–F6), donde se esperab
 Antes de ejecutar una fase adicional (p.ej. F7), se recomienda:
 
 1) Corregir el ciclo de vida del agente (instanciar una vez por run).
-2) Hacer una micro‑fase de validación (“repair validation”) que demuestre que:
+2) Hacer una micro‑fase de validación (“repair validation”) que verifique invariantes operacionales:
    - el agente persiste entre episodios (no se reinstancia),
-   - alguna señal de aprendizaje (p.ej. métricas o supervivencia) puede cambiar a través de episodios.
+   - el input/shape para DQN es estable (sin mismatches).
+   - (descriptivo) reportar si existe señal de aprendizaje intra‑run, sin usarlo como gating si es inestable/no informativo.
 3) Re‑plantear calibraciones (por ejemplo `red_team_prob` o budget `B`) bajo el nuevo régimen.
 
 ## Referencias
@@ -42,4 +43,3 @@ Antes de ejecutar una fase adicional (p.ej. F7), se recomienda:
 - Código: `sim/runner.py` (función `run_experiment`).
 - Control Tower: `results/v11/INDEX_SERIE_V11.md`
 - Roadmap: `results/v11/MEGA_PLAN_EVALUACION_v11.md`
-

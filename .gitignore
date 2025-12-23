@@ -15,6 +15,7 @@ results/**/*.json
 !results/**/README*.md
 !results/v11/F6/analysis/f6_pilot_selection_v11.json
 !results/v11/RV1/rv1_invariants.json
+!results/v11/RV2/rv2_invariants.json
 
 .venv/
 __pycache__/
@@ -42,6 +43,7 @@ results/v11/F4/raw/**/*.csv
 results/v11/F5/raw/**/*.csv
 results/v11/F6/raw/**/*.csv
 results/v11/RV1/raw/**/*.csv
+results/v11/RV2/raw/**/*.csv
 
 # Puedes añadir más patrones según tus necesidades
 None
