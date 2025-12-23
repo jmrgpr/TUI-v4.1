@@ -1,0 +1,4 @@
+hypothesis,grid,comparison,group_a,group_b,n_pairs,cfr_a,cfr_b,delta_cfr,ci95_lo,ci95_hi,p_mcnemar_exact_2sided,mesi_cfr
+H1,,H1: S0-H vs C-H,S0-H,C-H,40,0.4,1.0,-0.6,-0.75,-0.44999999999999996,1.1920928955078125e-07,0.2
+H1,8,H1: S0-H vs C-H,S0-H,C-H,20,0.5,1.0,-0.5,-0.7,-0.30000000000000004,0.001953125,0.2
+H1,16,H1: S0-H vs C-H,S0-H,C-H,20,0.3,1.0,-0.7,-0.9,-0.5,0.0001220703125,0.2

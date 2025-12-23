@@ -19,6 +19,12 @@ PHASE_HINTS = {
     "f0_baseline": "F0_baseline",
     "f1_highrisk": "F1_highrisk",
     "f2_redteam": "F2_redteam",
+    "f8/": "F8",
+    "f8_": "F8",
+    "/f8_": "F8",
+    "f7/": "F7",
+    "f7_": "F7",
+    "/f7_": "F7",
     "f6/": "F6",
     "f6_": "F6",
     "/f6_": "F6",
@@ -51,6 +57,10 @@ ATTACK_COLUMNS = [
 
 def detect_phase(filename: str) -> str:
     lowered = filename.replace("\\", "/").lower()
+    if "results/v11/f8/" in lowered:
+        return "F8"
+    if "results/v11/f7/" in lowered:
+        return "F7"
     if "results/v11/f6/" in lowered:
         return "F6"
     if "results/v11/f5/" in lowered:
@@ -229,6 +239,12 @@ def format_report(summary: pd.DataFrame) -> str:
             if phase == "F6":
                 lines.append("Nota: F6 mantiene high-stakes `B=3` y vuelve a CFR como endpoint primario, pero calibra `red_team_prob` via un piloto preregistrado (seleccion de p*). Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f6_preregistered_report_v11.md` y el piloto en `results/v11/data/f6_pilot_selection_v11.md`.")
                 lines.append("")
+            if phase == "F7":
+                lines.append("Nota: F7 calibra el budget `B` -> `B*` para des-saturar el endpoint CFR bajo high-stakes. Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f7_preregistered_report_v11.md` y el piloto B* en `results/v11/data/f7_pilot_selection_v11.md`.")
+                lines.append("")
+            if phase == "F8":
+                lines.append("Nota: F8 es una replicacion H1-only (S0-H vs C-H) para CFR sin Holm. Este reporte muestra solo descriptivos de recompensa; para el analisis preregistrado ver `results/v11/data/f8_preregistered_report_v11.md`.")
+                lines.append("")
             cols = ["agent", "risk_scale", "n", "mean", "std", "ci95_lo", "ci95_hi", "p_boot", "p_boot_holm", "attack_enabled", "attack_type", "attack_params"]
             lines.append(section[cols].to_string(index=False))
             lines.append("")
@@ -237,10 +253,13 @@ def format_report(summary: pd.DataFrame) -> str:
     lines.append("")
     lines.append("- Los p-values (`p_boot`) provienen del bootstrap no parametrico con unidad `run_mean_by_file` (media por seed/run) y se reportan solo para F2 vs control.")
     lines.append("- `p_boot_holm` aplica correccion Holm (por metrica) a las comparaciones de F2 vs control.")
-    lines.append("- `attack_enabled` esta activo para `F2_redteam`, `F4` y `F5` (F4/F5 fijan F2_redteam); `attack_params` resume los parametros del entorno que habilitan el ataque.")
+    lines.append("- `attack_enabled` esta activo para `F2_redteam`, `F4`, `F5`, `F6`, `F7` y `F8` (F4-F8 fijan variantes de F2_redteam); `attack_params` resume los parametros del entorno que habilitan el ataque.")
     lines.append("- Para F3, el reporte preregistrado (family primaria Holm M=6) esta en `results/v11/data/f3_preregistered_report_v11.md`.")
     lines.append("- Para F4, el reporte preregistrado (endpoint CFR + Holm) esta en `results/v11/data/f4_preregistered_report_v11.md`.")
     lines.append("- Para F5, el reporte preregistrado (endpoint episodes_completed + Holm) esta en `results/v11/data/f5_preregistered_report_v11.md`.")
+    lines.append("- Para F6, el reporte preregistrado (endpoint CFR + McNemar + Holm) esta en `results/v11/data/f6_preregistered_report_v11.md` y el piloto en `results/v11/data/f6_pilot_selection_v11.md`.")
+    lines.append("- Para F7, el reporte preregistrado (endpoint CFR + McNemar + Holm) esta en `results/v11/data/f7_preregistered_report_v11.md` y el piloto B* en `results/v11/data/f7_pilot_selection_v11.md`.")
+    lines.append("- Para F8, el reporte preregistrado (endpoint CFR, H1-only sin Holm) esta en `results/v11/data/f8_preregistered_report_v11.md`.")
     lines.append("- Los intervalos de confianza son +/-1.96 errores estandar calculados sobre el numero de runs/archivos (`n`), donde cada archivo representa una configuracion (grid, seed).")
     lines.append("")
     lines.append("El conjunto canonico y la comparativa F1/F2 se documentan en `results/v11/CANONICAL_DATASET_v11.md` y `results/v11/data/f2_vs_f1_diff.md`.")

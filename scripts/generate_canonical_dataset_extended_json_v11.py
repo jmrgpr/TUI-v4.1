@@ -6,11 +6,15 @@ from pathlib import Path
 ROOT = Path("results/v11")
 DOCUMENT = ROOT / "CANONICAL_DATASET_EXTENDED_JSON.md"
 AGENTS = {"control", "dqn_control", "simbiosis"}
-PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3", "F4", "F5", "F6"]
+PHASES = ["F0_baseline", "F1_highrisk", "F2_redteam", "F3", "F4", "F5", "F6", "F7", "F8"]
 
 
 def detect_phase(path: Path) -> str | None:
     lowered = [p.lower() for p in path.parts]
+    if "f8" in lowered:
+        return "F8"
+    if "f7" in lowered:
+        return "F7"
     if "f6" in lowered:
         return "F6"
     if "f5" in lowered:
@@ -41,6 +45,10 @@ def canonical_selector(path: Path) -> bool:
     if phase == "F5":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     if phase == "F6":
+        return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
+    if phase == "F7":
+        return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
+    if phase == "F8":
         return any(p.startswith("grid") for p in parts) and "riskhigh" in parts and any(agent in parts for agent in AGENTS)
     return False
 
