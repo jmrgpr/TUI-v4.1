@@ -1,7 +1,7 @@
 # Índice / Control Tower — Serie v11 (TUI v4.1)
 
-**Última actualización:** 2025-12-23  
-**Estado:** F0-F7 cerrados y auditados (con errata post-cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO) + F8 preregistrado (pendiente).
+**Última actualización:** 2025-12-24  
+**Estado:** F0-F8 cerrados y auditados (con errata post-cierre) + RV1 cerrado (FAIL/NO-GO) + RV2 cerrado (PASS/GO).
 
 Este archivo existe para evitar “saltos” entre documentos. Aquí está qué es canónico, qué es histórico, y el orden recomendado de lectura.
 
@@ -14,7 +14,7 @@ Este archivo existe para evitar “saltos” entre documentos. Aquí está qué 
 - **F5:** cerrado (high-stakes `B=3`, endpoint primario `episodes_completed`; ver `results/v11/data/f5_preregistered_report_v11.md` y `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - **F6:** cerrado (high-stakes `B=3`, endpoint primario CFR con calibración de `red_team_prob`; ver `results/v11/data/f6_preregistered_report_v11.md` y `results/v11/F6/F6_CLOSURE_REPORT.md`).
 - **F7:** cerrado (calibración budget `B` → `B*` para des‑saturar CFR; ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
-- **F8:** preregistrado (replicación H1-only para cierre; ver `results/v11/F8/PREREGISTRO_F8_v11.md`).
+- **F8:** cerrado (**PASS**; replicación H1-only para CFR sin Holm; ver `results/v11/F8/F8_CLOSURE_REPORT.md` y `results/v11/data/f8_preregistered_report_v11.md`).
 - **RV1 (Repair Validation):** cerrado (**FAIL/NO-GO**; invariantes OK, pero sin señal mínima de mejora en reward).
 - **RV2 (Repair Validation):** cerrado (**PASS/GO**; invariantes I1/I2 OK; E1/E2 descriptivos).
 
@@ -26,11 +26,13 @@ El mapa operativo actualizado vive en `results/v11/MEGA_PLAN_EVALUACION_v11.md`.
 - **Manifiesto canónico CSV (sha256):** `results/v11/CANONICAL_DATASET_v11.md`
 - **Manifiesto JSON (sha256 por run):** `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
 - **Pipeline reproducible v11:** `results/v11/README_REPRODUCIBLE_v11.md`
-- **Reporte global vigente (incluye F5):** `results/v11/data/stats_report_v11.md`
+- **Reporte global vigente:** `results/v11/data/stats_report_v11.md`
 - **Cierre F3:** `results/v11/F3/F3_CLOSURE_REPORT.md`
 - **Cierre F4:** `results/v11/F4/F4_CLOSURE_REPORT.md`
 - **Cierre F5:** `results/v11/F5/F5_CLOSURE_REPORT.md`
 - **Cierre F6:** `results/v11/F6/F6_CLOSURE_REPORT.md`
+- **Cierre F7:** `results/v11/F7/F7_CLOSURE_REPORT.md`
+- **Cierre F8:** `results/v11/F8/F8_CLOSURE_REPORT.md`
 
 ## 3) Qué leer según tu objetivo
 ### A) “Quiero reproducir números / regenerar artefactos”
@@ -44,6 +46,9 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - `results/v11/INFORME_CIENTIFICO_SERIE_V11.md`
 - `results/v11/PUBLICACION_SERIE_V11.md`
 - `results/v11/ANEXO_TECNICO_v11.md` (definiciones operacionales importantes)
+
+### B2) “Quiero qué significa v11 para TUI y qué sigue en v12”
+- `results/v11/SINTESIS_TUI_V11_Y_V12.md`
 
 ### C) “Quiero el paquete peer-review proof de F3”
 - **Preregistro canónico:** `results/v11/F3/PREREGISTRO_F3_v11.md`
@@ -123,4 +128,4 @@ Estos documentos cubren F0–F2 (son válidos para esa parte, pero no sustituyen
 - RV1 cerró como **NO-GO** (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
 - RV2 cerró como **PASS/GO** y habilita re‑intentar fases confirmatorias bajo el nuevo régimen (agente persistente).
 - F7 está cerrado: `B*` seleccionado + confirmatorio ejecutado + canónicos + análisis preregistrado.
-- F8 está preregistrado (H1-only) para convertir la señal de F7 en veredicto confirmatorio sin Holm; pendiente de ejecución.
+- F8 está cerrado (**PASS**) y resuelve el “borderline” de F7 al aislar H1 como única hipótesis confirmatoria (m=1) y aumentar n.

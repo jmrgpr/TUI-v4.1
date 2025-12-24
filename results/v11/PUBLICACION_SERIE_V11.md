@@ -1,6 +1,6 @@
 # Documento para Publicacion Cientifica (v11)
 
-> Nota (2025-12-22): este documento cubre principalmente F0–F2. Para el paquete causal/auditado de F3 ver `results/v11/F3/README.md` y `results/v11/data/f3_preregistered_report_v11.md`. Para F4 (pendiente) ver `results/v11/F4/README.md`. Guía general: `results/v11/INDEX_SERIE_V11.md`.
+> Nota (2025-12-24): este documento se centra principalmente en F0–F2 (texto base de publicación). La serie v11 completa (F0–F8) está cerrada; guía general: `results/v11/INDEX_SERIE_V11.md`. Para el cierre confirmatorio high-stakes CFR ver `results/v11/data/f8_preregistered_report_v11.md`.
 
 ## Titulo
 Evaluacion reproducible de agentes bajo referencia, alto riesgo y estres adversarial sintetico: serie v11 (TUI v4.1)

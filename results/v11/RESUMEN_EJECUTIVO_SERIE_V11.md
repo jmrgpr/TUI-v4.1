@@ -1,45 +1,28 @@
-# Resumen Ejecutivo: Serie v11 (F0, F1, F2)
+# Resumen Ejecutivo: Serie v11 (F0–F8 + RV1/RV2)
 
-> Nota (2025-12-22): este resumen cubre solo F0–F2. Para F3 (cerrado) ver `results/v11/F3/README.md` y `results/v11/data/f3_preregistered_report_v11.md`. Para F4 (pendiente) ver `results/v11/F4/README.md`. Guía general: `results/v11/INDEX_SERIE_V11.md`.
+> Última actualización: 2025-12-24. Guía general: `results/v11/INDEX_SERIE_V11.md`.
 
-## Objetivo
-Evaluar desempeno y comportamiento bajo referencia (F0), alto riesgo (F1) y estres adversarial sintetico (F2) bajo el protocolo v11.
+## Objetivo (v11)
+Evaluar agentes en (i) referencia, (ii) alto riesgo, (iii) estrés adversarial, y luego cerrar preguntas causales sobre `pgf_mix` (shaping) y robustez bajo stakes, con trazabilidad reproducible (CSV canónicos + hashes; JSON auditados por hashes).
 
-## Fuente canonica
-- Dataset canonico (hashes + rutas): `results/v11/CANONICAL_DATASET_v11.md`
-- Reporte estadistico vigente: `results/v11/data/stats_report_v11.md`
-- Bootstrap (unidad primaria = run/seed por archivo): `results/v11/data/bootstrap_stats_v11.md`
-- Verificacion de que F2 != F1: `results/v11/data/f2_vs_f1_diff.md`
+## Fuente canónica (siempre)
+- Dataset canónico (CSV + sha256): `results/v11/CANONICAL_DATASET_v11.md`
+- Manifiesto extendido (JSON + sha256): `results/v11/CANONICAL_DATASET_EXTENDED_JSON.md`
+- Reporte global vigente (descriptivo): `results/v11/data/stats_report_v11.md`
+- Paquetes preregistrados: `results/v11/data/f3_preregistered_report_v11.md`, `results/v11/data/f7_preregistered_report_v11.md`, `results/v11/data/f8_preregistered_report_v11.md`
 
-## Resultados (dos metricas de recompensa por fase)
-Valores resumidos desde `results/v11/data/stats_report_v11.md`.
+## Hallazgos clave (confirmatorios / preregistrados)
+### 1) `pgf_mix` como shaping lineal no muestra efecto ambiental (F3)
+- La ablación `pgf_mix=0.2` vs `pgf_mix=0.0` en `reward_env_total` arrojó Δ=0 con p≈0.99 (Holm=1): no hay evidencia de que `pgf_mix` cambie desempeño ambiental bajo este protocolo. Ver `results/v11/data/f3_preregistered_report_v11.md`.
+- Comparación “justa” (Simbiosis con `pgf_mix=0.0`) sugiere trade-off: pierde vs `control` en F1 y gana vs `control` en F2 (ver mismo reporte).
 
-### F0 (Referencia, risk_scale=0.5, red_team=False)
-| Agente      | n (runs) | mean reward_total | mean reward_env_total |
-|-------------|----------|------------------|-----------------------|
-| control     | 2        | -20.02           | -20.02                |
-| dqn_control | 2        | -24.08           | -24.08                |
-| simbiosis   | 2        |  14.87           | -22.66                |
+### 2) Robustez bajo stakes high-stakes (post‑errata): Simbiosis reduce fallos catastróficos (F8)
+- F7 calibró el budget (`B*`) para des‑saturar CFR y mostró señal direccional pero quedó INCONCLUSIVE por Holm (ver `results/v11/data/f7_preregistered_report_v11.md`).
+- F8 replicó H1-only (sin Holm; family m=1) con `B=40` y `red_team_prob=0.03` y cerró **PASS**:
+  - `CFR`: Control = 1.000 vs Simbiosis (m=0.0) = 0.400; Δ=-0.600; p=1.19209e-07. Ver `results/v11/data/f8_preregistered_report_v11.md`.
 
-### F1 (Alto riesgo, risk_scale=1.2, red_team=False)
-| Agente      | n (runs) | mean reward_total | mean reward_env_total |
-|-------------|----------|------------------|-----------------------|
-| control     | 10       | -56.83           | -56.83                |
-| dqn_control | 10       | -60.03           | -60.03                |
-| simbiosis   | 10       | -13.98           | -58.71                |
-
-### F2 (Estres adversarial sintetico, risk_scale=1.2, red_team=True, red_team_prob=0.1)
-| Agente      | n (runs) | mean reward_total | mean reward_env_total |
-|-------------|----------|------------------|-----------------------|
-| control     | 10       | -71.48           | -71.48                |
-| dqn_control | 10       | -70.45           | -70.45                |
-| simbiosis   | 10       | -46.01           | -70.18                |
-
-## Lectura rapida (F2)
-- F2 aplica perturbaciones estocasticas del entorno (no adversario min-max). La configuracion efectiva queda registrada en cada JSON (campos `config.red_team_prob`, etc.).
-- En esta ejecucion canonicamente regenerada, F2 degrada `reward_total` y `reward_env_total`. En `reward_total` Simbiosis queda por encima; en `reward_env_total` queda cercana a `control`/`dqn_control` con mejora pequena (≈ +1.29 vs `control`).
-- Evidencia inferencial principal: bootstrap no parametrico por run/seed en `results/v11/data/bootstrap_stats_v11.md`.
-- Nota de interpretacion: `reward_total` puede incluir mezcla PGF cuando `pgf_mix>0` (ver `results/v11/ANEXO_TECNICO_v11.md`); `reward_env_total` es recompensa ambiental estimada desde JSON y sirve como control contra shaping.
+## Nota post‑cierre (muy importante)
+Se documentó una errata de implementación: en `sim/runner.py` el agente se reinstanciaba por episodio, lo que limita interpretaciones de aprendizaje acumulado entre episodios en F0–F6. Ver `results/v11/ERRATA_RUNNER_AGENT_LIFECYCLE.md`. Tras el fix, RV2 cerró PASS/GO y habilitó F7/F8 bajo agente persistente.
 
 ## Estado
-F0–F2 quedan cerrados y reproducibles. Para el paquete causal/auditado de F3 y el preregistro de F4, ver `results/v11/INDEX_SERIE_V11.md`.
+La serie v11 queda cerrada y auditada (F0–F8 + errata + RV1/RV2). El “veredicto sin dudas” para high-stakes CFR está en F8 (PASS).

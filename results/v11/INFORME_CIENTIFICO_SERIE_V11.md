@@ -1,6 +1,6 @@
 # Informe Cientifico: Serie v11 (F0, F1, F2)
 
-> Nota (2025-12-22): este informe cubre solo F0–F2. F3 ya fue ejecutado y cerrado (ver `results/v11/F3/README.md` y `results/v11/data/f3_preregistered_report_v11.md`). F4 está preregistrado y pendiente (ver `results/v11/F4/README.md`). Guía general: `results/v11/INDEX_SERIE_V11.md`.
+> Nota (2025-12-24): este informe se centra en F0–F2 (narrativa y metodología base). La serie v11 completa (F0–F8, incluyendo F3 causal y el arco high-stakes CFR) está cerrada; ver `results/v11/INDEX_SERIE_V11.md` y, para el veredicto high-stakes, `results/v11/data/f8_preregistered_report_v11.md`.
 
 ## 1. Alcance
 Este informe resume la ejecucion y resultados de la serie v11 para tres fases:

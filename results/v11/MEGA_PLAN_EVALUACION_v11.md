@@ -1,4 +1,4 @@
-# MEGA PLAN DE EVALUACION - Serie v11 (post F7; F8 preregistrado)
+# MEGA PLAN DE EVALUACION - Serie v11 (post F8; cierre completado)
 
 Este documento es el **mapa de control** de la serie v11 y resume: (i) qué fases están cerradas, (ii) qué cambió con F3/F4/F5, y (iii) la extensión F6 (diseñada para resolver el ceiling effect de CFR sin reabrir F4/F5).
 
@@ -15,7 +15,7 @@ Si necesitas una guía rápida de “qué leer primero”, ver: `results/v11/IND
 - [x] F5 (high-stakes `B=3`, endpoint `episodes_completed`): ejecutado, auditado y con cierre formal (ver `results/v11/F5/F5_CLOSURE_REPORT.md`).
 - [x] F6 (calibración `red_team_prob` para CFR con `B=3`): ejecutado, auditado y con cierre formal (ver `results/v11/F6/F6_CLOSURE_REPORT.md`).
 - [x] F7 (budget calibration `B` → `B*` para des‑saturar CFR): ejecutado y cerrado (ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
-- [ ] F8 (replicación H1-only para cierre de CFR sin Holm): preregistrado; pendiente de ejecución (ver `results/v11/F8/PREREGISTRO_F8_v11.md`).
+- [x] F8 (replicación H1-only para cierre de CFR sin Holm): ejecutado y cerrado (**PASS**) (ver `results/v11/F8/F8_CLOSURE_REPORT.md` y `results/v11/data/f8_preregistered_report_v11.md`).
 
 ## 2) Qué cambió con los hallazgos nuevos (impacto sobre el plan)
 Cambios que afectan directamente al MEGA_PLAN original (post-F2):
@@ -58,10 +58,10 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - En confirmatorio, CFR volvió a saturar en `1.0` en todos los grupos (C-H, S0-H, S2-H) ⇒ H1/H3 **INCONCLUSIVE** (ver `results/v11/data/f6_preregistered_report_v11.md`).
 - Señal descriptiva: `episodes_completed` es mayor en Simbiosis que en Control, pero no es claim confirmatorio en F6 (ver `results/v11/F6/F6_CLOSURE_REPORT.md`).
 
-9) **ERRATA (ciclo de vida del agente) y ajuste del roadmap**
+ 9) **ERRATA (ciclo de vida del agente) y ajuste del roadmap**
 - Se detectó post‑cierre que `sim/runner.py` instanciaba el agente dentro del loop de episodios (`for ep in range(episodes)`), lo que implica un régimen tipo **episodic‑reset** (sin aprendizaje acumulado entre episodios).
 - Esto **no invalida** la auditabilidad de los artefactos (CSV/hashes), pero **sí limita** claims sobre “aprendizaje a través de 200 episodios”.
-- Roadmap ajustado (hecho): se corrigió el runner; RV1 cerró **FAIL/NO-GO**; RV2 cerró **PASS/GO**; F7 se ejecutó bajo agente persistente; F8 queda preregistrado para cerrar H1 (CFR) sin Holm.
+- Roadmap ajustado (hecho): se corrigió el runner; RV1 cerró **FAIL/NO-GO**; RV2 cerró **PASS/GO**; F7 se ejecutó bajo agente persistente; F8 se ejecutó como replicación H1-only y cerró **PASS** (CFR) sin Holm.
 
 ## 3) Artefactos canónicos (fuente de verdad)
 - Dataset canónico (CSV + sha256): `results/v11/CANONICAL_DATASET_v11.md`
@@ -88,7 +88,7 @@ Cambios que afectan directamente al MEGA_PLAN original (post-F2):
 - [x] RV1 (Repair Validation post‑errata): ejecutado y cerrado (**FAIL/NO-GO**) — invariantes OK, pero sin señal mínima de mejora intra-run en reward (ver `results/v11/RV1/RV1_CLOSURE_REPORT.md`).
 - [x] RV2 (Repair Validation post‑errata; invariantes como gating): ejecutado y cerrado (**PASS/GO**) (ver `results/v11/RV2/RV2_CLOSURE_REPORT.md`).
 - [x] F7 (budget calibration `B` → `B*` para des‑saturar CFR): ejecutado y cerrado (ver `results/v11/F7/F7_CLOSURE_REPORT.md`).
-- [ ] F8 (replicación H1-only para cierre CFR sin Holm): preregistrado; pendiente de ejecución (ver `results/v11/F8/PREREGISTRO_F8_v11.md`).
+- [x] F8 (replicación H1-only para cierre CFR sin Holm): ejecutado y cerrado (**PASS**) (ver `results/v11/F8/F8_CLOSURE_REPORT.md` y `results/v11/data/f8_preregistered_report_v11.md`).
 - [ ] (Opcional) Baseline “SOTA” (PPO/SAC/TD3 o Safe-RL) si el claim apunta a comparar con literatura; no es requisito para cerrar v11 si el claim es “nicho/robustez bajo stress”.
 
 ## 5) Qué significa “cerrar v11” (criterio operativo)
@@ -98,7 +98,7 @@ v11 queda cerrado cuando:
 
 Para un cierre “sin dudas” del arco **high-stakes CFR** (post‑errata):
 - F7 deja headroom real (B*), pero el veredicto puede quedar INCONCLUSIVE por potencia/multiplicidad.
-- F8 existe para cerrar **H1** (S0-H vs C-H) como claim confirmatorio H1-only; ejecutarlo y cerrarlo (o diferirlo explícitamente) deja el paquete v11 más sólido.
+- F8 existe para cerrar **H1** (S0-H vs C-H) como claim confirmatorio H1-only; ya está ejecutado y cerrado (**PASS**) (ver `results/v11/F8/F8_CLOSURE_REPORT.md`).
 
 En caso (a), el cierre mínimo de F4 debe incluir:
 - Outputs canónicos en `results/v11/F4/F2_redteam/stk{L,H}/` (CSV versionados).
@@ -111,4 +111,4 @@ En caso (a), el cierre mínimo de F5 debe incluir:
 - Reporte preregistrado F5 en `results/v11/data/` y un `F5_CLOSURE_REPORT.md` citando artefactos exactos.
 - Manifiestos y stats regenerados (master + reportes + hashes).
 
-Estado actual: F0–F6 cerrados y auditables; errata documentada; RV1 cerrado (FAIL/NO-GO).
+Estado actual: F0–F8 cerrados y auditables; errata documentada; RV1 cerrado (FAIL/NO-GO); RV2 cerrado (PASS/GO).
