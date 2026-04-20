@@ -90,3 +90,12 @@ results/**/debug/
 results/**/*_debug.*
 results/**/*_tmp.*
 *.ckpt
+
+# Auditoria local temporal (no versionar)
+_solo_local_*.txt
+_solo_local_*.md
+_repo_local_lista.txt
+_repo_remoto_lista.txt
+_repo_remoto_lista_utf8.txt
+_diferencias_repo.txt
+_identificacion_laptop_legion.txt
