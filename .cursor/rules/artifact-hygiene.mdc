@@ -1,0 +1,16 @@
+---
+description: Keep heavy artifacts and temporary outputs under control
+alwaysApply: true
+---
+
+# Artifact Hygiene
+
+- Do not commit heavy temporary outputs when canonical summaries are sufficient.
+- Keep canonical outputs in stable, phase-identified locations.
+- Separate temporary/debug artifacts from official scientific outputs.
+- If heavy artifacts are needed externally, keep references, metadata, and integrity hashes in-repo.
+- Respect `.gitignore` constraints and avoid introducing noisy binary churn.
+
+## Practical default
+
+- Prefer reproducible scripts + canonical CSV/MD over raw bulk run dumps.

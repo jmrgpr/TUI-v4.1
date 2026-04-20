@@ -13,6 +13,7 @@ results/**/*.json
 !results/**/analisis_*.json
 !results/**/*_metrics.json
 !results/**/README*.md
+!results/INDEX.md
 !results/v11/F6/analysis/f6_pilot_selection_v11.json
 !results/v11/F7/analysis/f7_pilot_selection_v11.json
 !results/v11/RV1/rv1_invariants.json
@@ -68,3 +69,16 @@ temp_doc_restore_candidates.txt
 *.bak
 *.log
 .ipynb_checkpoints/
+
+# --- Governance additions (non-destructive) ---
+# Evitar acumulacion de artefactos temporales pesados sin tocar historico existente.
+artifacts/tmp/
+artifacts/cache/
+artifacts/checkpoints/
+artifacts/raw_runs/
+results/**/tmp/
+results/**/temp/
+results/**/debug/
+results/**/*_debug.*
+results/**/*_tmp.*
+*.ckpt

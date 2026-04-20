@@ -26,6 +26,12 @@ Indice rapido de los materiales en `docs/` (sin mover archivos).
 - LICENSE_PROPUESTAS_MEJORAS_SIMULADORES.md
 - PROPUESTAS_MEJORAS_SIMULADORES.md
 
+## Gobernanza en main
+- GOVERNANCE_MAIN.md
+- PROTOCOL_COMMIT.md
+- PHASE_CLOSE_CHECKLIST.md
+- ARTIFACT_POLICY.md
+
 ## Uso
 - Coloca aqui manuscritos, PDFs, referencias y material cientifico relevante.
 - Place here manuscripts, PDFs, references, and formal project documentation.

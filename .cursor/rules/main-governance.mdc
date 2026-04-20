@@ -1,0 +1,19 @@
+---
+description: Enforce centralized governance on main
+alwaysApply: true
+---
+
+# Main Governance
+
+- Treat `main` as the working branch unless user explicitly requests another branch.
+- Assume Jose Manuel is the architecture authority and final approver.
+- Do not rewrite or delete scientific history unless explicitly instructed.
+- Preserve traceability between scripts, datasets, and reports.
+- Prefer conservative, auditable modifications over broad refactors.
+
+## Required references
+
+- `docs/GOVERNANCE_MAIN.md`
+- `docs/PROTOCOL_COMMIT.md`
+- `docs/PHASE_CLOSE_CHECKLIST.md`
+- `docs/ARTIFACT_POLICY.md`

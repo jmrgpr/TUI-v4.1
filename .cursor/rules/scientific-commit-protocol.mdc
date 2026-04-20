@@ -1,0 +1,16 @@
+---
+description: Apply scientific commit protocol for traceability
+alwaysApply: true
+---
+
+# Scientific Commit Protocol
+
+- Structure work so each change states objective, rationale, scope, reproducible execution, expected outputs, and closure criterion.
+- Use commit prefixes consistently: `F#:`, `RV:`, `PREREG:`, `ANALYSIS:`, `DOCS:`, `INFRA:`, `DATA:`, `HOTFIX:`.
+- In commit messaging and summaries, prioritize the "why" and methodological impact.
+- Before proposing closure, verify phase evidence is reflected in docs/checklists.
+
+## Example
+
+- Good: `RV: validate invariants after runner lifecycle fix (PASS/GO)`
+- Avoid: `misc updates`
