@@ -1,0 +1,19 @@
+{
+  "series": "v12",
+  "phase": "F1_highrisk",
+  "status": "DRAFT",
+  "intent": "reference/high-risk",
+  "params": {
+    "episodes": 200,
+    "seeds": [42, 101, 13, 7, 99],
+    "grids": [8, 16],
+    "risk_scale": 1.2,
+    "risk_level": "high",
+    "red_team": false,
+    "red_team_prob": 0.0,
+    "pgf_mix": 0.2,
+    "agents": ["control", "simbiosis", "dqn_control"]
+  },
+  "notes": "Completar al congelar el diseño."
+}
+
