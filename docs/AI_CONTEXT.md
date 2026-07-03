@@ -42,11 +42,12 @@ TUI-v4.1 is a scientific/reproducibility repository for the Tension of Risk theo
 
 Excluded by `.ignore` for agent search:
 
-- `data/`, generated `results/`, generated `reports/`, `plots/`, `htmlcov/`, `.venv/`, caches.
+- `data/`, generated `results/`, generated report payloads, `plots/`, `htmlcov/`, `.venv/`, caches.
 - Local inventory/output files such as `local_files.txt`, `diff_files.txt`, `*_integridad.txt`, `experiment_log.txt`, `None.json`, `None_episodes.csv`.
 - Binary documents/images and model/store formats.
 
 `results/INDEX.md` remains visible intentionally as the cheap canonical result map.
+Markdown reports under `reports/` and technical PDFs/DOCX under `docs/` remain visible when they are canonical human-readable material. Ignored paths are not permission to delete, rewrite, or modify artifacts; they only reduce broad agent search/context.
 
 ## Invariants
 
